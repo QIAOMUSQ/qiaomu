@@ -11,7 +11,8 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @MapperScan(basePackages = {"io.renren.modules.*.dao"})
 public class AdminApplication extends SpringBootServletInitializer {
 
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 		SpringApplication.run(AdminApplication.class, args);
 	}
 
