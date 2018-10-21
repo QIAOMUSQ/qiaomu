@@ -105,8 +105,8 @@ renren-security
 
  **分布式部署**
 - 分布式部署，需要安装redis，并配置config.properties里的redis信息
-- 需要配置【renren.redis.open=true】，表示开启redis缓存
-- 需要配置【renren.shiro.redis=true】，表示把shiro session存到redis里
+- 需要配置【redis.open=true】，表示开启redis缓存
+- 需要配置【shiro.redis=true】，表示把shiro session存到redis里
 
 <br>
 
