@@ -119,4 +119,3 @@ https://github.com/lipinxian/android-service.git
 
 <br>
 
-![捐赠](http://cdn.renren.io/donate.jpg "捐赠") 
