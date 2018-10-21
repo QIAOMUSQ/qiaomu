@@ -378,3 +378,44 @@ CREATE INDEX IDX_QRTZ_FT_J_G ON QRTZ_FIRED_TRIGGERS(SCHED_NAME,JOB_NAME,JOB_GROU
 CREATE INDEX IDX_QRTZ_FT_JG ON QRTZ_FIRED_TRIGGERS(SCHED_NAME,JOB_GROUP);
 CREATE INDEX IDX_QRTZ_FT_T_G ON QRTZ_FIRED_TRIGGERS(SCHED_NAME,TRIGGER_NAME,TRIGGER_GROUP);
 CREATE INDEX IDX_QRTZ_FT_TG ON QRTZ_FIRED_TRIGGERS(SCHED_NAME,TRIGGER_GROUP);
+
+
+
+
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for yw_appraise
+-- ----------------------------
+DROP TABLE IF EXISTS `yw_appraise`;
+CREATE TABLE `yw_appraise` (
+  `id` bigint(19) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(19) DEFAULT NULL COMMENT '用户id',
+  `news_id` bigint(19) DEFAULT NULL COMMENT '新闻id',
+  `time` datetime DEFAULT NULL COMMENT '评价时间',
+  `content` varchar(500) DEFAULT NULL COMMENT '评价内容',
+  `applaud` int(10) DEFAULT '0' COMMENT '评论赞同数',
+  `oppose` int(10) DEFAULT '0' COMMENT '评论反对数',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='存储用户评价新闻数据';
+
+
+
+-- ----------------------------
+-- Table structure for yw_news_info
+-- ----------------------------
+DROP TABLE IF EXISTS `yw_news_info`;
+CREATE TABLE `yw_news_info` (
+  `id` bigint(19) NOT NULL AUTO_INCREMENT COMMENT '消息类型：01政策公告  02-家事讨论 03-七彩生活 04-兴趣交流  05-闲置分享  06-理财交流',
+  `info_type` varchar(10) DEFAULT NULL COMMENT '消息类型 01：政策公告 02：家事讨论  03：七彩生活  04：闲置分享  05：兴趣交流  06：理财专区',
+  `img_url` varchar(100) DEFAULT NULL COMMENT '图片地址',
+  `title` varchar(50) DEFAULT NULL COMMENT '消息标题',
+  `content` varchar(1000) DEFAULT NULL COMMENT '消息内容',
+  `time` datetime DEFAULT NULL COMMENT '消息创建时间',
+  `modify_time` datetime DEFAULT NULL COMMENT '消息修改时间',
+  `applaud` int(10) DEFAULT '0' COMMENT '新闻赞同数',
+  `oppose` int(10) DEFAULT '0' COMMENT '新闻反对数',
+  `user_id` bigint(19) DEFAULT NULL COMMENT '用户id',
+  `info_type_name` varchar(20) DEFAULT NULL COMMENT '消息类型名称',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
