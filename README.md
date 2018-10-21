@@ -80,26 +80,25 @@ renren-security
 
  **本地部署**
 - 通过git下载源码
-- 创建数据库renren_security，数据库编码为UTF-8
 - 执行db/mysql.sql文件，初始化数据【按需导入表结构及数据】
 - 修改application-dev.yml文件，更新MySQL账号和密码
-- 在renren-security目录下，执行mvn clean install
+- 在security目录下，执行mvn clean install
 <br>
 
-- Eclipse、IDEA运行AdminApplication.java，则可启动项目【renren-admin】
-- renren-admin访问路径：http://localhost:8080/renren-admin
-- swagger文档路径：http://localhost:8080/renren-admin/swagger/index.html
+- Eclipse、IDEA运行AdminApplication.java，则可启动项目【admin】
+- renren-admin访问路径：http://localhost:8080/admin
+- swagger文档路径：http://localhost:8080/admin/swagger/index.html
 - 账号密码：admin/admin
 
 <br>
 
-- Eclipse、IDEA运行ApiApplication.java，则可启动项目【renren-api】
-- renren-api访问路径：http://localhost:8081/renren-api/swagger-ui.html
+- Eclipse、IDEA运行ApiApplication.java，则可启动项目【api】
+- renren-api访问路径：http://localhost:8081/api/swagger-ui.html
 
 <br>
 
-- Eclipse、IDEA运行GeneratorApplication.java，则可启动项目【renren-generator】
-- renren-generator访问路径：http://localhost:8082/renren-generator
+- Eclipse、IDEA运行GeneratorApplication.java，则可启动项目【generator】
+- renren-generator访问路径：http://localhost:8082/generator
 
 
 <br>
@@ -112,44 +111,7 @@ renren-security
 <br>
 
  **项目演示**
-- 演示地址：http://demo.open.renren.io/renren-security
 - 账号密码：admin/admin
-
-<br>
-
-**如何交流、反馈、参与贡献？** 
-- 开发文档：http://www.renren.io/guide/security
-- 官方社区：http://www.renren.io/community
-- gitee仓库：https://gitee.com/renrenio/renren-security
-- github仓库：https://github.com/renrenio/renren-security
-- [人人开源](http://www.renren.io)：http://www.renren.io   
-- 官方QQ群：324780204、145799952
-- 如需关注项目最新动态，请Watch、Star项目，同时也是对项目最好的支持
-- 技术讨论、二次开发等咨询、问题和建议，请移步到官方社区，我会在第一时间进行解答和回复！
-- 微信扫码并关注【人人开源】，获得项目最新动态及更新提醒<br>
-![输入图片说明](http://cdn.renren.io/47c26201804031918312618.jpg "在这里输入图片标题")
-<br>
-<br>
-
-**接口文档效果图：** 
-![输入图片说明](http://cdn.renren.io/img/c8dae596146248d8b4d0639738c2932b "在这里输入图片标题")
-
-<br>
-
-**Layui主题风格：**
-![输入图片说明](http://cdn.renren.io/img/1013aa91fe8542b7b05d82bc9444433a "在这里输入图片标题")
-
-<br>
-
-**AdminLTE主题风格：**
-![输入图片说明](http://cdn.renren.io/img/f9762bc6574545ce908e271995efcf1c "在这里输入图片标题")
-![输入图片说明](http://cdn.renren.io/img/a1b8bf1ea3db4844a8652a9cf84048cc "在这里输入图片标题")
-![输入图片说明](http://cdn.renren.io/img/e542060605f94b3ebec699b0afffc22d "在这里输入图片标题")
-![输入图片说明](http://cdn.renren.io/img/c94be5b4bf0d4387b18e119c91b1a986 "在这里输入图片标题")
-![输入图片说明](http://cdn.renren.io/img/ae8c683a01c74d8dbc52d62547efda31 "在这里输入图片标题")
-![输入图片说明](http://cdn.renren.io/img/ca38bcf3717c427d82dd67d86b744e18 "在这里输入图片标题")
-![输入图片说明](http://cdn.renren.io/img/4862ec46a9ad469b90c30788c4707e35 "在这里输入图片标题")
-![输入图片说明](http://cdn.renren.io/img/5d8e7243d30a4421b90f15394b6d1ccd "在这里输入图片标题")
 
 <br>
 
