@@ -23,12 +23,11 @@
 
 <br> 
 
-**项目结构** 
-```
-renren-security
-├─renren-common     公共模块
+**项目结构**
+security
+├─common     公共模块
 │ 
-├─renren-admin      管理后台
+├─admin      管理后台
 │    ├─db  数据库SQL脚本
 │    │ 
 │    ├─modules  模块
@@ -46,9 +45,9 @@ renren-security
 │        └─application.yml   全局配置文件
 │       
 │ 
-├─renren-api        API服务
+├─api        API服务
 │ 
-├─renren-generator  代码生成器
+├─generator  代码生成器
 │        └─resources 
 │           ├─mapper   MyBatis文件
 │           ├─template 代码生成器模板（可增加或修改相应模板）
@@ -56,6 +55,11 @@ renren-security
 │           └─generator.properties   代码生成器，配置文件
 │
 ```
+
+<br>
+git:lipinxian/lipx1991
+https://github.com/lipinxian/android-service.git
+
 
 <br>
 
