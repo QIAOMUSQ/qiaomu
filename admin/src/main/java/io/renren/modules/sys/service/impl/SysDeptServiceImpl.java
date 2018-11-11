@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 
-@Service("sysDeptService")
+@Service("sysDeptServiceImp")
 public class SysDeptServiceImpl extends ServiceImpl<SysDeptDao, SysDeptEntity> implements SysDeptService {
 	
 	@Override

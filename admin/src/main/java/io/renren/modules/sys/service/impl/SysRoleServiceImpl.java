@@ -44,7 +44,7 @@ import java.util.Map;
  * @email sunlightcs@gmail.com
  * @date 2016年9月18日 上午9:45:12
  */
-@Service("sysRoleService")
+@Service("sysRoleServiceImp")
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> implements SysRoleService {
 	@Autowired
 	private SysRoleMenuService sysRoleMenuService;

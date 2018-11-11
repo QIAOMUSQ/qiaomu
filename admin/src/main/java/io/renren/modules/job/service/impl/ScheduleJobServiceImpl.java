@@ -36,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import java.util.*;
 
-@Service("scheduleJobService")
+@Service("scheduleJobServiceImp")
 public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, ScheduleJobEntity> implements ScheduleJobService {
 	@Autowired
     private Scheduler scheduler;

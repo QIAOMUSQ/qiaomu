@@ -77,7 +77,7 @@ https://github.com/lipinxian/android-service.git
 <br>
 
 - Eclipse、IDEA运行AdminApplication.java，则可启动项目【admin】
-- renren-admin访问路径：http://localhost:8080/admin
+- admin访问路径：http://localhost:8080/admin
 - swagger文档路径：http://localhost:8080/admin/swagger/index.html
 - 账号密码：admin/admin
 

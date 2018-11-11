@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 
-@Service("sysOssService")
+@Service("sysOssServiceImp")
 public class SysOssServiceImpl extends ServiceImpl<SysOssDao, SysOssEntity> implements SysOssService {
 
 	@Override

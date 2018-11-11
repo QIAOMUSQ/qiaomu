@@ -35,7 +35,7 @@ import java.util.List;
  * @email sunlightcs@gmail.com
  * @date 2016年9月18日 上午9:44:35
  */
-@Service("sysRoleMenuService")
+@Service("sysRoleMenuServiceImp")
 public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuDao, SysRoleMenuEntity> implements SysRoleMenuService {
 
 	@Override

@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Service("sysMenuService")
+@Service("sysMenuServiceImp")
 public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenuEntity> implements SysMenuService {
 	@Autowired
 	private SysUserService sysUserService;

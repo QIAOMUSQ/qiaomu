@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 
-@Service("sysLogService")
+@Service("sysLogServiceImp")
 public class SysLogServiceImpl extends ServiceImpl<SysLogDao, SysLogEntity> implements SysLogService {
 
     @Override

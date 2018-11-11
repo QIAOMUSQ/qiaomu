@@ -35,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.Map;
 
-@Service("sysConfigService")
+@Service("sysConfigServiceImp")
 public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEntity> implements SysConfigService {
 	@Autowired
 	private SysConfigRedis sysConfigRedis;

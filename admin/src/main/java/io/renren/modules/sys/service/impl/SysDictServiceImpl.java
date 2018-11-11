@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 
-@Service("sysDictService")
+@Service("sysDictServiceImp")
 public class SysDictServiceImpl extends ServiceImpl<SysDictDao, SysDictEntity> implements SysDictService {
 
     @Override

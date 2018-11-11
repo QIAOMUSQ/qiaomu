@@ -35,7 +35,7 @@ import java.util.List;
  * @email sunlightcs@gmail.com
  * @date 2016年9月18日 上午9:45:48
  */
-@Service("sysUserRoleService")
+@Service("sysUserRoleServiceImp")
 public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleDao, SysUserRoleEntity> implements SysUserRoleService {
 	@Override
 	public void saveOrUpdate(Long userId, List<Long> roleIdList) {
