@@ -67,8 +67,8 @@ public class AppUserController extends AbstractController {
      * @param password
      * @return
      */
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public R addUser(String username,String password){
+    @RequestMapping(value = "/regist", method = RequestMethod.POST)
+    public R registUser(String username,String password){
         SysUserEntity user =new SysUserEntity();
         user.setUsername(username);
         user.setPassword(AESUtil.decrypt(password));
