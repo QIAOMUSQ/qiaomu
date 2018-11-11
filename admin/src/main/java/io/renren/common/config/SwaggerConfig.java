@@ -53,7 +53,7 @@ public class SwaggerConfig{
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
             .title("后台管理")
-            .description("renren-admin文档")
+            .description("admin文档")
             .termsOfServiceUrl("")
             .version("3.2.0")
             .build();
