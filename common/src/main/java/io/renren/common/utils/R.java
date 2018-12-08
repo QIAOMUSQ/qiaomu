@@ -30,28 +30,34 @@ public class R extends HashMap<String, Object> {
 	private static final long serialVersionUID = 1L;
 	
 	public R() {
-		put("code", 0);
-		put("msg", "success");
+		put("data", 0);
+		put("status", "success");
 	}
 	
 	public static R error() {
 		return error(500, "未知异常，请联系管理员");
 	}
 	
-	public static R error(String msg) {
-		return error(500, msg);
+	public static R error(String status) {
+		return error(500, status);
 	}
 	
-	public static R error(int code, String msg) {
+	public static R error(int data, String status) {
 		R r = new R();
-		r.put("code", code);
-		r.put("msg", msg);
+		r.put("data", data);
+		r.put("status", status);
 		return r;
 	}
 
-	public static R ok(String msg) {
+	public static R ok(String status) {
 		R r = new R();
-		r.put("msg", msg);
+		r.put("status", status);
+		return r;
+	}
+	public static R ok(String status,Object data) {
+		R r = new R();
+		r.put("data", data);
+		r.put("status", status);
 		return r;
 	}
 	

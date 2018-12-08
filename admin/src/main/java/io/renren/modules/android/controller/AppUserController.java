@@ -2,9 +2,11 @@ package io.renren.modules.android.controller;
 
 import io.renren.common.utils.AESUtil;
 import io.renren.common.utils.R;
+import io.renren.common.utils.SecretUtils;
 import io.renren.common.validator.Assert;
 import io.renren.common.validator.ValidatorUtils;
 import io.renren.common.validator.group.AddGroup;
+import io.renren.modules.android.service.AppUserService;
 import io.renren.modules.sys.controller.AbstractController;
 import io.renren.modules.sys.entity.SysUserEntity;
 import io.renren.modules.sys.service.SysUserService;
@@ -35,15 +37,17 @@ public class AppUserController extends AbstractController {
     @Autowired
     private SysUserService sysUserService;
 
+    @Autowired
+    private AppUserService appUserService;
+
    // @ResponseBody
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public R login(String username,String password){
 
         try{
             Subject subject = ShiroUtils.getSubject();
-            UsernamePasswordToken token = new UsernamePasswordToken(username, AESUtil.decrypt(password));
+            UsernamePasswordToken token = new UsernamePasswordToken(username, password);
             subject.login(token);
-           // subject.getSession();
         }catch (UnknownAccountException e) {
             return R.error(e.getMessage());
         }catch (IncorrectCredentialsException e) {
@@ -63,17 +67,14 @@ public class AppUserController extends AbstractController {
 
     /**
      * 新增用户
-     * @param username
+     * @param phone
      * @param password
      * @return
      */
     @RequestMapping(value = "/regist", method = RequestMethod.POST)
-    public R registUser(String username,String password){
-        SysUserEntity user =new SysUserEntity();
-        user.setUsername(username);
-        user.setPassword(AESUtil.decrypt(password));
-        ValidatorUtils.validateEntity(user, AddGroup.class);
-        sysUserService.save(user);
+    public R registUser(String phone,String password,Integer communityId){
+
+        appUserService.save(phone,password,communityId);
         return R.ok();
     }
 

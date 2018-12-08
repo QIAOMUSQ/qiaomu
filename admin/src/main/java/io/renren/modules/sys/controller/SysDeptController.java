@@ -32,7 +32,7 @@ import java.util.List;
 
 
 /**
- * 部门管理
+ * 社区管理
  * 
  * @author chenshun
  * @email sunlightcs@gmail.com

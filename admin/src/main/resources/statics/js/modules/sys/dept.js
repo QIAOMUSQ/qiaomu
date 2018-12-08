@@ -26,7 +26,7 @@ var vm = new Vue({
     },
     methods: {
         getDept: function(){
-            //加载部门树
+            //加载社区树
             $.get(baseURL + "sys/dept/select", function(r){
                 ztree = $.fn.zTree.init($("#deptTree"), setting, r.deptList);
                 var node = ztree.getNodeByParam("deptId", vm.dept.parentId);
@@ -67,7 +67,7 @@ var vm = new Vue({
                     url: baseURL + "sys/dept/delete",
                     data: "deptId=" + deptId,
                     success: function(r){
-                        if(r.code === 0){
+                        if(r.status == "success"){
                             alert('操作成功', function(){
                                 vm.reload();
                             });
@@ -86,7 +86,7 @@ var vm = new Vue({
                 contentType: "application/json",
                 data: JSON.stringify(vm.dept),
                 success: function(r){
-                    if(r.code === 0){
+                    if(r.status == "success"){
                         alert('操作成功', function(){
                             vm.reload();
                         });
@@ -101,7 +101,7 @@ var vm = new Vue({
                 type: 1,
                 offset: '50px',
                 skin: 'layui-layer-molv',
-                title: "选择部门",
+                title: "选择社区",
                 area: ['300px', '450px'],
                 shade: 0,
                 shadeClose: false,
@@ -109,7 +109,7 @@ var vm = new Vue({
                 btn: ['确定', '取消'],
                 btn1: function (index) {
                     var node = ztree.getSelectedNodes();
-                    //选择上级部门
+                    //选择上级社区
                     vm.dept.parentId = node[0].deptId;
                     vm.dept.parentName = node[0].name;
 
@@ -136,9 +136,9 @@ var Dept = {
 Dept.initColumn = function () {
     var columns = [
         {field: 'selectItem', radio: true},
-        {title: '部门ID', field: 'deptId', visible: false, align: 'center', valign: 'middle', width: '80px'},
-        {title: '部门名称', field: 'name', align: 'center', valign: 'middle', sortable: true, width: '180px'},
-        {title: '上级部门', field: 'parentName', align: 'center', valign: 'middle', sortable: true, width: '100px'},
+        {title: '社区ID', field: 'deptId', visible: false, align: 'center', valign: 'middle', width: '80px'},
+        {title: '社区名称', field: 'name', align: 'center', valign: 'middle', sortable: true, width: '180px'},
+        {title: '上级社区', field: 'parentName', align: 'center', valign: 'middle', sortable: true, width: '100px'},
         {title: '排序号', field: 'orderNum', align: 'center', valign: 'middle', sortable: true, width: '100px'}]
     return columns;
 };

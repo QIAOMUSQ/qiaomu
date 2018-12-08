@@ -106,6 +106,11 @@ public class SysUserEntity implements Serializable {
 	@TableField(exist=false)
 	private String deptName;
 
+
+	/**
+	 * 用户所属社区id
+	 */
+	private Integer communityId;
 	/**
 	 * 设置：
 	 * @param userId 
@@ -248,5 +253,13 @@ public class SysUserEntity implements Serializable {
 
 	public void setDeptName(String deptName) {
 		this.deptName = deptName;
+	}
+
+	public Integer getCommunityId() {
+		return communityId;
+	}
+
+	public void setCommunityId(Integer communityId) {
+		this.communityId = communityId;
 	}
 }
