@@ -37,7 +37,7 @@ public class DataSourceAspect  {
     @Around("dataSourcePointCut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         String resultDS = determineDatasource(point);
-        if(resultDS == null){
+        if(resultDS.equals("first") || resultDS == null){
             DynamicDataSource.setDataSource(DataSourceNames.FIRST);
             logger.debug("set datasource is " + DataSourceNames.FIRST);
         }else {

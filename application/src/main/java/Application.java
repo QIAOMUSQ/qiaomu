@@ -9,8 +9,8 @@ import org.springframework.context.annotation.ComponentScan;
  * @Date 2018-12-20 18:59
  */
 @SpringBootApplication
-@ComponentScan({"io.renren.*","com.andrService"})
-@MapperScan(basePackages = {"com.andrService.*.dao"})
+@ComponentScan({"io.renren.*","com.renren.*"})
+@MapperScan(basePackages = {"io.renren.modules.*.dao","com.renren.*.dao"})
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
