@@ -18,6 +18,8 @@ package io.renren.modules.sys.dao;
 
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import io.renren.datasources.DataSourceNames;
+import io.renren.datasources.annotation.DataSource;
 import io.renren.modules.sys.entity.SysLogEntity;
 
 /**

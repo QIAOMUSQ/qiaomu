@@ -6,6 +6,7 @@ $(function () {
             { label: '角色ID', name: 'roleId', index: "role_id", width: 45, key: true },
             { label: '角色名称', name: 'roleName', index: "role_name", width: 75 },
             { label: '所属社区', name: 'deptName', sortable: false, width: 75 },
+            { label: '部门角色', name: 'deptRole', sortable: false, width: 75 },
             { label: '备注', name: 'remark', width: 100 },
             { label: '创建时间', name: 'createTime', index: "create_time", width: 80}
         ],
@@ -104,7 +105,8 @@ var vm = new Vue({
         role:{
             deptId:null,
             deptName:null
-        }
+        },
+        picked : '管理员'
     },
     methods: {
         query: function () {
@@ -179,6 +181,8 @@ var vm = new Vue({
             });
         },
         saveOrUpdate: function () {
+            var deptRole = $('input:radio:checked').val();
+            $("#deptRole").val(deptRole);
             //获取选择的菜单
             var nodes = menu_ztree.getCheckedNodes(true);
             var menuIdList = new Array();
@@ -217,7 +221,7 @@ var vm = new Vue({
             $.get(baseURL + "sys/menu/list", function(r){
                 menu_ztree = $.fn.zTree.init($("#menuTree"), menu_setting, r);
                 //展开所有节点
-                menu_ztree.expandAll(true);
+                menu_ztree.expandAll(false);
 
                 if(roleId != null){
                     vm.getRole(roleId);
@@ -229,7 +233,7 @@ var vm = new Vue({
             $.get(baseURL + "sys/dept/list", function(r){
                 data_ztree = $.fn.zTree.init($("#dataTree"), data_setting, r);
                 //展开所有节点
-                data_ztree.expandAll(true);
+                data_ztree.expandAll(false);
             });
         },
         getDept: function(){

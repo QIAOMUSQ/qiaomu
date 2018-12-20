@@ -72,6 +72,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 			if(sysDeptEntity != null){
 				sysRoleEntity.setDeptName(sysDeptEntity.getName());
 			}
+			if(sysRoleEntity.getDeptRole().equals("0")){
+				sysRoleEntity.setDeptRole("管理员");
+			}else {
+				sysRoleEntity.setDeptRole("普通用户");
+			}
 		}
 
 		return new PageUtils(page);

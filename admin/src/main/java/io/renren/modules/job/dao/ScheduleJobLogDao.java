@@ -17,6 +17,8 @@
 package io.renren.modules.job.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import io.renren.datasources.DataSourceNames;
+import io.renren.datasources.annotation.DataSource;
 import io.renren.modules.job.entity.ScheduleJobLogEntity;
 
 /**
@@ -25,6 +27,7 @@ import io.renren.modules.job.entity.ScheduleJobLogEntity;
  * @author Mark sunlightcs@gmail.com
  * @since 1.2.0 2016-11-28
  */
+@DataSource(name = DataSourceNames.FIRST)
 public interface ScheduleJobLogDao extends BaseMapper<ScheduleJobLogEntity> {
 	
 }

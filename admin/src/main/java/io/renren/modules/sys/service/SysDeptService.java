@@ -45,4 +45,5 @@ public interface SysDeptService extends IService<SysDeptEntity> {
 	 */
 	List<Long> getSubDeptIdList(Long deptId);
 
+
 }

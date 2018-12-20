@@ -16,6 +16,8 @@
 
 package io.renren.modules.sys.dao;
 
+import io.renren.datasources.DataSourceNames;
+import io.renren.datasources.annotation.DataSource;
 import io.renren.modules.sys.entity.SysDictEntity;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 

@@ -24,6 +24,8 @@ import io.renren.common.annotation.DataFilter;
 import io.renren.common.utils.Constant;
 import io.renren.common.utils.PageUtils;
 import io.renren.common.utils.Query;
+import io.renren.datasources.DataSourceNames;
+import io.renren.datasources.annotation.DataSource;
 import io.renren.modules.sys.dao.SysUserDao;
 import io.renren.modules.sys.entity.SysDeptEntity;
 import io.renren.modules.sys.entity.SysUserEntity;
@@ -50,6 +52,7 @@ import java.util.Map;
  * @date 2016年9月18日 上午9:46:09
  */
 @Service("sysUserServiceImp")
+@DataSource(name = DataSourceNames.FIRST)
 public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> implements SysUserService {
 	@Autowired
 	private SysUserRoleService sysUserRoleService;
@@ -122,4 +125,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
                 new EntityWrapper<SysUserEntity>().eq("user_id", userId).eq("password", password));
     }
 
+	@Override
+	public SysUserEntity queryById(Long userId) {
+		return baseMapper.queryById(userId);
+	}
 }

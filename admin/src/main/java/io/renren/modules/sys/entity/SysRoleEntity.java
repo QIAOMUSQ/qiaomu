@@ -72,6 +72,8 @@ public class SysRoleEntity implements Serializable {
 	private List<Long> menuIdList;
 	@TableField(exist=false)
 	private List<Long> deptIdList;
+
+	private String deptRole;
 	
 	/**
 	 * 创建时间
@@ -165,5 +167,13 @@ public class SysRoleEntity implements Serializable {
 
 	public void setDeptIdList(List<Long> deptIdList) {
 		this.deptIdList = deptIdList;
+	}
+
+	public String getDeptRole() {
+		return deptRole;
+	}
+
+	public void setDeptRole(String deptRole) {
+		this.deptRole = deptRole;
 	}
 }

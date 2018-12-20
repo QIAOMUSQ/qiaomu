@@ -18,6 +18,8 @@ package io.renren.modules.oss.dao;
 
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import io.renren.datasources.DataSourceNames;
+import io.renren.datasources.annotation.DataSource;
 import io.renren.modules.oss.entity.SysOssEntity;
 
 /**
@@ -27,7 +29,7 @@ import io.renren.modules.oss.entity.SysOssEntity;
  * @email sunlightcs@gmail.com
  * @date 2017-03-25 12:13:26
  */
-
+@DataSource(name = DataSourceNames.FIRST)
 public interface SysOssDao extends BaseMapper<SysOssEntity> {
 	
 }

@@ -18,6 +18,8 @@ package io.renren.modules.sys.dao;
 
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import io.renren.datasources.DataSourceNames;
+import io.renren.datasources.annotation.DataSource;
 import io.renren.modules.sys.entity.SysConfigEntity;
 import org.apache.ibatis.annotations.Param;
 
@@ -33,6 +35,7 @@ public interface SysConfigDao extends BaseMapper<SysConfigEntity> {
 	/**
 	 * 根据key，查询value
 	 */
+
 	SysConfigEntity queryByKey(String paramKey);
 
 	/**

@@ -17,7 +17,10 @@
 package io.renren.modules.sys.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import io.renren.datasources.DataSourceNames;
+import io.renren.datasources.annotation.DataSource;
 import io.renren.modules.sys.entity.SysUserEntity;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -28,6 +31,7 @@ import java.util.List;
  * @email sunlightcs@gmail.com
  * @date 2016年9月18日 上午9:34:11
  */
+
 public interface SysUserDao extends BaseMapper<SysUserEntity> {
 	
 	/**
@@ -41,4 +45,6 @@ public interface SysUserDao extends BaseMapper<SysUserEntity> {
 	 */
 	List<Long> queryAllMenuId(Long userId);
 
+	//@DataSource(name = DataSourceNames.SECOND)
+	SysUserEntity queryById(Long userId);
 }
