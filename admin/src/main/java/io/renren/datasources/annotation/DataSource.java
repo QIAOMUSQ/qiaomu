@@ -8,9 +8,10 @@ import java.lang.annotation.*;
  * @email sunlightcs@gmail.com
  * @date 2017/9/16 22:16
  */
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD,ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+@Inherited
 public @interface DataSource {
     String name() default "";
 }

@@ -1,7 +1,10 @@
 package io.renren;
 
 
+import io.renren.modules.sys.dao.SysUserDao;
 import io.renren.modules.sys.entity.SysUserEntity;
+import io.renren.modules.sys.service.SysUserService;
+import io.renren.modules.sys.service.impl.SysUserServiceImpl;
 import io.renren.service.DataSourceTestService;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.junit.Test;
@@ -12,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = {AdminApplication.class})
 public class DynamicDataSourceTest {
     @Autowired
     private DataSourceTestService dataSourceTestService;
@@ -20,16 +23,16 @@ public class DynamicDataSourceTest {
     @Test
     public void test(){
         //数据源1
-        SysUserEntity user1 = dataSourceTestService.queryUser(1L);
-        System.out.println(ToStringBuilder.reflectionToString(user1));
+       // SysUserEntity user1 = dataSourceTestService.queryUser(1L);
+       // System.out.println(ToStringBuilder.reflectionToString(user1));
 
         //数据源2
-        SysUserEntity user2 = dataSourceTestService.queryUser2(1L);
+        SysUserEntity user2 = dataSourceTestService.queryUser3(13L);
         System.out.println(ToStringBuilder.reflectionToString(user2));
 
         //数据源1
-        SysUserEntity user3 = dataSourceTestService.queryUser(1L);
-        System.out.println(ToStringBuilder.reflectionToString(user3));
+      //  SysUserEntity user3 = dataSourceTestService.queryUser(1L);
+       // System.out.println(ToStringBuilder.reflectionToString(user3));
     }
 
 }

@@ -16,6 +16,6 @@ public interface AppUserService extends IService<SysUserEntity> {
      * @param password
      * @param communityId
      */
-    void save(String phone,String password,Integer communityId);
+    void save(String phone,String password);
 
 }

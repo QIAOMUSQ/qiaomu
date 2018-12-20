@@ -72,9 +72,9 @@ public class AppUserController extends AbstractController {
      * @return
      */
     @RequestMapping(value = "/regist", method = RequestMethod.POST)
-    public R registUser(String phone,String password,Integer communityId){
+    public R registUser(String phone,String password){
 
-        appUserService.save(phone,password,communityId);
+        appUserService.save(phone,password);
         return R.ok();
     }
 

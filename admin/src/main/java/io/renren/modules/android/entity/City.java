@@ -8,8 +8,8 @@ import com.baomidou.mybatisplus.annotations.TableName;
  * @description:社区实体
  * @Date 2018-11-28 21:30
  */
-@TableName("yw_community")
-public class Community {
+@TableName("yw_city")
+public class City {
     @TableId
     private Integer id;
 

@@ -23,6 +23,8 @@ import io.renren.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 测试多数据源
  *
@@ -38,8 +40,15 @@ public class DataSourceTestService {
         return sysUserService.selectById(userId);
     }
 
-    @DataSource(name = DataSourceNames.SECOND)
+    //@DataSource(name = DataSourceNames.SECOND)
     public SysUserEntity queryUser2(Long userId){
         return sysUserService.selectById(userId);
     }
+
+    //@DataSource(name = DataSourceNames.SECOND)
+    public SysUserEntity queryUser3(Long userId){
+        return sysUserService.queryById(userId);
+    }
+
+
 }
