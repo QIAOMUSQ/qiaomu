@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author
- * @description:App中用户管理
+ * @description:App
  * @Date 2018-10-23 20:02
  */
 @RestController
