@@ -906,10 +906,10 @@ CREATE TABLE `yw_user_indetity` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of yw_user_indetity
+-- app升级表
 -- ----------------------------
 DROP TABLE IF EXISTS `pluto_updateAppinfo`;
-CREATE TABLE `pluto_updateAppinfo
+CREATE TABLE pluto_updateAppinfo (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `appVersion` varchar(20) NOT NULL AUTO_INCREMENT,
   `appUrl` varchar(100) DEFAULT NULL,
