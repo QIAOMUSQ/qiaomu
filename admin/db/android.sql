@@ -908,3 +908,13 @@ CREATE TABLE `yw_user_indetity` (
 -- ----------------------------
 -- Records of yw_user_indetity
 -- ----------------------------
+DROP TABLE IF EXISTS `pluto_updateAppinfo`;
+CREATE TABLE `pluto_updateAppinfo
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `appVersion` varchar(20) NOT NULL AUTO_INCREMENT,
+  `appUrl` varchar(100) DEFAULT NULL,
+  `updateType` varchar(20) DEFAULT NULL ,
+  `createdAs` datetime(70) DEFAULT NULL ,
+  `updatedAs` datetime(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

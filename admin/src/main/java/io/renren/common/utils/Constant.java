@@ -28,6 +28,8 @@ public class Constant {
     /** 数据权限过滤 */
 	public static final String SQL_FILTER = "sql_filter";
 
+    public static final String BASE_URL="http://123.com";//待定，尽量从配置文件读
+
 
 	/**
 	 * 菜单类型

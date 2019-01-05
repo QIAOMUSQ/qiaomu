@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.renren.modules.android.dao.UpdateAppDao">
+
+    <insert id="addAppUpdateInfo" parameterType="io.renren.modules.android.entity.AppUpdateEntity">
+        insert into pluto_updateAppinfo (appVersion,appUrl,updateType,createdAs,updatedAs) VALUES (#{appVersion},#{appUrl},#{updateType},#{createdAs},#{updatedAs})
+    </insert>
+
+    <select id="getMaxVersion" resultType="io.renren.modules.android.entity.AppUpdateEntity">
+        SELECT * FROM pluto_updateAppinfo ORDER BY appVersion DESC LIMIT 1
+    </select>
+
+
+</mapper>
