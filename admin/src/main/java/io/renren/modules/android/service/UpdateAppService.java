@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  * Created by wenglei on 2018/11/21.
  */
 @Service
-public class BaseService {
+public class UpdateAppService {
     @Autowired
     private UpdateAppDao updateAppDao;
 

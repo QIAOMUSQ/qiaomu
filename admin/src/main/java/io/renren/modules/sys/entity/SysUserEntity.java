@@ -20,6 +20,7 @@ package io.renren.modules.sys.entity;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.renren.common.validator.group.AddGroup;
 import io.renren.common.validator.group.UpdateGroup;
@@ -105,6 +106,10 @@ public class SysUserEntity implements Serializable {
 	 */
 	@TableField(exist=false)
 	private String deptName;
+
+
+	// 注册时间
+	private Date initTime;
 
 
 	/**
@@ -261,5 +266,13 @@ public class SysUserEntity implements Serializable {
 
 	public void setCommunityId(Integer communityId) {
 		this.communityId = communityId;
+	}
+
+	public Date getInitTime() {
+		return initTime;
+	}
+
+	public void setInitTime(Date initTime) {
+		this.initTime = initTime;
 	}
 }

@@ -47,4 +47,10 @@ public interface SysUserDao extends BaseMapper<SysUserEntity> {
 
 	//@DataSource(name = DataSourceNames.SECOND)
 	SysUserEntity queryById(Long userId);
+
+	SysUserEntity findByUsername(String username);
+
+	SysUserEntity findByEmail(String email);
+
+	void save(SysUserEntity sysUserEntity);
 }

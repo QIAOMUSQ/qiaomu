@@ -3,8 +3,9 @@ package io.renren.modules.android.bussiness;
 import io.renren.common.utils.CommonUtils;
 import io.renren.common.utils.DateUtils;
 import io.renren.common.utils.R;
+import io.renren.modules.android.dao.UpdateAppDao;
 import io.renren.modules.android.entity.AppUpdateEntity;
-import io.renren.modules.android.service.BaseService;
+import io.renren.modules.android.service.UpdateAppService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,7 +25,7 @@ import static io.renren.common.utils.Constant.BASE_URL;
 @Service
 public class UpdateAppBussinessImpl implements UpdateAppBussiness {
     @Autowired
-    private BaseService baseService;
+    private UpdateAppService baseService;
 
     @Override
     public R uploadFile(HttpServletRequest request) {
