@@ -36,3 +36,8 @@ spring:
         wall:
           config:
             multi-statement-allow: true
+
+
+#### 上传文件保存的路径
+file:
+  save: E:/files/

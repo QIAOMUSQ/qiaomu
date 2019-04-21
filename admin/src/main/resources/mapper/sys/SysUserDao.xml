@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="io.renren.modules.sys.dao.SysUserDao">
+<mapper namespace="com.qiaomu.modules.sys.dao.SysUserDao">
 	
 	<!-- 查询用户的所有权限 -->
 	<select id="queryAllPerms" resultType="string">
@@ -18,7 +18,24 @@
 		where ur.user_id = #{userId}
 	</select>
 
-	<select id="queryById" resultType="io.renren.modules.sys.entity.SysUserEntity">
+	<select id="queryById" resultType="com.qiaomu.modules.sys.entity.SysUserEntity">
 		SELECT * FROM sys_user WHERE user_id = #{userId}
+	</select>
+
+	<!--根据角色获取用户-->
+	<select id="getLoginUser" resultType="com.qiaomu.modules.sys.entity.SysUserEntity">
+		SELECT
+			*
+		FROM
+			sys_user u right JOIN  yw_user_extend e on e.user_phone = u.username
+		WHERE e.property_company_role_type = #{roleType};
+	</select>
+
+	<select id="getUserByUserName" resultType="com.qiaomu.modules.sys.entity.SysUserEntity" >
+		SELECT
+			*
+		FROM
+			sys_user
+		WHERE username = #{userName};
 	</select>
 </mapper>

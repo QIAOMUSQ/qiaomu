@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>审批人员管理</title>
+    <#include "/header.html">
+
+        <link rel="stylesheet" href="${request.contextPath}/statics/css/fileinput.css">
+        </head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <div class="form-group col-sm-2">
+                <input type="text" class="form-control" v-model="q.name" @keyup.enter="query" placeholder="企业名称">
+            </div>
+
+            <a class="btn btn-default" @click="query">查询</a>
+            <#if shiro.hasPermission("company:save")>
+                <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            </#if>
+            <#if shiro.hasPermission("company:update")>
+                <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+            </#if>
+            <#if shiro.hasPermission("company:delete")>
+                <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            </#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" id="panelId"  class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">企业名称</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="company.name" placeholder="企业名称"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">法人名称</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="company.legalPerson" placeholder="法人名称"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label">联系号码</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="company.telPhone" placeholder="联系号码"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">登录账户</div>
+                <div class="col-sm-10">
+                    <select class="select"  v-model="loginUser" v-on:change="indexSelect($event)">
+                        <template v-for="item in userList">
+                            <option v-bind:value = "item.value">{{item.text}}</option>
+                        </template>
+                    </select>
+                    <input type="text" class="form-control" style="display:none;" v-model="company.adminPhone"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label">地址</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="company.address" placeholder="地址"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">营业执照</div>
+                <div class="col-sm-10" style="height: 190px;">
+                    <div class="form-group">
+                        <!--<input id="fish_file" name="fish_file" type="file" multiple  class="file"  data-show-upload="false" data-show-caption="true">-->
+                        <input id="fish_file" type="file" class="file" data-overwrite-initial="false" data-min-file-count="1">
+                    </div>
+                    <input type="text" id="imgPath" style="display: none"  v-model="company.companyImg"/>
+                    <input type="text" id="companyId" style="display: none"  v-model="company.id"/>
+                </div>
+            </div>
+
+        </form>
+        <div class="form-group" style="    width: 20%;position: absolute;right: 0px;top: 60%;">
+            <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>&nbsp;&nbsp;
+            <input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+        </div>
+    </div>
+
+</div>
+<!-- 选择部门 -->
+<script src="${request.contextPath}/statics/js/modules/propertyCompany/company.js?_${.now?long}"></script>
+<script src="${request.contextPath}/statics/js/fileinput.js" type="text/javascript"></script>
+
+<script src="${request.contextPath}/statics/js/fileinput_locale_zh.js" type="text/javascript"></script>
+<script>
+    $("#fish_file").fileinput({
+        uploadUrl: '${request.contextPath}/App/upload/addFishPicture', // you must set a valid URL here else you will get an error
+        language: 'zh', //设置语言
+        //enctype: 'multipart/form-data',
+        allowedFileExtensions : ['jpg', 'png','bmp','jpeg'],//接收的文件后缀
+        showUpload: false, //是否显示上传按钮
+        showPreview: true,              //展前预览
+        showCaption: false,//是否显示标题
+        maxFileSize : 10000,//上传文件最大的尺寸
+        maxFilesNum : 1,//
+        dropZoneEnabled: false,//是否显示拖拽区域
+        showRemove:true,
+        browseClass: "btn btn-primary", //按钮样式
+        uploadAsync: true,
+        fileActionSettings:{showUpload: false}, // 控制上传按钮是否显示
+        layoutTemplates :{
+            actionUpload:'',//去除上传预览缩略图中的上传图片；
+            actionZoom:''   //去除上传预览缩略图中的查看详情预览的缩略图标。
+        }
+    }).on("filebatchselected", function() {
+        $(this).fileinput("upload");
+    }).on("fileuploaded", function(event, data) {
+        vm.company.companyImg =data.response.path;
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>审批人员管理</title>
+    <#include "/header.html">
+
+        </head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <div class="form-group col-sm-2">
+                <input type="text" class="form-control" v-model="q.communityName" @keyup.enter="query" placeholder="社区名称">
+            </div>
+            <div class="form-group col-sm-2">
+                <input type="text" class="form-control" v-model="q.userPhone" @keyup.enter="query" placeholder="用户手机">
+            </div>
+            <a class="btn btn-default" @click="query">查询</a>
+            <#if shiro.hasPermission("process:people:check")>
+                <a class="btn btn-primary" @click="check"><i class="fa fa-pencil-square-o"></i>&nbsp;审核</a>
+            </#if>
+            <#if shiro.hasPermission("process:people:forbidden")>
+                <a class="btn btn-primary" @click="unUsed(3)"><i class="fa fa-plus"></i>&nbsp;禁用</a>
+            </#if>
+            <#if shiro.hasPermission("process:people:delete")>
+                <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            </#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">用户手机</div>
+                <div class="col-sm-10">
+                    <input type="text"  id="userPhone" class="form-control" readonly="readonly"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">真实姓名</div>
+                <div class="col-sm-10">
+                    <input type="text" id="realName" class="form-control" style="cursor:pointer;"  @click="deptTree" readonly="readonly" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">证件号</div>
+                <div class="col-sm-10">
+                    <input type="text" id="userIdentity" class="form-control" readonly="readonly"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">所属社区</div>
+                <div class="col-sm-10">
+                    <input type="text" id="communityName" class="form-control"  readonly="readonly"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">住址</div>
+                <div class="col-sm-10">
+                    <input type="text" id="address" class="form-control"  readonly="readonly"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">申请时间</div>
+                <div class="col-sm-10">
+                    <input type="text" id="creatTime" class="form-control"readonly="readonly"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">角色类型</div>
+                <div class="col-sm-12" style="    position: absolute;left: 10%;">
+                    <label v-for="type in typeList" class="radio-inline">
+                        <input type="radio" name="roleType" :value="type.value" v-model="userExtend.propertyCompanyRoleType">{{type.name}}
+                    </label>
+                </div>
+            </div>
+            <div class="imgDiv">
+                <img class="img" id="imgUrl" src="" />
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label">审核意见</div>
+                <div class="col-sm-10">
+                    <textarea type="text" id="info" class="form-control"v-model="userExtend.info" ></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" style="background: #1b510f;" @click="saveOrUpdate(1)" value="通过"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="saveOrUpdate(2)" value="不通过"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-primary" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 选择社区 -->
+<div id="deptLayer" style="display: none;padding:10px;">
+    <ul id="deptTree" class="ztree"></ul>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/auditprocess/people.js?_${.now?long}"></script>
+<input style="display: none;" id="_application_static_url"/>
+</body>
+<script>
+    $("#_application_static_url").val("${request.contextPath}");
+</script>
+</html>
