@@ -26,5 +26,5 @@ import com.qiaomu.modules.sys.entity.SysDictEntity;
  * @since 3.1.0 2018-01-27
  */
 public interface SysDictDao extends BaseMapper<SysDictEntity> {
-	
+
 }

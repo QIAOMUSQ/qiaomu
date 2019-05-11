@@ -26,8 +26,7 @@ import java.util.Map;
  */
 @Service
 public class YwAuditProcessCheckServiceImpl extends ServiceImpl<YwAuditProcesscheckDao, YwAuditProcessCheck>
-        implements YwAuditProcessCheckService
-{
+        implements YwAuditProcessCheckService {
 
     @Autowired
     private YwCommunityService communityService;
@@ -41,11 +40,10 @@ public class YwAuditProcessCheckServiceImpl extends ServiceImpl<YwAuditProcessch
     @Autowired
     private SysDictService dictService;
 
-    public PageUtils queryPage(Map<String, Object> params)
-    {
-        Long companyId = (Long)params.get("companyId");
-        String communityName = (String)params.get("communityName");
-        String processName = (String)params.get("processName");
+    public PageUtils queryPage(Map<String, Object> params) {
+        Long companyId = (Long) params.get("companyId");
+        String communityName = (String) params.get("communityName");
+        String processName = (String) params.get("processName");
         List communityId = this.communityService.getCommunityIdList(communityName, companyId);
         Page<YwAuditProcessCheck> page = selectPage(new Query(params)
                 .getPage(), new EntityWrapper()
@@ -56,7 +54,7 @@ public class YwAuditProcessCheckServiceImpl extends ServiceImpl<YwAuditProcessch
                         .size() > 0, "community_id", communityId)
                 .addFilterIfNeed(params
                                 .get("sql_filter") != null,
-                        (String)params.get("sql_filter"), new Object[0]));
+                        (String) params.get("sql_filter"), new Object[0]));
 
         for (YwAuditProcessCheck processCheck : page.getRecords()) {
             processCheck.setClientPhone(getUserByPhone(processCheck.getClientPhone()));
@@ -65,8 +63,7 @@ public class YwAuditProcessCheckServiceImpl extends ServiceImpl<YwAuditProcessch
         return new PageUtils(page);
     }
 
-    private String getUserByPhone(String phone)
-    {
+    private String getUserByPhone(String phone) {
         String name = "";
         String[] phones = phone.split("_");
         for (String i : phones) {

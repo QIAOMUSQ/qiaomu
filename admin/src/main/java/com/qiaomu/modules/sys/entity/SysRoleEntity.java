@@ -30,150 +30,156 @@ import java.util.List;
 
 /**
  * 角色
- * 
+ *
  * @author chenshun
  * @email sunlightcs@gmail.com
  * @date 2016年9月18日 上午9:27:38
  */
 @TableName("sys_role")
 public class SysRoleEntity implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
-	/**
-	 * 角色ID
-	 */
-	@TableId
-	private Long roleId;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * 角色名称
-	 */
-	@NotBlank(message="角色名称不能为空")
-	private String roleName;
+    /**
+     * 角色ID
+     */
+    @TableId
+    private Long roleId;
 
-	/**
-	 * 备注
-	 */
-	private String remark;
+    /**
+     * 角色名称
+     */
+    @NotBlank(message = "角色名称不能为空")
+    private String roleName;
 
-	/**
-	 * 部门ID
-	 */
-	@NotNull(message="部门不能为空")
-	private Long deptId;
+    /**
+     * 备注
+     */
+    private String remark;
 
-	/**
-	 * 部门名称
-	 */
-	@TableField(exist=false)
-	private String deptName;
+    /**
+     * 部门ID
+     */
+    @NotNull(message = "部门不能为空")
+    private Long deptId;
 
-	@TableField(exist=false)
-	private List<Long> menuIdList;
-	@TableField(exist=false)
-	private List<Long> deptIdList;
+    /**
+     * 部门名称
+     */
+    @TableField(exist = false)
+    private String deptName;
 
-	private String deptRole;
-	
-	/**
-	 * 创建时间
-	 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-	private Date createTime;
+    @TableField(exist = false)
+    private List<Long> menuIdList;
+    @TableField(exist = false)
+    private List<Long> deptIdList;
 
-	/**
-	 * 设置：
-	 * @param roleId 
-	 */
-	public void setRoleId(Long roleId) {
-		this.roleId = roleId;
-	}
+    private String deptRole;
 
-	/**
-	 * 获取：
-	 * @return Long
-	 */
-	public Long getRoleId() {
-		return roleId;
-	}
-	
-	/**
-	 * 设置：角色名称
-	 * @param roleName 角色名称
-	 */
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
-	}
+    /**
+     * 创建时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date createTime;
 
-	/**
-	 * 获取：角色名称
-	 * @return String
-	 */
-	public String getRoleName() {
-		return roleName;
-	}
-	
-	/**
-	 * 设置：备注
-	 * @param remark 备注
-	 */
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+    /**
+     * 设置：
+     *
+     * @param roleId
+     */
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
 
-	/**
-	 * 获取：备注
-	 * @return String
-	 */
-	public String getRemark() {
-		return remark;
-	}
+    /**
+     * 获取：
+     *
+     * @return Long
+     */
+    public Long getRoleId() {
+        return roleId;
+    }
 
-	public Date getCreateTime() {
-		return createTime;
-	}
+    /**
+     * 设置：角色名称
+     *
+     * @param roleName 角色名称
+     */
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
+    /**
+     * 获取：角色名称
+     *
+     * @return String
+     */
+    public String getRoleName() {
+        return roleName;
+    }
 
-	public List<Long> getMenuIdList() {
-		return menuIdList;
-	}
+    /**
+     * 设置：备注
+     *
+     * @param remark 备注
+     */
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
-	public void setMenuIdList(List<Long> menuIdList) {
-		this.menuIdList = menuIdList;
-	}
+    /**
+     * 获取：备注
+     *
+     * @return String
+     */
+    public String getRemark() {
+        return remark;
+    }
 
-	public Long getDeptId() {
-		return deptId;
-	}
+    public Date getCreateTime() {
+        return createTime;
+    }
 
-	public void setDeptId(Long deptId) {
-		this.deptId = deptId;
-	}
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 
-	public String getDeptName() {
-		return deptName;
-	}
+    public List<Long> getMenuIdList() {
+        return menuIdList;
+    }
 
-	public void setDeptName(String deptName) {
-		this.deptName = deptName;
-	}
+    public void setMenuIdList(List<Long> menuIdList) {
+        this.menuIdList = menuIdList;
+    }
 
-	public List<Long> getDeptIdList() {
-		return deptIdList;
-	}
+    public Long getDeptId() {
+        return deptId;
+    }
 
-	public void setDeptIdList(List<Long> deptIdList) {
-		this.deptIdList = deptIdList;
-	}
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
+    }
 
-	public String getDeptRole() {
-		return deptRole;
-	}
+    public String getDeptName() {
+        return deptName;
+    }
 
-	public void setDeptRole(String deptRole) {
-		this.deptRole = deptRole;
-	}
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
+
+    public List<Long> getDeptIdList() {
+        return deptIdList;
+    }
+
+    public void setDeptIdList(List<Long> deptIdList) {
+        this.deptIdList = deptIdList;
+    }
+
+    public String getDeptRole() {
+        return deptRole;
+    }
+
+    public void setDeptRole(String deptRole) {
+        this.deptRole = deptRole;
+    }
 }

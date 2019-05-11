@@ -23,49 +23,50 @@ public class YwUserExtendController extends AbstractController {
     private YwUserExtendService userExtendService;
 
     @ResponseBody
-    @RequestMapping(value = "people/list",method = RequestMethod.POST)
+    @RequestMapping(value = "people/list", method = RequestMethod.POST)
     @RequiresPermissions("process:people:list")
-    public R list(@RequestParam Map<String, Object> params){
-        params.put("companyId",getCompanyOrCommunityByType("1"));
+    public R list(@RequestParam Map<String, Object> params) {
+        params.put("companyId", getCompanyOrCommunityByType("1"));
         PageUtils page = userExtendService.queryPage(params);
 
         return R.ok().put("page", page);
     }
 
     @ResponseBody
-    @RequestMapping(value = "/info/{id}",method = RequestMethod.GET)
+    @RequestMapping(value = "/info/{id}", method = RequestMethod.GET)
     @RequiresPermissions("process:people:info")
-    public R getUserExtendInfo(@PathVariable("id") Long id){
-        return R.ok().put("userExtendInfo",userExtendService.getUserExtendInfo(id));
+    public R getUserExtendInfo(@PathVariable("id") Long id) {
+        return R.ok().put("userExtendInfo", userExtendService.getUserExtendInfo(id));
     }
 
     /**
      * 用户审核
+     *
      * @param userPhone 手机号码
-     * @param info 备注信息
-     * @param type  1：通过 2：不通过 3：禁用
-     * @param roleType 物业角色
+     * @param info      备注信息
+     * @param type      1：通过 2：不通过 3：禁用
+     * @param roleType  物业角色
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "saveCheckInfo",method = RequestMethod.POST)
+    @RequestMapping(value = "saveCheckInfo", method = RequestMethod.POST)
     @RequiresPermissions("process:people:check")
-    public R saveCheckInfo( String userPhone,String info,String type,String roleType){
-        userExtendService.saveCheckInfo(userPhone,info,type,roleType);
+    public R saveCheckInfo(String userPhone, String info, String type, String roleType) {
+        userExtendService.saveCheckInfo(userPhone, info, type, roleType);
         return R.ok();
     }
 
     @ResponseBody
-    @RequestMapping(value = "delete",method = RequestMethod.POST)
+    @RequestMapping(value = "delete", method = RequestMethod.POST)
     @RequiresPermissions("process:people:check")
-    public R saveCheckInfo(@RequestBody Long[] userIds){
+    public R saveCheckInfo(@RequestBody Long[] userIds) {
         userExtendService.delect(userIds);
         return R.ok();
     }
 
     @ResponseBody
-    @RequestMapping(value = "getUserCompanyId",method = RequestMethod.GET)
-    public R getUserCompanyId(){
-        return R.ok().put("id",getCompanyOrCommunityByType("1"));
+    @RequestMapping(value = "getUserCompanyId", method = RequestMethod.GET)
+    public R getUserCompanyId() {
+        return R.ok().put("id", getCompanyOrCommunityByType("1"));
     }
 }

@@ -21,35 +21,42 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping({"processMessage"})
-public class AuditProcessMessageController extends AbstractController
-{
+public class AuditProcessMessageController extends AbstractController {
 
     @Autowired
     private YwAuditProcessMessageService processMessageService;
 
     @ResponseBody
-    @RequestMapping(value={"process/list"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
+    @RequestMapping(value = {"process/list"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
     @RequiresPermissions({"message:list"})
-    public R list(@RequestParam Map<String, Object> params)
-    {
+    public R list(@RequestParam Map<String, Object> params) {
         params.put("companyId", getCompanyOrCommunityByType("1"));
         PageUtils page = this.processMessageService.queryPage(params);
 
-        return R.ok().put("page", page); }
+        return R.ok().put("page", page);
+    }
+
     @ResponseBody
-    @RequestMapping(value={"process/save"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
-    @RequiresPermissions(value={"message:add", "message:update"}, logical= Logical.OR)
-    public R save(@RequestBody YwAuditProcessMessage processMessage) { processMessage.setCompanyId(getCompanyOrCommunityByType("1"));
+    @RequestMapping(value = {"process/save"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
+    @RequiresPermissions(value = {"message:add", "message:update"}, logical = Logical.OR)
+    public R save(@RequestBody YwAuditProcessMessage processMessage) {
+        processMessage.setCompanyId(getCompanyOrCommunityByType("1"));
         this.processMessageService.save(processMessage);
-        return R.ok(); }
+        return R.ok();
+    }
+
     @ResponseBody
-    @RequestMapping(value={"getProcess/{id}"}, method={org.springframework.web.bind.annotation.RequestMethod.GET})
+    @RequestMapping(value = {"getProcess/{id}"}, method = {org.springframework.web.bind.annotation.RequestMethod.GET})
     @RequiresPermissions({"message:info"})
-    public R getProcess(@PathVariable("id") Long id) { return R.ok().put("process", this.processMessageService.getById(id)); }
+    public R getProcess(@PathVariable("id") Long id) {
+        return R.ok().put("process", this.processMessageService.getById(id));
+    }
+
     @ResponseBody
-    @RequestMapping(value={"delete"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
+    @RequestMapping(value = {"delete"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
     @RequiresPermissions({"message:delete"})
-    public R getProcess(@RequestBody Long[] ids) { this.processMessageService.deleteBatchIds(Arrays.asList(ids));
+    public R getProcess(@RequestBody Long[] ids) {
+        this.processMessageService.deleteBatchIds(Arrays.asList(ids));
         return R.ok();
     }
 }

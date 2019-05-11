@@ -20,45 +20,53 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping({"propertyCompanyManage"})
-public class PropertyCompanyManageController
-{
+public class PropertyCompanyManageController {
 
     @Autowired
     private YwPropertyCompanyService propertyCompanyService;
 
     @ResponseBody
-    @RequestMapping(value={"company/list"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
+    @RequestMapping(value = {"company/list"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
     @RequiresPermissions({"company:list"})
-    public R list(@RequestParam Map<String, Object> params)
-    {
+    public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = this.propertyCompanyService.queryPage(params);
 
-        return R.ok().put("page", page); }
+        return R.ok().put("page", page);
+    }
+
     @ResponseBody
-    @RequestMapping(value={"save"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
+    @RequestMapping(value = {"save"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
     @RequiresPermissions({"company:save"})
-    public R addCompany(@RequestBody YwPropertyCompany company) { System.out.printf(JSON.toJSONString(company), new Object[0]);
+    public R addCompany(@RequestBody YwPropertyCompany company) {
+        System.out.printf(JSON.toJSONString(company), new Object[0]);
 
         company.setCreatTime(new Date());
         this.propertyCompanyService.save(company);
-        return R.ok(); }
+        return R.ok();
+    }
 
     @ResponseBody
     @RequestMapping({"/info/{id}"})
     @RequiresPermissions({"company:info"})
     public R info(@PathVariable("id") Long id) {
-        YwPropertyCompany company = (YwPropertyCompany)this.propertyCompanyService.selectById(id);
+        YwPropertyCompany company = (YwPropertyCompany) this.propertyCompanyService.selectById(id);
 
-        return R.ok().put("company", company); }
+        return R.ok().put("company", company);
+    }
+
     @ResponseBody
-    @RequestMapping(value={"update"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
+    @RequestMapping(value = {"update"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
     @RequiresPermissions({"company:update"})
-    public R update(@RequestBody YwPropertyCompany company) { this.propertyCompanyService.update(company);
-        return R.ok(); }
+    public R update(@RequestBody YwPropertyCompany company) {
+        this.propertyCompanyService.update(company);
+        return R.ok();
+    }
+
     @ResponseBody
-    @RequestMapping(value={"delete"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
+    @RequestMapping(value = {"delete"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
     @RequiresPermissions({"company:update"})
-    public R delete(@PathVariable("id") Long id) { this.propertyCompanyService.deleteById(id);
+    public R delete(@PathVariable("id") Long id) {
+        this.propertyCompanyService.deleteById(id);
         return R.ok();
     }
 }

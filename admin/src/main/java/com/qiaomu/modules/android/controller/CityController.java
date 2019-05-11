@@ -33,21 +33,21 @@ public class CityController {
     private SysDeptService sysDeptService;
 
     @ResponseBody
-    @RequestMapping(value = "/list",method = RequestMethod.POST)
-    public R getCommunityList(String name){
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    public R getCommunityList(String name) {
         List<SysDeptEntity> deptList = new ArrayList<>();
-        try{
-            if(name !=null && name !=""){
-                SysDeptEntity entity= new SysDeptEntity();
+        try {
+            if (name != null && name != "") {
+                SysDeptEntity entity = new SysDeptEntity();
                 entity.setName(name);
                 Map<String, Object> params = new HashMap<>();
-                params.put("name",name);
-                deptList = sysDeptService.selectList(new EntityWrapper<SysDeptEntity>().like("name",name));
-               // deptList = sysDeptService.queryList(params);
+                params.put("name", name);
+                deptList = sysDeptService.selectList(new EntityWrapper<SysDeptEntity>().like("name", name));
+                // deptList = sysDeptService.queryList(params);
             } else {
                 deptList = sysDeptService.selectList(null);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -55,10 +55,10 @@ public class CityController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "getCity",method = RequestMethod.POST)
-    public R getCity(){
+    @RequestMapping(value = "getCity", method = RequestMethod.POST)
+    public R getCity() {
 
-        return R.ok("success",JSON.toJSON(cityService.selectList(null)));
+        return R.ok("success", JSON.toJSON(cityService.selectList(null)));
     }
 
 }

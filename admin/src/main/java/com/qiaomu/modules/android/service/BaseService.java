@@ -16,13 +16,11 @@ public class BaseService {
     @Autowired
     private AppUpdateDao updateAppDao;
 
-    public void addAppUpdateInfo(AppUpdateEntity appUpdateEntity)
-    {
+    public void addAppUpdateInfo(AppUpdateEntity appUpdateEntity) {
         this.updateAppDao.addAppUpdateInfo(appUpdateEntity);
     }
 
-    public AppUpdateEntity getMaxVersion()
-    {
+    public AppUpdateEntity getMaxVersion() {
         return this.updateAppDao.getMaxVersion();
     }
 }

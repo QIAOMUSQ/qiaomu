@@ -33,7 +33,7 @@ public interface SysDictService extends IService<SysDictEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    List<SysDictEntity>getDictByType(String type);
+    List<SysDictEntity> getDictByType(String type);
 
     String getdictCodeByTypeValue(String value, String type);
 }

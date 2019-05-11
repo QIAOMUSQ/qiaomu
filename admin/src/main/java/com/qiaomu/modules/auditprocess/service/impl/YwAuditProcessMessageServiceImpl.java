@@ -26,8 +26,7 @@ import java.util.Map;
  */
 @Service
 public class YwAuditProcessMessageServiceImpl extends ServiceImpl<YwAuditProcessMessageDao, YwAuditProcessMessage>
-        implements YwAuditProcessMessageService
-{
+        implements YwAuditProcessMessageService {
 
     @Autowired
     private YwCommunityService communityService;
@@ -38,11 +37,10 @@ public class YwAuditProcessMessageServiceImpl extends ServiceImpl<YwAuditProcess
     @Autowired
     private SysDictService dictService;
 
-    public PageUtils queryPage(Map<String, Object> params)
-    {
-        Long companyId = (Long)params.get("companyId");
-        String communityName = (String)params.get("communityName");
-        String processName = (String)params.get("processName");
+    public PageUtils queryPage(Map<String, Object> params) {
+        Long companyId = (Long) params.get("companyId");
+        String communityName = (String) params.get("communityName");
+        String processName = (String) params.get("processName");
         List communityId = this.communityService.getCommunityIdList(communityName, companyId);
         Page<YwAuditProcessMessage> page = selectPage(new Query(params)
                 .getPage(), new EntityWrapper()
@@ -53,7 +51,7 @@ public class YwAuditProcessMessageServiceImpl extends ServiceImpl<YwAuditProcess
                         .size() > 0, "community_id", communityId)
                 .addFilterIfNeed(params
                                 .get("sql_filter") != null,
-                        (String)params.get("sql_filter"), new Object[0]));
+                        (String) params.get("sql_filter"), new Object[0]));
 
         for (YwAuditProcessMessage processMessage : page.getRecords()) {
             processMessage.setPhoneOne(getUserByPhone(processMessage.getPhoneOne()));
@@ -65,8 +63,7 @@ public class YwAuditProcessMessageServiceImpl extends ServiceImpl<YwAuditProcess
         return new PageUtils(page);
     }
 
-    public void save(YwAuditProcessMessage processMessage)
-    {
+    public void save(YwAuditProcessMessage processMessage) {
         if (processMessage.getId() != null) {
             updateById(processMessage);
         } else {
@@ -85,9 +82,8 @@ public class YwAuditProcessMessageServiceImpl extends ServiceImpl<YwAuditProcess
         return name;
     }
 
-    public YwAuditProcessMessage getById(Long id)
-    {
-        YwAuditProcessMessage processMessage = (YwAuditProcessMessage)selectById(id);
+    public YwAuditProcessMessage getById(Long id) {
+        YwAuditProcessMessage processMessage = (YwAuditProcessMessage) selectById(id);
         processMessage.setPhoneOneName(getUserByPhone(processMessage.getPhoneOne()));
         processMessage.setPhoneTwoName(getUserByPhone(processMessage.getPhoneTwo()));
         processMessage.setReportPersonName(getUserByPhone(processMessage.getReportPerson()));

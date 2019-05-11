@@ -27,20 +27,19 @@ public class YwCommunity implements Serializable {
     private Long companyId;
     private Date creatTime;
 
-    @TableField(exist=false)
+    @TableField(exist = false)
     private String companyName;
 
-    @TableField(exist=false)
+    @TableField(exist = false)
     private String cityName;
 
-    @TableField(exist=false)
+    @TableField(exist = false)
     private String admin;
 
-    @TableField(exist=false)
+    @TableField(exist = false)
     private String cityCode;
 
-    public Long getId()
-    {
+    public Long getId() {
         return this.id;
     }
 
@@ -80,8 +79,7 @@ public class YwCommunity implements Serializable {
         this.address = address;
     }
 
-    public Long getCompanyId()
-    {
+    public Long getCompanyId() {
         return this.companyId;
     }
 

@@ -11,8 +11,7 @@ import java.util.Map;
  * @description:
  * @Date 2019-04-21 16:19
  */
-public interface YwPropertyCompanyService extends IService<YwPropertyCompany>
-{
+public interface YwPropertyCompanyService extends IService<YwPropertyCompany> {
     public abstract PageUtils queryPage(Map<String, Object> paramMap);
 
     public abstract void save(YwPropertyCompany paramYwPropertyCompany);

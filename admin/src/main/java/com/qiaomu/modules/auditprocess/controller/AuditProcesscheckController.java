@@ -20,17 +20,15 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping({"processCheck"})
-public class AuditProcesscheckController extends AbstractController
-{
+public class AuditProcesscheckController extends AbstractController {
 
     @Autowired
     private YwAuditProcessCheckService processCheckService;
 
     @ResponseBody
-    @RequestMapping(value={"process/list"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
+    @RequestMapping(value = {"process/list"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
     @RequiresPermissions({"process:check:list"})
-    public R list(@RequestParam Map<String, Object> params)
-    {
+    public R list(@RequestParam Map<String, Object> params) {
         params.put("companyId", getCompanyOrCommunityByType("1"));
         PageUtils page = this.processCheckService.queryPage(params);
 

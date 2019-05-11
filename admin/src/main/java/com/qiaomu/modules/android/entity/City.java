@@ -19,22 +19,20 @@ public class City {
     private String code;
     private String name;
 
-    @TableField(exist=false)
+    @TableField(exist = false)
     private Long parentId;
 
-    @TableField(exist=false)
+    @TableField(exist = false)
     private Boolean open;
 
-    @TableField(exist=false)
+    @TableField(exist = false)
     private List<?> list;
 
-    public Long getId()
-    {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(Long id)
-    {
+    public void setId(Long id) {
         this.id = id;
     }
 

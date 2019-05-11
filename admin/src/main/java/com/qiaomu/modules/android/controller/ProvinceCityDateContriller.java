@@ -19,25 +19,27 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping({"App/provinceCity"})
-public class ProvinceCityDateContriller
-{
+public class ProvinceCityDateContriller {
 
     @Autowired
     private ProvinceCityDateService provinceCityDateService;
 
     @ResponseBody
-    @RequestMapping(value={"getPrivateDate"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
-    public R getProviceDate()
-    {
+    @RequestMapping(value = {"getPrivateDate"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
+    public R getProviceDate() {
         List provinceList = this.provinceCityDateService.getProvinceData();
         return R.ok("success", JSON.toJSON(provinceList));
     }
+
     @ResponseBody
-    @RequestMapping(value={"getCityDateByProvinceName"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
-    public R getCityDateByProvinceName(@RequestParam Map<String, Object> params) { List cityList = this.provinceCityDateService.getProvinceCityDate(params);
-        return R.ok("success", JSON.toJSON(cityList)); }
+    @RequestMapping(value = {"getCityDateByProvinceName"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
+    public R getCityDateByProvinceName(@RequestParam Map<String, Object> params) {
+        List cityList = this.provinceCityDateService.getProvinceCityDate(params);
+        return R.ok("success", JSON.toJSON(cityList));
+    }
+
     @ResponseBody
-    @RequestMapping(value={"getCityDateByProvinceCode"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
+    @RequestMapping(value = {"getCityDateByProvinceCode"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
     public R getCityDateByProvinceCode(@RequestParam Map<String, Object> params) {
         List cityList = this.provinceCityDateService.getProvinceCityDate(params);
         return R.ok("success", JSON.toJSON(cityList));

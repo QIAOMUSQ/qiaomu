@@ -1,7 +1,6 @@
 package com.qiaomu.modules.sys.service;
 
 
-
 import com.baomidou.mybatisplus.service.IService;
 import com.qiaomu.modules.sys.entity.ProvinceCityDateEntity;
 
@@ -16,18 +15,20 @@ import java.util.Map;
 public interface ProvinceCityDateService extends IService<ProvinceCityDateEntity> {
     /**
      * 获取省份数据
+     *
      * @return
      */
-     List<ProvinceCityDateEntity>getProvinceData();
+    List<ProvinceCityDateEntity> getProvinceData();
 
     /**
      * 根据省份获取城市数据
+     *
      * @param params
      * @return
      */
-     List<ProvinceCityDateEntity>getProvinceCityDate(Map<String, Object> params);
+    List<ProvinceCityDateEntity> getProvinceCityDate(Map<String, Object> params);
 
-    List<ProvinceCityDateEntity>getCityDateByProvinceCode(String provinceCode);
+    List<ProvinceCityDateEntity> getCityDateByProvinceCode(String provinceCode);
 
     ProvinceCityDateEntity getProvCityByCityName(String cityName);
 }

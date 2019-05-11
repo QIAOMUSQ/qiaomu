@@ -48,7 +48,7 @@ import java.util.Map;
 
 /**
  * 系统用户
- * 
+ *
  * @author chenshun
  * @email sunlightcs@gmail.com
  * @date 2016年9月18日 上午9:46:09
@@ -56,114 +56,114 @@ import java.util.Map;
 @Service
 @DataSource(name = DataSourceNames.FIRST)
 public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> implements SysUserService {
-	@Autowired
-	private SysUserRoleService sysUserRoleService;
-	@Autowired
-	private SysDeptService sysDeptService;
+    @Autowired
+    private SysUserRoleService sysUserRoleService;
+    @Autowired
+    private SysDeptService sysDeptService;
 
-	@Autowired
-	private YwUserExtendService userExtendService;
-
-
-	@Override
-	public List<Long> queryAllMenuId(Long userId) {
-		return baseMapper.queryAllMenuId(userId);
-	}
-
-	@Override
-	@DataFilter(subDept = true, user = false)
-	public PageUtils queryPage(Map<String, Object> params) {
-		String username = (String)params.get("username");
-
-		Page<SysUserEntity> page = this.selectPage(
-			new Query<SysUserEntity>(params).getPage(),
-			new EntityWrapper<SysUserEntity>()
-				.like(StringUtils.isNotBlank(username),"username", username)
-				.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER))
-		);
-
-		for(SysUserEntity sysUserEntity : page.getRecords()){
-			SysDeptEntity sysDeptEntity = sysDeptService.selectById(sysUserEntity.getDeptId());
-			if(sysDeptEntity != null){
-				sysUserEntity.setDeptName(sysDeptEntity.getName());
-			}else {
-				sysUserEntity.setDeptName("");
-			}
-		}
-
-		return new PageUtils(page);
-	}
-
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void save(SysUserEntity user) {
-		user.setCreateTime(new Date());
-		//sha256加密
-		String salt = RandomStringUtils.randomAlphanumeric(20);
-		user.setSalt(salt);
-		user.setPassword(ShiroUtils.sha256(user.getPassword(), user.getSalt()));
-		this.insert(user);
-		YwUserExtend userExtend = new YwUserExtend();
-		userExtend.setPropertyCompanyRoleType(user.getPropertyCompanyRoleType());
-		userExtend.setUserPhone(user.getUsername());
-		userExtendService.insert(userExtend);
-		//保存用户与角色关系
-		sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
-	}
-
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void update(SysUserEntity user) {
-		if(StringUtils.isBlank(user.getPassword())){
-			user.setPassword(null);
-		}else{
-			user.setPassword(ShiroUtils.sha256(user.getPassword(), user.getSalt()));
-		}
-		this.updateById(user);
-		YwUserExtend userExtend = new YwUserExtend();
-		userExtend = userExtendService.getUserExtend(user.getUsername());
-		if(user.getPropertyCompanyRoleType().equals("1")){
-			userExtend.setCheck("1");
-		}
-		if(userExtend != null){
-			userExtend.setPropertyCompanyRoleType(user.getPropertyCompanyRoleType());
-			userExtendService.updateById(userExtend);
-		}else{
-			userExtend = new YwUserExtend();
-			userExtend.setPropertyCompanyRoleType(user.getPropertyCompanyRoleType());
-			userExtend.setUserPhone(user.getUsername());
-			userExtendService.insert(userExtend);
-		}
-
-		//保存用户与角色关系
-		sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
-	}
+    @Autowired
+    private YwUserExtendService userExtendService;
 
 
-	@Override
-	public boolean updatePassword(Long userId, String password, String newPassword) {
+    @Override
+    public List<Long> queryAllMenuId(Long userId) {
+        return baseMapper.queryAllMenuId(userId);
+    }
+
+    @Override
+    @DataFilter(subDept = true, user = false)
+    public PageUtils queryPage(Map<String, Object> params) {
+        String username = (String) params.get("username");
+
+        Page<SysUserEntity> page = this.selectPage(
+                new Query<SysUserEntity>(params).getPage(),
+                new EntityWrapper<SysUserEntity>()
+                        .like(StringUtils.isNotBlank(username), "username", username)
+                        .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER))
+        );
+
+        for (SysUserEntity sysUserEntity : page.getRecords()) {
+            SysDeptEntity sysDeptEntity = sysDeptService.selectById(sysUserEntity.getDeptId());
+            if (sysDeptEntity != null) {
+                sysUserEntity.setDeptName(sysDeptEntity.getName());
+            } else {
+                sysUserEntity.setDeptName("");
+            }
+        }
+
+        return new PageUtils(page);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void save(SysUserEntity user) {
+        user.setCreateTime(new Date());
+        //sha256加密
+        String salt = RandomStringUtils.randomAlphanumeric(20);
+        user.setSalt(salt);
+        user.setPassword(ShiroUtils.sha256(user.getPassword(), user.getSalt()));
+        this.insert(user);
+        YwUserExtend userExtend = new YwUserExtend();
+        userExtend.setPropertyCompanyRoleType(user.getPropertyCompanyRoleType());
+        userExtend.setUserPhone(user.getUsername());
+        userExtendService.insert(userExtend);
+        //保存用户与角色关系
+        sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void update(SysUserEntity user) {
+        if (StringUtils.isBlank(user.getPassword())) {
+            user.setPassword(null);
+        } else {
+            user.setPassword(ShiroUtils.sha256(user.getPassword(), user.getSalt()));
+        }
+        this.updateById(user);
+        YwUserExtend userExtend = new YwUserExtend();
+        userExtend = userExtendService.getUserExtend(user.getUsername());
+        if (user.getPropertyCompanyRoleType().equals("1")) {
+            userExtend.setCheck("1");
+        }
+        if (userExtend != null) {
+            userExtend.setPropertyCompanyRoleType(user.getPropertyCompanyRoleType());
+            userExtendService.updateById(userExtend);
+        } else {
+            userExtend = new YwUserExtend();
+            userExtend.setPropertyCompanyRoleType(user.getPropertyCompanyRoleType());
+            userExtend.setUserPhone(user.getUsername());
+            userExtendService.insert(userExtend);
+        }
+
+        //保存用户与角色关系
+        sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
+    }
+
+
+    @Override
+    public boolean updatePassword(Long userId, String password, String newPassword) {
         SysUserEntity userEntity = new SysUserEntity();
         userEntity.setPassword(newPassword);
         return this.update(userEntity,
                 new EntityWrapper<SysUserEntity>().eq("user_id", userId).eq("password", password));
     }
 
-	@Override
-	public SysUserEntity queryById(Long userId) {
-		return baseMapper.queryById(userId);
-	}
+    @Override
+    public SysUserEntity queryById(Long userId) {
+        return baseMapper.queryById(userId);
+    }
 
-	@Override
-	public List<SysUserEntity> getLoginUser(String roleType) {
-		return baseMapper.getLoginUser(roleType);
-	}
+    @Override
+    public List<SysUserEntity> getLoginUser(String roleType) {
+        return baseMapper.getLoginUser(roleType);
+    }
 
-	@Override
-	public boolean isExist(String phone) {
-		if(baseMapper.getUserByUserName(phone) != null){
-			return true;
-		}else {
-			return false;
-		}
-	}
+    @Override
+    public boolean isExist(String phone) {
+        if (baseMapper.getUserByUserName(phone) != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -36,12 +36,12 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictDao, SysDictEntity> i
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        String name = (String)params.get("name");
+        String name = (String) params.get("name");
 
         Page<SysDictEntity> page = this.selectPage(
                 new Query<SysDictEntity>(params).getPage(),
                 new EntityWrapper<SysDictEntity>()
-                    .like(StringUtils.isNotBlank(name),"name", name)
+                        .like(StringUtils.isNotBlank(name), "name", name)
         );
 
         return new PageUtils(page);
@@ -49,14 +49,14 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictDao, SysDictEntity> i
 
     @Override
     public List<SysDictEntity> getDictByType(String type) {
-        return selectList(new EntityWrapper<SysDictEntity>().eq("TYPE",type));
+        return selectList(new EntityWrapper<SysDictEntity>().eq("TYPE", type));
     }
 
     @Override
     public String getdictCodeByTypeValue(String value, String type) {
 
         return selectOne(new EntityWrapper<SysDictEntity>()
-                .eq("TYPE",type)
-                .eq("VALUE",value)).getCode();
+                .eq("TYPE", type)
+                .eq("VALUE", value)).getCode();
     }
 }

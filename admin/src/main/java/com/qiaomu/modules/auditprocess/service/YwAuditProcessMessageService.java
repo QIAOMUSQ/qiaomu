@@ -11,8 +11,7 @@ import java.util.Map;
  * @description:
  * @Date 2019-04-21 16:04
  */
-public interface YwAuditProcessMessageService extends IService<YwAuditProcessMessage>
-{
+public interface YwAuditProcessMessageService extends IService<YwAuditProcessMessage> {
     PageUtils queryPage(Map<String, Object> paramMap);
 
     void save(YwAuditProcessMessage paramYwAuditProcessMessage);

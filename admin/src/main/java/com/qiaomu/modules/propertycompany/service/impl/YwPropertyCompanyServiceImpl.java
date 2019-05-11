@@ -22,37 +22,32 @@ import java.util.Map;
  */
 @Service
 public class YwPropertyCompanyServiceImpl extends ServiceImpl<YwPropertyCompanyDao, YwPropertyCompany>
-        implements YwPropertyCompanyService
-{
+        implements YwPropertyCompanyService {
 
     @Autowired
     private YwUserExtendService userExtendService;
 
-    public PageUtils queryPage(Map<String, Object> params)
-    {
+    public PageUtils queryPage(Map<String, Object> params) {
         Page<YwPropertyCompany> page = selectPage(new Query(params)
                 .getPage(), new EntityWrapper()
                 .addFilterIfNeed(params
                                 .get("sql_filter") != null,
-                        (String)params.get("sql_filter"), new Object[0]));
+                        (String) params.get("sql_filter"), new Object[0]));
 
         return new PageUtils(page);
     }
 
-    public void save(YwPropertyCompany propertyCompany)
-    {
-        ((YwPropertyCompanyDao)this.baseMapper).insert(propertyCompany);
+    public void save(YwPropertyCompany propertyCompany) {
+        ((YwPropertyCompanyDao) this.baseMapper).insert(propertyCompany);
         updateUserExtendInfo(propertyCompany);
     }
 
-    public void update(YwPropertyCompany propertyCompany)
-    {
-        ((YwPropertyCompanyDao)this.baseMapper).updateById(propertyCompany);
+    public void update(YwPropertyCompany propertyCompany) {
+        ((YwPropertyCompanyDao) this.baseMapper).updateById(propertyCompany);
         updateUserExtendInfo(propertyCompany);
     }
 
-    private void updateUserExtendInfo(YwPropertyCompany propertyCompany)
-    {
+    private void updateUserExtendInfo(YwPropertyCompany propertyCompany) {
         YwUserExtend userExtend = this.userExtendService.getUserExtend(propertyCompany.getAdminPhone());
         if (userExtend != null) {
             userExtend.setCompanyId(propertyCompany.getId());

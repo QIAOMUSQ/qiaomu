@@ -12,9 +12,10 @@ public interface AppUserService extends IService<SysUserEntity> {
 
     /**
      * app 保存用户
+     *
      * @param phone
      * @param password
      */
-    void save(String phone,String password);
+    void save(String phone, String password);
 
 }

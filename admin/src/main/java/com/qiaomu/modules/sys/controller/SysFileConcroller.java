@@ -44,7 +44,7 @@ public class SysFileConcroller {
             File dir = new File(savePath);
             if (!dir.exists()) dir.mkdirs();
 
-            SysFileEntity fileEntity =new SysFileEntity();
+            SysFileEntity fileEntity = new SysFileEntity();
             String filePath = "";
             if (file_list != null && file_list.size() > 0) {
                 if (file_list.containsKey("inputName")) {
@@ -53,15 +53,15 @@ public class SysFileConcroller {
                         // 保存图片
                         String fileName = file.getOriginalFilename();
                         String newFileName = "";
-                        String uploadPath="";
+                        String uploadPath = "";
                         String[] desp = fileName.split("\\.");
                         if (desp != null && desp.length > 0) {
                             String extendName = desp[desp.length - 1];
-                            newFileName = desp[0]+"_"+new Date().getTime() + "." + extendName;
+                            newFileName = desp[0] + "_" + new Date().getTime() + "." + extendName;
                             uploadPath = savePath + "upload\\";
                             File saveFile = new File(uploadPath, newFileName);
                             file.transferTo(saveFile);
-                            filePath = uploadPath.substring(0,uploadPath.length()-1)+"/"+newFileName;
+                            filePath = uploadPath.substring(0, uploadPath.length() - 1) + "/" + newFileName;
 
                             fileEntity.setName(newFileName);
                             fileEntity.setPath(filePath);
@@ -69,7 +69,7 @@ public class SysFileConcroller {
                             sysFileService.insert(fileEntity);
 
                         }
-                        session.setAttribute("filPath",filePath);
+                        session.setAttribute("filPath", filePath);
 
                         response.getWriter().print(fileEntity.getId());
                     }
@@ -79,7 +79,6 @@ public class SysFileConcroller {
             e.printStackTrace();
         }
     }
-
 
 
 }

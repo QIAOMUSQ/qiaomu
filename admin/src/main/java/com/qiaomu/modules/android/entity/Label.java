@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * @Author LHR
  * Create By 2017/8/18
- *
+ * <p>
  * 标签
  */
 @TableName("quark_label")

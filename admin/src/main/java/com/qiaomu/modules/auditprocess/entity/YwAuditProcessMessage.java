@@ -11,8 +11,7 @@ import java.util.Date;
  * @description:
  * @Date 2019-04-21 16:01
  */
-public class YwAuditProcessMessage implements Serializable
-{
+public class YwAuditProcessMessage implements Serializable {
     public static final Long serialVersionUID = Long.valueOf(1L);
 
     @TableId
@@ -26,23 +25,24 @@ public class YwAuditProcessMessage implements Serializable
     private String processType;
     private Long companyId;
 
-    @TableField(exist=false)
+    @TableField(exist = false)
     private String communityName;
 
-    @TableField(exist=false)
+    @TableField(exist = false)
     private String phoneOneName;
 
-    @TableField(exist=false)
+    @TableField(exist = false)
     private String phoneTwoName;
 
-    @TableField(exist=false)
+    @TableField(exist = false)
     private String reportPersonName;
     private Date createTime;
 
-    public Long getId() { return this.id; }
+    public Long getId() {
+        return this.id;
+    }
 
-    public void setId(Long id)
-    {
+    public void setId(Long id) {
         this.id = id;
     }
 

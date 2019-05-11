@@ -1,6 +1,5 @@
 package com.qiaomu.common.utils;
 
-import com.sun.istack.internal.logging.Logger;
 import org.apache.commons.lang.StringUtils;
 
 import javax.crypto.Cipher;
@@ -17,7 +16,7 @@ import java.util.Scanner;
  * @creat 2018-03-20-15:14
  */
 public class AESUtil {
-    private static final Logger logger = Logger.getLogger(AESUtil.class);
+  //  private static final Logger logger = Logger.getLogger(AESUtil.class);
     private static final String defaultCharset = "UTF-8";
     private static final String KEY_AES = "AES";
     private static final String KEY = "Akw#3.098*k!34@$&ui#$(8*,o)";
@@ -89,7 +88,7 @@ public class AESUtil {
                 return new String(result, defaultCharset);
             }
         } catch (Exception e) {
-            logger.config("AES 密文处理异常", e);
+            //logger.config("AES 密文处理异常", e);
         }
         return null;
     }

@@ -26,21 +26,20 @@ public class CommunityController extends AbstractController {
     private YwCommunityService communityService;
 
 
-
     @ResponseBody
-    @RequestMapping(value = "/list",method = RequestMethod.POST)
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
     @RequiresPermissions("community:list")
-    public R getCommunityList(@RequestParam Map<String, Object> params, ServletRequest request){
-        params.put("companyId",getCompanyOrCommunityByType("1"));
+    public R getCommunityList(@RequestParam Map<String, Object> params, ServletRequest request) {
+        params.put("companyId", getCompanyOrCommunityByType("1"));
         PageUtils page = communityService.queryPage(params);
         return R.ok().put("page", page);
     }
 
     @ResponseBody
-    @RequestMapping(value = "save",method = RequestMethod.POST)
-    @RequiresPermissions({"community:save","community:update"})
-    public R save(@RequestBody YwCommunity community){
-         //对社区进行分类
+    @RequestMapping(value = "save", method = RequestMethod.POST)
+    @RequiresPermissions({"community:save", "community:update"})
+    public R save(@RequestBody YwCommunity community) {
+        //对社区进行分类
         community.setCompanyId(getCompanyOrCommunityByType("1"));
         communityService.save(community);
         return R.ok();
@@ -48,13 +47,13 @@ public class CommunityController extends AbstractController {
 
     @ResponseBody
     @RequestMapping(value = "getCommunityById/{id}")
-    public R getCommunityById(@PathVariable("id") Long id){
+    public R getCommunityById(@PathVariable("id") Long id) {
         return R.ok("community", communityService.queryById(id));
     }
 
     @ResponseBody
     @RequestMapping(value = "delete")
-    public R delete(Long id){
+    public R delete(Long id) {
         communityService.deleteById(id);
         return R.ok();
     }

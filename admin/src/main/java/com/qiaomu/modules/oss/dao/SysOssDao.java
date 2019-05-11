@@ -24,12 +24,12 @@ import com.qiaomu.datasources.DataSourceNames;
 
 /**
  * 文件上传
- * 
+ *
  * @author chenshun
  * @email sunlightcs@gmail.com
  * @date 2017-03-25 12:13:26
  */
 @DataSource(name = DataSourceNames.FIRST)
 public interface SysOssDao extends BaseMapper<SysOssEntity> {
-	
+
 }

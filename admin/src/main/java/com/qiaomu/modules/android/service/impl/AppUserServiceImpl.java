@@ -29,7 +29,7 @@ public class AppUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 
     @Override
     public void save(String phone, String password) {
-        SysUserEntity user =new SysUserEntity();
+        SysUserEntity user = new SysUserEntity();
         user.setUsername(phone);
         String salt = RandomStringUtils.randomAlphanumeric(20);
         user.setSalt(salt);

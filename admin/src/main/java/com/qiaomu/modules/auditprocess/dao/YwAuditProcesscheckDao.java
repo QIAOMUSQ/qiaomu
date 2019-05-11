@@ -8,6 +8,6 @@ import com.qiaomu.modules.auditprocess.entity.YwAuditProcessCheck;
  * @description:
  * @Date 2019-04-21 15:59
  */
-public interface YwAuditProcesscheckDao extends BaseMapper<YwAuditProcessCheck>{
+public interface YwAuditProcesscheckDao extends BaseMapper<YwAuditProcessCheck> {
 
 }

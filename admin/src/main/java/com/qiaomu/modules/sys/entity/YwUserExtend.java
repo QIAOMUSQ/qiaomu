@@ -13,7 +13,7 @@ import java.util.Date;
  * @Date 2019-04-17 7:08
  */
 @TableName
-public class YwUserExtend  implements Serializable {
+public class YwUserExtend implements Serializable {
     private static final long serialVersionUID = 1L;
     @TableId
     private Long id;

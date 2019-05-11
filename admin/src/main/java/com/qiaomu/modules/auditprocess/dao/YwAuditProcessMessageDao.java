@@ -8,6 +8,5 @@ import com.qiaomu.modules.auditprocess.entity.YwAuditProcessMessage;
  * @description:
  * @Date 2019-04-21 15:59
  */
-public interface YwAuditProcessMessageDao extends BaseMapper<YwAuditProcessMessage>
-{
+public interface YwAuditProcessMessageDao extends BaseMapper<YwAuditProcessMessage> {
 }

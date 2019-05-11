@@ -26,47 +26,48 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Controller公共组件
- * 
+ *
  * @author chenshun
  * @email sunlightcs@gmail.com
  * @date 2016年11月9日 下午9:42:26
  */
 public abstract class AbstractController {
 
-	@Autowired
-	private YwUserExtendService userExtendService;
+    @Autowired
+    private YwUserExtendService userExtendService;
 
-	protected Logger logger = LoggerFactory.getLogger(getClass());
-	
-	protected SysUserEntity getUser() {
-		return (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
-	}
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
-	protected Long getUserId() {
-		return getUser().getUserId();
-	}
+    protected SysUserEntity getUser() {
+        return (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
+    }
 
-	protected Long getDeptId() {
-		return getUser().getDeptId();
-	}
+    protected Long getUserId() {
+        return getUser().getUserId();
+    }
 
-	/**
-	 * 根据登陆用户查询该用户物业公司或社区
-	 * @param type  获取物业或者社区
-	 *              1：物业
-	 *              2：社区
-	 * @return
-	 */
-	protected Long getCompanyOrCommunityByType(String type){
-		//根据登陆用户查询该物业公司
-		YwUserExtend userExtend = userExtendService.getUserExtend(getUser().getUsername());
-		if(type.equals("1") && userExtend!=null){
-			return  userExtend.getCompanyId();
-		}else if(type.equals("0") && userExtend!=null){
-			return userExtend.getCommunityId();
-		}else {
-			return -1l;
-		}
-	}
+    protected Long getDeptId() {
+        return getUser().getDeptId();
+    }
+
+    /**
+     * 根据登陆用户查询该用户物业公司或社区
+     *
+     * @param type 获取物业或者社区
+     *             1：物业
+     *             2：社区
+     * @return
+     */
+    protected Long getCompanyOrCommunityByType(String type) {
+        //根据登陆用户查询该物业公司
+        YwUserExtend userExtend = userExtendService.getUserExtend(getUser().getUsername());
+        if (type.equals("1") && userExtend != null) {
+            return userExtend.getCompanyId();
+        } else if (type.equals("0") && userExtend != null) {
+            return userExtend.getCommunityId();
+        } else {
+            return -1l;
+        }
+    }
 
 }

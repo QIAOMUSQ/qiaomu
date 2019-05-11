@@ -14,8 +14,7 @@ import java.util.Date;
  */
 @TableName("yw_property_company")
 public class YwPropertyCompany
-        implements Serializable
-{
+        implements Serializable {
     public static final long serialVersionUID = 1L;
 
     @TableId
@@ -30,11 +29,10 @@ public class YwPropertyCompany
     private Long adminstratorId;
     private String adminPhone;
 
-    @TableField(exist=false)
+    @TableField(exist = false)
     private String administratorName;
 
-    public String getAdministratorName()
-    {
+    public String getAdministratorName() {
         return this.administratorName;
     }
 

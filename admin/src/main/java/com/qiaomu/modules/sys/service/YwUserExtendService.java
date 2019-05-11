@@ -21,10 +21,11 @@ public interface YwUserExtendService extends IService<YwUserExtend> {
 
     /**
      * 保存审核信息
+     *
      * @param userPhone 用户手机号
-     * @param info 通过信息
-     * @param type 1：通过 2：不通过 3：禁用
-     * @param roleType 物业角色
+     * @param info      通过信息
+     * @param type      1：通过 2：不通过 3：禁用
+     * @param roleType  物业角色
      */
     void saveCheckInfo(String userPhone, String info, String type, String roleType);
 

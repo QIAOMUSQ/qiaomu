@@ -54,24 +54,24 @@ public class YwUserExtendServiceImpl extends ServiceImpl<YwUserExtendDao, YwUser
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        String userPhone = (String)params.get("userPhone");
-        String communityName = (String)params.get("communityName");
-        Long companyId = (Long)params.get("companyId");
-        String propertyCompanyRoleType = (String)params.get("companyRoleType");
-        List<Long> communityIds = communityService.getCommunityIdList(communityName,companyId);
+        String userPhone = (String) params.get("userPhone");
+        String communityName = (String) params.get("communityName");
+        Long companyId = (Long) params.get("companyId");
+        String propertyCompanyRoleType = (String) params.get("companyRoleType");
+        List<Long> communityIds = communityService.getCommunityIdList(communityName, companyId);
         Page<YwUserExtend> page = this.selectPage(
                 new Query<YwUserExtend>(params).getPage(),
                 new EntityWrapper<YwUserExtend>()
-                        .eq(StringUtils.isNotBlank(userPhone),"USER_PHONE", userPhone)
-                        .in(communityIds.size() > 0,"COMMUNITY_ID", communityIds)
-                        .eq(companyId != -1l,"COMPANY_ID", companyId)
-                        .ne(StringUtils.isNotBlank(propertyCompanyRoleType),"PROPERTY_COMPANY_ROLE_TYPE",propertyCompanyRoleType)//过滤物业管理员
-                        .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER))
+                        .eq(StringUtils.isNotBlank(userPhone), "USER_PHONE", userPhone)
+                        .in(communityIds.size() > 0, "COMMUNITY_ID", communityIds)
+                        .eq(companyId != -1l, "COMPANY_ID", companyId)
+                        .ne(StringUtils.isNotBlank(propertyCompanyRoleType), "PROPERTY_COMPANY_ROLE_TYPE", propertyCompanyRoleType)//过滤物业管理员
+                        .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER))
         );
 
-        for(YwUserExtend userExtend : page.getRecords()){
-           YwCommunity community = communityService.queryById(userExtend.getCommunityId());
-            userExtend.setCommunityName(community == null? "":community.getName());
+        for (YwUserExtend userExtend : page.getRecords()) {
+            YwCommunity community = communityService.queryById(userExtend.getCommunityId());
+            userExtend.setCommunityName(community == null ? "" : community.getName());
         }
 
         return new PageUtils(page);
@@ -81,7 +81,7 @@ public class YwUserExtendServiceImpl extends ServiceImpl<YwUserExtendDao, YwUser
     public YwUserExtend getUserExtendInfo(Long id) {
         YwUserExtend userExtend = this.selectById(id);
         YwUserCheckInfo checkInfo = checkInfoDao.selectOneByPhone(userExtend.getUserPhone());
-        if(checkInfo != null){
+        if (checkInfo != null) {
             userExtend.setInfo(checkInfo.getInfo());
         }
         return userExtend;
@@ -90,18 +90,19 @@ public class YwUserExtendServiceImpl extends ServiceImpl<YwUserExtendDao, YwUser
 
     /**
      * 用户审核信息
+     *
      * @param userPhone 用户手机号
-     * @param info 通过信息
-     * @param type 1：通过 2：不通过 3:禁用
+     * @param info      通过信息
+     * @param type      1：通过 2：不通过 3:禁用
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveCheckInfo(String userPhone, String info,String type,String roleType) {
+    public void saveCheckInfo(String userPhone, String info, String type, String roleType) {
 
-        if(!type.equals("3")){//1通过
+        if (!type.equals("3")) {//1通过
             SysUserEntity user = userDao.getUserByUserName(userPhone);
 
-            String[] role_dept =  DicRoleDeptCode.role_dept_map.get(roleType).split("_");
+            String[] role_dept = DicRoleDeptCode.role_dept_map.get(roleType).split("_");
             List<Long> roleList = new ArrayList<Long>();
             roleList.add(Long.valueOf(role_dept[0]));
 
@@ -110,7 +111,7 @@ public class YwUserExtendServiceImpl extends ServiceImpl<YwUserExtendDao, YwUser
             user.setPropertyCompanyRoleType(roleType);
             sysUserService.update(user);
         }
-        YwUserExtend userExtend =  this.getUserExtend(userPhone);
+        YwUserExtend userExtend = this.getUserExtend(userPhone);
         userExtend.setCheck(type);//更新审核标志
         this.updateById(userExtend);
 
@@ -118,7 +119,7 @@ public class YwUserExtendServiceImpl extends ServiceImpl<YwUserExtendDao, YwUser
 
     @Override
     public void delect(Long[] userIds) {
-        for(Long id :userIds){
+        for (Long id : userIds) {
             YwUserExtend userExtend = this.selectById(id);
             SysUserEntity userEntity = userDao.getUserByUserName(userExtend.getUserPhone());
             userDao.deleteById(userEntity.getDeptId());

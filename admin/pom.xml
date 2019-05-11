@@ -123,12 +123,12 @@
 					<skipTests>true</skipTests>
 				</configuration>
 			</plugin>
-			<plugin>
+			<!--<plugin>
 				<groupId>com.spotify</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
 				<version>0.4.14</version>
 				<configuration>
-					<imageName>renren/admin</imageName>
+					<imageName>com/qiaomu/admin</imageName>
 					<dockerDirectory>${project.basedir}</dockerDirectory>
 					<resources>
 						<resource>
@@ -138,8 +138,8 @@
 						</resource>
 					</resources>
 				</configuration>
-				<!-- 运行命令 mvn clean package docker:build 打包并生成docker镜像 -->
-			</plugin>
+				&lt;!&ndash; 运行命令 mvn clean package docker:build 打包并生成docker镜像 &ndash;&gt;
+			</plugin>-->
 		</plugins>
 	</build>
 </project>

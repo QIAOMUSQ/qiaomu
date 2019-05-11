@@ -27,7 +27,7 @@ public class CityServiceImpl extends ServiceImpl<CityDao, City> implements CityS
         List<City> cityList =
                 this.selectList(new EntityWrapper<City>()
                         .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null,
-                                (String)params.get(Constant.SQL_FILTER)));
+                                (String) params.get(Constant.SQL_FILTER)));
         return cityList;
     }
 }

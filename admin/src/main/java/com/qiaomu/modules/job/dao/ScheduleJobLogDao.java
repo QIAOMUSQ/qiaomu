@@ -29,5 +29,5 @@ import com.qiaomu.modules.job.entity.ScheduleJobLogEntity;
  */
 @DataSource(name = DataSourceNames.FIRST)
 public interface ScheduleJobLogDao extends BaseMapper<ScheduleJobLogEntity> {
-	
+
 }

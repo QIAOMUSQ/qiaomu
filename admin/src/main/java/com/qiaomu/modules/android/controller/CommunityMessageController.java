@@ -27,8 +27,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping({"/App/communityMessage"})
-public class CommunityMessageController
-{
+public class CommunityMessageController {
 
     @Autowired
     private CityService cityService;
@@ -40,21 +39,23 @@ public class CommunityMessageController
     private YwCommunityService communityService;
 
     @ResponseBody
-    @RequestMapping(value={"/list"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
-    public R getCommunityList(@RequestParam Map<String, Object> params, ServletRequest request)
-    {
+    @RequestMapping(value = {"/list"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
+    public R getCommunityList(@RequestParam Map<String, Object> params, ServletRequest request) {
         PageUtils page = this.communityService.queryPage(params);
 
         return R.ok("success", page);
     }
+
     @ResponseBody
-    @RequestMapping(value={"getCity"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
+    @RequestMapping(value = {"getCity"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
     public R getCity() {
         return R.ok("success", JSON.toJSON(this.cityService.selectList(null)));
     }
+
     @ResponseBody
-    @RequestMapping(value={"selectCity"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
-    public R select() { List cityList = this.cityService.queryList(new HashMap());
+    @RequestMapping(value = {"selectCity"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
+    public R select() {
+        List cityList = this.cityService.queryList(new HashMap());
         City root = new City();
         root.setId(Long.valueOf(0L));
         root.setName("城市");
@@ -62,9 +63,8 @@ public class CommunityMessageController
     }
 
     @ResponseBody
-    @RequestMapping(value={"findCommunityAdministrator"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
-    public R findCommunityByQuery(String communityName, Long communityId)
-    {
+    @RequestMapping(value = {"findCommunityAdministrator"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
+    public R findCommunityByQuery(String communityName, Long communityId) {
         YwCommunity community = new YwCommunity();
 
         if (communityId != null) community.setId(communityId);
@@ -75,11 +75,9 @@ public class CommunityMessageController
     }
 
 
-
     @ResponseBody
-    @RequestMapping(value={"addCommunityMember"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
-    public R addCommunityMember(String pathId, String phone, Long communityId, String realName, String address, String identityInfo, String sex)
-    {
+    @RequestMapping(value = {"addCommunityMember"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
+    public R addCommunityMember(String pathId, String phone, Long communityId, String realName, String address, String identityInfo, String sex) {
         String data = this.communityService.addCommunityMember(pathId, phone, communityId, realName, address, identityInfo, sex);
         return R.ok("success", data);
     }
