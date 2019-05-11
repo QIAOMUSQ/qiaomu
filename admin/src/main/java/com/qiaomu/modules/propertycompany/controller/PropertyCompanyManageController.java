@@ -15,7 +15,7 @@ import java.util.Map;
 
 /**
  * @author 李品先
- * @description:
+ * @description: 物业公司管理
  * @Date 2019-04-21 16:15
  */
 @Controller
@@ -25,8 +25,9 @@ public class PropertyCompanyManageController {
     @Autowired
     private YwPropertyCompanyService propertyCompanyService;
 
+
     @ResponseBody
-    @RequestMapping(value = {"company/list"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
+    @RequestMapping(value = "company/list", method = RequestMethod.POST)
     @RequiresPermissions({"company:list"})
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = this.propertyCompanyService.queryPage(params);
@@ -35,7 +36,7 @@ public class PropertyCompanyManageController {
     }
 
     @ResponseBody
-    @RequestMapping(value = {"save"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
+    @RequestMapping(value = "save", method = RequestMethod.POST)
     @RequiresPermissions({"company:save"})
     public R addCompany(@RequestBody YwPropertyCompany company) {
         System.out.printf(JSON.toJSONString(company), new Object[0]);
@@ -55,7 +56,7 @@ public class PropertyCompanyManageController {
     }
 
     @ResponseBody
-    @RequestMapping(value = {"update"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
+    @RequestMapping(value = "update", method = RequestMethod.POST)
     @RequiresPermissions({"company:update"})
     public R update(@RequestBody YwPropertyCompany company) {
         this.propertyCompanyService.update(company);
@@ -63,7 +64,7 @@ public class PropertyCompanyManageController {
     }
 
     @ResponseBody
-    @RequestMapping(value = {"delete"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
+    @RequestMapping(value = "delete", method = {RequestMethod.POST})
     @RequiresPermissions({"company:update"})
     public R delete(@PathVariable("id") Long id) {
         this.propertyCompanyService.deleteById(id);

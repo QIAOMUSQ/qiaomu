@@ -44,6 +44,10 @@ public class ShiroUtils {
         return new SimpleHash(hashAlgorithmName, password, salt, hashIterations).toString();
     }
 
+    public static String sha256(String password) {
+        return new SimpleHash(hashAlgorithmName, password, hashIterations).toString();
+    }
+
     public static Session getSession() {
         return SecurityUtils.getSubject().getSession();
     }

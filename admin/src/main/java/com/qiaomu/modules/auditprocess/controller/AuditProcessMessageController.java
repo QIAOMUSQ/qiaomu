@@ -16,7 +16,7 @@ import java.util.Map;
 
 /**
  * @author 李品先
- * @description:
+ * @description: 流程管理
  * @Date 2019-04-21 15:57
  */
 @Controller
@@ -27,7 +27,7 @@ public class AuditProcessMessageController extends AbstractController {
     private YwAuditProcessMessageService processMessageService;
 
     @ResponseBody
-    @RequestMapping(value = {"process/list"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
+    @RequestMapping(value = "process/list", method = RequestMethod.POST)
     @RequiresPermissions({"message:list"})
     public R list(@RequestParam Map<String, Object> params) {
         params.put("companyId", getCompanyOrCommunityByType("1"));
@@ -37,7 +37,7 @@ public class AuditProcessMessageController extends AbstractController {
     }
 
     @ResponseBody
-    @RequestMapping(value = {"process/save"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
+    @RequestMapping(value = "process/save", method = RequestMethod.POST)
     @RequiresPermissions(value = {"message:add", "message:update"}, logical = Logical.OR)
     public R save(@RequestBody YwAuditProcessMessage processMessage) {
         processMessage.setCompanyId(getCompanyOrCommunityByType("1"));
@@ -46,14 +46,14 @@ public class AuditProcessMessageController extends AbstractController {
     }
 
     @ResponseBody
-    @RequestMapping(value = {"getProcess/{id}"}, method = {org.springframework.web.bind.annotation.RequestMethod.GET})
+    @RequestMapping(value = "getProcess/{id}", method = RequestMethod.GET)
     @RequiresPermissions({"message:info"})
     public R getProcess(@PathVariable("id") Long id) {
         return R.ok().put("process", this.processMessageService.getById(id));
     }
 
     @ResponseBody
-    @RequestMapping(value = {"delete"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
+    @RequestMapping(value = {"delete"}, method = RequestMethod.POST)
     @RequiresPermissions({"message:delete"})
     public R getProcess(@RequestBody Long[] ids) {
         this.processMessageService.deleteBatchIds(Arrays.asList(ids));

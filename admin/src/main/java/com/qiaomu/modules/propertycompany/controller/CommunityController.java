@@ -15,7 +15,7 @@ import java.util.Map;
 
 /**
  * @author 李品先
- * @description:
+ * @description: 物业社区管理
  * @Date 2019-03-25 19:32
  */
 @Controller
@@ -28,7 +28,7 @@ public class CommunityController extends AbstractController {
 
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    @RequiresPermissions("community:list")
+    @RequiresPermissions({"community:list"})
     public R getCommunityList(@RequestParam Map<String, Object> params, ServletRequest request) {
         params.put("companyId", getCompanyOrCommunityByType("1"));
         PageUtils page = communityService.queryPage(params);

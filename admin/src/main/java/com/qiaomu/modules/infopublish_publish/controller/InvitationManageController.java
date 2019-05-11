@@ -37,6 +37,11 @@ public class InvitationManageController extends AbstractController{
 
     }
 
+    /**
+     *
+     * @param invitationEntity
+     * @return
+     */
     @RequestMapping(value = "insertInvitation",method = RequestMethod.POST)
     public R insertInvitation(InvitationEntity invitationEntity){
         invitationEntity.setCommunityId(getCompanyOrCommunityByType("2"));

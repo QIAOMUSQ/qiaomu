@@ -3,6 +3,7 @@ package com.qiaomu.modules.sys.service.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.qiaomu.common.utils.AESUtil;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
 import com.qiaomu.modules.sys.dao.SysUserDao;
@@ -13,6 +14,7 @@ import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.entity.YwUserExtend;
 import com.qiaomu.modules.sys.service.ProvinceCityDateService;
 import com.qiaomu.modules.sys.service.YwCommunityService;
+import com.qiaomu.modules.sys.shiro.ShiroUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,7 +63,6 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
                         (String) params.get("sql_filter"), new Object[0]));
 
         for (YwCommunity community : page.getRecords()) {
-
             community.setCityName(((ProvinceCityDateEntity) this.provinceCityDateService.selectById(community.getCityId())).getCityName());
         }
 
@@ -79,9 +80,9 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
         YwCommunity community = this.communityService.queryById(communityId);
 
         YwUserExtend userExtend = this.userExtendDao.getUserExtend(phone);
-        userExtend.setAddress(address);
+        userExtend.setAddress(AESUtil.encrypt(address));
         userExtend.setImgId(Long.valueOf(pathId));
-        userExtend.setRealName(realName);
+        userExtend.setRealName(AESUtil.encrypt(realName));
         userExtend.setUserIdentity(identityInfo);
         userExtend.setUserPhone(phone);
         userExtend.setCommunityId(communityId);

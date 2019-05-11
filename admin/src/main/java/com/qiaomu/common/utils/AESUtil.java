@@ -19,7 +19,7 @@ public class AESUtil {
   //  private static final Logger logger = Logger.getLogger(AESUtil.class);
     private static final String defaultCharset = "UTF-8";
     private static final String KEY_AES = "AES";
-    private static final String KEY = "Akw#3.098*k!34@$&ui#$(8*,o)";
+    private static final String KEY = "1234567890";
     /**
      * 加密
      *
@@ -27,8 +27,12 @@ public class AESUtil {
      * @param key 加密密码
      * @return
      */
-    public static String encrypt(String data, String key) {
+    public static String encryptByKey(String data, String key) {
         return doAES(data, key, Cipher.ENCRYPT_MODE);
+    }
+
+    public static String encrypt(String data) {
+        return doAES(data, KEY, Cipher.ENCRYPT_MODE);
     }
 
     /**
@@ -38,11 +42,13 @@ public class AESUtil {
      * @param key 解密密钥
      * @return
      */
-    public static String decrypt(String data, String key) {
+    public static String decryptByKey(String data, String key) {
         return doAES(data, key, Cipher.DECRYPT_MODE);
     }
 
-
+    public static String decrypt(String data) {
+        return doAES(data, KEY, Cipher.DECRYPT_MODE);
+    }
     /**
      * 加解密
      *
@@ -128,9 +134,7 @@ public class AESUtil {
         return result;
     }
 
-    public static String decrypt(String password){
-        return decrypt(password, KEY);
-    }
+
 
     public static void main(String[] args) throws Exception {
         Scanner scan = new Scanner(System.in);
@@ -138,10 +142,10 @@ public class AESUtil {
             while (scan.hasNextLine()){
                 String str2 = scan.nextLine();
                 System.out.println("输入的数据为：" + str2);
-                String encrypt = encrypt(str2, KEY);
-                System.out.println("加密后：" + encrypt);
-                String decrypt = decrypt(encrypt, KEY);
-                System.out.println("解密后：" + decrypt);
+              //  String encrypt = encrypt(str2, KEY);
+               // System.out.println("加密后：" + encrypt);
+               // String decrypt = decrypt(encrypt, KEY);
+                ///System.out.println("解密后：" + decrypt);
             }
         }catch (Exception e){
             e.printStackTrace();
