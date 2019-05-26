@@ -63,7 +63,7 @@ public class CommunityMessageController {
         return R.ok().put("cityList", cityList);
     }
 
-    @ResponseBody
+   /* @ResponseBody
     @RequestMapping(value = "findCommunityAdministrator", method = RequestMethod.POST)
     public R findCommunityByQuery(String communityName, Long communityId) {
         YwCommunity community = new YwCommunity();
@@ -73,7 +73,7 @@ public class CommunityMessageController {
         String info = this.communityService.findAdministratorNum(community);
 
         return R.ok("success", info);
-    }
+    }*/
 
 
     /**
