@@ -10,14 +10,17 @@ import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.sys.shiro.ShiroUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -27,7 +30,7 @@ import java.util.List;
  * @Date 2018-10-23 20:02
  */
 @RestController
-@RequestMapping("/App/user")
+@RequestMapping("mobile/user")
 public class AppUserController extends AbstractController {
 
     private static final Logger log = LoggerFactory.getLogger(AppUserController.class);
@@ -35,40 +38,50 @@ public class AppUserController extends AbstractController {
     @Autowired
     private SysUserService sysUserService;
 
+    /**
+     * 用户登陆
+     * @param phone
+     * @param password
+     * @return
+     */
     @ResponseBody
-    @RequestMapping(value = {"/login"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
-    public R login(String username, String password) {
+    @RequestMapping(value ="login", method = RequestMethod.GET)
+    public R login(String phone, String password) {
         try {
             Subject subject = ShiroUtils.getSubject();
-            UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+            UsernamePasswordToken token = new UsernamePasswordToken(phone, password);
             subject.login(token);
         } catch (UnknownAccountException e) {
-            return R.error(e.getMessage());
+            log.error(DateTime.now().toString("yyyy-MM-dd HH:mm:ss") +"phone:"+phone+"--"+e.getMessage());
+            return R.ok("error",e.getMessage());
         } catch (IncorrectCredentialsException e) {
-            return R.error("账号或密码不正确");
+            log.error(DateTime.now().toString("yyyy-MM-dd HH:mm:ss") +"phone:"+phone+"--"+e.getMessage());
+            return R.ok("error","账号或密码不正确");
         } catch (LockedAccountException e) {
-            return R.error("账号已被锁定,请联系管理员");
-        } catch (AuthenticationException e) {
-            log.error("登陆失败----------用户:" + username, e);
-            return R.error("账户登陆失败");
+            log.error(DateTime.now().toString("yyyy-MM-dd HH:mm:ss") +"phone:"+phone+"--"+e.getMessage());
+            return R.ok("error","账号已被锁定");
         } catch (Exception e) {
-            log.error("登陆失败----------用户:" + username, e);
-            return R.error("账户登陆失败");
+            log.error(DateTime.now().toString("yyyy-MM-dd HH:mm:ss") +"phone:"+phone+"--"+e.getMessage());
+            return R.ok("error","登陆失败");
         }
 
         return R.ok();
     }
 
-    @RequestMapping(value = {"/regist"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
-    public R registUser(String phone, String password) {
+    /**
+     * 用户注册
+     * @param phone
+     * @param password
+     * @return
+     */
+    @RequestMapping(value = "register", method = RequestMethod.GET)
+    public R registerUser(String phone, String password) {
         SysUserEntity user = new SysUserEntity();
         user.setUsername(phone);
         user.setPassword(password);
-
         if (this.sysUserService.isExist(phone)) {
             return R.ok("error", "手机号码已存在");
         }
-
         user.setPropertyCompanyRoleType("4");
         String[] role_dept = ((String) DicRoleDeptCode.role_dept_map.get("4")).split("_");
         List roleList = new ArrayList();
@@ -80,8 +93,15 @@ public class AppUserController extends AbstractController {
         return R.ok();
     }
 
+
+    /**
+     * 修改密码
+     * @param password
+     * @param newPassword
+     * @return
+     */
     @RequestMapping({"/modifyPassword"})
-    public R modifyPassword(String username, String password, String newPassword) {
+    public R modifyPassword(String password, String newPassword) {
         Assert.isBlank(newPassword, "新密码不为能空");
 
         password = ShiroUtils.sha256(AESUtil.decrypt(password), getUser().getSalt());
@@ -90,7 +110,7 @@ public class AppUserController extends AbstractController {
 
         boolean flag = this.sysUserService.updatePassword(getUserId(), password, newPassword);
         if (!flag) {
-            return R.error("原密码不正确");
+            return R.ok("error","原密码不正确");
         }
 
         return R.ok();

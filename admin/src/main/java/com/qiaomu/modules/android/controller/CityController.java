@@ -57,7 +57,6 @@ public class CityController {
     @ResponseBody
     @RequestMapping(value = "getCity", method = RequestMethod.POST)
     public R getCity() {
-
         return R.ok("success", JSON.toJSON(cityService.selectList(null)));
     }
 
