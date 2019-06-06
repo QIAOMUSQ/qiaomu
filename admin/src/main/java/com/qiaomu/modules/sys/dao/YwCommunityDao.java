@@ -3,6 +3,8 @@ package com.qiaomu.modules.sys.dao;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.qiaomu.modules.sys.entity.YwCommunity;
 
+import java.util.List;
+
 /**
  * @author 李品先
  * @description:
@@ -10,4 +12,6 @@ import com.qiaomu.modules.sys.entity.YwCommunity;
  */
 public interface YwCommunityDao extends BaseMapper<YwCommunity> {
     YwCommunity queryById(Long var1);
+
+    List<YwCommunity>findAllByCondition(YwCommunity condition);
 }

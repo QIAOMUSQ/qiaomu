@@ -45,6 +45,11 @@ public class CommunityController extends AbstractController {
         return R.ok();
     }
 
+    /**
+     *  根据社区id获取社区信息
+     * @param id
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "getCommunityById/{id}")
     public R getCommunityById(@PathVariable("id") Long id) {

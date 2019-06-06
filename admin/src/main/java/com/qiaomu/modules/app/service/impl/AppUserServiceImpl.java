@@ -1,8 +1,8 @@
-package com.qiaomu.modules.android.service.impl;
+package com.qiaomu.modules.app.service.impl;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.qiaomu.modules.sys.service.SysUserRoleService;
-import com.qiaomu.modules.android.service.AppUserService;
+import com.qiaomu.modules.app.service.AppUserService;
 import com.qiaomu.modules.sys.dao.SysUserDao;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.service.SysRoleService;

@@ -1,4 +1,4 @@
-package com.qiaomu.modules.android.service;
+package com.qiaomu.modules.app.service;
 
 import com.qiaomu.modules.sys.dao.AppUpdateDao;
 import com.qiaomu.modules.sys.entity.AppUpdateEntity;

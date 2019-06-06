@@ -48,8 +48,8 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
     public PageUtils queryPage(Map<String, Object> params) {
         String name = (String) params.get("name");
         Long companyId = (Long) params.get("companyId");
-        String cityname = (String) params.get("cityName");
-        ProvinceCityDateEntity provinceCity = this.provinceCityDateService.getProvCityByCityName(cityname);
+        String cityName = (String) params.get("cityName");
+        ProvinceCityDateEntity provinceCity = this.provinceCityDateService.getProvCityByCityName(cityName);
         Page<YwCommunity> page = selectPage(new Query(params)
                 .getPage(), new EntityWrapper()
                 .like(StringUtils.isNotBlank(name),
@@ -69,11 +69,6 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
         return new PageUtils(page);
     }
 
-    public String findAdministratorNum(YwCommunity community) {
-        YwCommunity community1 = (YwCommunity) selectOne(new EntityWrapper().eq("name", community.getName()));
-
-        return "ok";
-    }
 
     @Transactional
     public String addCommunityMember(String pathId, String phone, Long communityId, String realName, String address, String identityInfo, String sex) {
@@ -137,5 +132,10 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
             }
         }
         return communityId;
+    }
+
+    @Override
+    public List<YwCommunity> findAllByCondition(YwCommunity condition) {
+        return baseMapper.findAllByCondition(condition);
     }
 }

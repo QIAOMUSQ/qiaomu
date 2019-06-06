@@ -1,4 +1,4 @@
-package com.qiaomu.modules.android.controller;
+package com.qiaomu.modules.app.controller;
 
 import com.qiaomu.common.utils.AESUtil;
 import com.qiaomu.common.utils.DicRoleDeptCode;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -45,7 +44,7 @@ public class AppUserController extends AbstractController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value ="login", method = RequestMethod.GET)
+    @RequestMapping(value ="login", method = RequestMethod.POST)
     public R login(String phone, String password) {
         try {
             Subject subject = ShiroUtils.getSubject();
@@ -74,7 +73,7 @@ public class AppUserController extends AbstractController {
      * @param password
      * @return
      */
-    @RequestMapping(value = "register", method = RequestMethod.GET)
+    @RequestMapping(value = "register", method = RequestMethod.POST)
     public R registerUser(String phone, String password) {
         SysUserEntity user = new SysUserEntity();
         user.setUsername(phone);

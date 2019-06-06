@@ -1,4 +1,4 @@
-package com.qiaomu.modules.android.service;
+package com.qiaomu.modules.app.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

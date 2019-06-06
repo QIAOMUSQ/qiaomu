@@ -1,4 +1,4 @@
-package com.qiaomu.modules.android.entity;
+package com.qiaomu.modules.app.entity;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;

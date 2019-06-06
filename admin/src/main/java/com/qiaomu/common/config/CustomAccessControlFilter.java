@@ -16,10 +16,21 @@ import javax.servlet.ServletResponse;
 
 public class CustomAccessControlFilter extends AccessControlFilter {
 
+    /**
+     * 表示是否允许访问
+     * @param servletRequest
+     * @param servletResponse
+     * @param o
+     * @return
+     * @throws Exception
+     */
     @Override
     protected boolean isAccessAllowed(ServletRequest servletRequest, ServletResponse servletResponse, Object o) throws Exception {
         Subject subject = getSubject(servletRequest, servletResponse);
         String url = ((ShiroHttpServletResponse) servletResponse).getRequest().getRequestURI().toString();
+        if(url.contains("/mobile/")){
+            return true;
+        }
         if (!subject.isAuthenticated() && !subject.isRemembered()) {
             WebUtils.issueRedirect(servletRequest, servletResponse, url);
             return false;
@@ -28,6 +39,14 @@ public class CustomAccessControlFilter extends AccessControlFilter {
     }
 
 
+    /**
+     * 表示当访问拒绝时是否已经处理了
+     * 访问拒绝才会进来此方法
+     * @param servletRequest
+     * @param servletResponse
+     * @return
+     * @throws Exception
+     */
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
         Subject subject = getSubject(servletRequest, servletResponse);

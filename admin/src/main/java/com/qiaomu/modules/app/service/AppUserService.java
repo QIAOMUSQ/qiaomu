@@ -1,4 +1,4 @@
-package com.qiaomu.modules.android.service;
+package com.qiaomu.modules.app.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.qiaomu.modules.sys.entity.SysUserEntity;

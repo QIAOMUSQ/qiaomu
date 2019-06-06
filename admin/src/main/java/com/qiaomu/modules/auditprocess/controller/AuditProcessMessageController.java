@@ -26,6 +26,11 @@ public class AuditProcessMessageController extends AbstractController {
     @Autowired
     private YwAuditProcessMessageService processMessageService;
 
+    /**
+     * 获取流程列表
+     * @param params
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "process/list", method = RequestMethod.POST)
     @RequiresPermissions({"message:list"})

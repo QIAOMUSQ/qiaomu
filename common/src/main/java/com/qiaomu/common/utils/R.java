@@ -48,6 +48,12 @@ public class R extends HashMap<String, Object> {
 		r.put("status", status);
 		return r;
 	}
+	public static R error(String status,String data) {
+		R r = new R();
+		r.put("data", data);
+		r.put("status", status);
+		return r;
+	}
 
 	public static R ok(String status) {
 		R r = new R();

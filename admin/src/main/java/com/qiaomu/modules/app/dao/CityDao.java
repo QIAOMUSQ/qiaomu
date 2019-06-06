@@ -1,7 +1,7 @@
-package com.qiaomu.modules.android.dao;
+package com.qiaomu.modules.app.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.qiaomu.modules.android.entity.City;
+import com.qiaomu.modules.app.entity.City;
 
 /**
  * @author 李品先
