@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>security</artifactId>
-        <groupId>io.renren</groupId>
+        <groupId>com.qiaomu</groupId>
         <version>3.2.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -12,11 +12,11 @@
     <artifactId>application</artifactId>
     <packaging>jar</packaging>
     <dependencies>
-        <dependency>
-            <groupId>io.renren</groupId>
+        <!--<dependency>
+            <groupId>com.qiaomu</groupId>
             <artifactId>admin</artifactId>
             <version>3.2.0</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
     <build>
         <finalName>${project.artifactId}</finalName>

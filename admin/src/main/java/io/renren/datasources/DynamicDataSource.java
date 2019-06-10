@@ -1,5 +1,6 @@
 package io.renren.datasources;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import javax.sql.DataSource;
@@ -16,7 +17,9 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 
     public DynamicDataSource(DataSource defaultTargetDataSource, Map<Object, Object> targetDataSources) {
         super.setDefaultTargetDataSource(defaultTargetDataSource);
+        System.out.println("DynamicDataSource.DynamicDataSource.first "+targetDataSources.get("first").toString() );
         super.setTargetDataSources(targetDataSources);
+
         super.afterPropertiesSet();
     }
 

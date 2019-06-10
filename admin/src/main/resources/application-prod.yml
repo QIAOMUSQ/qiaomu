@@ -4,13 +4,13 @@ spring:
     driverClassName: com.mysql.jdbc.Driver
     druid:
       first:  #数据源1
-        url: jdbc:mysql://localhost:3306/renren_security?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
-        username: renren
-        password: 123456
+        url: jdbc:mysql://localhost:3306/qiaomu_service?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+        username: root
+        password: qiaomu
       second:  #数据源2
-        url: jdbc:mysql://10.10.168.18:3306/renren_security?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
-        username: renren
-        password: 123456
+        url: jdbc:mysql://localhost:3306/qiaomu_service?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+        username: root
+        password: qiaomu
       initial-size: 10
       max-active: 100
       min-idle: 10
@@ -36,3 +36,19 @@ spring:
         wall:
           config:
             multi-statement-allow: true
+  redis:
+    database: 0
+    host: 103.26.76.116
+    port: 6379
+    password: qiaomu     # 密码（默认为空）
+    timeout: 6000ms  # 连接超时时长（毫秒）
+    open: true  # 是否开启redis缓存  true开启   false关闭
+    jedis:
+      pool:
+        max-active: 1000  # 连接池最大连接数（使用负值表示没有限制）
+        max-wait: -1ms      # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-idle: 10      # 连接池中的最大空闲连接
+        min-idle: 5       # 连接池中的最小空闲连接
+
+file:
+  save: /www/temp
