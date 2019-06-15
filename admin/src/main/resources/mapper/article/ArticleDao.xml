@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">    
+<mapper namespace="com.qiaomu.modules.article.dao.ArticleDao">
+
+	<!-- 根据key，更新value -->
+	<select id="query" parameterType="com.qiaomu.modules.article.model.ArticleSelectModel" resultType="com.qiaomu.modules.article.entity.ArticleEntity">
+		select * from pluto_article
+		<where>
+			<if test="category != null and category !=''">
+				AND category = #{category}
+			</if>
+			<if test="title != null and title !=''">
+				AND title = #{title}
+			</if>
+			<if test="authorId != null and authorId !=''">
+				AND authorId = #{authorId}
+			</if>
+			<if test="articleId != null and articleId !=''">
+				AND articleId = #{articleId}
+			</if>
+		</where>
+	</select>
+
+	<select id="queryPraise" parameterType="com.qiaomu.modules.article.entity.ArticlePraiseEntity" resultType="String">
+	select isPraise from pluto_article_praise WHERE userId = #{userId}
+	</select>
+	<update id="updateArticlePraiseNum" parameterType="com.qiaomu.modules.article.entity.ArticleEntity">
+		update pluto_article set praiseNum = #{praiseNum} where articleId = #{articleId}
+	</update>
+	<update id="updateArticle" parameterType="com.qiaomu.modules.article.entity.ArticleEntity">
+		update pluto_article set content = #{content} ,title= #{title},category= #{category},updatedAt=#{updatedAt} where articleId = #{articleId}
+	</update>
+
+	<insert id="insertArticlePraise" parameterType="com.qiaomu.modules.article.entity.ArticlePraiseEntity">
+		insert into pluto_article_praise (userId,isPraise) VALUES (#{userId},#{isPraise})
+	</insert>
+	<update id="updateArticlePraise" parameterType="com.qiaomu.modules.article.entity.ArticlePraiseEntity">
+		update pluto_article_praise set isPraise = #{isPraise} where userId = #{userId}
+	</update>
+
+	<insert id="insertArticle" parameterType="com.qiaomu.modules.article.entity.ArticleEntity">
+		insert into pluto_article (articleId ,content,title,category,commentId,praiseNum,authorId,createdAt,updatedAt) VALUES
+		 (#{articleId},#{content},#{title},#{category},#{commentId},#{praiseNum},#{authorId},#{createdAt},#{updatedAt})
+	</insert>
+
+	<insert id="insertArticleComment" parameterType="com.qiaomu.modules.article.entity.CommentEntity">
+		insert into pluto_article_comment (articleId ,content,commentId,userId,createdAt,updatedAt) VALUES
+		(#{articleId},#{content},#{commentId},#{userId},#{createdAt},#{updatedAt})
+	</insert>
+	<delete id="deleteArticleByArticleId" parameterType="com.qiaomu.modules.article.entity.CommentEntity">
+		delete from pluto_article WHERE articleId = #{articleId}
+	</delete>
+	<delete id="deleteCommentById" parameterType="com.qiaomu.modules.article.entity.CommentEntity">
+		delete from pluto_article_comment WHERE commentId = #{commentId}
+	</delete>
+	<delete id="deleteCommentByArticleId" parameterType="com.qiaomu.modules.article.entity.CommentEntity">
+		delete from pluto_article_comment WHERE articleId = #{articleId}
+	</delete>
+	<select id="queryCommentByArticleId" parameterType="String" resultType="com.qiaomu.modules.article.entity.CommentEntity">
+		select * from pluto_article_comment WHERE articleId = #{articleId}
+	</select>
+	<select id="queryCommentByUserId" parameterType="String" resultType="com.qiaomu.modules.article.entity.CommentEntity">
+		select * from pluto_article_comment WHERE userId = #{userId}
+	</select>
+</mapper>

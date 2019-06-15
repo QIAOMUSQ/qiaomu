@@ -1,0 +1,134 @@
+package com.qiaomu.modules.article.service;
+
+import com.qiaomu.common.utils.DateUtils;
+import com.qiaomu.modules.article.dao.ArticleDao;
+import com.qiaomu.modules.article.entity.ArticleEntity;
+import com.qiaomu.modules.article.entity.ArticlePraiseEntity;
+import com.qiaomu.modules.article.entity.CommentEntity;
+import com.qiaomu.modules.article.exception.CommentException;
+import com.qiaomu.modules.article.model.ArticleSelectModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by wenglei on 2019/5/25.
+ */
+@Service
+public class ArticleServiceImp implements ArticleService{
+    @Autowired
+    private ArticleDao articleDao;
+
+    @Override
+    public void add(ArticleEntity articleEntity) {
+        ArticleSelectModel articleSelectModel = new ArticleSelectModel();
+        articleSelectModel.setTitle(articleEntity.getTitle());
+        List<ArticleEntity> articles =  articleDao.query(articleSelectModel);
+        if(articles!=null&&articles.size()>0){
+            throw new DuplicateKeyException("文章标题重名");
+        }
+        Date date = new Date();
+        articleEntity.setCreatedAt(DateUtils.formats(date));
+        articleEntity.setUpdatedAt(DateUtils.formats(date));
+        try {
+            articleDao.insertArticle(articleEntity);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("添加失败");
+        }
+    }
+
+    @Override
+    public List<ArticleEntity> query(ArticleSelectModel articleSelectModel) {
+        return articleDao.query(articleSelectModel);
+    }
+
+    @Override
+    public Map<String,Object> addPraiseNum(String userId, String articleId ) {
+        ArticleSelectModel articleSelectModel = new ArticleSelectModel();
+        articleSelectModel.setArticleId(articleId);
+        List<ArticleEntity> articles =  articleDao.query(articleSelectModel);
+        ArticlePraiseEntity articlePraiseEntity = new ArticlePraiseEntity();
+        articlePraiseEntity.setUserId(userId);
+        String isPraise = articleDao.queryPraise(articlePraiseEntity);
+        Integer praiseNum = articles.get(0).getPraiseNum();
+        if(praiseNum==null){
+            praiseNum = 0;
+        }
+        if(null == isPraise||"0".equals(isPraise)) {
+            praiseNum = articles.get(0).getPraiseNum() + 1;
+            articles.get(0).setPraiseNum(praiseNum);
+            articleDao.updateArticlePraiseNum(articles.get(0));
+            articlePraiseEntity.setIsPraise("1");
+            if(null == isPraise){
+                articleDao.insertArticlePraise(articlePraiseEntity);
+            }else{
+                articleDao.updateArticlePraise(articlePraiseEntity);
+            }
+        }else if("1".equals(isPraise)&&praiseNum>=1){
+            praiseNum = articles.get(0).getPraiseNum() - 1;
+            articles.get(0).setPraiseNum(praiseNum);
+            articleDao.updateArticlePraiseNum(articles.get(0));
+            articlePraiseEntity.setIsPraise("0");
+            articleDao.updateArticlePraise(articlePraiseEntity);
+        }
+        Map<String,Object> returnMap = new HashMap<String,Object>();
+        returnMap.put("praiseNum",praiseNum);
+        returnMap.put("isPraise",articlePraiseEntity.getIsPraise());
+        return returnMap;
+    }
+
+    @Override
+    public void addComment (CommentEntity commentEntity) throws Exception{
+        Map<String,String> returnMap = new HashMap<String,String>();
+        List<CommentEntity> commentEntities = articleDao.queryCommentByUserId(commentEntity.getUserId());
+        if(commentEntities.size()>3){
+            throw new CommentException("最多只能评论3次！");
+        }
+        Date date = new Date();
+        commentEntity.setCreatedAt(DateUtils.formats(date));
+        commentEntity.setUpdatedAt(DateUtils.formats(date));
+        try {
+            articleDao.insertArticleComment(commentEntity);
+        }catch(Exception e){
+            e.printStackTrace();
+            throw new CommentException("评论失败!");
+        }
+    }
+
+    @Override
+    public List<CommentEntity> queryComment(CommentEntity commentEntity) {
+        List<CommentEntity> commentEntities = articleDao.queryCommentByArticleId(commentEntity.getArticleId());
+        return commentEntities;
+    }
+
+    @Override
+    public void  deleteCommentByCommentId(CommentEntity commentEntity) {
+        articleDao.deleteCommentById(commentEntity);
+    }
+    @Override
+    public void  deleteCommentByArticleId(CommentEntity commentEntity) {
+        articleDao.deleteCommentByArticleId(commentEntity);
+    }
+    @Override
+    public void deleteArticleByArticleId(String articleId){
+        ArticleEntity articleEntity = new ArticleEntity();
+        articleEntity.setArticleId(articleId);
+        articleDao.deleteArticleByArticleId(articleEntity);
+        CommentEntity commentEntity = new CommentEntity();
+        commentEntity.setArticleId(articleEntity.getArticleId());
+        deleteCommentByArticleId(commentEntity);
+    }
+    @Override
+    public void updateArticle(ArticleEntity articleEntity){
+        Date date = new Date();
+        articleEntity.setUpdatedAt(DateUtils.formats(date));
+        articleDao.updateArticle(articleEntity);
+    }
+
+}

@@ -31,6 +31,7 @@ import org.apache.commons.lang.StringUtils;
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,6 +61,7 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public PageUtils queryPage(Map<String, Object> params) {
         String beanName = (String) params.get("beanName");
 
@@ -102,6 +104,7 @@ public class ScheduleJobServiceImpl extends ServiceImpl<ScheduleJobDao, Schedule
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int updateBatch(Long[] jobIds, int status) {
         Map<String, Object> map = new HashMap<>();
         map.put("list", jobIds);

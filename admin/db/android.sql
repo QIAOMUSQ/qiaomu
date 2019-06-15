@@ -911,10 +911,45 @@ CREATE TABLE `yw_user_indetity` (
 DROP TABLE IF EXISTS `pluto_updateAppinfo`;
 CREATE TABLE pluto_updateAppinfo (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `appVersion` varchar(20) NOT NULL AUTO_INCREMENT,
+  `appVersion` varchar(20) NOT NULL ,
   `appUrl` varchar(100) DEFAULT NULL,
   `updateType` varchar(20) DEFAULT NULL ,
-  `createdAs` datetime(70) DEFAULT NULL ,
-  `updatedAs` datetime(100) DEFAULT NULL,
+  `createdAs` datetime(6) DEFAULT NULL ,
+  `updatedAs` datetime(6) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `pluto_article`;
+CREATE TABLE pluto_article (
+  `articleId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `title` TEXT NOT NULL ,
+  `content` LONGTEXT NOT NULL,
+  `category` varchar(20) NOT NULL ,
+  `commentId` bigint(20) DEFAULT NULL ,
+  `praiseNum` bigint(20) DEFAULT 0 ,
+  `authorId` varchar(20) DEFAULT NULL ,
+  `createdAt` datetime(6) DEFAULT NULL ,
+  `updatedAt` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`articleId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE pluto_article_praise (
+  `userId` bigint(20) NOT NULL ,
+  `isPraise` varchar(20) DEFAULT '0' ,
+  PRIMARY KEY (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+DROP TABLE IF EXISTS `pluto_article_comment`;
+CREATE TABLE pluto_article_comment (
+  `commentId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `content` LONGTEXT NOT NULL,
+  `articleId` varchar(20) NOT NULL ,
+  `userId` varchar(20) NOT NULL ,
+  `createdAt` datetime(6) DEFAULT NULL ,
+  `updatedAt` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`commentId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+

@@ -46,7 +46,9 @@ public class DateUtils {
 	public static String format(Date date) {
         return format(date, DATE_PATTERN);
     }
-
+    public static String formats(Date date) {
+        return format(date, DATE_TIME_PATTERN);
+    }
     /**
      * 日期格式化 日期格式为：yyyy-MM-dd
      * @param date  日期
