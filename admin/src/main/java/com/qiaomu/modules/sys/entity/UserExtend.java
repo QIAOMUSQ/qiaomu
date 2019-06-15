@@ -12,8 +12,8 @@ import java.util.Date;
  * @description:
  * @Date 2019-04-17 7:08
  */
-@TableName
-public class YwUserExtend implements Serializable {
+@TableName("yw_user_extend")
+public class UserExtend implements Serializable {
     private static final long serialVersionUID = 1L;
     @TableId
     private Long id;
@@ -23,8 +23,8 @@ public class YwUserExtend implements Serializable {
     private Long imgId;
     private String nickName;
     private String realName;
-    private Long communityId;
-    private Long companyId;
+    private Integer communityId;
+    private Integer companyId;
     private Date createTime;
     private Date checkTime;
     private String checkUser;
@@ -93,19 +93,19 @@ public class YwUserExtend implements Serializable {
         this.realName = realName;
     }
 
-    public Long getCommunityId() {
+    public Integer getCommunityId() {
         return communityId;
     }
 
-    public void setCommunityId(Long communityId) {
+    public void setCommunityId(Integer communityId) {
         this.communityId = communityId;
     }
 
-    public Long getCompanyId() {
+    public Integer getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(Long companyId) {
+    public void setCompanyId(Integer companyId) {
         this.companyId = companyId;
     }
 

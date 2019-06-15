@@ -14,13 +14,11 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -41,15 +39,21 @@ public class AppUserController extends AbstractController {
      * 用户登陆
      * @param phone
      * @param password
+     * @param isAgree
      * @return
      */
     @ResponseBody
     @RequestMapping(value ="login", method = RequestMethod.POST)
-    public R login(String phone, String password) {
+    public R login(String phone,String password ,boolean isAgree) {
         try {
-            Subject subject = ShiroUtils.getSubject();
-            UsernamePasswordToken token = new UsernamePasswordToken(phone, password);
-            subject.login(token);
+           if(!"".equals(phone) && phone != null){
+               Subject subject = ShiroUtils.getSubject();
+               UsernamePasswordToken token = new UsernamePasswordToken(phone, password);
+               subject.login(token);
+               return R.ok();
+           }else {
+               return R.ok("error","客户端出现问题");
+           }
         } catch (UnknownAccountException e) {
             log.error(DateTime.now().toString("yyyy-MM-dd HH:mm:ss") +"phone:"+phone+"--"+e.getMessage());
             return R.ok("error",e.getMessage());
@@ -64,7 +68,6 @@ public class AppUserController extends AbstractController {
             return R.ok("error","登陆失败");
         }
 
-        return R.ok();
     }
 
     /**

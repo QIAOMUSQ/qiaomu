@@ -18,14 +18,14 @@ public class YwCommunity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId
-    private Long id;
+    private Integer id;
     private String name;
     private Long cityId;
     private String describe;
     private String address;
     private Long adminId;
-    private Long companyId;
-    private Date creatTime;
+    private Integer companyId;
+    private Date createTime;
 
     @TableField(exist = false)
     private String companyName;
@@ -39,11 +39,11 @@ public class YwCommunity implements Serializable {
     @TableField(exist = false)
     private String cityCode;
 
-    public Long getId() {
-        return this.id;
+    public Integer getId() {
+        return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -79,11 +79,11 @@ public class YwCommunity implements Serializable {
         this.address = address;
     }
 
-    public Long getCompanyId() {
-        return this.companyId;
+    public Integer getCompanyId() {
+        return companyId;
     }
 
-    public void setCompanyId(Long companyId) {
+    public void setCompanyId(Integer companyId) {
         this.companyId = companyId;
     }
 
@@ -119,12 +119,12 @@ public class YwCommunity implements Serializable {
         this.admin = admin;
     }
 
-    public Date getCreatTime() {
-        return this.creatTime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatTime(Date creatTime) {
-        this.creatTime = creatTime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public String getCityCode() {

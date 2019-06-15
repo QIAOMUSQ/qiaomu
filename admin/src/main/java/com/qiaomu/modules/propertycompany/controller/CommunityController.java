@@ -52,7 +52,7 @@ public class CommunityController extends AbstractController {
      */
     @ResponseBody
     @RequestMapping(value = "getCommunityById/{id}")
-    public R getCommunityById(@PathVariable("id") Long id) {
+    public R getCommunityById(@PathVariable("id") Integer id) {
         return R.ok("community", communityService.queryById(id));
     }
 

@@ -12,29 +12,31 @@ import java.util.Date;
  * @description:
  * @Date 2019-04-21 16:00
  */
-@TableName("yw_audit_process_check")
-public class YwAuditProcessCheck
-        implements Serializable {
+@TableName("yw_workflow_info")
+public class YwWorkflowInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId
     private Long id;
     private String type;
     private String clientPhone;
-    private Long communityId;
-    private Long companyId;
-    private String detailPhoneOne;
-    private String detailOpinionOne;
-    private Date detailOneDate;
+    private Integer communityId;   //社区id
+    private Integer companyId;     //  物业id
+    private String detailPhoneOne;  //  第一处理人号码
+    private String detailOpinionOne;    //  第一处理人意见
+    private Date detailOneDate;     //处理时间
     private String detailPhoneTwo;
     private String detailOpinionTwo;
     private Date detailTwoDate;
-    private String detailPhoneReport;
-    private String detailOpinionReport;
-    private String userOpinion;
-    private Long processId;
-    private String detail;
-    private Date createTime;
+    private String detailPhoneReport;   //上报人号码
+    private String detailOpinionReport; //上报人意见
+    private String userOpinion; //用户评价
+    private Integer workflowId; //流程类型id
+    private String detail;  //事务描述细节
+    private Date createTime;    //发起时间
+    private String location;    //事发位置
+    private String pictureId;
+    private Date serviceDate;//上门维修时间
 
     @TableField(exist = false)
     private String processName;
@@ -63,19 +65,19 @@ public class YwAuditProcessCheck
         this.clientPhone = clientPhone;
     }
 
-    public Long getCommunityId() {
-        return this.communityId;
+    public Integer getCommunityId() {
+        return communityId;
     }
 
-    public void setCommunityId(Long communityId) {
+    public void setCommunityId(Integer communityId) {
         this.communityId = communityId;
     }
 
-    public Long getCompanyId() {
-        return this.companyId;
+    public Integer getCompanyId() {
+        return companyId;
     }
 
-    public void setCompanyId(Long companyId) {
+    public void setCompanyId(Integer companyId) {
         this.companyId = companyId;
     }
 
@@ -151,12 +153,12 @@ public class YwAuditProcessCheck
         this.userOpinion = userOpinion;
     }
 
-    public Long getProcessId() {
-        return this.processId;
+    public Integer getWorkflowId() {
+        return workflowId;
     }
 
-    public void setProcessId(Long processId) {
-        this.processId = processId;
+    public void setWorkflowId(Integer workflowId) {
+        this.workflowId = workflowId;
     }
 
     public String getDetail() {
@@ -181,5 +183,29 @@ public class YwAuditProcessCheck
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getPictureId() {
+        return pictureId;
+    }
+
+    public void setPictureId(String pictureId) {
+        this.pictureId = pictureId;
+    }
+
+    public Date getServiceDate() {
+        return serviceDate;
+    }
+
+    public void setServiceDate(Date serviceDate) {
+        this.serviceDate = serviceDate;
     }
 }

@@ -9,14 +9,14 @@ import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
 import com.qiaomu.modules.sys.dao.SysUserDao;
 import com.qiaomu.modules.sys.dao.YwUserCheckInfoDao;
-import com.qiaomu.modules.sys.dao.YwUserExtendDao;
+import com.qiaomu.modules.sys.dao.UserExtendDao;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.entity.YwUserCheckInfo;
-import com.qiaomu.modules.sys.entity.YwUserExtend;
+import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.sys.service.YwCommunityService;
-import com.qiaomu.modules.sys.service.YwUserExtendService;
+import com.qiaomu.modules.sys.service.UserExtendService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ import java.util.Map;
  * @Date 2019-03-29 17:08
  */
 @Service
-public class YwUserExtendServiceImpl extends ServiceImpl<YwUserExtendDao, YwUserExtend> implements YwUserExtendService {
+public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend> implements UserExtendService {
 
     @Autowired
     private YwCommunityService communityService;
@@ -48,7 +48,7 @@ public class YwUserExtendServiceImpl extends ServiceImpl<YwUserExtendDao, YwUser
     private YwUserCheckInfoDao checkInfoDao;
 
     @Override
-    public YwUserExtend getUserExtend(String userPhone) {
+    public UserExtend getUserExtend(String userPhone) {
         return this.baseMapper.getUserExtend(userPhone);
     }
 
@@ -56,12 +56,12 @@ public class YwUserExtendServiceImpl extends ServiceImpl<YwUserExtendDao, YwUser
     public PageUtils queryPage(Map<String, Object> params) {
         String userPhone = (String) params.get("userPhone");
         String communityName = (String) params.get("communityName");
-        Long companyId = (Long) params.get("companyId");
+        Integer companyId = (Integer) params.get("companyId");
         String propertyCompanyRoleType = (String) params.get("companyRoleType");
-        List<Long> communityIds = communityService.getCommunityIdList(communityName, companyId);
-        Page<YwUserExtend> page = this.selectPage(
-                new Query<YwUserExtend>(params).getPage(),
-                new EntityWrapper<YwUserExtend>()
+        List<Integer> communityIds = communityService.getCommunityIdList(communityName, companyId);
+        Page<UserExtend> page = this.selectPage(
+                new Query<UserExtend>(params).getPage(),
+                new EntityWrapper<UserExtend>()
                         .eq(StringUtils.isNotBlank(userPhone), "USER_PHONE", userPhone)
                         .in(communityIds.size() > 0, "COMMUNITY_ID", communityIds)
                         .eq(companyId != -1l, "COMPANY_ID", companyId)
@@ -69,7 +69,7 @@ public class YwUserExtendServiceImpl extends ServiceImpl<YwUserExtendDao, YwUser
                         .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER))
         );
 
-        for (YwUserExtend userExtend : page.getRecords()) {
+        for (UserExtend userExtend : page.getRecords()) {
             YwCommunity community = communityService.queryById(userExtend.getCommunityId());
             userExtend.setCommunityName(community == null ? "" : community.getName());
         }
@@ -78,8 +78,8 @@ public class YwUserExtendServiceImpl extends ServiceImpl<YwUserExtendDao, YwUser
     }
 
     @Override
-    public YwUserExtend getUserExtendInfo(Long id) {
-        YwUserExtend userExtend = this.selectById(id);
+    public UserExtend getUserExtendInfo(Long id) {
+        UserExtend userExtend = this.selectById(id);
         YwUserCheckInfo checkInfo = checkInfoDao.selectOneByPhone(userExtend.getUserPhone());
         if (checkInfo != null) {
             userExtend.setInfo(checkInfo.getInfo());
@@ -111,7 +111,7 @@ public class YwUserExtendServiceImpl extends ServiceImpl<YwUserExtendDao, YwUser
             user.setPropertyCompanyRoleType(roleType);
             sysUserService.update(user);
         }
-        YwUserExtend userExtend = this.getUserExtend(userPhone);
+        UserExtend userExtend = this.getUserExtend(userPhone);
         userExtend.setCheck(type);//更新审核标志
         this.updateById(userExtend);
 
@@ -120,7 +120,7 @@ public class YwUserExtendServiceImpl extends ServiceImpl<YwUserExtendDao, YwUser
     @Override
     public void delect(Long[] userIds) {
         for (Long id : userIds) {
-            YwUserExtend userExtend = this.selectById(id);
+            UserExtend userExtend = this.selectById(id);
             SysUserEntity userEntity = userDao.getUserByUserName(userExtend.getUserPhone());
             userDao.deleteById(userEntity.getDeptId());
         }

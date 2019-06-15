@@ -2,7 +2,7 @@ package com.qiaomu.modules.sys.controller;
 
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
-import com.qiaomu.modules.sys.service.YwUserExtendService;
+import com.qiaomu.modules.sys.service.UserExtendService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,10 +17,10 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(value = "communityUser")
-public class YwUserExtendController extends AbstractController {
+public class UserExtendController extends AbstractController {
 
     @Autowired
-    private YwUserExtendService userExtendService;
+    private UserExtendService userExtendService;
 
     @ResponseBody
     @RequestMapping(value = "people/list", method = RequestMethod.POST)

@@ -2,8 +2,8 @@ package com.qiaomu.modules.auditprocess.controller;
 
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
-import com.qiaomu.modules.auditprocess.entity.YwAuditProcessMessage;
-import com.qiaomu.modules.auditprocess.service.YwAuditProcessMessageService;
+import com.qiaomu.modules.auditprocess.entity.YwWorkflowMessage;
+import com.qiaomu.modules.auditprocess.service.YwWorkflowMessageService;
 import com.qiaomu.modules.sys.controller.AbstractController;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -20,11 +20,11 @@ import java.util.Map;
  * @Date 2019-04-21 15:57
  */
 @Controller
-@RequestMapping({"processMessage"})
-public class AuditProcessMessageController extends AbstractController {
+@RequestMapping("processMessage")
+public class WorkflowMessageController extends AbstractController {
 
     @Autowired
-    private YwAuditProcessMessageService processMessageService;
+    private YwWorkflowMessageService workflowMessageService;
 
     /**
      * 获取流程列表
@@ -36,7 +36,7 @@ public class AuditProcessMessageController extends AbstractController {
     @RequiresPermissions({"message:list"})
     public R list(@RequestParam Map<String, Object> params) {
         params.put("companyId", getCompanyOrCommunityByType("1"));
-        PageUtils page = this.processMessageService.queryPage(params);
+        PageUtils page = this.workflowMessageService.queryPage(params);
 
         return R.ok().put("page", page);
     }
@@ -44,24 +44,24 @@ public class AuditProcessMessageController extends AbstractController {
     @ResponseBody
     @RequestMapping(value = "process/save", method = RequestMethod.POST)
     @RequiresPermissions(value = {"message:add", "message:update"}, logical = Logical.OR)
-    public R save(@RequestBody YwAuditProcessMessage processMessage) {
+    public R save(@RequestBody YwWorkflowMessage processMessage) {
         processMessage.setCompanyId(getCompanyOrCommunityByType("1"));
-        this.processMessageService.save(processMessage);
+        this.workflowMessageService.save(processMessage);
         return R.ok();
     }
 
     @ResponseBody
     @RequestMapping(value = "getProcess/{id}", method = RequestMethod.GET)
     @RequiresPermissions({"message:info"})
-    public R getProcess(@PathVariable("id") Long id) {
-        return R.ok().put("process", this.processMessageService.getById(id));
+    public R getProcess(@PathVariable("id") Integer id) {
+        return R.ok().put("process", this.workflowMessageService.getById(id));
     }
 
     @ResponseBody
-    @RequestMapping(value = {"delete"}, method = RequestMethod.POST)
+    @RequestMapping(value = "delete", method = RequestMethod.POST)
     @RequiresPermissions({"message:delete"})
     public R getProcess(@RequestBody Long[] ids) {
-        this.processMessageService.deleteBatchIds(Arrays.asList(ids));
+        this.workflowMessageService.deleteBatchIds(Arrays.asList(ids));
         return R.ok();
     }
 }

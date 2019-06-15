@@ -2,6 +2,7 @@ package com.qiaomu.modules.auditprocess.entity;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -11,19 +12,20 @@ import java.util.Date;
  * @description:
  * @Date 2019-04-21 16:01
  */
-public class YwAuditProcessMessage implements Serializable {
+@TableName("yw_workflow_message")
+public class YwWorkflowMessage implements Serializable {
     public static final Long serialVersionUID = Long.valueOf(1L);
 
     @TableId
     private Long id;
-    private Long communityId;
-    private String phoneOne;
-    private String phoneTwo;
-    private String reportPerson;
-    private String superintendentPhone;
-    private String processName;
-    private String processType;
-    private Long companyId;
+    private Integer communityId;   //社区id
+    private String phoneOne;    //第一处理人
+    private String phoneTwo;    //  第二处理人
+    private String reportPerson;    //上报人
+    private String superintendentPhone; //监管人
+    private String processName; //流程名称
+    private String processType; //流程类型
+    private Integer companyId; //物业ID
 
     @TableField(exist = false)
     private String communityName;
@@ -46,13 +48,7 @@ public class YwAuditProcessMessage implements Serializable {
         this.id = id;
     }
 
-    public Long getCommunityId() {
-        return this.communityId;
-    }
 
-    public void setCommunityId(Long communityId) {
-        this.communityId = communityId;
-    }
 
     public String getPhoneOne() {
         return this.phoneOne;
@@ -102,11 +98,19 @@ public class YwAuditProcessMessage implements Serializable {
         this.processType = processType;
     }
 
-    public Long getCompanyId() {
-        return this.companyId;
+    public Integer getCommunityId() {
+        return communityId;
     }
 
-    public void setCompanyId(Long companyId) {
+    public void setCommunityId(Integer communityId) {
+        this.communityId = communityId;
+    }
+
+    public Integer getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Integer companyId) {
         this.companyId = companyId;
     }
 

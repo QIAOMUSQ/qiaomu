@@ -81,7 +81,7 @@ public class CommunityMessageController {
      */
     @ResponseBody
     @RequestMapping(value = "addCommunityMember", method = RequestMethod.POST)
-    public R addCommunityMember(String pathId, String phone, Long communityId, String realName, String address, String identityInfo, String sex) {
+    public R addCommunityMember(String pathId, String phone, Integer communityId, String realName, String address, String identityInfo, String sex) {
         String data = this.communityService.addCommunityMember(pathId, phone, communityId, realName, address, identityInfo, sex);
         return R.ok("success", data);
     }

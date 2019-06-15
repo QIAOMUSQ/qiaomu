@@ -8,13 +8,12 @@ import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
 import com.qiaomu.modules.sys.dao.SysUserDao;
 import com.qiaomu.modules.sys.dao.YwCommunityDao;
-import com.qiaomu.modules.sys.dao.YwUserExtendDao;
+import com.qiaomu.modules.sys.dao.UserExtendDao;
 import com.qiaomu.modules.sys.entity.ProvinceCityDateEntity;
 import com.qiaomu.modules.sys.entity.YwCommunity;
-import com.qiaomu.modules.sys.entity.YwUserExtend;
+import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.service.ProvinceCityDateService;
 import com.qiaomu.modules.sys.service.YwCommunityService;
-import com.qiaomu.modules.sys.shiro.ShiroUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +36,7 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
     private ProvinceCityDateService provinceCityDateService;
 
     @Autowired
-    private YwUserExtendDao userExtendDao;
+    private UserExtendDao userExtendDao;
 
     @Autowired
     private YwCommunityService communityService;
@@ -70,11 +69,11 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
     }
 
 
-    @Transactional
-    public String addCommunityMember(String pathId, String phone, Long communityId, String realName, String address, String identityInfo, String sex) {
+    /*@Override
+    public String addCommunityMember(String pathId, String phone, Integer communityId, String realName, String address, String identityInfo, String sex) {
         YwCommunity community = this.communityService.queryById(communityId);
 
-        YwUserExtend userExtend = this.userExtendDao.getUserExtend(phone);
+        UserExtend userExtend = this.userExtendDao.getUserExtend(phone);
         userExtend.setAddress(AESUtil.encrypt(address));
         userExtend.setImgId(Long.valueOf(pathId));
         userExtend.setRealName(AESUtil.encrypt(realName));
@@ -86,9 +85,9 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
 
         this.userExtendDao.updateById(userExtend);
         return "ok";
-    }
+    }*/
 
-    public YwCommunity queryById(Long communityId) {
+    public YwCommunity queryById(Integer communityId) {
         YwCommunity community = ((YwCommunityDao) this.baseMapper).queryById(communityId);
 
         return community;
@@ -111,16 +110,16 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
         List cityDate = this.provinceCityDateService.getProvinceCityDate(params);
         if (cityDate.size() == 1) community.setCityId(((ProvinceCityDateEntity) cityDate.get(0)).getId());
 
-        community.setCreatTime(new Date());
+        community.setCreateTime(new Date());
         if (community.getId() != null)
             updateById(community);
         else
             ((YwCommunityDao) this.baseMapper).insert(community);
     }
 
-    public List<Long> getCommunityIdList(String communityName, Long companyId) {
+    public List<Integer> getCommunityIdList(String communityName, Integer companyId) {
         List<YwCommunity> communityList = new ArrayList<>();
-        List<Long> communityId = new ArrayList();
+        List<Integer> communityId = new ArrayList();
 
         if (StringUtils.isNotBlank(communityName)) {
             YwCommunity community = new YwCommunity();
@@ -137,5 +136,23 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
     @Override
     public List<YwCommunity> findAllByCondition(YwCommunity condition) {
         return baseMapper.findAllByCondition(condition);
+    }
+
+    @Override
+    public String addCommunityMember(String pathId, String phone, Integer communityId, String realName, String address, String identityInfo, String sex) {
+        YwCommunity community = this.communityService.queryById(communityId);
+
+        UserExtend userExtend = this.userExtendDao.getUserExtend(phone);
+        userExtend.setAddress(AESUtil.encrypt(address));
+        userExtend.setImgId(Long.valueOf(pathId));
+        userExtend.setRealName(AESUtil.encrypt(realName));
+        userExtend.setUserIdentity(identityInfo);
+        userExtend.setUserPhone(phone);
+        userExtend.setCommunityId(communityId);
+        userExtend.setCompanyId(community.getCompanyId());
+        userExtend.setSex(sex);
+
+        this.userExtendDao.updateById(userExtend);
+        return "ok";
     }
 }

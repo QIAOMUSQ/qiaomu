@@ -5,12 +5,12 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
-import com.qiaomu.modules.auditprocess.dao.YwAuditProcessMessageDao;
-import com.qiaomu.modules.auditprocess.entity.YwAuditProcessMessage;
-import com.qiaomu.modules.auditprocess.service.YwAuditProcessMessageService;
+import com.qiaomu.modules.auditprocess.dao.YwWorkflowMessageDao;
+import com.qiaomu.modules.auditprocess.entity.YwWorkflowMessage;
+import com.qiaomu.modules.auditprocess.service.YwWorkflowMessageService;
 import com.qiaomu.modules.sys.service.SysDictService;
 import com.qiaomu.modules.sys.service.YwCommunityService;
-import com.qiaomu.modules.sys.service.YwUserExtendService;
+import com.qiaomu.modules.sys.service.UserExtendService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,24 +25,24 @@ import java.util.Map;
  * @Date 2019-04-21 16:07
  */
 @Service
-public class YwAuditProcessMessageServiceImpl extends ServiceImpl<YwAuditProcessMessageDao, YwAuditProcessMessage>
-        implements YwAuditProcessMessageService {
+public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageDao, YwWorkflowMessage>
+        implements YwWorkflowMessageService {
 
     @Autowired
     private YwCommunityService communityService;
 
     @Autowired
-    private YwUserExtendService userExtendService;
+    private UserExtendService userExtendService;
 
     @Autowired
     private SysDictService dictService;
 
     public PageUtils queryPage(Map<String, Object> params) {
-        Long companyId = (Long) params.get("companyId");
+        Integer companyId = (Integer) params.get("companyId");
         String communityName = (String) params.get("communityName");
         String processName = (String) params.get("processName");
-        List communityId = this.communityService.getCommunityIdList(communityName, companyId);
-        Page<YwAuditProcessMessage> page = selectPage(new Query(params)
+        List<Integer> communityId = this.communityService.getCommunityIdList(communityName, companyId);
+        Page<YwWorkflowMessage> page = selectPage(new Query(params)
                 .getPage(), new EntityWrapper()
                 .like(StringUtils.isNotBlank(processName),
                         "process_name", processName)
@@ -53,7 +53,7 @@ public class YwAuditProcessMessageServiceImpl extends ServiceImpl<YwAuditProcess
                                 .get("sql_filter") != null,
                         (String) params.get("sql_filter"), new Object[0]));
 
-        for (YwAuditProcessMessage processMessage : page.getRecords()) {
+        for (YwWorkflowMessage processMessage : page.getRecords()) {
             processMessage.setPhoneOne(getUserByPhone(processMessage.getPhoneOne()));
             processMessage.setPhoneTwo(getUserByPhone(processMessage.getPhoneTwo()));
             processMessage.setReportPerson(getUserByPhone(processMessage.getReportPerson()));
@@ -63,7 +63,7 @@ public class YwAuditProcessMessageServiceImpl extends ServiceImpl<YwAuditProcess
         return new PageUtils(page);
     }
 
-    public void save(YwAuditProcessMessage processMessage) {
+    public void save(YwWorkflowMessage processMessage) {
         if (processMessage.getId() != null) {
             updateById(processMessage);
         } else {
@@ -82,8 +82,8 @@ public class YwAuditProcessMessageServiceImpl extends ServiceImpl<YwAuditProcess
         return name;
     }
 
-    public YwAuditProcessMessage getById(Long id) {
-        YwAuditProcessMessage processMessage = (YwAuditProcessMessage) selectById(id);
+    public YwWorkflowMessage getById(Integer id) {
+        YwWorkflowMessage processMessage = (YwWorkflowMessage) selectById(id);
         processMessage.setPhoneOneName(getUserByPhone(processMessage.getPhoneOne()));
         processMessage.setPhoneTwoName(getUserByPhone(processMessage.getPhoneTwo()));
         processMessage.setReportPersonName(getUserByPhone(processMessage.getReportPerson()));

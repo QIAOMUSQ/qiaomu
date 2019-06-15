@@ -29,11 +29,11 @@ import com.qiaomu.datasources.annotation.DataSource;
 import com.qiaomu.modules.sys.dao.SysUserDao;
 import com.qiaomu.modules.sys.entity.SysDeptEntity;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
-import com.qiaomu.modules.sys.entity.YwUserExtend;
+import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.service.SysDeptService;
 import com.qiaomu.modules.sys.service.SysUserRoleService;
 import com.qiaomu.modules.sys.service.SysUserService;
-import com.qiaomu.modules.sys.service.YwUserExtendService;
+import com.qiaomu.modules.sys.service.UserExtendService;
 import com.qiaomu.modules.sys.shiro.ShiroUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
@@ -62,7 +62,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     private SysDeptService sysDeptService;
 
     @Autowired
-    private YwUserExtendService userExtendService;
+    private UserExtendService userExtendService;
 
 
     @Override
@@ -103,7 +103,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         user.setSalt(salt);
         user.setPassword(ShiroUtils.sha256(user.getPassword(), user.getSalt()));
         this.insert(user);
-        YwUserExtend userExtend = new YwUserExtend();
+        UserExtend userExtend = new UserExtend();
         userExtend.setPropertyCompanyRoleType(user.getPropertyCompanyRoleType());
         userExtend.setUserPhone(user.getUsername());
         userExtendService.insert(userExtend);
@@ -120,7 +120,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
             user.setPassword(ShiroUtils.sha256(user.getPassword(), user.getSalt()));
         }
         this.updateById(user);
-        YwUserExtend userExtend = new YwUserExtend();
+        UserExtend userExtend = new UserExtend();
         userExtend = userExtendService.getUserExtend(user.getUsername());
         if (user.getPropertyCompanyRoleType().equals("1")) {
             userExtend.setCheck("1");
@@ -129,7 +129,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
             userExtend.setPropertyCompanyRoleType(user.getPropertyCompanyRoleType());
             userExtendService.updateById(userExtend);
         } else {
-            userExtend = new YwUserExtend();
+            userExtend = new UserExtend();
             userExtend.setPropertyCompanyRoleType(user.getPropertyCompanyRoleType());
             userExtend.setUserPhone(user.getUsername());
             userExtendService.insert(userExtend);

@@ -2,7 +2,7 @@ package com.qiaomu.modules.auditprocess.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.qiaomu.common.utils.PageUtils;
-import com.qiaomu.modules.auditprocess.entity.YwAuditProcessMessage;
+import com.qiaomu.modules.auditprocess.entity.YwWorkflowMessage;
 
 import java.util.Map;
 
@@ -11,10 +11,10 @@ import java.util.Map;
  * @description:
  * @Date 2019-04-21 16:04
  */
-public interface YwAuditProcessMessageService extends IService<YwAuditProcessMessage> {
+public interface YwWorkflowMessageService extends IService<YwWorkflowMessage> {
     PageUtils queryPage(Map<String, Object> paramMap);
 
-    void save(YwAuditProcessMessage paramYwAuditProcessMessage);
+    void save(YwWorkflowMessage paramYwAuditProcessMessage);
 
-    YwAuditProcessMessage getById(Long paramLong);
+    YwWorkflowMessage getById(Integer paramLong);
 }

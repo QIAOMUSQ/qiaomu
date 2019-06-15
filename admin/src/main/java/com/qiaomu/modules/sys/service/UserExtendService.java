@@ -2,7 +2,7 @@ package com.qiaomu.modules.sys.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.qiaomu.common.utils.PageUtils;
-import com.qiaomu.modules.sys.entity.YwUserExtend;
+import com.qiaomu.modules.sys.entity.UserExtend;
 
 import java.util.Map;
 
@@ -11,13 +11,13 @@ import java.util.Map;
  * @description:
  * @Date 2019-03-29 17:08
  */
-public interface YwUserExtendService extends IService<YwUserExtend> {
+public interface UserExtendService extends IService<UserExtend> {
 
-    YwUserExtend getUserExtend(String userPhone);
+    UserExtend getUserExtend(String userPhone);
 
     PageUtils queryPage(Map<String, Object> params);
 
-    YwUserExtend getUserExtendInfo(Long id);
+    UserExtend getUserExtendInfo(Long id);
 
     /**
      * 保存审核信息
