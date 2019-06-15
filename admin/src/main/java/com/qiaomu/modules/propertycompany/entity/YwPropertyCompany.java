@@ -18,7 +18,7 @@ public class YwPropertyCompany
     public static final long serialVersionUID = 1L;
 
     @TableId
-    private Long id;
+    private Integer id;
     private String name;
     private String address;
     private String legalPerson;
@@ -48,11 +48,11 @@ public class YwPropertyCompany
         this.adminstratorId = adminstratorId;
     }
 
-    public Long getId() {
-        return this.id;
+    public Integer getId() {
+        return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

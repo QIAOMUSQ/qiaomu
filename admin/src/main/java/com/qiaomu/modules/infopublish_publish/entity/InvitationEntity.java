@@ -17,8 +17,8 @@ public class InvitationEntity implements Serializable {
 
     private String phone;
 
-    private Long communityId;
-    private Long companyId;
+    private Integer communityId;
+    private Integer companyId;
     private Date createTime;
     @Length(max=30, message="用户名长度必须0-30之间")
     private String title;
@@ -37,19 +37,19 @@ public class InvitationEntity implements Serializable {
         this.phone = phone;
     }
 
-    public Long getCommunityId() {
+    public Integer getCommunityId() {
         return communityId;
     }
 
-    public void setCommunityId(Long communityId) {
+    public void setCommunityId(Integer communityId) {
         this.communityId = communityId;
     }
 
-    public Long getCompanyId() {
+    public Integer getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(Long companyId) {
+    public void setCompanyId(Integer companyId) {
         this.companyId = companyId;
     }
 

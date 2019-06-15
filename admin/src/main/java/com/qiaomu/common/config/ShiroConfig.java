@@ -75,11 +75,16 @@ public class ShiroConfig {
      */
     @Bean("shiroFilter")
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
-        ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
-        shiroFilter.setSecurityManager(securityManager);
-        shiroFilter.setLoginUrl("/login.html");
-        shiroFilter.setUnauthorizedUrl("/");
-
+        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        shiroFilterFactoryBean.setSecurityManager(securityManager);
+        //自定义拦截器
+        Map<String, Filter> filtersMap = new LinkedHashMap<String, Filter>();
+        filtersMap.put("mobileAuthc", new CustomAccessControlFilter());
+//        shiroFilter.
+        shiroFilterFactoryBean.setLoginUrl("/login.html");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/");
+        shiroFilterFactoryBean.setFilters(filtersMap);
+        //拦截器
         Map<String, String> filterMap = new LinkedHashMap<>();
         filterMap.put("/swagger/**", "anon");
         filterMap.put("/v2/api-docs", "anon");
@@ -88,6 +93,8 @@ public class ShiroConfig {
         filterMap.put("/App/**", "anon");
         filterMap.put("/swagger-resources/**", "anon");
 
+        filterMap.put("/mobile/**", "mobileAuthc");
+
         filterMap.put("/article/**", "anon");
         filterMap.put("/statics/**", "anon");
         filterMap.put("/login.html", "anon");
@@ -95,9 +102,9 @@ public class ShiroConfig {
         filterMap.put("/favicon.ico", "anon");
         filterMap.put("/captcha.jpg", "anon");
         filterMap.put("/**", "authc");
-        shiroFilter.setFilterChainDefinitionMap(filterMap);
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
 
-        return shiroFilter;
+        return shiroFilterFactoryBean;
     }
 
     @Bean("lifecycleBeanPostProcessor")

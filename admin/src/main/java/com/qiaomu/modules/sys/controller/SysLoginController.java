@@ -71,7 +71,7 @@ public class SysLoginController {
     public R login(String username, String password, String captcha) {
         String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
         if (!captcha.equalsIgnoreCase(kaptcha)) {
-            return R.error("验证码不正确");
+            return R.error("error","验证码不正确");
         }
 
         try {
@@ -79,13 +79,13 @@ public class SysLoginController {
             UsernamePasswordToken token = new UsernamePasswordToken(username, password);
             subject.login(token);
         } catch (UnknownAccountException e) {
-            return R.error(e.getMessage());
+            return R.error("error",e.getMessage());
         } catch (IncorrectCredentialsException e) {
-            return R.error("账号或密码不正确");
+            return R.error("error","账号或密码不正确");
         } catch (LockedAccountException e) {
-            return R.error("账号已被锁定,请联系管理员");
+            return R.error("error","账号已被锁定,请联系管理员");
         } catch (AuthenticationException e) {
-            return R.error("账户验证失败");
+            return R.error("error","账户验证失败");
         }
 
         return R.ok();

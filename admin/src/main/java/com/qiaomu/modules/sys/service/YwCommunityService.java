@@ -14,19 +14,48 @@ import java.util.Map;
  */
 
 public interface YwCommunityService extends IService<YwCommunity> {
+    /**
+     * 获取社区
+     * @param paramMap
+     * @return
+     */
     PageUtils queryPage(Map<String, Object> paramMap);
 
-    String findAdministratorNum(YwCommunity paramYwCommunity);
 
-    String addCommunityMember(String paramString1, String paramString2, Long paramLong, String paramString3, String paramString4, String paramString5, String paramString6);
-
-    YwCommunity queryById(Long paramLong);
+    /**
+     * 根据社区ID获取社区
+     * @param paramLong
+     * @return
+     */
+    YwCommunity queryById(Integer paramLong);
 
     List<YwCommunity> findAll(YwCommunity paramYwCommunity);
 
     void save(YwCommunity paramYwCommunity);
 
-    List<Long> getCommunityIdList(String paramString, Long paramLong);
+    /**
+     * 根据物业公司id和社区名称获取社区id
+     * @param communityName
+     * @param companyId
+     * @return
+     */
+    List<Integer> getCommunityIdList(String communityName, Integer companyId);
+
+    List<YwCommunity> findAllByCondition(YwCommunity condition);
+
+
+    /**
+     * 增加社区成员
+     * @param pathId
+     * @param phone
+     * @param communityId
+     * @param realName
+     * @param address
+     * @param identityInfo
+     * @param sex
+     * @return
+     */
+    String addCommunityMember(String pathId, String phone, Integer communityId, String realName, String address, String identityInfo, String sex);
 }
 
 

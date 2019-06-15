@@ -4,13 +4,13 @@ spring:
     driverClassName: com.mysql.jdbc.Driver
     druid:
       first:  #数据源1
-        url: jdbc:mysql://localhost:3306/android?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
-        username: root
-        password: root
+        url: jdbc:mysql://103.26.76.116:6300/qiaomu_service?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+        username: qiaomu_service
+        password: qiaomu
       second:  #数据源2
-        url: jdbc:mysql://localhost:3306/function?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
-        username: root
-        password: root
+        url: jdbc:mysql://103.26.76.116:6300/qiaomu_service?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+        username: qiaomu_service
+        password: qiaomu
       initial-size: 10
       max-active: 100
       min-idle: 10
@@ -42,7 +42,7 @@ spring:
     port: 6379
     password:      # 密码（默认为空）
     timeout: 6000ms  # 连接超时时长（毫秒）
-    open: false  # 是否开启redis缓存  true开启   false关闭
+    open: true  # 是否开启redis缓存  true开启   false关闭
     jedis:
       pool:
         max-active: 1000  # 连接池最大连接数（使用负值表示没有限制）

@@ -1,7 +1,7 @@
 package com.qiaomu.modules.sys.service;
 
 import com.baomidou.mybatisplus.service.IService;
-import com.qiaomu.modules.android.entity.City;
+import com.qiaomu.modules.app.entity.City;
 
 import java.util.List;
 import java.util.Map;

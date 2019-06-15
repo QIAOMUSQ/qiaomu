@@ -1,11 +1,10 @@
 package com.qiaomu.modules.sys.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.service.IService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.qiaomu.common.utils.Constant;
-import com.qiaomu.modules.android.dao.CityDao;
-import com.qiaomu.modules.android.entity.City;
+import com.qiaomu.modules.app.dao.CityDao;
+import com.qiaomu.modules.app.entity.City;
 
 import com.qiaomu.modules.sys.service.CityService;
 import org.springframework.stereotype.Service;

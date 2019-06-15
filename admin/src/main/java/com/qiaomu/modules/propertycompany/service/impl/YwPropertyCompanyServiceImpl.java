@@ -8,8 +8,8 @@ import com.qiaomu.common.utils.Query;
 import com.qiaomu.modules.propertycompany.dao.YwPropertyCompanyDao;
 import com.qiaomu.modules.propertycompany.entity.YwPropertyCompany;
 import com.qiaomu.modules.propertycompany.service.YwPropertyCompanyService;
-import com.qiaomu.modules.sys.entity.YwUserExtend;
-import com.qiaomu.modules.sys.service.YwUserExtendService;
+import com.qiaomu.modules.sys.entity.UserExtend;
+import com.qiaomu.modules.sys.service.UserExtendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ public class YwPropertyCompanyServiceImpl extends ServiceImpl<YwPropertyCompanyD
         implements YwPropertyCompanyService {
 
     @Autowired
-    private YwUserExtendService userExtendService;
+    private UserExtendService userExtendService;
 
     public PageUtils queryPage(Map<String, Object> params) {
         Page<YwPropertyCompany> page = selectPage(new Query(params)
@@ -48,12 +48,12 @@ public class YwPropertyCompanyServiceImpl extends ServiceImpl<YwPropertyCompanyD
     }
 
     private void updateUserExtendInfo(YwPropertyCompany propertyCompany) {
-        YwUserExtend userExtend = this.userExtendService.getUserExtend(propertyCompany.getAdminPhone());
+        UserExtend userExtend = this.userExtendService.getUserExtend(propertyCompany.getAdminPhone());
         if (userExtend != null) {
             userExtend.setCompanyId(propertyCompany.getId());
             this.userExtendService.updateById(userExtend);
         } else {
-            YwUserExtend userExtends = new YwUserExtend();
+            UserExtend userExtends = new UserExtend();
             userExtends.setUserPhone(propertyCompany.getAdminPhone());
             userExtends.setCompanyId(propertyCompany.getId());
             this.userExtendService.insert(userExtends);

@@ -1,16 +1,13 @@
 package com.qiaomu.common.servlet;
 
-import com.qiaomu.modules.sys.entity.YwUserExtend;
-import com.qiaomu.modules.sys.service.YwUserExtendService;
+import com.qiaomu.modules.sys.service.UserExtendService;
+import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebListener;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * @author 李品先
@@ -22,7 +19,8 @@ public class MyServletRequest implements ServletRequestListener {
     @Autowired
     private RedisTemplate redisTemplate;
     @Autowired
-    private YwUserExtendService userExtendService;
+    private UserExtendService userExtendService;
+
 
     @Override
     public void requestDestroyed(ServletRequestEvent servletRequestEvent) {
@@ -32,6 +30,15 @@ public class MyServletRequest implements ServletRequestListener {
     @Override
     public void requestInitialized(ServletRequestEvent servletRequestEvent) {
         HttpServletRequest request = (HttpServletRequest)servletRequestEvent.getServletRequest();
+        String url  = request.getRequestURI().toString();
+        if(url.contains("/App/")){
+            Session session = (Session) request.getSession();
+
+        }
+
+
+       /*
+
         String name = request.getParameter("phone");
         if(name != null && !"".equals(name)){
             YwUserExtend userExtend = userExtendService.getUserExtend(name);
@@ -39,6 +46,6 @@ public class MyServletRequest implements ServletRequestListener {
         }
 
         String url = request.getRequestURL().toString();//根据url进行判断处理
-        System.out.println(url);
+        System.out.println(url);*/
     }
 }

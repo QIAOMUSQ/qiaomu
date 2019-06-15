@@ -4,13 +4,13 @@ spring:
     driverClassName: com.mysql.jdbc.Driver
     druid:
       first:  #数据源1
-        url: jdbc:mysql://103.26.76.116:6322/qiaomu?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
-        username: root
-        password: qiaomu_1_l
+        url: jdbc:mysql://127.0.0.1:6300/qiaomu_service?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+        username: qiaomu_service
+        password: qiaomu
       second:  #数据源2
-        url: jdbc:mysql://103.26.76.116:6322/qiaomu?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
-        username: root
-        password: qiaomu_1_l
+        url: jdbc:mysql://127.0.0.1:6300/qiaomu_service?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+        username: qiaomu_service
+        password: qiaomu
       initial-size: 10
       max-active: 100
       min-idle: 10
@@ -38,7 +38,7 @@ spring:
             multi-statement-allow: true
   redis:
     database: 0
-    host: 103.26.76.116
+    host: 127.0.0.1
     port: 6379
     password: qiaomu     # 密码（默认为空）
     timeout: 6000ms  # 连接超时时长（毫秒）
