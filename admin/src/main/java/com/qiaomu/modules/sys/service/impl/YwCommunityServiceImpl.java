@@ -46,7 +46,7 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
 
     public PageUtils queryPage(Map<String, Object> params) {
         String name = (String) params.get("name");
-        Long companyId = (Long) params.get("companyId");
+        Integer companyId = (Integer) params.get("companyId");
         String cityName = (String) params.get("cityName");
         ProvinceCityDateEntity provinceCity = this.provinceCityDateService.getProvCityByCityName(cityName);
         Page<YwCommunity> page = selectPage(new Query(params)

@@ -127,6 +127,7 @@ var vm = new Vue({
                 success: function(r){
                     if(r.status == "success"){
                         alert('操作成功', function(){
+                            vm.processMessage=[];
                             vm.reload();
                         });
                     }else{

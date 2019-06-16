@@ -65,6 +65,12 @@ public class WorkflowInfoController extends AbstractController {
         }else {
             return R.ok("error","请进行个人信息验证");
         }
-
     }
+
+
+    //根据类型获取流程列表
+    //获取所有的申请
+    //更具类型获取流程列表
+
+
 }

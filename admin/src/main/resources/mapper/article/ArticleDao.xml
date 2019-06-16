@@ -21,7 +21,7 @@
 		</where>
 	</select>
 
-	<select id="queryPraise" parameterType="com.qiaomu.modules.article.entity.ArticlePraiseEntity" resultType="String">
+	<select id="queryPraise" parameterType="com.qiaomu.modules.article.entity.ArticlePraiseEntity" resultType="java.lang.String">
 	select isPraise from pluto_article_praise WHERE userId = #{userId}
 	</select>
 	<update id="updateArticlePraiseNum" parameterType="com.qiaomu.modules.article.entity.ArticleEntity">
@@ -56,10 +56,10 @@
 	<delete id="deleteCommentByArticleId" parameterType="com.qiaomu.modules.article.entity.CommentEntity">
 		delete from pluto_article_comment WHERE articleId = #{articleId}
 	</delete>
-	<select id="queryCommentByArticleId" parameterType="String" resultType="com.qiaomu.modules.article.entity.CommentEntity">
+	<select id="queryCommentByArticleId" parameterType="java.lang.String" resultType="com.qiaomu.modules.article.entity.CommentEntity">
 		select * from pluto_article_comment WHERE articleId = #{articleId}
 	</select>
-	<select id="queryCommentByUserId" parameterType="String" resultType="com.qiaomu.modules.article.entity.CommentEntity">
+	<select id="queryCommentByUserId" parameterType="java.lang.String" resultType="com.qiaomu.modules.article.entity.CommentEntity">
 		select * from pluto_article_comment WHERE userId = #{userId}
 	</select>
 </mapper>
