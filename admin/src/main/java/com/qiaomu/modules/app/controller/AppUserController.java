@@ -14,6 +14,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -43,8 +44,8 @@ public class AppUserController extends AbstractController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value ="login", method = RequestMethod.POST)
-    public R login(String phone,String password ,boolean isAgree) {
+    @RequestMapping(value ="login")
+    public R login(String phone,String password,boolean isAgree) {
         try {
            if(!"".equals(phone) && phone != null){
                Subject subject = ShiroUtils.getSubject();
@@ -102,7 +103,7 @@ public class AppUserController extends AbstractController {
      * @param newPassword
      * @return
      */
-    @RequestMapping({"/modifyPassword"})
+    @RequestMapping(value = "modifyPassword",method = RequestMethod.POST)
     public R modifyPassword(String password, String newPassword) {
         Assert.isBlank(newPassword, "新密码不为能空");
 
@@ -118,5 +119,10 @@ public class AppUserController extends AbstractController {
         return R.ok();
     }
 
+    @RequestMapping(value = "logout",method = RequestMethod.POST)
+    public R logout(){
+        ShiroUtils.logout();
+        return R.ok();
+    }
 
 }

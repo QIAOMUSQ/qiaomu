@@ -13,11 +13,11 @@ import com.qiaomu.modules.sys.entity.ProvinceCityDateEntity;
 import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.service.ProvinceCityDateService;
+import com.qiaomu.modules.sys.service.SysFileService;
 import com.qiaomu.modules.sys.service.YwCommunityService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -67,25 +67,6 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
 
         return new PageUtils(page);
     }
-
-
-    /*@Override
-    public String addCommunityMember(String pathId, String phone, Integer communityId, String realName, String address, String identityInfo, String sex) {
-        YwCommunity community = this.communityService.queryById(communityId);
-
-        UserExtend userExtend = this.userExtendDao.getUserExtend(phone);
-        userExtend.setAddress(AESUtil.encrypt(address));
-        userExtend.setImgId(Long.valueOf(pathId));
-        userExtend.setRealName(AESUtil.encrypt(realName));
-        userExtend.setUserIdentity(identityInfo);
-        userExtend.setUserPhone(phone);
-        userExtend.setCommunityId(communityId);
-        userExtend.setCompanyId(community.getCompanyId());
-        userExtend.setSex(sex);
-
-        this.userExtendDao.updateById(userExtend);
-        return "ok";
-    }*/
 
     public YwCommunity queryById(Integer communityId) {
         YwCommunity community = ((YwCommunityDao) this.baseMapper).queryById(communityId);

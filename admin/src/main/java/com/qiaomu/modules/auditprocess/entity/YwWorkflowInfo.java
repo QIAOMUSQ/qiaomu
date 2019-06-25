@@ -18,28 +18,40 @@ public class YwWorkflowInfo implements Serializable {
 
     @TableId
     private Long id;
-    private String type;
+    private String type;//流程状态 0：申请 1：一级接收 11：一级受理完成 2：二级接收 21：二级受理完成  3：上报  4通过  5不通过
     private String clientPhone;
     private Integer communityId;   //社区id
     private Integer companyId;     //  物业id
-    private String detailPhoneOne;  //  第一处理人号码
+
     private String detailOpinionOne;    //  第一处理人意见
     private Date detailOneDate;     //处理时间
-    private String detailPhoneTwo;
+
     private String detailOpinionTwo;
     private Date detailTwoDate;
-    private String detailPhoneReport;   //上报人号码
+
     private String detailOpinionReport; //上报人意见
+    private Date reportDate;
     private String userOpinion; //用户评价
-    private Integer workflowId; //流程类型id
+    private Long workflowId; //流程类型id
     private String detail;  //事务描述细节
     private Date createTime;    //发起时间
     private String location;    //事发位置
     private String pictureId;
     private Date serviceDate;//上门维修时间
+    private String workflowType;//流程类型
+
+    private String detailPhoneOne;  //  第一处理人号码
+    private String detailPhoneTwo;
+    private String detailPhoneReport;   //上报人号码
 
     @TableField(exist = false)
     private String processName;
+    @TableField(exist = false)
+    private String detailPhoneOneName;
+    @TableField(exist = false)
+    private String detailPhoneTwoName;
+    @TableField(exist = false)
+    private String detailPhoneReportName;
 
     public Long getId() {
         return this.id;
@@ -153,11 +165,11 @@ public class YwWorkflowInfo implements Serializable {
         this.userOpinion = userOpinion;
     }
 
-    public Integer getWorkflowId() {
+    public Long getWorkflowId() {
         return workflowId;
     }
 
-    public void setWorkflowId(Integer workflowId) {
+    public void setWorkflowId(Long workflowId) {
         this.workflowId = workflowId;
     }
 
@@ -207,5 +219,45 @@ public class YwWorkflowInfo implements Serializable {
 
     public void setServiceDate(Date serviceDate) {
         this.serviceDate = serviceDate;
+    }
+
+    public String getWorkflowType() {
+        return workflowType;
+    }
+
+    public void setWorkflowType(String workflowType) {
+        this.workflowType = workflowType;
+    }
+
+    public String getDetailPhoneOneName() {
+        return detailPhoneOneName;
+    }
+
+    public void setDetailPhoneOneName(String detailPhoneOneName) {
+        this.detailPhoneOneName = detailPhoneOneName;
+    }
+
+    public String getDetailPhoneTwoName() {
+        return detailPhoneTwoName;
+    }
+
+    public void setDetailPhoneTwoName(String detailPhoneTwoName) {
+        this.detailPhoneTwoName = detailPhoneTwoName;
+    }
+
+    public String getDetailPhoneReportName() {
+        return detailPhoneReportName;
+    }
+
+    public void setDetailPhoneReportName(String detailPhoneReportName) {
+        this.detailPhoneReportName = detailPhoneReportName;
+    }
+
+    public Date getReportDate() {
+        return reportDate;
+    }
+
+    public void setReportDate(Date reportDate) {
+        this.reportDate = reportDate;
     }
 }

@@ -24,20 +24,18 @@ public class YwWorkflowMessage implements Serializable {
     private String reportPerson;    //上报人
     private String superintendentPhone; //监管人
     private String processName; //流程名称
-    private String processType; //流程类型
+    private String dicValue; //字典值
     private Integer companyId; //物业ID
+
+
 
     @TableField(exist = false)
     private String communityName;
 
-    @TableField(exist = false)
     private String phoneOneName;
-
-    @TableField(exist = false)
     private String phoneTwoName;
-
-    @TableField(exist = false)
     private String reportPersonName;
+    private String superintendentName;
     private Date createTime;
 
     public Long getId() {
@@ -90,12 +88,12 @@ public class YwWorkflowMessage implements Serializable {
         this.processName = processName;
     }
 
-    public String getProcessType() {
-        return this.processType;
+    public String getDicValue() {
+        return dicValue;
     }
 
-    public void setProcessType(String processType) {
-        this.processType = processType;
+    public void setDicValue(String dicValue) {
+        this.dicValue = dicValue;
     }
 
     public Integer getCommunityId() {
@@ -152,5 +150,14 @@ public class YwWorkflowMessage implements Serializable {
 
     public void setReportPersonName(String reportPersonName) {
         this.reportPersonName = reportPersonName;
+    }
+
+
+    public String getSuperintendentName() {
+        return superintendentName;
+    }
+
+    public void setSuperintendentName(String superintendentName) {
+        this.superintendentName = superintendentName;
     }
 }

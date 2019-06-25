@@ -1,9 +1,9 @@
-package com.qiaomu.modules.sys.service;
+package com.qiaomu.modules.sys.service.impl;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.qiaomu.modules.sys.dao.SysFileDao;
 import com.qiaomu.modules.sys.entity.SysFileEntity;
-import com.qiaomu.modules.sys.service.impl.SysFileService;
+import com.qiaomu.modules.sys.service.SysFileService;
 import org.springframework.stereotype.Service;
 
 /**

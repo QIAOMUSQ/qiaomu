@@ -99,37 +99,42 @@ public class CommunityMessageController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "addCommunityCheckInfo",method = RequestMethod.GET)
+    @RequestMapping(value = "addCommunityCheckInfo",method = RequestMethod.POST)
     public R addCommunityCheckInfo(@RequestParam Map<String, Object> params){
-        String userPhone = (String) params.get("userPhone");
-        String cityCode = (String) params.get("cityCode");
-        String communityName = (String) params.get("communityName");
-        String name = (String) params.get("name");
-        String contactPhone = (String) params.get("contactPhone");
-        String address = (String) params.get("address");
         try {
             //对社区信息验证
+            String userPhone = (String) params.get("userPhone");
+            String cityName = (String) params.get("cityName");
+            String communityName = (String) params.get("communityName");
+            String name = (String) params.get("name");
+            String contactPhone = (String) params.get("contactPhone");
+            String address = (String) params.get("address");
+
             YwCommunity community = new YwCommunity();
             community.setName(communityName);
-            community.setCityCode(cityCode);
+            community.setCityName(cityName);
             List<YwCommunity> communities =  communityService.findAllByCondition(community);
             if(communities.size()>0){
                 return R.ok("error","该社区已注册");
             }
+            ProvinceCityDateEntity cityDateEntity = provinceCityDateService.getProvCityByCityName(cityName);
             CommunityCheckEntity communityCheck = new CommunityCheckEntity();
             communityCheck.setUserPhone(userPhone);
             communityCheck.setCommunityName(communityName);
-            communityCheck.setCityCode(cityCode);
+            communityCheck.setCityCode(cityDateEntity.getCityCode());
             communityCheck.setName(name);
             communityCheck.setContactPhone(contactPhone);
             communityCheck.setAddress(address);
             communityCheckService.insert(communityCheck);
             return R.ok("success","保存成功");
         }catch (Exception e){
+            e.printStackTrace();
             logger.error(DateTime.now().toString("YYYY-MM-dd HH:mm:ss")+
-                    " CommunityMessageController.addCommunityCheckInfo"+ JSON.toJSON(params));
+                    "CommunityMessageController.addCommunityCheckInfo"+ JSON.toJSON(params));
             return R.ok("error","保存失败");
         }
     }
+
+
 
 }

@@ -58,10 +58,3 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     cache-enabled: false
     call-setters-on-nulls: true
-
-
-logging:
-  level: debug
-  level.com.qiaomu: debug
-  path: logs/
-  file: admin.log

@@ -18,6 +18,7 @@ package com.qiaomu.common.exception;
 
 import com.qiaomu.common.utils.R;
 import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.session.UnknownSessionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
@@ -62,5 +63,9 @@ public class RRExceptionHandler {
 	public R handleException(Exception e){
 		logger.error(e.getMessage(), e);
 		return R.error();
+	}
+	@ExceptionHandler(UnknownSessionException.class)
+	public R UnknownSessionException(UnknownSessionException e){
+		return R.error("请先登录");
 	}
 }

@@ -1,4 +1,4 @@
-package com.qiaomu.modules.sys.service.impl;
+package com.qiaomu.modules.sys.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.qiaomu.modules.sys.entity.SysFileEntity;

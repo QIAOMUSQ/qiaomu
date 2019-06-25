@@ -52,3 +52,9 @@ spring:
 
 file:
   save: /www/temp
+
+logging:
+  level: info
+  level.com.qiaomu: info
+  path: logs/
+  file: admin.log

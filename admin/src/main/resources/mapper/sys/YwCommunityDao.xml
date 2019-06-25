@@ -10,16 +10,19 @@
     </select>
 
     <select id="findAllByCondition" resultType="com.qiaomu.modules.sys.entity.YwCommunity">
-         SELECT * FROM yw_community
+         SELECT * FROM yw_community A LEFT JOIN prov_city_data B ON A.city_id = b.id
         <where>
             <if test="name != null and name !=''">
-                AND name = #{name}
+                AND A.name = #{name}
             </if>
             <if test="cityId != null and cityId !=''">
-                AND city_id = #{cityId}
+                AND A.city_id = #{cityId}
+            </if>
+            <if test="cityName != null and cityName !=''">
+                AND B.city_name = #{cityName}
             </if>
             <if test="companyId != null and companyId !=''">
-                AND company_id = #{companyId}
+                AND A.company_id = #{companyId}
             </if>
 
         </where>

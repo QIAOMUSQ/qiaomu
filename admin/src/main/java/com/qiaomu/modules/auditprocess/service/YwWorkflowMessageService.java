@@ -16,5 +16,5 @@ public interface YwWorkflowMessageService extends IService<YwWorkflowMessage> {
 
     void save(YwWorkflowMessage paramYwAuditProcessMessage);
 
-    YwWorkflowMessage getById(Integer paramLong);
+    YwWorkflowMessage getById(Long paramLong);
 }

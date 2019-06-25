@@ -6,10 +6,10 @@ $(function () {
         colModel: [
             { label: '', name: 'id', width: 45,hidden:true,index: "id", key: true   },
             { label: '流程名称', name: 'processName', width: 45,sortable: false},
-            { label: '流程类型', name: 'processType', width: 75 ,sortable: false},
-            { label: '一级处理人', name: 'phoneOne', width: 90 ,sortable: false},
-            { label: '二级处理人', name: 'phoneTwo', width: 90 ,sortable: false},
-            { label: '上报人', name: 'reportPerson', width: 70 ,sortable: false},
+            { label: '流程类型', name: 'dicValue', width: 75 ,sortable: false},
+            { label: '一级处理人', name: 'phoneOneName', width: 90 ,sortable: false},
+            { label: '二级处理人', name: 'phoneTwoName', width: 90 ,sortable: false},
+            { label: '上报人', name: 'reportPersonName', width: 70 ,sortable: false},
             { label: '社区名称', name: 'communityName', width: 60,sortable: false},
             { label: '创建时间', name: 'createTime', index: "create_time", width: 85}
         ],
@@ -127,7 +127,6 @@ var vm = new Vue({
                 success: function(r){
                     if(r.status == "success"){
                         alert('操作成功', function(){
-                            vm.processMessage=[];
                             vm.reload();
                         });
                     }else{
@@ -146,7 +145,7 @@ var vm = new Vue({
                 vm.processMessage.phoneTwo =result.process.phoneTwo ;
                 vm.processMessage.reportPerson =result.process.reportPerson;
                 vm.processMessage.processName =result.process.processName;
-                vm.processMessage.processType = result.process.processType;
+                vm.processMessage.dicValue = result.process.dicValue;
                 vm.processMessage.communityId = result.process.communityId;
                 vm.processMessage.id = result.process.id;
                 vm.getDictor();
@@ -237,15 +236,15 @@ var vm = new Vue({
             $.get(baseURL + "sys/dict/getDictByType",{"type":"property_process"}, function(r){
                 var i =0;
                 $.each(r.dict,function (index,item) {
-                    if(item.value == vm.processMessage.processType) i=index;
+                    if(item.value == vm.processMessage.dicValue) i=index;
                     vm.typeList.push({"value":item.value,"name":item.code});
                 });
-                vm.processMessage.processType = vm.typeList[i].value;
+                vm.processMessage.dicValue = vm.typeList[i].value;
             });
         },
         selectType:function (event) {
 
-            vm.processMessage.processType = event.target.value;
+            vm.processMessage.dicValue = event.target.value;
 
         },
         //获取社区框口

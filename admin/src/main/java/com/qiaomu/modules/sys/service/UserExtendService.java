@@ -30,4 +30,6 @@ public interface UserExtendService extends IService<UserExtend> {
     void saveCheckInfo(String userPhone, String info, String type, String roleType);
 
     void delect(Long[] userIds);
+
+    String getUserByPhone(String phone);
 }

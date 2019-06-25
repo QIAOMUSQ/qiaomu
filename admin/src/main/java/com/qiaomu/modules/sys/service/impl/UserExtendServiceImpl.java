@@ -127,4 +127,15 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
         this.deleteBatchIds(Arrays.asList(userIds));
 
     }
+
+    @Override
+    public String getUserByPhone(String phone) {
+        String name = "";
+        String[] phones = phone.split("_");
+        for (String i : phones) {
+            name = name + getUserExtend(i).getRealName() + "、";
+        }
+        name = name.substring(0, name.length() - 1);
+        return name;
+    }
 }

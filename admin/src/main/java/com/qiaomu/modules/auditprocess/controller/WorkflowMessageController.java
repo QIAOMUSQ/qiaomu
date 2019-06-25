@@ -53,7 +53,7 @@ public class WorkflowMessageController extends AbstractController {
     @ResponseBody
     @RequestMapping(value = "getProcess/{id}", method = RequestMethod.GET)
     @RequiresPermissions({"message:info"})
-    public R getProcess(@PathVariable("id") Integer id) {
+    public R getProcess(@PathVariable("id") Long id) {
         return R.ok().put("process", this.workflowMessageService.getById(id));
     }
 

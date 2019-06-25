@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -41,29 +42,38 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
         Integer companyId = (Integer) params.get("companyId");
         String communityName = (String) params.get("communityName");
         String processName = (String) params.get("processName");
-        List<Integer> communityId = this.communityService.getCommunityIdList(communityName, companyId);
-        Page<YwWorkflowMessage> page = selectPage(new Query(params)
-                .getPage(), new EntityWrapper()
-                .like(StringUtils.isNotBlank(processName),
-                        "process_name", processName)
-                .eq("COMPANY_ID", companyId)
-                .in(communityId
-                        .size() > 0, "community_id", communityId)
-                .addFilterIfNeed(params
-                                .get("sql_filter") != null,
+        String dicCode = (String) params.get("workflowType");
+        //当没指定社区时选择全物业
+        List<Integer> communityId = new ArrayList<>();
+        if(params.get("communityId") != null && StringUtils.isNotBlank((String)params.get("communityId") )){
+            //指定固定社区
+            communityId.add((Integer) params.get("communityId"));
+        }else {
+            communityId = this.communityService.getCommunityIdList(communityName, companyId);
+        }
+
+        Page<YwWorkflowMessage> page = selectPage(new Query(params).getPage(),
+                new EntityWrapper()
+                        .like(StringUtils.isNotBlank(processName), "process_name", processName)
+                        .eq("COMPANY_ID", companyId)
+                        .in(communityId.size() > 0, "community_id", communityId)
+                        .eq(StringUtils.isNotBlank(dicCode),"DIC_VALUE",dicCode)
+                        .addFilterIfNeed(params.get("sql_filter") != null,
                         (String) params.get("sql_filter"), new Object[0]));
 
         for (YwWorkflowMessage processMessage : page.getRecords()) {
-            processMessage.setPhoneOne(getUserByPhone(processMessage.getPhoneOne()));
-            processMessage.setPhoneTwo(getUserByPhone(processMessage.getPhoneTwo()));
-            processMessage.setReportPerson(getUserByPhone(processMessage.getReportPerson()));
             processMessage.setCommunityName(this.communityService.queryById(processMessage.getCommunityId()).getName());
-            processMessage.setProcessType(this.dictService.getdictCodeByTypeValue(processMessage.getProcessType(), "property_process"));
+            processMessage.setDicValue(this.dictService.getdictCodeByTypeValue(processMessage.getDicValue(), "property_process"));
         }
         return new PageUtils(page);
     }
 
     public void save(YwWorkflowMessage processMessage) {
+        processMessage.setPhoneOneName(userExtendService.getUserByPhone(processMessage.getPhoneOne()));
+        processMessage.setPhoneTwoName(userExtendService.getUserByPhone(processMessage.getPhoneTwo()));
+        processMessage.setReportPersonName(userExtendService.getUserByPhone(processMessage.getReportPerson()));
+        processMessage.setSuperintendentName(userExtendService.getUserByPhone(processMessage.getSuperintendentPhone()));
+
         if (processMessage.getId() != null) {
             updateById(processMessage);
         } else {
@@ -72,22 +82,10 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
         }
     }
 
-    private String getUserByPhone(String phone) {
-        String name = "";
-        String[] phones = phone.split("_");
-        for (String i : phones) {
-            name = name + this.userExtendService.getUserExtend(i).getRealName() + "、";
-        }
-        name = name.substring(0, name.length() - 1);
-        return name;
-    }
 
-    public YwWorkflowMessage getById(Integer id) {
+    public YwWorkflowMessage getById(Long id) {
         YwWorkflowMessage processMessage = (YwWorkflowMessage) selectById(id);
-        processMessage.setPhoneOneName(getUserByPhone(processMessage.getPhoneOne()));
-        processMessage.setPhoneTwoName(getUserByPhone(processMessage.getPhoneTwo()));
-        processMessage.setReportPersonName(getUserByPhone(processMessage.getReportPerson()));
-        processMessage.setCommunityName(this.communityService.queryById(processMessage.getCommunityId()).getName());
+       processMessage.setCommunityName(this.communityService.queryById(processMessage.getCommunityId()).getName());
         return processMessage;
     }
 }

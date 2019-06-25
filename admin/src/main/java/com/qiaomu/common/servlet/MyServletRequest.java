@@ -31,11 +31,11 @@ public class MyServletRequest implements ServletRequestListener {
     public void requestInitialized(ServletRequestEvent servletRequestEvent) {
         HttpServletRequest request = (HttpServletRequest)servletRequestEvent.getServletRequest();
         String url  = request.getRequestURI().toString();
-        if(url.contains("/App/")){
+        /*if(url.contains("/App/")){
             Session session = (Session) request.getSession();
 
         }
-
+*/
 
        /*
 
