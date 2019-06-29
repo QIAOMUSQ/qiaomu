@@ -18,15 +18,15 @@ public class YwPropertyCompany
     public static final long serialVersionUID = 1L;
 
     @TableId
-    private Integer id;
+    private Long id;
     private String name;
     private String address;
     private String legalPerson;
     private String telPhone;
     private String companyImg;
     private String usageType;
-    private Date creatTime;
-    private Long adminstratorId;
+    private Date createTime;
+    private Long administratorId;
     private String adminPhone;
 
     @TableField(exist = false)
@@ -40,19 +40,19 @@ public class YwPropertyCompany
         this.administratorName = administratorName;
     }
 
-    public Long getAdminstratorId() {
-        return this.adminstratorId;
+    public Long getAdministratorId() {
+        return administratorId;
     }
 
-    public void setAdminstratorId(Long adminstratorId) {
-        this.adminstratorId = adminstratorId;
+    public void setAdministratorId(Long administratorId) {
+        this.administratorId = administratorId;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -104,13 +104,7 @@ public class YwPropertyCompany
         this.usageType = usageType;
     }
 
-    public Date getCreatTime() {
-        return this.creatTime;
-    }
 
-    public void setCreatTime(Date creatTime) {
-        this.creatTime = creatTime;
-    }
 
     public String getAdminPhone() {
         return this.adminPhone;
@@ -118,5 +112,13 @@ public class YwPropertyCompany
 
     public void setAdminPhone(String adminPhone) {
         this.adminPhone = adminPhone;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

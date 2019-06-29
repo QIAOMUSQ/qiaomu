@@ -22,13 +22,13 @@
 		SELECT * FROM sys_user WHERE user_id = #{userId}
 	</select>
 
-	<!--根据角色获取用户-->
+	<!--根据部门获取用户-->
 	<select id="getLoginUser" resultType="com.qiaomu.modules.sys.entity.SysUserEntity">
 		SELECT
 			*
 		FROM
-			sys_user u right JOIN  yw_user_extend e on e.user_phone = u.username
-		WHERE e.property_company_role_type = #{roleType};
+			sys_user u
+		WHERE u.dept_id = #{deptId};
 	</select>
 
 	<select id="getUserByUserName" resultType="com.qiaomu.modules.sys.entity.SysUserEntity" >

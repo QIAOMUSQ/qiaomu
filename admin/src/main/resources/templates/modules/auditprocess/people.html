@@ -22,6 +22,9 @@
             <#if shiro.hasPermission("process:people:forbidden")>
                 <a class="btn btn-primary" @click="unUsed(3)"><i class="fa fa-plus"></i>&nbsp;禁用</a>
             </#if>
+            <#if shiro.hasPermission("process:people:forbidden")>
+                <a class="btn btn-primary" @click="unUsed(0)"><i class="fa fa-plus"></i>&nbsp;解禁</a>
+            </#if>
             <#if shiro.hasPermission("process:people:delete")>
                 <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
             </#if>
@@ -72,12 +75,14 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">角色类型</div>
                 <div class="col-sm-12" style="    position: absolute;left: 10%;">
-                    <label v-for="type in typeList" class="radio-inline">
+                  <!--  <label v-for="type in typeList" class="radio-inline">
                         <input type="radio" name="roleType" :value="type.value" v-model="userExtend.propertyCompanyRoleType">{{type.name}}
-                    </label>
+                    </label>-->
+                    <input id ="roleType"/>
+                    <input style="display:none;" v-model="userExtend.propertyCompanyRoleType">
                 </div>
             </div>
-            <div class="imgDiv">
+            <div class="imgDiv" style="position: absolute;left: 58%;top: 35%;">
                 <img class="img" id="imgUrl" src="" />
             </div>
 

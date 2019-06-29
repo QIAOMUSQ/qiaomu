@@ -51,8 +51,8 @@ public class UserExtendController extends AbstractController {
     @ResponseBody
     @RequestMapping(value = "saveCheckInfo", method = RequestMethod.POST)
     @RequiresPermissions("process:people:check")
-    public R saveCheckInfo(String userPhone, String info, String type, String roleType) {
-        userExtendService.saveCheckInfo(userPhone, info, type, roleType);
+    public R saveCheckInfo(String userPhone, String info, String type, String roleType,Long CommunityId) {
+        userExtendService.saveCheckInfo(userPhone, info, type, roleType,CommunityId);
         return R.ok();
     }
 

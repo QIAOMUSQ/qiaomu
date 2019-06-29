@@ -21,6 +21,9 @@ public class SysFileEntity {
 
     private Date dateTime;
 
+    private String orgName;
+    private Long fileSize;
+
     public Long getId() {
         return id;
     }
@@ -51,5 +54,21 @@ public class SysFileEntity {
 
     public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
+    }
+
+    public Long getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(Long fileSize) {
+        this.fileSize = fileSize;
     }
 }

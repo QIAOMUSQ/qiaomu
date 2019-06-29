@@ -12,9 +12,9 @@ import java.util.Map;
  * @Date 2019-04-21 16:19
  */
 public interface YwPropertyCompanyService extends IService<YwPropertyCompany> {
-    public abstract PageUtils queryPage(Map<String, Object> paramMap);
+    PageUtils queryPage(Map<String, Object> paramMap);
 
-    public abstract void save(YwPropertyCompany paramYwPropertyCompany);
+    void save(YwPropertyCompany paramYwPropertyCompany);
 
-    public abstract void update(YwPropertyCompany paramYwPropertyCompany);
+    void update(YwPropertyCompany paramYwPropertyCompany);
 }

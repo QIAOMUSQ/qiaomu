@@ -9,10 +9,10 @@
     <div v-show="showList">
         <div class="grid-btn">
             <div class="form-group col-sm-2">
-                <input type="text" class="form-control" v-model="q.communityName" @keyup.enter="query" placeholder="社区">
+                <input class="form-control" v-model="q.communityName" @keyup.enter="query" placeholder="社区">
             </div>
             <div class="form-group col-sm-2">
-                <input type="text" class="form-control" v-model="q.processName" @keyup.enter="query" placeholder="流程名称">
+                <input class="form-control" v-model="q.processName" @keyup.enter="query" placeholder="流程名称">
             </div>
             <a class="btn btn-default" @click="query">查询</a>
             <#if shiro.hasPermission("message:add")>
@@ -35,49 +35,51 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">流程名称</div>
                 <div class="col-sm-10">
-                    <input type="text"  i class="form-control"  v-model="processMessage.processName" />
+                    <input   class="form-control"  v-model="processMessage.processName" />
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">流程类型</div>
                 <div class="col-sm-10">
-                    <select class="select"  v-on:change="selectType($event)">
-                        <template v-for="item in typeList">
-                            <option v-bind:value = "item.value">{{item.name}}</option>
-                            </templa>
-                        </template>
-                    </select>
-                    <input type="text" class="form-control" style="display: none;" v-model="processMessage.dicValue" />
+                    <input id="dicValue" />
+                    <input style="display: none" v-model="processMessage.dicValue" />
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">一级处理人</div>
                 <div class="col-sm-10">
-                    <input type="text" id="phoneOne" @click="getUser('phoneOne')"  class="form-control" readonly="readonly"  />
-                    <input type="text" style="display:none;"  class="form-control" v-model="processMessage.phoneOne" />
+                    <input id="phoneOne" @click="getUser('phoneOne')"  class="form-control" readonly="readonly"  />
+                    <input style="display:none;"  class="form-control" v-model="processMessage.phoneOne" />
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">二级处理人</div>
                 <div class="col-sm-10">
-                    <input type="text" id="phoneTwo" @click="getUser('phoneTwo')" class="form-control" readonly="readonly"/>
-                    <input type="text" style="display:none;"  class="form-control" v-model="processMessage.phoneTwo"/>
+                    <input id="phoneTwo" @click="getUser('phoneTwo')" class="form-control" readonly="readonly"/>
+                    <input style="display:none;"  class="form-control" v-model="processMessage.phoneTwo"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">上报人</div>
                 <div class="col-sm-10">
-                    <input type="text" id="reportPerson" class="form-control" @click="getUser('reportPerson')" readonly="readonly"/>
-                    <input type="text" style="display:none;"  class="form-control" v-model="processMessage.reportPerson"  />
+                    <input id="reportPerson" class="form-control" @click="getUser('reportPerson')" readonly="readonly"/>
+                    <input style="display:none;"  class="form-control" v-model="processMessage.reportPerson"  />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">监管人</div>
+                <div class="col-sm-10">
+                    <input id="superintendentPhone" class="form-control" @click="getUser('superintendentPhone')" readonly="readonly"/>
+                    <input  style="display:none;"  class="form-control" v-model="processMessage.superintendentPhone"  />
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">社区名称</div>
                 <div class="col-sm-10">
-                    <input type="text" id="communityName" class="form-control" @click="getCommunity()"  readonly="readonly" />
-                    <input type="text" style="display:none;" class="form-control" v-model="processMessage.communityId" />
+                    <input id="communityName" class="form-control" @click="getCommunity()"  readonly="readonly" />
+                    <input  style="display:none;" class="form-control" v-model="processMessage.communityId" />
                 </div>
-                <input type="text" style="display:none;" class="form-control" v-model="processMessage.id" />
+                <input  style="display:none;" class="form-control" v-model="processMessage.id" />
             </div>
 
             <div class="form-group">

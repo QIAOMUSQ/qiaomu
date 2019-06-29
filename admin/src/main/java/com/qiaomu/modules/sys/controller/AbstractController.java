@@ -24,6 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Controller公共组件
  *
@@ -50,6 +53,10 @@ public abstract class AbstractController {
         return getUser().getDeptId();
     }
 
+    protected Long getCompanyId(){
+        return  getUser().getCompanyId();
+    }
+
     /**
      * 根据登陆用户查询该用户物业公司或社区
      *
@@ -58,24 +65,29 @@ public abstract class AbstractController {
      *             2：社区
      * @return
      */
-    protected Integer getCompanyOrCommunityByType(String type) {
+    protected List<Long> getCompanyOrCommunityByType(String type) {
         //根据登陆用户查询该物业公司
-        UserExtend userExtend = userExtendService.getUserExtend(getUser().getUsername());
-        if (type.equals("1") && userExtend != null) {
-            return userExtend.getCompanyId();
-        } else if (type.equals("0") && userExtend != null) {
-            return userExtend.getCommunityId();
-        } else {
-            return -1;
+        List<Long> data = new ArrayList<>();
+        List<UserExtend> userExtend = userExtendService.getUserExtend(getUser().getUsername());
+
+        for (UserExtend user : userExtend){
+            if (type.equals("1") && userExtend != null) {
+                data.add(user.getCompanyId());
+            } else if (type.equals("0") && userExtend != null) {
+                data.add(user.getCommunityId());
+            }
         }
+        return data;
     }
+
+
 
     /**
      * 获取用户扩展信息
      * @param userPhone
      * @return
      */
-    protected UserExtend getUserExtend(String userPhone){
+    protected List<UserExtend> getUserExtend(String userPhone){
       return  userExtendService.getUserExtend(userPhone);
     }
 

@@ -136,19 +136,28 @@ var vm = new Vue({
             }).trigger("reloadGrid");
         },
         getLoginAdministrator:function () {
-            $.post(baseURL + "sys/user/getLoginUser", {"roleType":1},function(result){
-                vm.userList = [];
+            $.post(baseURL + "sys/user/getLoginUser", {"deptId":6},function(result){
+                console.info(result);
+                /*vm.userList = [];
                 var i =0;
                 $.each(result.user,function (index,item) {
                     if(item.userName == vm.company.adminPhone){i = index;}
                     vm.userList.push({value:item.username,text:item.username});
                 })
-                vm.loginUser =vm.userList[i].value;
+                vm.loginUser =vm.userList[i].value;*/
+                $("#userId").kendoDropDownList({
+                    dataTextField: "username",
+                    dataValueField: "userId",
+                    dataSource: result.user,
+                    index:0,
+                    change: onchange
+                });
+                vm.company.administratorId = $("#userId").val();
             });
-        }
-        ,
-        indexSelect:function (event) {
-            vm.company.adminPhone=event.target.value;
         }
     }
 });
+
+function onchange() {
+    vm.company.administratorId = $("#userId").val();
+}

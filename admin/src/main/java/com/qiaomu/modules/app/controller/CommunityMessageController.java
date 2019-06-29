@@ -10,7 +10,7 @@ import com.qiaomu.modules.sys.entity.ProvinceCityDateEntity;
 import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.service.CityService;
 import com.qiaomu.modules.sys.service.ProvinceCityDateService;
-import com.qiaomu.modules.sys.service.YwCommunityService;
+import com.qiaomu.modules.propertycompany.service.YwCommunityService;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,10 +69,10 @@ public class CommunityMessageController {
     }
 
     /**
-     * 新增用户成员
+     * 新增用户审核信息
      * @param pathId 图片存库的地址id
-     * @param phone
-     * @param communityId
+     * @param phone 号码
+     * @param communityId 社区ID
      * @param realName 真实姓名
      * @param address 住址
      * @param identityInfo 身份证号码
@@ -81,7 +81,7 @@ public class CommunityMessageController {
      */
     @ResponseBody
     @RequestMapping(value = "addCommunityMember", method = RequestMethod.POST)
-    public R addCommunityMember(String pathId, String phone, Integer communityId, String realName, String address, String identityInfo, String sex) {
+    public R addCommunityMember(String pathId, String phone, Long communityId, String realName, String address, String identityInfo, String sex) {
         String data = this.communityService.addCommunityMember(pathId, phone, communityId, realName, address, identityInfo, sex);
         return R.ok("success", data);
     }

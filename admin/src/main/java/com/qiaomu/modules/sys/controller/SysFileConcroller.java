@@ -3,6 +3,7 @@ package com.qiaomu.modules.sys.controller;
 import com.alibaba.fastjson.JSON;
 import com.qiaomu.modules.sys.entity.SysFileEntity;
 import com.qiaomu.modules.sys.service.SysFileService;
+import jodd.io.FileUtil;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,9 +20,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author 李品先
@@ -38,52 +41,56 @@ public class SysFileConcroller {
     @Value("${file.save}")
     private String savePath;
 
+    /**
+     * 文件上传
+     *
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "upload")
+    public void upload(@RequestParam("file") MultipartFile file, HttpServletResponse response) throws IOException {
+        response.setContentType("application/json");//application/html
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
 
-    @ResponseBody
-    @RequestMapping(value = "upFile", method = RequestMethod.POST)
-    public void uploadOrderSignImage(HttpServletRequest request, HttpSession session, HttpServletResponse response) {
-        try {
-            MultipartHttpServletRequest rq = (MultipartHttpServletRequest) request;
-            Map<String, MultipartFile> file_list = rq.getFileMap();
-            System.out.println("file_list = [" + JSON.toJSON(file_list) + "]");
-            File dir = new File(savePath);
-            if (!dir.exists()) dir.mkdirs();
+       // FileInfo fileInfo = new FileInfo();
+        SysFileEntity fileEntity = new SysFileEntity();
+        if (!file.isEmpty()) {
+            try {
+                String orgName = file.getOriginalFilename();
+                Long fileSize = file.getSize();
 
-            SysFileEntity fileEntity = new SysFileEntity();
-            String filePath = "";
-            if (file_list != null && file_list.size() > 0) {
-                if (file_list.containsKey("inputName")) {
-                    MultipartFile file = file_list.get("inputName");
-                    if (file != null) {
-                        // 保存图片
-                        String fileName = file.getOriginalFilename();
-                        String newFileName = "";
-                        String uploadPath = "";
-                        String[] desp = fileName.split("\\.");
-                        if (desp != null && desp.length > 0) {
-                            String extendName = desp[desp.length - 1];
-                            newFileName = desp[0] + "_" + new Date().getTime() + "." + extendName;
-                            uploadPath = savePath + "upload\\";
-                            File saveFile = new File(uploadPath, newFileName);
-                            file.transferTo(saveFile);
-                            filePath = uploadPath.substring(0, uploadPath.length() - 1) + "/" + newFileName;
+                String saveName = UUID.randomUUID().toString() + "." + orgName.substring(orgName.lastIndexOf(".") + 1, orgName.length());
 
-                            fileEntity.setName(newFileName);
-                            fileEntity.setPath(filePath);
-                            fileEntity.setDateTime(new Date());
-                            sysFileService.insert(fileEntity);
+                File dir = new File(savePath);
+                if (!dir.exists())
+                    dir.mkdirs();
 
-                        }
-                        session.setAttribute("filPath", filePath);
-                        System.out.println("request = [" + request + "], filePath = [" + filePath + "], fileEntity = [" + JSON.toJSON(fileEntity) + "]");
-                        response.getWriter().print(fileEntity.getId());
-                    }
-                }
+                File newFile = new File(savePath + saveName);
+                fileEntity.setDateTime(new Date());
+                FileUtil.writeStream(newFile, file.getInputStream());
+                fileEntity.setName(saveName);
+                fileEntity.setPath(savePath + saveName);
+                fileEntity.setOrgName(orgName);
+                //fileInfo.setRealFileName(saveName);
+                fileEntity.setFileSize(fileSize);
+              //  fileInfo.setFlag("1");
+               // fileInfo.setFileNotes(orgName.substring(0, orgName.lastIndexOf(".")));
+                sysFileService.insert(fileEntity);
+                String result = JSON.toJSON(fileEntity).toString();
+                out.println(result);
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                //fileInfo.setFlag("0");
+                String result = JSON.toJSON(fileEntity).toString();
+                out.print(result);
+                out.close();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-    }
 
+        return;
+    }
 
 }

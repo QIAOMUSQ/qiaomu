@@ -16,6 +16,7 @@
 
 package com.qiaomu.common.config;
 
+import com.qiaomu.common.config.managet.ShiroSessionManager;
 import com.qiaomu.modules.sys.shiro.RedisShiroSessionDAO;
 import com.qiaomu.modules.sys.shiro.UserRealm;
 import org.apache.shiro.mgt.SecurityManager;
@@ -47,7 +48,7 @@ public class ShiroConfig {
     public SessionManager sessionManager(RedisShiroSessionDAO redisShiroSessionDAO,
                                          @Value("${spring.redis.open}") boolean redisOpen,
                                          @Value("${shiro.redis}") boolean shiroRedis){
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        ShiroSessionManager sessionManager = new ShiroSessionManager();
         //设置session过期时间为1小时(单位：毫秒)，默认为30分钟
         sessionManager.setGlobalSessionTimeout(60 * 60 * 1000);
         sessionManager.setSessionValidationSchedulerEnabled(true);

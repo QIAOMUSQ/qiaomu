@@ -35,7 +35,7 @@ public class WorkflowMessageController extends AbstractController {
     @RequestMapping(value = "process/list", method = RequestMethod.POST)
     @RequiresPermissions({"message:list"})
     public R list(@RequestParam Map<String, Object> params) {
-        params.put("companyId", getCompanyOrCommunityByType("1"));
+        params.put("companyId", getUser().getCompanyId());
         PageUtils page = this.workflowMessageService.queryPage(params);
 
         return R.ok().put("page", page);
@@ -45,8 +45,8 @@ public class WorkflowMessageController extends AbstractController {
     @RequestMapping(value = "process/save", method = RequestMethod.POST)
     @RequiresPermissions(value = {"message:add", "message:update"}, logical = Logical.OR)
     public R save(@RequestBody YwWorkflowMessage processMessage) {
-        processMessage.setCompanyId(getCompanyOrCommunityByType("1"));
-        this.workflowMessageService.save(processMessage);
+      /*  processMessage.setCompanyId(getCompanyOrCommunityByType("1"));
+        this.workflowMessageService.save(processMessage);*/
         return R.ok();
     }
 

@@ -7,4 +7,20 @@
     <select id="getUserExtend" resultType="com.qiaomu.modules.sys.entity.UserExtend">
         SELECT * FROM yw_user_extend where user_phone = #{userPhone}
     </select>
+
+    <select id="selectAll" resultType="com.qiaomu.modules.sys.entity.UserExtend">
+        SELECT * FROM yw_user_extend
+        <where>
+            <if test="userPhone != null  and userPhone !=''" >
+               AND  user_phone = #{userPhone}
+            </if>
+            <if test="companyId != null and companyId !=''">
+                AND  company_id = #{companyId}
+            </if>
+            <if test="communityId != null and communityId !=''">
+                AND  community_id = #{communityId}
+            </if>
+        </where>
+    </select>
+
 </mapper>

@@ -1,4 +1,4 @@
-package com.qiaomu.modules.sys.service;
+package com.qiaomu.modules.propertycompany.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.qiaomu.common.utils.PageUtils;
@@ -24,10 +24,11 @@ public interface YwCommunityService extends IService<YwCommunity> {
 
     /**
      * 根据社区ID获取社区
-     * @param paramLong
+     * @param communityId
      * @return
      */
-    YwCommunity queryById(Integer paramLong);
+    YwCommunity queryById(Long communityId);
+
 
     List<YwCommunity> findAll(YwCommunity paramYwCommunity);
 
@@ -39,7 +40,7 @@ public interface YwCommunityService extends IService<YwCommunity> {
      * @param companyId
      * @return
      */
-    List<Integer> getCommunityIdList(String communityName, Integer companyId);
+    List<Long> getCommunityIdList(String communityName, Long companyId);
 
     List<YwCommunity> findAllByCondition(YwCommunity condition);
 
@@ -55,7 +56,8 @@ public interface YwCommunityService extends IService<YwCommunity> {
      * @param sex
      * @return
      */
-    String addCommunityMember(String pathId, String phone, Integer communityId, String realName, String address, String identityInfo, String sex);
+    String addCommunityMember(String pathId, String phone, Long communityId, String realName, String address, String identityInfo, String sex);
+
 }
 
 

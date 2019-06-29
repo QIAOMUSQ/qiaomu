@@ -15,7 +15,7 @@ import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.entity.YwUserCheckInfo;
 import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.service.SysUserService;
-import com.qiaomu.modules.sys.service.YwCommunityService;
+import com.qiaomu.modules.propertycompany.service.YwCommunityService;
 import com.qiaomu.modules.sys.service.UserExtendService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
     private YwUserCheckInfoDao checkInfoDao;
 
     @Override
-    public UserExtend getUserExtend(String userPhone) {
+    public List<UserExtend> getUserExtend(String userPhone) {
         return this.baseMapper.getUserExtend(userPhone);
     }
 
@@ -56,9 +56,9 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
     public PageUtils queryPage(Map<String, Object> params) {
         String userPhone = (String) params.get("userPhone");
         String communityName = (String) params.get("communityName");
-        Integer companyId = (Integer) params.get("companyId");
+        Long companyId = (Long) params.get("companyId");
         String propertyCompanyRoleType = (String) params.get("companyRoleType");
-        List<Integer> communityIds = communityService.getCommunityIdList(communityName, companyId);
+        List<Long> communityIds = communityService.getCommunityIdList(communityName, companyId);
         Page<UserExtend> page = this.selectPage(
                 new Query<UserExtend>(params).getPage(),
                 new EntityWrapper<UserExtend>()
@@ -93,25 +93,27 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
      *
      * @param userPhone 用户手机号
      * @param info      通过信息
-     * @param type      1：通过 2：不通过 3:禁用
+     * @param type      0: 待审核 1：通过 2：不通过 3:禁用
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveCheckInfo(String userPhone, String info, String type, String roleType) {
-
+    public void saveCheckInfo(String userPhone, String info, String type, String roleType,Long communityId) {
+      //  SysUserEntity user = userDao.getUserByUserName(userPhone);
+        UserExtend userExtend = new UserExtend();
+        userExtend.setUserPhone(userPhone);
+        userExtend.setCompanyId(communityId);
+        userExtend = this.baseMapper.selectAll(userExtend);
         if (!type.equals("3")) {//1通过
-            SysUserEntity user = userDao.getUserByUserName(userPhone);
-
             String[] role_dept = DicRoleDeptCode.role_dept_map.get(roleType).split("_");
             List<Long> roleList = new ArrayList<Long>();
             roleList.add(Long.valueOf(role_dept[0]));
 
-            user.setRoleIdList(roleList);//设置角色类型
-            user.setDeptId(Long.valueOf(role_dept[1]));
-            user.setPropertyCompanyRoleType(roleType);
-            sysUserService.update(user);
+            //user.setRoleIdList(roleList);//设置角色类型
+         //   user.setDeptId(Long.valueOf(role_dept[1]));
+          //  user.setPropertyCompanyRoleType(roleType);
+           // sysUserService.update(user);
         }
-        UserExtend userExtend = this.getUserExtend(userPhone);
+
         userExtend.setCheck(type);//更新审核标志
         this.updateById(userExtend);
 
@@ -133,9 +135,67 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
         String name = "";
         String[] phones = phone.split("_");
         for (String i : phones) {
-            name = name + getUserExtend(i).getRealName() + "、";
+            //name = name + getUserExtend(i).getRealName() + "、";
         }
         name = name.substring(0, name.length() - 1);
         return name;
+    }
+
+    /**
+     *
+     * @param userPhone
+     * @param newPhone 新手机号码
+     * @param nickName  昵称
+     * @param sex   性别
+     * @param imgId 图片id
+     * @param communityId 社区id
+     * @return
+     */
+    @Override
+    @Transactional
+    public String setPersonalCenter(String userPhone,String newPhone, String nickName, String sex, Long imgId,Long communityId) {
+
+        try {
+            SysUserEntity user = sysUserService.isExist(userPhone);
+            //设置昵称
+            if(StringUtils.isNotBlank(nickName)){
+                user.setNickName(nickName);
+            }
+            //设置性别
+            if(StringUtils.isNotBlank(sex)){
+                user.setSex(sex);
+            }
+            //设置头像
+            if(imgId != null){
+                user.setHandImgId(imgId);
+            }
+            if(StringUtils.isNotBlank(newPhone)){
+                user.setUsername(newPhone);
+            }
+            sysUserService.updateById(user);
+            /*
+            UserExtend userExtend = new UserExtend();
+            userExtend.setUserPhone(userPhone);
+            userExtend.setCommunityId(communityId);
+            userExtend = this.baseMapper.selectAll(userExtend);
+            //设置昵称
+            if(StringUtils.isNotBlank(nickName)){
+                userExtend.setNickName(nickName);
+            }
+            //设置性别
+            if(StringUtils.isNotBlank(sex)){
+                userExtend.setSex(sex);
+            }
+            //设置头像
+            if(imgId != null){
+                userExtend.setHandImgId(imgId);
+            }
+            this.baseMapper.updateById(userExtend);*/
+            return "success";
+        }catch (Exception e){
+            e.printStackTrace();
+            return "error";
+        }
+
     }
 }

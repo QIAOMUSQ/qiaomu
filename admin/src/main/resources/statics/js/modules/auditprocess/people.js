@@ -29,7 +29,7 @@ $(function () {
                     return '<span class="label label-success">审核通过</span>';
                 }else if(value == 2){
                     return '<span class="label label-success" style="background: #ec971f">审核不通过</span>';
-                }else {
+                }else if(value == 3){
                     return '<span class="label label-success" style="background: #9f191f">禁用</span>';
                 }
             }}
@@ -160,8 +160,6 @@ var vm = new Vue({
         },
         getUserExtent: function(id){
             $.get(baseURL + "communityUser/info/"+id, function(result){
-                if(result.userExtendInfo.propertyCompanyRoleType != 1
-                    && result.userExtendInfo.propertyCompanyRoleType !=0){
                     $("#realName").val(result.userExtendInfo.realName);
                     $("#userIdentity").val(result.userExtendInfo.userIdentity);
                     $("#communityName").val(result.userExtendInfo.communityName);
@@ -172,12 +170,6 @@ var vm = new Vue({
                     vm.userExtend.propertyCompanyRoleType = result.userExtendInfo.propertyCompanyRoleType;
                     $("#imgUrl").attr("src", baseURL+"/App/upload/showPicture?id="+result.userExtendInfo.imgUrl);
                     vm.getTypeList();
-                }else {
-                    alert('超级管理员不能更改', function(){
-                        vm.reload();
-                    });
-                }
-
             });
         },
         unUsed: function (type) {
@@ -215,17 +207,24 @@ var vm = new Vue({
         },
         getTypeList:function () {
             vm.typeList = [];
-            $.get(baseURL + "sys/dict/getDictByType",{"type":"property_company"}, function(r){
+            $.get(baseURL + "sys/dict/getDictByType",{"type":"property_company"}, function(data){
+                console.info(data);
                 var i=0;
-                $.each(r.dict,function (index,item) {
-                    if(vm.userExtend.propertyCompanyRoleType = item.value){
-                        i = index;
-                    }
+                $.each(data.dict,function (index,item) {
+
                     if(item.value != 1 && item.value != 0){
                         vm.typeList.push({"value":item.value,"name":item.code});
                     }
                     
                 });
+                $("#roleType").kendoDropDownList({
+                    dataTextField: "name",
+                    dataValueField: "value",
+                    dataSource: vm.typeList,
+                    index:0,
+                    change: onchange
+                });
+                vm.q.propertyCompanyRoleType = $("#roleType").val();
             });
         }
         ,
@@ -240,3 +239,7 @@ var vm = new Vue({
         }
     }
 });
+
+function onchange() {
+    vm.q.propertyCompanyRoleType = $("#roleType").val();
+}

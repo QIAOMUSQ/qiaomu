@@ -11,7 +11,7 @@ import java.util.List;
  * @Date 2019-04-19 22:56
  */
 public interface YwCommunityDao extends BaseMapper<YwCommunity> {
-    YwCommunity queryById(Integer var1);
+    YwCommunity queryById(Long var1);
 
     List<YwCommunity>findAllByCondition(YwCommunity condition);
 }

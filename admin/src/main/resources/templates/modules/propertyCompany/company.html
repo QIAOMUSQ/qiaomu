@@ -4,7 +4,8 @@
     <title>审批人员管理</title>
     <#include "/header.html">
 
-        <link rel="stylesheet" href="${request.contextPath}/statics/css/fileinput.css">
+    <!--    <link rel="stylesheet" href="${request.contextPath}/statics/css/fileinput.css">-->
+        <link rel="stylesheet" href="${request.contextPath}/statics/plugins/diyUpload/globle.css">
         </head>
 <body>
 <div id="rrapp" v-cloak>
@@ -54,12 +55,13 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">登录账户</div>
                 <div class="col-sm-10">
-                    <select class="select"  v-model="loginUser" v-on:change="indexSelect($event)">
+                    <input id="userId"/>
+                    <!--<select class="select"  v-model="loginUser" v-on:change="indexSelect($event)">
                         <template v-for="item in userList">
                             <option v-bind:value = "item.value">{{item.text}}</option>
                         </template>
-                    </select>
-                    <input type="text" class="form-control" style="display:none;" v-model="company.adminPhone"/>
+                    </select>-->
+                    <input type="text" class="form-control" style="display:none;" v-model="company.administratorId"/>
                 </div>
             </div>
 
@@ -73,10 +75,13 @@
                 <div class="col-sm-2 control-label">营业执照</div>
                 <div class="col-sm-10" style="height: 190px;">
                     <div class="form-group">
-                        <!--<input id="fish_file" name="fish_file" type="file" multiple  class="file"  data-show-upload="false" data-show-caption="true">-->
-                        <input id="fish_file" type="file" class="file" data-overwrite-initial="false" data-min-file-count="1">
+                        <ul class="upload-ul clearfix">
+                            <li class="upload-pick">
+                                <div class="webuploader-container clearfix" id="fish_file"></div>
+                            </li>
+                        </ul>
                     </div>
-                    <input type="text" id="imgPath" style="display: none"  v-model="company.companyImg"/>
+                    <input type="text" id="imgId" style="display: none"  v-model="company.companyImg"/>
                     <input type="text" id="companyId" style="display: none"  v-model="company.id"/>
                 </div>
             </div>
@@ -91,34 +96,70 @@
 </div>
 <!-- 选择部门 -->
 <script src="${request.contextPath}/statics/js/modules/propertyCompany/company.js?_${.now?long}"></script>
-<script src="${request.contextPath}/statics/js/fileinput.js" type="text/javascript"></script>
+<script src="${request.contextPath}/statics/plugins/diyUpload/js/diyUpload.js" type="text/javascript"></script>
+<script src="${request.contextPath}/statics/plugins/diyUpload/js/webuploader.min.js" type="text/javascript"></script>
 
-<script src="${request.contextPath}/statics/js/fileinput_locale_zh.js" type="text/javascript"></script>
 <script>
-    $("#fish_file").fileinput({
-        uploadUrl: '${request.contextPath}/App/upload/addFishPicture', // you must set a valid URL here else you will get an error
-        language: 'zh', //设置语言
-        //enctype: 'multipart/form-data',
-        allowedFileExtensions : ['jpg', 'png','bmp','jpeg'],//接收的文件后缀
-        showUpload: false, //是否显示上传按钮
-        showPreview: true,              //展前预览
-        showCaption: false,//是否显示标题
-        maxFileSize : 10000,//上传文件最大的尺寸
-        maxFilesNum : 1,//
-        dropZoneEnabled: false,//是否显示拖拽区域
-        showRemove:true,
-        browseClass: "btn btn-primary", //按钮样式
-        uploadAsync: true,
-        fileActionSettings:{showUpload: false}, // 控制上传按钮是否显示
-        layoutTemplates :{
-            actionUpload:'',//去除上传预览缩略图中的上传图片；
-            actionZoom:''   //去除上传预览缩略图中的查看详情预览的缩略图标。
-        }
-    }).on("filebatchselected", function() {
-        $(this).fileinput("upload");
-    }).on("fileuploaded", function(event, data) {
-        vm.company.companyImg =data.response.path;
+
+
+
+    $(function(){
+        //上传图片
+        $('#fish_file').diyUpload({
+            url:'${request.contextPath}/mobile/sysFile/upload',
+            success:function(response,fileBox) {
+                if(response){
+                    //var obj = response;
+                    var imgId = $("#imgId").val();
+                    $("#imgId").val( imgId+"_"+response.id);
+                    vm.company.companyImg = imgId+"_"+response.id;
+                    //console.info(obj);
+                    //fileBox.append("<input name='"+fileBox.selector.substring(1,fileBox.selector.length)+"' value='"+response.id+"' style='display:none;'/>");
+                }else{
+                    alert("图片上传失败！");
+                }
+            },
+            // 选完文件后，是否自动上传。
+            auto: true,
+            error:function( err ) { },
+            buttonText : '',
+            accept: {
+                title: "Images",
+                extensions: 'gif,jpg,jpeg,bmp,png'
+            },
+            thumb:{
+                width:120,
+                height:90,
+                quality:100,
+                allowMagnify:true,
+                crop:true,
+                type:"image/jpeg"
+            }
+        });
     });
+
+   /* function setPic(response,fileBox){
+        if(response){
+            var obj = response;
+            console.info(obj);
+            debugger;
+
+            fileBox.append("<input name='"+fileBox+"' style='display:none;'/>");
+            /!*if(obj.flag == '1'){
+                var filedisplay = $("<div class='fn-left ui-form-uploadfilediv' ><" +
+                        "img src='"+_application_static_url+"/filedown/showTempPic?filePath="+obj.filePath+"' width='160px' height='120px'/>" +
+                        "<input type='hidden' name='"+entityPre+"fileName' value='"+obj.orgFileName+"'/>" +
+                        "<input type='hidden' name='"+entityPre+"path' value='"+obj.filePath+"'/>" +
+                        "<input type='hidden' name='"+entityPre+"fileSize' value='"+obj.fileSize+"'/>" +
+                        "<br/>&nbsp;&nbsp;<input type='hidden' class='ui-input' name='"+entityPre+"description' value='"+obj.fileNotes+"'/></div>");
+                $(uploadFilesId).html(filedisplay);
+            }else{
+                alert("图片上传失败！");
+            }*!/
+        }else{
+            alert("图片上传失败！");
+        }
+    }*/
 </script>
 </body>
 </html>

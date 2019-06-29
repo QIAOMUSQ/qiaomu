@@ -10,8 +10,11 @@ import com.qiaomu.modules.auditprocess.entity.YwWorkflowInfo;
 import com.qiaomu.modules.auditprocess.entity.YwWorkflowMessage;
 import com.qiaomu.modules.auditprocess.service.YwWorkflowInfoService;
 import com.qiaomu.modules.auditprocess.service.YwWorkflowMessageService;
+import com.qiaomu.modules.sys.entity.SysUserEntity;
+import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.service.SysDictService;
-import com.qiaomu.modules.sys.service.YwCommunityService;
+import com.qiaomu.modules.propertycompany.service.YwCommunityService;
+import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.sys.service.UserExtendService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import static com.qiaomu.common.utils.StringCommonUtils.returnNullData;
 
 /**
  * @author 李品先
@@ -45,43 +50,70 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
     @Autowired
     private SysDictService dictService;
 
+    @Autowired
+    private SysUserService userService;
+
     public PageUtils queryPage(Map<String, Object> params) {
-        Integer companyId = (Integer) params.get("companyId");
+        Long companyId = null;//
         String communityName = (String) params.get("communityName");
         String processName = (String) params.get("processName");
-        String clientPhone = (String) params.get("phone");
+        String phone = (String) params.get("phone");
         String type = (String) params.get("type");
         String workflowType = (String) params.get("workflowType");//字典值
 
-        List<Integer> communityId = new ArrayList<>();
+        Long communityId = null;
         //若不指定社区则查询该物业下所有社区
-        if(params.get("communityId") != null && StringUtils.isNotBlank((String)params.get("communityId"))){
-            communityId = this.communityService.getCommunityIdList(communityName, companyId);
+        if(params.get("communityId") != null){
+            communityId = (Long) params.get("communityId");
         }else {
-            communityId.add((Integer)params.get("communityId"));
+            companyId = (Long) params.get("companyId");
         }
+        Long userId = null;
+        if(StringUtils.isNotBlank(phone)){
+             userId = userService.isExist(phone).getUserId();
+        }
+
 
         Page<YwWorkflowInfo> page = selectPage(
                 new Query(params).getPage(),
                 new EntityWrapper()
                         .like(StringUtils.isNotBlank(processName), "process_name", processName)
-                        .eq("COMPANY_ID", companyId)
-                        .eq(StringUtils.isNotBlank(clientPhone),"client_phone",clientPhone)
+                        .eq(companyId !=null,"COMPANY_ID", companyId)
+                        .eq(userId != null ,"USER_ID",userId)
                         .eq(StringUtils.isNotBlank(workflowType),"workflow_type",workflowType)
                         .eq(StringUtils.isNotBlank(type),"type",type)
-                        .in(communityId.size() > 0, "community_id", communityId)
+                        .eq(communityId !=null , "community_id", communityId)
                         .addFilterIfNeed(params.get("sql_filter") != null, (String) params.get("sql_filter"), new Object[0]));
 
-        for (YwWorkflowInfo processCheck : page.getRecords()) {
-            YwWorkflowMessage processMessage = this.workflowMessageService.getById(processCheck.getWorkflowId());
-            processCheck.setDetailPhoneOneName(processMessage.getPhoneOneName());
-            processCheck.setDetailPhoneTwoName(processMessage.getPhoneTwoName());
-            processCheck.setDetailPhoneReportName(processMessage.getReportPersonName());
-            processCheck.setDetailPhoneOne(processMessage.getPhoneOne());
-            processCheck.setDetailPhoneTwo(processMessage.getPhoneTwo());
-            processCheck.setDetailPhoneReport(processMessage.getReportPerson());
-            processCheck.setClientPhone(userExtendService.getUserByPhone(processCheck.getClientPhone()));
-            processCheck.setProcessName(processMessage.getProcessName());
+        SysUserEntity user = null;
+        for (YwWorkflowInfo workflowInfo : page.getRecords()) {
+            YwWorkflowMessage workflowMessage = this.workflowMessageService.getById(workflowInfo.getWorkflowId());
+            if(workflowMessage.getPhoneOneId() !=null){
+                user = userService.queryById(workflowMessage.getPhoneOneId());
+                workflowInfo.setDetailPhoneOneName(returnNullData(user.getRealName()));
+                workflowInfo.setDetailPhoneOne(user.getUsername());
+                user = null;
+            }
+            if(workflowMessage.getPhoneTwoId() !=null){
+                user  = userService.queryById(workflowMessage.getPhoneTwoId());
+                workflowInfo.setDetailPhoneTwoName(returnNullData(user.getRealName()));
+                workflowInfo.setDetailPhoneTwo(user.getUsername());
+                user = null;
+            }
+
+            if(workflowMessage.getReportPersonId() != null){
+                user = userService.queryById(workflowMessage.getReportPersonId());
+                workflowInfo.setDetailPhoneReportName(returnNullData(user.getRealName()));
+                workflowInfo.setDetailPhoneReport(user.getUsername());
+                user = null;
+            }
+            if(workflowMessage.getSuperintendentId() != null ){
+                user = userService.queryById(workflowMessage.getSuperintendentId());
+                workflowInfo.setSuperintendentName(returnNullData(user.getRealName()));
+                workflowInfo.setSuperintendentPhone(user.getUsername());
+                user = null;
+            }
+            workflowInfo.setProcessName(workflowMessage.getProcessName());
         }
         return new PageUtils(page);
     }
@@ -95,19 +127,19 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
      * @param pictureId 图片
      * @param serviceDate   上门维修时间
      * @param workflowId    流程ID
-     * @param companyId   公司ID
      * @param communityId 社区ID
      * @return
      */
     @Override
     public String saveWorkflowInfo(String userPhone, String location,
                                    String detail, String pictureId,
-                                   String serviceDate, Long workflowId,Integer companyId,Integer communityId) {
+                                   String serviceDate, Long workflowId,Long communityId) {
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         YwWorkflowMessage workflowMessage = workflowMessageService.getById(workflowId);
-
+        YwCommunity community =  communityService.queryById(communityId);
         YwWorkflowInfo workflow = new YwWorkflowInfo();
-        workflow.setClientPhone(userPhone);
+
+        workflow.setUserId(userService.isExist(userPhone).getUserId());
         workflow.setWorkflowId(workflowId);
         workflow.setLocation(location);
         workflow.setDetail(detail);
@@ -117,7 +149,7 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
         try{
             workflow.setServiceDate(sdf.parse(serviceDate));
             workflow.setCreateTime(new Date());
-            workflow.setCompanyId(companyId);
+            workflow.setCompanyId(community.getCompanyId());
             workflow.setCommunityId(communityId);
             this.insert(workflow);
             return "success";

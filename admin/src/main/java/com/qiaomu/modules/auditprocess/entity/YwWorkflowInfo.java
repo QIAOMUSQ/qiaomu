@@ -19,9 +19,9 @@ public class YwWorkflowInfo implements Serializable {
     @TableId
     private Long id;
     private String type;//流程状态 0：申请 1：一级接收 11：一级受理完成 2：二级接收 21：二级受理完成  3：上报  4通过  5不通过
-    private String clientPhone;
-    private Integer communityId;   //社区id
-    private Integer companyId;     //  物业id
+    private Long userId;
+    private Long communityId;   //社区id
+    private Long companyId;     //  物业id
 
     private String detailOpinionOne;    //  第一处理人意见
     private Date detailOneDate;     //处理时间
@@ -40,9 +40,20 @@ public class YwWorkflowInfo implements Serializable {
     private Date serviceDate;//上门维修时间
     private String workflowType;//流程类型
 
+    private String finalityOpinion;//评审终结意见
+
+    @TableField(exist = false)
     private String detailPhoneOne;  //  第一处理人号码
+    @TableField(exist = false)
     private String detailPhoneTwo;
+    @TableField(exist = false)
     private String detailPhoneReport;   //上报人号码
+
+
+    @TableField(exist = false)
+    private String superintendentName;//评审人名称
+    @TableField(exist = false)
+    private String superintendentPhone;//评审号码
 
     @TableField(exist = false)
     private String processName;
@@ -69,27 +80,21 @@ public class YwWorkflowInfo implements Serializable {
         this.type = type;
     }
 
-    public String getClientPhone() {
-        return this.clientPhone;
-    }
 
-    public void setClientPhone(String clientPhone) {
-        this.clientPhone = clientPhone;
-    }
 
-    public Integer getCommunityId() {
+    public Long getCommunityId() {
         return communityId;
     }
 
-    public void setCommunityId(Integer communityId) {
+    public void setCommunityId(Long communityId) {
         this.communityId = communityId;
     }
 
-    public Integer getCompanyId() {
+    public Long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(Integer companyId) {
+    public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
 
@@ -259,5 +264,37 @@ public class YwWorkflowInfo implements Serializable {
 
     public void setReportDate(Date reportDate) {
         this.reportDate = reportDate;
+    }
+
+    public String getFinalityOpinion() {
+        return finalityOpinion;
+    }
+
+    public void setFinalityOpinion(String finalityOpinion) {
+        this.finalityOpinion = finalityOpinion;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getSuperintendentName() {
+        return superintendentName;
+    }
+
+    public void setSuperintendentName(String superintendentName) {
+        this.superintendentName = superintendentName;
+    }
+
+    public String getSuperintendentPhone() {
+        return superintendentPhone;
+    }
+
+    public void setSuperintendentPhone(String superintendentPhone) {
+        this.superintendentPhone = superintendentPhone;
     }
 }

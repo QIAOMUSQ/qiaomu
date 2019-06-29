@@ -167,8 +167,8 @@ public class SysUserController extends AbstractController {
      */
     @ResponseBody
     @RequestMapping(value = "getLoginUser", method = RequestMethod.POST)
-    public R getLoginUser(String roleType) {
-        return R.ok().put("user", sysUserService.getLoginUser(roleType));
+    public R getLoginUser(Long deptId) {
+        return R.ok().put("user", sysUserService.getLoginUser(deptId));
     }
 
 

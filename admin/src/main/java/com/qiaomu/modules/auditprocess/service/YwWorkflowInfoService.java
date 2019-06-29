@@ -22,11 +22,10 @@ public interface YwWorkflowInfoService extends IService<YwWorkflowInfo> {
      * @param pictureId 图片
      * @param serviceDate   上门维修时间
      * @param workflowId    流程ID
-     * @param companyId   公司ID
      * @param communityId 社区ID
      * @return
      */
-    String saveWorkflowInfo(String userPhone, String location, String detail, String pictureId, String serviceDate, Long workflowId,Integer companyId,Integer communityId);
+    String saveWorkflowInfo(String userPhone, String location, String detail, String pictureId, String serviceDate, Long workflowId,Long communityId);
 
     /**
      * 更新用户流程信息

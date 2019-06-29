@@ -18,23 +18,26 @@ public class YwWorkflowMessage implements Serializable {
 
     @TableId
     private Long id;
-    private Integer communityId;   //社区id
-    private String phoneOne;    //第一处理人
-    private String phoneTwo;    //  第二处理人
-    private String reportPerson;    //上报人
-    private String superintendentPhone; //监管人
+    private Long communityId;   //社区id
+    private Long phoneOneId;    //第一处理人
+    private Long phoneTwoId;    //  第二处理人
+    private Long reportPersonId;    //上报人
+    private Long superintendentId; //监管人
     private String processName; //流程名称
     private String dicValue; //字典值
-    private Integer companyId; //物业ID
+    private Long companyId; //物业ID
 
 
 
     @TableField(exist = false)
     private String communityName;
-
+    @TableField(exist = false)
     private String phoneOneName;
+    @TableField(exist = false)
     private String phoneTwoName;
+    @TableField(exist = false)
     private String reportPersonName;
+    @TableField(exist = false)
     private String superintendentName;
     private Date createTime;
 
@@ -47,41 +50,40 @@ public class YwWorkflowMessage implements Serializable {
     }
 
 
-
-    public String getPhoneOne() {
-        return this.phoneOne;
+    public Long getPhoneOneId() {
+        return phoneOneId;
     }
 
-    public void setPhoneOne(String phoneOne) {
-        this.phoneOne = phoneOne;
+    public void setPhoneOneId(Long phoneOneId) {
+        this.phoneOneId = phoneOneId;
     }
 
-    public String getPhoneTwo() {
-        return this.phoneTwo;
+    public Long getPhoneTwoId() {
+        return phoneTwoId;
     }
 
-    public void setPhoneTwo(String phoneTwo) {
-        this.phoneTwo = phoneTwo;
+    public void setPhoneTwoId(Long phoneTwoId) {
+        this.phoneTwoId = phoneTwoId;
     }
 
-    public String getReportPerson() {
-        return this.reportPerson;
+    public Long getReportPersonId() {
+        return reportPersonId;
     }
 
-    public void setReportPerson(String reportPerson) {
-        this.reportPerson = reportPerson;
+    public void setReportPersonId(Long reportPersonId) {
+        this.reportPersonId = reportPersonId;
     }
 
-    public String getSuperintendentPhone() {
-        return this.superintendentPhone;
+    public Long getSuperintendentId() {
+        return superintendentId;
     }
 
-    public void setSuperintendentPhone(String superintendentPhone) {
-        this.superintendentPhone = superintendentPhone;
+    public void setSuperintendentId(Long superintendentId) {
+        this.superintendentId = superintendentId;
     }
 
     public String getProcessName() {
-        return this.processName;
+        return processName;
     }
 
     public void setProcessName(String processName) {
@@ -96,20 +98,12 @@ public class YwWorkflowMessage implements Serializable {
         this.dicValue = dicValue;
     }
 
-    public Integer getCommunityId() {
+    public Long getCommunityId() {
         return communityId;
     }
 
-    public void setCommunityId(Integer communityId) {
+    public void setCommunityId(Long communityId) {
         this.communityId = communityId;
-    }
-
-    public Integer getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Integer companyId) {
-        this.companyId = companyId;
     }
 
     public String getCommunityName() {
@@ -159,5 +153,13 @@ public class YwWorkflowMessage implements Serializable {
 
     public void setSuperintendentName(String superintendentName) {
         this.superintendentName = superintendentName;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 }

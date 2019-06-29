@@ -103,10 +103,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         user.setSalt(salt);
         user.setPassword(ShiroUtils.sha256(user.getPassword(), user.getSalt()));
         this.insert(user);
-        UserExtend userExtend = new UserExtend();
+       /* UserExtend userExtend = new UserExtend();
         userExtend.setPropertyCompanyRoleType(user.getPropertyCompanyRoleType());
         userExtend.setUserPhone(user.getUsername());
-        userExtendService.insert(userExtend);
+        userExtendService.insert(userExtend);*/
         //保存用户与角色关系
         sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
     }
@@ -121,7 +121,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         }
         this.updateById(user);
         UserExtend userExtend = new UserExtend();
-        userExtend = userExtendService.getUserExtend(user.getUsername());
+       // userExtend = userExtendService.getUserExtend(user.getUsername());
         if (user.getPropertyCompanyRoleType().equals("1")) {
             userExtend.setCheck("1");
         }
@@ -154,16 +154,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     }
 
     @Override
-    public List<SysUserEntity> getLoginUser(String roleType) {
-        return baseMapper.getLoginUser(roleType);
+    public List<SysUserEntity> getLoginUser(Long deptId) {
+        return baseMapper.getLoginUser(deptId);
     }
 
     @Override
-    public boolean isExist(String phone) {
-        if (baseMapper.getUserByUserName(phone) != null) {
-            return true;
-        } else {
-            return false;
-        }
+    public SysUserEntity isExist(String phone) {
+
+        return baseMapper.getUserByUserName(phone);
+
     }
 }

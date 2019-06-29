@@ -41,7 +41,7 @@ public class PropertyCompanyManageController {
     public R addCompany(@RequestBody YwPropertyCompany company) {
         System.out.printf(JSON.toJSONString(company), new Object[0]);
 
-        company.setCreatTime(new Date());
+        company.setCreateTime(new Date());
         this.propertyCompanyService.save(company);
         return R.ok();
     }

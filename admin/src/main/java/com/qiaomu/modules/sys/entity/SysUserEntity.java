@@ -95,6 +95,19 @@ public class SysUserEntity implements Serializable {
     private Date createTime;
 
     /**
+     * 真实姓名
+     */
+    private String realName;
+
+    private Long companyId;
+
+    private String nickName;
+
+    private String sex;
+
+    private Long handImgId;
+
+    /**
      * 部门ID
      */
     @NotNull(message = "部门不能为空", groups = {AddGroup.class, UpdateGroup.class})
@@ -267,5 +280,43 @@ public class SysUserEntity implements Serializable {
         this.propertyCompanyRoleType = propertyCompanyRoleType;
     }
 
+    public String getRealName() {
+        return realName;
+    }
 
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public Long getHandImgId() {
+        return handImgId;
+    }
+
+    public void setHandImgId(Long handImgId) {
+        this.handImgId = handImgId;
+    }
 }

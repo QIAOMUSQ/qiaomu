@@ -78,7 +78,6 @@ var vm = new Vue({
             vm.showList = false;
             vm.title = "新增";
             vm.getDictor();
-            
         },
        
         update: function () {
@@ -118,35 +117,22 @@ var vm = new Vue({
                 });
             });
         },
-        saveOrUpdate: function () {
-            $.ajax({
-                type: "POST",
-                url: baseURL + "processMessage/process/save",
-                contentType: "application/json",
-                data: JSON.stringify(vm.processMessage),
-                success: function(r){
-                    if(r.status == "success"){
-                        alert('操作成功', function(){
-                            vm.reload();
-                        });
-                    }else{
-                        alert(r.msg);
-                    }
-                }
-            });
-        },
+
         getProcess: function(id){
             $.get(baseURL + "processMessage/getProcess/"+id, function(result){
+                console.info(result);
                 $("#phoneOne").val(result.process.phoneOneName);
                 $("#phoneTwo").val(result.process.phoneTwoName);
                 $("#reportPerson").val(result.process.reportPersonName);
                 $("#communityName").val(result.process.communityName);
+                $("#superintendentPhone").val(result.process.superintendentName);
                 vm.processMessage.phoneOne =result.process.phoneOne ;
                 vm.processMessage.phoneTwo =result.process.phoneTwo ;
                 vm.processMessage.reportPerson =result.process.reportPerson;
                 vm.processMessage.processName =result.process.processName;
                 vm.processMessage.dicValue = result.process.dicValue;
                 vm.processMessage.communityId = result.process.communityId;
+                vm.processMessage.superintendentPhone = result.process.superintendentPhone;
                 vm.processMessage.id = result.process.id;
                 vm.getDictor();
             });
@@ -219,9 +205,12 @@ var vm = new Vue({
                     }else if(type=="phoneTwo") {
                         vm.processMessage.phoneTwo =phone;
                         $("#phoneTwo").val(name);
-                    }else {
+                    }else if (type=="reportPerson"){
                         vm.processMessage.reportPerson =phone;
                         $("#reportPerson").val(name);
+                    }else {
+                        vm.processMessage.superintendentPhone =phone;
+                        $("#superintendentPhone").val(name);
                     }
                     layer.close(index);
 
@@ -233,19 +222,16 @@ var vm = new Vue({
         },
         getDictor:function () {
             vm.typeList=[];
-            $.get(baseURL + "sys/dict/getDictByType",{"type":"property_process"}, function(r){
-                var i =0;
-                $.each(r.dict,function (index,item) {
-                    if(item.value == vm.processMessage.dicValue) i=index;
-                    vm.typeList.push({"value":item.value,"name":item.code});
+            $.get(baseURL + "sys/dict/getDictByType",{"type":"property_process"}, function(data){
+                $("#dicValue").kendoDropDownList({
+                    dataTextField: "code",
+                    dataValueField: "value",
+                    dataSource: data.dict,
+                    index:0,
+                    change: onchange
                 });
-                vm.processMessage.dicValue = vm.typeList[i].value;
+                vm.processMessage.dicValue = $("#dicValue").val();
             });
-        },
-        selectType:function (event) {
-
-            vm.processMessage.dicValue = event.target.value;
-
         },
         //获取社区框口
         getCommunity:function () {
@@ -322,6 +308,12 @@ var vm = new Vue({
         ,
         reload: function () {
             $("#userTable").css("display","none");
+            vm.processMessage=[];
+            $("#phoneOne").val("");
+            $("#phoneTwo").val("");
+            $("#reportPerson").val("");
+            $("#communityName").val("");
+            $("#superintendentPhone").val("");
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam','page');
             $("#jqGrid").jqGrid('setGridParam',{
@@ -332,3 +324,48 @@ var vm = new Vue({
         }
     }
 });
+
+function onchange(e) {
+    vm.processMessage.dicValue = $("#dicValue").val();
+}
+
+function saveOrUpdate() {
+    debugger;
+    if(vm.processMessage.phoneOne == undefined || vm.processMessage.phoneOne ==""){
+        return alert('请选择一级处理人');
+    }
+    if(vm.processMessage.phoneTwo  == undefined || vm.processMessage.phoneTwo ==""){
+        return alert('请选择二级处理人');
+    }
+    if(vm.processMessage.reportPerson  ==undefined || vm.processMessage.reportPerson  =="" ){
+        return alert('请选择上报人');
+    }
+    if( vm.processMessage.processName  ==undefined || vm.processMessage.processName  =="" ){
+        return alert('请填写流程名称');
+    }
+    if(vm.processMessage.dicValue  ==undefined || vm.processMessage.dicValue  ==""){
+        return alert('请填写流程类型');
+    }
+    if(vm.processMessage.communityId  ==undefined || vm.processMessage.communityId  ==""){
+        return alert('请选择社区');
+    }
+    if(vm.processMessage.superintendentPhone  ==undefined || vm.processMessage.superintendentPhone  ==""){
+        return alert('请选择监管人');
+    }
+    $.ajax({
+        type: "POST",
+        url: baseURL + "processMessage/process/save",
+        contentType: "application/json",
+        data: JSON.stringify(vm.processMessage),
+        success: function(r){
+            console.info(r);
+            if(r.status == "success"){
+                alert('操作成功', function(){
+                    vm.reload();
+                });
+            }else if(r.data == 500){
+                alert('保存失败');
+            }
+        }
+    });
+}

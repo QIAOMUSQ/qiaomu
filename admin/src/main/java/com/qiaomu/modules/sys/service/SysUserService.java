@@ -64,10 +64,10 @@ public interface SysUserService extends IService<SysUserEntity> {
     /**
      * 根据角色获取用户
      *
-     * @param roleType
+     * @param deptId
      * @return
      */
-    List<SysUserEntity> getLoginUser(String roleType);
+    List<SysUserEntity> getLoginUser(Long deptId);
 
-    boolean isExist(String phone);
+    SysUserEntity isExist(String phone);
 }

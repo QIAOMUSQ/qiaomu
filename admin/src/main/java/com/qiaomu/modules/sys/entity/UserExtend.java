@@ -17,20 +17,23 @@ public class UserExtend implements Serializable {
     private static final long serialVersionUID = 1L;
     @TableId
     private Long id;
+    @TableField(exist = false)
     private String userPhone;
+    private Long userId;
     private String userIdentity;
     private String address;
     private Long imgId;
     private String nickName;
     private String realName;
-    private Integer communityId;
-    private Integer companyId;
+    private Long communityId;
+    private Long companyId;
     private Date createTime;
     private Date checkTime;
     private String checkUser;
     private String check;
     private String propertyCompanyRoleType;
     private String sex;
+    private Long handImgId;
 
     @TableField(exist = false)
     private String communityName;
@@ -93,21 +96,7 @@ public class UserExtend implements Serializable {
         this.realName = realName;
     }
 
-    public Integer getCommunityId() {
-        return communityId;
-    }
 
-    public void setCommunityId(Integer communityId) {
-        this.communityId = communityId;
-    }
-
-    public Integer getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Integer companyId) {
-        this.companyId = companyId;
-    }
 
     public Date getCreateTime() {
         return createTime;
@@ -117,25 +106,7 @@ public class UserExtend implements Serializable {
         this.createTime = createTime;
     }
 
-    public Date getCheckTime() {
-        return checkTime;
-    }
 
-    public void setCheckTime(Date checkTime) {
-        this.checkTime = checkTime;
-    }
-
-    public String getCheckUser() {
-        return checkUser;
-    }
-
-    public void setCheckUser(String checkUser) {
-        this.checkUser = checkUser;
-    }
-
-    public String getCheck() {
-        return check;
-    }
 
     public String getPropertyCompanyRoleType() {
         return propertyCompanyRoleType;
@@ -145,9 +116,6 @@ public class UserExtend implements Serializable {
         this.propertyCompanyRoleType = propertyCompanyRoleType;
     }
 
-    public void setCheck(String check) {
-        this.check = check;
-    }
 
     public String getCommunityName() {
         return communityName;
@@ -171,5 +139,61 @@ public class UserExtend implements Serializable {
 
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    public Long getHandImgId() {
+        return handImgId;
+    }
+
+    public void setHandImgId(Long handImgId) {
+        this.handImgId = handImgId;
+    }
+
+    public Long getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(Long communityId) {
+        this.communityId = communityId;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public Date getCheckTime() {
+        return checkTime;
+    }
+
+    public void setCheckTime(Date checkTime) {
+        this.checkTime = checkTime;
+    }
+
+    public String getCheckUser() {
+        return checkUser;
+    }
+
+    public void setCheckUser(String checkUser) {
+        this.checkUser = checkUser;
+    }
+
+    public String getCheck() {
+        return check;
+    }
+
+    public void setCheck(String check) {
+        this.check = check;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

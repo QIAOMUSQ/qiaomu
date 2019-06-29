@@ -4,7 +4,7 @@ import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
 import com.qiaomu.modules.sys.controller.AbstractController;
 import com.qiaomu.modules.sys.entity.YwCommunity;
-import com.qiaomu.modules.sys.service.YwCommunityService;
+import com.qiaomu.modules.propertycompany.service.YwCommunityService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,7 +40,7 @@ public class CommunityController extends AbstractController {
     @RequiresPermissions({"community:save", "community:update"})
     public R save(@RequestBody YwCommunity community) {
         //对社区进行分类
-        community.setCompanyId(getCompanyOrCommunityByType("1"));
+        //community.setCompanyId(getCompanyOrCommunityByType("1"));
         communityService.save(community);
         return R.ok();
     }
@@ -52,7 +52,7 @@ public class CommunityController extends AbstractController {
      */
     @ResponseBody
     @RequestMapping(value = "getCommunityById/{id}")
-    public R getCommunityById(@PathVariable("id") Integer id) {
+    public R getCommunityById(@PathVariable("id") Long id) {
         return R.ok("community", communityService.queryById(id));
     }
 

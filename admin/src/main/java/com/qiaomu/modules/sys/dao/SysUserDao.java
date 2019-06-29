@@ -48,10 +48,10 @@ public interface SysUserDao extends BaseMapper<SysUserEntity> {
     /**
      * 根据数字字典中的角色获取用户（property_company）
      *
-     * @param roleTypt
+     * @param deptId
      * @return
      */
-    List<SysUserEntity> getLoginUser(String roleTypt);
+    List<SysUserEntity> getLoginUser(Long deptId);
 
     SysUserEntity getUserByUserName(String userName);
 }

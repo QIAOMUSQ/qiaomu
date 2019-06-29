@@ -7,7 +7,9 @@ import com.qiaomu.modules.auditprocess.entity.YwWorkflowMessage;
 import com.qiaomu.modules.auditprocess.service.YwWorkflowInfoService;
 import com.qiaomu.modules.auditprocess.service.YwWorkflowMessageService;
 import com.qiaomu.modules.sys.controller.AbstractController;
+import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.entity.UserExtend;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,7 +42,7 @@ public class WorkflowInfoController extends AbstractController {
     @RequestMapping(value = "process/list", method = RequestMethod.POST)
     @RequiresPermissions("process:check:list")
     public R list(@RequestParam Map<String, Object> params) {
-        params.put("companyId", getCompanyOrCommunityByType("1"));
+        params.put("companyId", getCompanyId());
         PageUtils page = this.WorkflowCheckService.queryPage(params);
         return R.ok().put("page", page);
     }
@@ -53,17 +55,20 @@ public class WorkflowInfoController extends AbstractController {
      * @param pictureId 图片id字符串
      * @param ServiceDate 维修时间
      * @param WorkflowId 流程ID
+     * @param communityId  社区ID
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "saveWorkflowInfo",method = RequestMethod.POST)
-    public R saveWorkflowInfo(String userPhone,String location,String detail,String pictureId,String ServiceDate,Long WorkflowId){
-        UserExtend userExtend = getUserExtend(userPhone);
-        if(userExtend.getCompanyId() != null || userExtend.getCommunityId() != null){
+    public R saveWorkflowInfo(String userPhone,String location,
+                              String detail,String pictureId,
+                              String ServiceDate,Long WorkflowId,
+                              Long communityId){
+        if(communityId != null){
             String info = WorkflowCheckService.saveWorkflowInfo(userPhone,
                     location,detail,
                     pictureId,ServiceDate,
-                    WorkflowId, userExtend.getCompanyId(),userExtend.getCommunityId());
+                    WorkflowId,communityId);
             if(info.equals("success")){
                 return R.ok(info,"保存成功");
             }else {
@@ -83,30 +88,31 @@ public class WorkflowInfoController extends AbstractController {
      * @param workflowType 字典值 1:供水维修  2:电力报修  3:煤气维修   4:建筑报修
      * @param page 当前页
      * @param limit 每页数
+     * @param communityId 社区id
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "getCompanyCommunityWorkFlowInfoByDict",method = RequestMethod.POST)
-    public R getCompanyCommunityWorkFlowInfoByDict(String userPhone,String workflowType,Integer page,Integer limit){
-        UserExtend userExtend = getUserExtend(userPhone);
+    public R getCompanyCommunityWorkFlowInfoByDict(String userPhone,Long communityId,String workflowType,Integer page,Integer limit){
+        Map<String, Object> params = new HashMap<>();
+        params.put("page",page);
+        params.put("limit",limit);
+        params.put("phone",userPhone);
+        params.put("workflowType",workflowType);
 
-        if(userExtend.getCompanyId() != null || userExtend.getCommunityId() != null){
-            Map<String, Object> params = new HashMap<>();
-            params.put("page",page);
-            params.put("limit",limit);
-            params.put("phone",userPhone);
-            params.put("workflowType",workflowType);
-            if(userExtend.getCommunityId() != null){
-                params.put("communityId",userExtend.getCommunityId());
+        if(communityId == null) {
+            SysUserEntity user = getUser();
+            if(user.getCompanyId() != null && !"".equals(user.getCompanyId()) ){
+                params.put("companyId",user.getCompanyId());
+            }else {
+                R.ok("error","请进行个人信息验证");
             }
-            if(userExtend.getCompanyId() != null){
-                params.put("companyId",userExtend.getCompanyId());
-            }
-            PageUtils pageUtil = this.workflowMessageService.queryPage(params);
-            return R.ok().put("page", pageUtil);
         }else {
-            return R.ok("error","请进行个人信息验证");
+            params.put("communityId",communityId);
         }
+        PageUtils pageUtil = this.workflowMessageService.queryPage(params);
+        return R.ok().put("page", pageUtil);
+
     }
 
 
@@ -115,29 +121,29 @@ public class WorkflowInfoController extends AbstractController {
      * @param userPhone 用户号码
      * @param workflowType  工作流类型 1:供水维修  2:电力报修  3:煤气维修   4:建筑报修
      * @param type  流程状态 0：申请 1：一级接收 11：一级受理完成 2：二级接收 21：二级受理完成  3：上报  4：通过  5：不通过 6:终止
+     * @param communityId 社区ID
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "getUserApplyWorkflowInfo",method = RequestMethod.POST)
-    public R getUserApplyWorkflowInfo(String userPhone,String workflowType,String type,Integer page,Integer limit){
-        UserExtend userExtend = getUserExtend(userPhone);
-        if(userExtend.getCompanyId() != null || userExtend.getCommunityId() != null){
-            Map<String, Object> params = new HashMap<>();
-            params.put("page",page);
-            params.put("limit",limit);
-            params.put("phone",userPhone);
-            params.put("workflowType",workflowType);
-            params.put("type",type);
-            if(userExtend.getCommunityId() != null){
-                params.put("communityId",userExtend.getCommunityId());
+    public R getUserApplyWorkflowInfo(String userPhone,Long communityId,String workflowType,String type,Integer page,Integer limit){
+        Map<String, Object> params = new HashMap<>();
+        params.put("page",page);
+        params.put("limit",limit);
+        params.put("phone",userPhone);
+        params.put("workflowType",workflowType);
+        params.put("type",type);
+        if(communityId == null) {
+            SysUserEntity user = getUser();
+            if(user.getCompanyId() != null && !"".equals(user.getCompanyId()) ){
+                params.put("companyId",user.getCompanyId());
+            }else {
+                R.ok("error","请进行个人信息验证");
             }
-            if(userExtend.getCompanyId() != null){
-                params.put("companyId",userExtend.getCompanyId());
-            }
-            return R.ok().put("page", this.WorkflowCheckService.queryPage(params));
         }else {
-            return R.ok("error","请进行个人信息验证");
+            params.put("communityId",communityId);
         }
+        return R.ok().put("page", this.WorkflowCheckService.queryPage(params));
     }
 
     /**
