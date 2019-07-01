@@ -952,4 +952,36 @@ CREATE TABLE pluto_article_comment (
   PRIMARY KEY (`commentId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `welfare_task`;
+CREATE TABLE welfare_task (
+  `serviceId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `serviceName` LONGTEXT NOT NULL,
+  `seviceDetail` LONGTEXT NOT NULL ,
+  `status` varchar(20) NOT NULL ,
+  `points` varchar(20) NOT NULL ,
+  `createdAt` datetime(6) DEFAULT NULL ,
+  `updatedAt` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`serviceId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `welfare_task_publish_user`;
+CREATE TABLE welfare_task_publish_user (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `publishUserId` varchar(20) NOT NULL,
+  `serviceId` varchar(20) NOT NULL ,
+  `status` varchar(20) NOT NULL ,
+  `createdAt` datetime(6) DEFAULT NULL ,
+  `updatedAt` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `welfare_task_recevie_user`;
+CREATE TABLE welfare_task_recevie_user (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `receiveUserId` varchar(20) NOT NULL,
+  `serviceId` varchar(20) NOT NULL ,
+  `status` varchar(20) NOT NULL ,
+  `createdAt` datetime(6) DEFAULT NULL ,
+  `updatedAt` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

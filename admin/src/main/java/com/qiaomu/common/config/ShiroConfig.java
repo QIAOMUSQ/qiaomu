@@ -95,7 +95,7 @@ public class ShiroConfig {
         filterMap.put("/swagger-resources/**", "anon");
 
         filterMap.put("/mobile/**", "mobileAuthc");
-
+        filterMap.put("/welfare/**", "anon");
         filterMap.put("/article/**", "anon");
         filterMap.put("/statics/**", "anon");
         filterMap.put("/login.html", "anon");
