@@ -3,6 +3,7 @@ package com.qiaomu.modules.propertycompany.controller;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
 import com.qiaomu.modules.sys.controller.AbstractController;
+import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -30,7 +31,11 @@ public class CommunityController extends AbstractController {
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @RequiresPermissions({"community:list"})
     public R getCommunityList(@RequestParam Map<String, Object> params, ServletRequest request) {
-        params.put("companyId", getCompanyOrCommunityByType("1"));
+        //params.put("companyId", getCompanyOrCommunityByType("1"));
+        SysUserEntity user = getUser();
+        if(user.getCompanyId()!= null ){
+            params.put("companyId",user.getCompanyId());
+        }
         PageUtils page = communityService.queryPage(params);
         return R.ok().put("page", page);
     }

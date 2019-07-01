@@ -21,9 +21,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static org.apache.http.HttpHeaders.AUTHORIZATION;
 
 
 /**
@@ -52,14 +55,19 @@ public class AppUserController extends AbstractController {
      */
     @ResponseBody
     @RequestMapping(value ="login")
-    public R login(String phone, String password, ServletRequest request, boolean isAgree) {
+    public R login(String phone, String password, ServletRequest request, boolean isAgree,HttpServletResponse response) {
         try {
            if(!"".equals(phone) && phone != null){
                Subject subject = ShiroUtils.getSubject();
                UsernamePasswordToken token = new UsernamePasswordToken(phone, password);
                subject.login(token);
                SysUserEntity userEntity = getUser();
-               return R.ok("success","{userId:"+userEntity.getUserId()+"}");
+               userEntity.setPassword("");
+               userEntity.setSalt("");
+               String session  = response.getHeader(AUTHORIZATION);
+               System.out.printf(session);
+               userEntity.setSessionId(session);
+               return R.ok("success",JSON.toJSON(userEntity));
            }else {
                return R.ok("error","客户端出现问题");
            }

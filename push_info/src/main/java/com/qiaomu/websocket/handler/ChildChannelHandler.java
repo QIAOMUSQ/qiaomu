@@ -10,7 +10,7 @@ import io.netty.handler.timeout.IdleStateHandler;
 
 /**
  * @author 李品先
- * @description:
+ * @description: 初始化连接各个组件
  * @Date 2019-06-24 16:28
  */
 public class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
@@ -18,7 +18,7 @@ public class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         ChannelPipeline pipeline = socketChannel.pipeline();
         // 设置30秒没有读到数据，则触发一个READER_IDLE事件。
-         pipeline.addLast(new IdleStateHandler(30, 0, 0));
+       //  pipeline.addLast(new IdleStateHandler(30, 0, 0));
         // HttpServerCodec：将请求和应答消息解码为HTTP消息
         pipeline.addLast("http-codec",new HttpServerCodec());
         // HttpObjectAggregator：将HTTP消息的多个部分合成一条完整的HTTP消息

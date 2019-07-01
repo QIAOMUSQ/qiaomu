@@ -44,7 +44,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>5.0.0.Alpha1</version>
+            <version>4.1.25.Final</version>
         </dependency>
 
       <!--  &lt;!&ndash; https://mvnrepository.com/artifact/org.yeauty/netty-websocket-spring-boot-starter &ndash;&gt;

@@ -55,7 +55,7 @@ file:
   save: E:/files/
 
 logging:
-  level: info
+  level: debug
   level.com.qiaomu: info
   path: logs/
   file: admin.log

@@ -6,7 +6,9 @@ import com.qiaomu.common.utils.R;
 import com.qiaomu.modules.app.entity.City;
 import com.qiaomu.modules.app.entity.CommunityCheckEntity;
 import com.qiaomu.modules.app.service.CommunityCheckService;
+import com.qiaomu.modules.sys.controller.AbstractController;
 import com.qiaomu.modules.sys.entity.ProvinceCityDateEntity;
+import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.service.CityService;
 import com.qiaomu.modules.sys.service.ProvinceCityDateService;
@@ -33,8 +35,8 @@ import java.util.Map;
  */
 
 @Controller
-@RequestMapping({"mobile/communityMessage"})
-public class CommunityMessageController {
+@RequestMapping("mobile/communityMessage")
+public class CommunityMessageController  extends AbstractController {
 
     Logger logger = LoggerFactory.getLogger(CommunityMessageController.class);
 
@@ -53,6 +55,10 @@ public class CommunityMessageController {
     @ResponseBody
     @RequestMapping(value = "list", method = RequestMethod.POST)
     public R getCommunityList(@RequestParam Map<String, Object> params, ServletRequest request) {
+        SysUserEntity user = getUser();
+        if(user.getCompanyId()!= null ){
+            params.put("companyId",user.getCompanyId());
+        }
         PageUtils page = this.communityService.queryPage(params);
         return R.ok("success", page);
     }
