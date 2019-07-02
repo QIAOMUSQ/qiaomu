@@ -21,3 +21,5 @@ logging:
   path: logs/
   file: websocket_info.log
   config: classpath:logback-spring.xml
+
+websocketUrl: ws://103.26.76.116:8082/Websocket/websocketConnet

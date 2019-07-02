@@ -122,6 +122,8 @@ public class SysUserEntity implements Serializable {
     @TableField(exist = false)
     private String deptName;
 
+    @TableField(exist = false)
+    private String sessionId;
 
     /**
      * 设置：
@@ -318,5 +320,13 @@ public class SysUserEntity implements Serializable {
 
     public void setHandImgId(Long handImgId) {
         this.handImgId = handImgId;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 }

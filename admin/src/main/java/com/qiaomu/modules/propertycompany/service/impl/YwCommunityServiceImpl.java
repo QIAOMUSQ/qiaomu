@@ -48,23 +48,24 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
 
     public PageUtils queryPage(Map<String, Object> params) {
         String name = (String) params.get("name");
-        Integer companyId = (Integer) params.get("companyId");
+        Long companyId =null;
         String cityName = (String) params.get("cityName");
         ProvinceCityDateEntity provinceCity = this.provinceCityDateService.getProvCityByCityName(cityName);
+        if(params.get("companyId") != null ){
+            companyId = (Long)params.get("companyId");
+        }
         Page<YwCommunity> page = selectPage(new Query(params)
                 .getPage(), new EntityWrapper()
-                .like(StringUtils.isNotBlank(name),
-                        "name", name)
+                .like(StringUtils.isNotBlank(name), "name", name)
                 .eq(companyId != null, "COMPANY_ID", companyId)
                 .eq(provinceCity != null, "CITY_ID",
-                        Long.valueOf(provinceCity == null ? 0L : provinceCity
-                                .getId().longValue()))
+                        Long.valueOf(provinceCity == null ? 0L : provinceCity.getId().longValue()))
                 .addFilterIfNeed(params
                                 .get("sql_filter") != null,
                         (String) params.get("sql_filter"), new Object[0]));
 
         for (YwCommunity community : page.getRecords()) {
-            community.setCityName(((ProvinceCityDateEntity) this.provinceCityDateService.selectById(community.getCityId())).getCityName());
+            community.setCityName(this.provinceCityDateService.selectById(community.getCityId()).getCityName());
         }
 
         return new PageUtils(page);

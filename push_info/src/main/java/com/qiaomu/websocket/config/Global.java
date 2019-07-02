@@ -11,7 +11,7 @@ import io.netty.util.concurrent.GlobalEventExecutor;
  */
 public class Global {
     /**
-     * 存储每个客户端接入景来的channel对象
+     * 存储每个客户端接入进来的channel对象
      */
     public static ChannelGroup group = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 }

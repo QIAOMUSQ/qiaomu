@@ -37,15 +37,17 @@ public class CustomAccessControlFilter extends AccessControlFilter {
    @Override
     protected boolean isAccessAllowed(ServletRequest servletRequest, ServletResponse servletResponse, Object o) throws Exception {
 
+       //System.out.println("servletRequest = [" + servletRequest + "], servletResponse = [" + servletResponse + "], o = [" + o + "]");
         Subject subject = getSubject(servletRequest, servletResponse);
         String url = ((ShiroHttpServletResponse) servletResponse).getRequest().getRequestURI().toString();
         if(url.contains("/mobile/")){
             //当没有登录时候
-            if(url.contains("login")){
+            if(url.contains("login")|| url.contains("register")){
                 return true;
             }else if(!SecurityUtils.getSubject().isAuthenticated()){
                 return false;
             }
+            return true;
         }
         if (!subject.isAuthenticated() && !subject.isRemembered()) {
             WebUtils.issueRedirect(servletRequest, servletResponse, url);
