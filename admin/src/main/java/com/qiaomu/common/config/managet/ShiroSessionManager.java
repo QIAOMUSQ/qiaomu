@@ -5,6 +5,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.SessionContext;
 import org.apache.shiro.session.mgt.SessionKey;
+import javax.servlet.http.Cookie;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.apache.shiro.web.util.WebUtils;
@@ -38,10 +39,23 @@ public class ShiroSessionManager extends DefaultWebSessionManager {
     protected Serializable getSessionId(ServletRequest request, ServletResponse response) {
        // 初次登陆将session放入请求头中
         String id = WebUtils.toHttp(request).getHeader(AUTHORIZATION);
+
+        if(id == null){
+            if(WebUtils.toHttp(request).getCookies() != null){
+                Cookie[] cookies = (Cookie[])WebUtils.toHttp(request).getCookies() ;
+                for(Cookie cookie : cookies){
+                    if(cookie.getName().equals("JSESSIONID")){
+                        id = cookie.getValue();
+                    }
+                }
+            }
+        }
+
         HttpServletResponse httpResponse = (HttpServletResponse) response;
+        String url = ((ShiroHttpServletRequest) request).getRequestURI().toString();
         try{
-            System.out.println(DateTime.now().toString("YYYY-MM-dd HH:mm:ss") +"___id："+id);
-            if(StringUtils.isEmpty(id)){
+          //  System.out.println(DateTime.now().toString("YYYY-MM-dd HH:mm:ss") +"___id："+id);
+            if(StringUtils.isEmpty(id) && url.contains("login") ){
                 //如果没有携带id参数则按照父类的方式在cookie进行获取
                 Serializable sessionid = super.getSessionId(request, response);
                 httpResponse.setHeader(AUTHORIZATION, sessionid.toString());
@@ -58,7 +72,7 @@ public class ShiroSessionManager extends DefaultWebSessionManager {
             }
         }catch (Exception e){
             e.printStackTrace();
-            return super.getSessionId(request, response);
+            return "";
         }
     }
 
