@@ -1,11 +1,14 @@
 package com.qiaomu.modules.welfare.service;
 
 import com.qiaomu.modules.welfare.dao.WelfareTaskDao;
+import com.qiaomu.modules.welfare.entity.PointEntity;
 import com.qiaomu.modules.welfare.entity.TaskEntity;
 import com.qiaomu.modules.welfare.entity.TaskPublishUserEntity;
 import com.qiaomu.modules.welfare.entity.TaskRecevieUserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by wenglei on 2019/6/16.
@@ -64,5 +67,35 @@ public class PublicWelfareTaskServiceIml implements PublicWelfareTaskService {
     @Override
     public TaskPublishUserEntity queryPublishUserTaskLast(String serviceId) {
         return welfareTaskDao.queryPublishUserTaskLast(serviceId);
+    }
+
+    @Override
+    public List<TaskEntity> queryPublishUserServices(String publishUserId) {
+        return welfareTaskDao.queryPublishUserServices(publishUserId);
+    }
+
+    @Override
+    public List<TaskEntity> queryRecevieUserServices(String receiveUserId) {
+        return welfareTaskDao.queryRecevieUserServices(receiveUserId);
+    }
+
+    @Override
+    public List<TaskEntity> queryAllunReviewTask(String receiveUserId) {
+        return welfareTaskDao.queryAllunReviewTask(receiveUserId);
+    }
+
+    @Override
+    public void updatePonit(PointEntity pointEntity) {
+        welfareTaskDao.updatePonit(pointEntity);
+    }
+
+    @Override
+    public Integer selectPonitByUserId(String userId) {
+        return welfareTaskDao.selectPonitByUserId(userId);
+    }
+
+    @Override
+    public List<PointEntity> selectTopPointUser() {
+        return welfareTaskDao.selectTopPointUser();
     }
 }

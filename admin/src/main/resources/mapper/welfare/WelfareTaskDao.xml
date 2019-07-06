@@ -20,6 +20,10 @@
 	<select id="queryTaskByName" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskEntity">
 		select * from welfare_task WHERE serviceName = #{serviceName} LIMIT 1
 	</select>
+	<insert id="newPonit" parameterType="com.qiaomu.modules.welfare.entity.TaskEntity" >
+		insert into welfare_points_user (userId,points,createdAt,updatedAt) VALUES
+		(#{userId} ,#{points},#{createdAt},#{updatedAt})
+	</insert>
 
 
 	<select id="queryTask" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskEntity">
@@ -28,11 +32,27 @@
 	<select id="queryPublishUserTask" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskPublishUserEntity">
 		select * from welfare_task_publish_user WHERE serviceId = #{serviceId} Limit 1
 	</select>
+	<select id="queryPublishUserServices" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskEntity">
+		select * from welfare_task where serviceId in (select serviceId from welfare_task_publish_user where publishUserId=#{publishUserId} GROUP BY serviceId)
+	</select>
+	<select id="queryRecevieUserServices" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskEntity">
+		select * from welfare_task where serviceId in (select serviceId from welfare_task_recevie_user where receiveUserId=#{receiveUserId} GROUP BY serviceId)
+	</select>
+	<select id="queryAllunReviewTask" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskEntity">
+		select * from welfare_task where serviceId in (select serviceId from welfare_task_publish_user where publishUserId=#{publishUserId}  and status="待审核" GROUP BY serviceId)
+	</select>
 	<select id="queryPublishUserTaskLast" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskPublishUserEntity">
 		select * from welfare_task_publish_user WHERE serviceId = #{serviceId} ORDER by createdAt DESC Limit 1
 	</select>
 	<select id="queryRecevieUserTask" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskRecevieUserEntity">
 		select * from welfare_task_recevie_user WHERE serviceId = #{serviceId} ORDER by createdAt DESC Limit 1
+	</select>
+	<select id="selectPonitByUserId" parameterType="String" resultType="Integer">
+		select points from welfare_points_user WHERE userId=#{userId}
+	</select>
+
+	<select id="selectTopPointUser" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.PointEntity">
+		select * from welfare_points_user ORDER by points DESC limit 20
 	</select>
 	<update id="updateTask" parameterType="com.qiaomu.modules.welfare.entity.TaskEntity">
 		update welfare_task set
@@ -53,7 +73,9 @@
 		</if>
 		WHERE serviceId=#{serviceId}
 	</update>
-
+	<update id="updatePonit" parameterType="com.qiaomu.modules.welfare.entity.PointEntity" >
+		update welfare_points_user set points = #{points}, updatedAt = #{updatedAt} WHERE userId=#{userId}
+	</update>
 
 
 	<delete id="deleteTaskByServiceId" parameterType="String">

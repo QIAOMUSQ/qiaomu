@@ -61,7 +61,7 @@ public class ArticleServiceImp implements ArticleService{
             praiseNum = 0;
         }
         if(null == isPraise||"0".equals(isPraise)) {
-            praiseNum = articles.get(0).getPraiseNum() + 1;
+            praiseNum = praiseNum + 1;
             articles.get(0).setPraiseNum(praiseNum);
             articleDao.updateArticlePraiseNum(articles.get(0));
             articlePraiseEntity.setIsPraise("1");
@@ -71,7 +71,7 @@ public class ArticleServiceImp implements ArticleService{
                 articleDao.updateArticlePraise(articlePraiseEntity);
             }
         }else if("1".equals(isPraise)&&praiseNum>=1){
-            praiseNum = articles.get(0).getPraiseNum() - 1;
+            praiseNum = praiseNum - 1;
             articles.get(0).setPraiseNum(praiseNum);
             articleDao.updateArticlePraiseNum(articles.get(0));
             articlePraiseEntity.setIsPraise("0");
