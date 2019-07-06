@@ -40,6 +40,12 @@ public class WelfareTaskController {
         Date date = new Date();
         String createdTime = DateUtils.formats(date);
 
+        try {
+            Integer point = Integer.valueOf(taskModel.getPoints());
+        }catch (Exception e){
+            return JSON.toJSONString(BuildResponse.fail("任务积分只能是整数"));
+        }
+
         TaskEntity taskEntity = new TaskEntity();
         taskEntity.setPoints(taskModel.getPoints());
         taskEntity.setServiceName(taskModel.getServiceName());
@@ -109,7 +115,7 @@ public class WelfareTaskController {
         TaskEntity taskEntity = new TaskEntity();
         TaskPublishUserEntity taskPublishUserEntity = publicWelfareTaskService.queryPublishUserTaskLast(taskModel.getServiceId());
         if(taskPublishUserEntity!=null&&!"未执行".equals(taskPublishUserEntity.getStatus())){
-            return JSON.toJSONString(BuildResponse.fail("2002","任务不可领取"));
+            return JSON.toJSONString(BuildResponse.fail("任务不可领取"));
         }
         TaskRecevieUserEntity taskRecevieUserEntity = new TaskRecevieUserEntity();
         taskEntity.setStatus("已领取");
@@ -150,7 +156,7 @@ public class WelfareTaskController {
         Assert.isNull(taskPublishUserEntity,"未找到该任务");
         Assert.isNull(taskRecevieUserEntity,"未领取该任务");
         if(!"执行中".equals(taskRecevieUserEntity.getStatus())){
-            return JSON.toJSONString(BuildResponse.fail("2003","当前任务不可取消"));
+            return JSON.toJSONString(BuildResponse.fail("当前任务不可取消"));
         }
         taskEntity.setStatus("未领取");
         taskEntity.setServiceId(taskModel.getServiceId());
@@ -196,7 +202,7 @@ public class WelfareTaskController {
             publicWelfareTaskService.updateTask(taskEntity);//更新状态
             publicWelfareTaskService.updateTaskUser(taskPublishUserEntity);
         }else{
-            return JSON.toJSONString(BuildResponse.fail("2001","不可取消已领取任务"));
+            return JSON.toJSONString(BuildResponse.fail("不可取消已领取任务"));
         }
         return JSON.toJSONString(BuildResponse.success());
 
@@ -220,7 +226,7 @@ public class WelfareTaskController {
         Assert.isNull(taskPublishUserEntity,"未找到该任务");
         Assert.isNull(taskRecevieUserEntity,"未领取该任务");
         if(!"执行中".equals(taskRecevieUserEntity.getStatus())){
-            return JSON.toJSONString(BuildResponse.fail("2004","当前任务不可审核"));
+            return JSON.toJSONString(BuildResponse.fail("当前任务不可审核"));
         }
 
 
@@ -256,7 +262,7 @@ public class WelfareTaskController {
         Assert.isNull(taskPublishUserEntity,"未找到该任务");
         Assert.isNull(taskRecevieUserEntity,"未领取该任务");
         if(!"待审核".equals(taskRecevieUserEntity.getStatus())){
-            return JSON.toJSONString(BuildResponse.fail("2005","当前任务不可审核"));
+            return JSON.toJSONString(BuildResponse.fail("当前任务不可审核"));
         }
 
 
@@ -273,6 +279,24 @@ public class WelfareTaskController {
 
         publicWelfareTaskService.newTaskUser(taskPublishUserEntity);
         publicWelfareTaskService.newTaskRecevieUser(taskRecevieUserEntity);
+        PointEntity points = publicWelfareTaskService.selectPonitByUserId(taskModel.getReceiveUserId());
+        //新用户初始积分100
+        if(points==null){
+            String createdTime = DateUtils.formats(date);
+            points.setPoints(100);
+            points.setUserId(taskModel.getReceiveUserId());
+            points.setCreatedAt(updatedTime);
+            points.setUpdatedAt(updatedTime);
+            publicWelfareTaskService.newPonit(points);
+        }
+        //增加任务积分
+        TaskEntity taskEntity = publicWelfareTaskService.queryTask(taskModel.getServiceId());
+        String taskPoint = taskEntity.getPoints();
+        if(taskPoint!=null&&!taskPoint.contains(".")){
+            points.setPoints(Integer.valueOf(taskPoint)+points.getPoints());
+            publicWelfareTaskService.updatePonit(points);
+        }
+
         return JSON.toJSONString(BuildResponse.success(taskPublishUserEntity));
 
     }
@@ -293,7 +317,7 @@ public class WelfareTaskController {
         Assert.isNull(taskPublishUserEntity,"未找到该任务");
         Assert.isNull(taskRecevieUserEntity,"未领取该任务");
         if(!"待审核".equals(taskRecevieUserEntity.getStatus())){
-            return JSON.toJSONString(BuildResponse.fail("2005","当前任务不可审核"));
+            return JSON.toJSONString(BuildResponse.fail("当前任务不可审核"));
         }
 
 
@@ -321,11 +345,21 @@ public class WelfareTaskController {
      */
     @RequestMapping(value = "statisticGold",method = RequestMethod.POST)
     public String statisticGold(String userId){
-        Integer points = publicWelfareTaskService.selectPonitByUserId(userId);
+        PointEntity points = publicWelfareTaskService.selectPonitByUserId(userId);
+        //新用户初始积分100
+        if(points==null){
+            Date date = new Date();
+            String createdTime = DateUtils.formats(date);
+            points.setPoints(100);
+            points.setUserId(userId);
+            points.setCreatedAt(createdTime);
+            points.setUpdatedAt(createdTime);
+            publicWelfareTaskService.newPonit(points);
+        }
 
-        Map<String,Object> returnMap = new HashMap<>();
+        Map<String,Object> returnMap = BuildResponse.success();
         returnMap.put("points",points);
-        return JSON.toJSONString(BuildResponse.success(returnMap));
+        return JSON.toJSONString(returnMap);
 
     }
 

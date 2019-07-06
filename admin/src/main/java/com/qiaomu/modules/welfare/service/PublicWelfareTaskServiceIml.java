@@ -30,6 +30,11 @@ public class PublicWelfareTaskServiceIml implements PublicWelfareTaskService {
     }
 
     @Override
+    public void newPonit(PointEntity pointEntity) {
+        welfareTaskDao.newPonit(pointEntity);
+    }
+
+    @Override
     public void updateTaskUser(TaskPublishUserEntity taskUserEntity) {
         welfareTaskDao.updateTaskUser(taskUserEntity);
     }
@@ -90,7 +95,7 @@ public class PublicWelfareTaskServiceIml implements PublicWelfareTaskService {
     }
 
     @Override
-    public Integer selectPonitByUserId(String userId) {
+    public PointEntity selectPonitByUserId(String userId) {
         return welfareTaskDao.selectPonitByUserId(userId);
     }
 

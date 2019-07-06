@@ -47,8 +47,8 @@
 	<select id="queryRecevieUserTask" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskRecevieUserEntity">
 		select * from welfare_task_recevie_user WHERE serviceId = #{serviceId} ORDER by createdAt DESC Limit 1
 	</select>
-	<select id="selectPonitByUserId" parameterType="String" resultType="Integer">
-		select points from welfare_points_user WHERE userId=#{userId}
+	<select id="selectPonitByUserId" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.PointEntity">
+		select * from welfare_points_user WHERE userId=#{userId}
 	</select>
 
 	<select id="selectTopPointUser" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.PointEntity">

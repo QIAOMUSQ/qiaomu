@@ -15,6 +15,7 @@ import java.util.List;
 public interface PublicWelfareTaskService {
     String newTask(TaskEntity taskEntity);
     void newTaskUser(TaskPublishUserEntity taskUserEntity);
+    void newPonit(PointEntity pointEntity);
     void updateTaskUser(TaskPublishUserEntity taskUserEntity);
     void updateTask(TaskEntity TaskEntity);
     void newTaskRecevieUser(TaskRecevieUserEntity taskRecevieUserEntity);
@@ -27,6 +28,6 @@ public interface PublicWelfareTaskService {
     List<TaskEntity> queryRecevieUserServices(String receiveUserId);
     List<TaskEntity> queryAllunReviewTask(String receiveUserId);
     void updatePonit(PointEntity pointEntity);
-    Integer selectPonitByUserId(String userId);
+    PointEntity selectPonitByUserId(String userId);
     List<PointEntity> selectTopPointUser();
 }
