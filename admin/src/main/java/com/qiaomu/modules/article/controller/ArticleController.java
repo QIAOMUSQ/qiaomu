@@ -22,7 +22,7 @@ import java.util.Map;
  * @Date 2019-05-25 0:02
  */
 @RestController
-@RequestMapping(value = "article")
+@RequestMapping(value = "mobile/article")
 public class ArticleController extends AbstractController{
 
     @Autowired

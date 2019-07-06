@@ -25,7 +25,7 @@ import java.util.Map;
  * Created by wenglei on 2019/6/15.
  */
 @RestController
-@RequestMapping(value = "welfare")
+@RequestMapping(value = "mobile/welfare")
 public class WelfareTaskController {
     @Autowired
     private PublicWelfareTaskService publicWelfareTaskService;
