@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <#include "/header.html">
+        <style>
+            .table-striped{
+                text-align: center;
+            }
+            .K-textbox{
+                width: 100%;
+            }
+        </style>
+</head>
+<body>
+<form id="form">
+    <table class="table table-striped">
+        <tr>
+            <td >
+                申请人手机：
+            </td>
+            <td><input id="userPhone" name="userPhone" class="K-textbox"/></td>
+            <td >
+                社区名称：
+            </td>
+            <td><input id="communityName" name="communityName" class="K-textbox"/></td>
+        </tr>
+        <tr>
+            <td >
+                申请人人名：
+            </td>
+            <td><input id="name" name="name" class="K-textbox"/></td>
+            <td >
+                联系人号码：
+            </td>
+            <td><input id="contactPhone" name="contactPhone" class="K-textbox"/></td>
+        </tr>
+        <tr>
+            <td >
+                小区地址：
+            </td>
+            <td><input id="address" name="address" class="K-textbox"/></td>
+            <td >
+                时间：
+            </td>
+            <td><input id="createTime" name="time" class="K-textbox"/></td>
+        </tr>
+        <tr>
+            <td>是否同意:</td>
+            <td><div class="layui-input-inline">
+                    <select name="isCheck" lay-filter="aihao">
+                        <option value="0" selected="">未审核</option>
+                        <option value="1" >同意</option>
+                        <option value="2">不同意</option>
+                    </select>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="line-height: 52px;">
+                意见：
+            </td>
+            <td colspan="4">
+                <textarea class="K-textbox" style="width: 100%;" name= "remark" rows="2"></textarea>
+            </td>
+        </tr>
+
+    </table>
+    <input id="dataId" name="id" style="display: none"/>
+    <input id="cityCode" name="cityCode" style="display: none"/>
+</form>
+</body>
+<script>
+
+    var data= JSON.parse('${model}');;
+    console.info(data);
+    $("#userPhone").val(data.userPhone);
+    $("#communityName").val(data.communityName);
+    $("#name").val(data.name);
+    $("#contactPhone").val(data.contactPhone);
+    $("#address").val(data.address);
+    $("#createTime").val(data.time);
+    $("#dataId").val(data.id);
+    $("#cityCode").val(data.cityCode);
+
+</script>
+</html>

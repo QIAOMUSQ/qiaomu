@@ -51,4 +51,9 @@ public class ProvinceCityDateServiceImpl extends ServiceImpl<ProvinceCityDateDao
                 .eq("CITY_NAME", cityName));
     }
 
+    @Override
+    public ProvinceCityDateEntity getProCityByCityCode(String cityCode) {
+        return (ProvinceCityDateEntity) selectOne(new EntityWrapper()
+                .eq("CITY_CODE", cityCode));
+    }
 }
