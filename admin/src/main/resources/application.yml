@@ -10,7 +10,7 @@ server:
 
 spring:
   profiles:
-    active: prod
+    active: dev
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -30,7 +30,7 @@ spring:
       default_encoding: UTF-8
 
 shiro:
-    redis: true # true表示shiro session存到redis里，需要开启redis，才会生效【分布式场景】
+    redis: false # true表示shiro session存到redis里，需要开启redis，才会生效【分布式场景】
 
 #mybatis
 mybatis-plus:
