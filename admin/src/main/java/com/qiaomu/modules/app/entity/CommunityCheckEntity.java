@@ -1,10 +1,12 @@
 package com.qiaomu.modules.app.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author 李品先
@@ -31,6 +33,17 @@ public class CommunityCheckEntity implements Serializable {
     @Length(max = 100,message = "地址信息太长")
     private String address;//小区地址
 
+    private Date createTime;
+
+    @TableField(exist = false)
+    private String cityName;
+
+    private String isCheck; //是否审核 0：未审核  1：通过 2：未通过
+
+    private Date checkDate;
+    private String remark;
+    @TableField(exist = false)
+    private String time;
     public Long getId() {
         return id;
     }
@@ -85,5 +98,53 @@ public class CommunityCheckEntity implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getIsCheck() {
+        return isCheck;
+    }
+
+    public void setIsCheck(String isCheck) {
+        this.isCheck = isCheck;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public Date getCheckDate() {
+        return checkDate;
+    }
+
+    public void setCheckDate(Date checkDate) {
+        this.checkDate = checkDate;
     }
 }

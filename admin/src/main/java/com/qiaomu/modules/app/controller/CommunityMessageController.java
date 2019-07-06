@@ -13,17 +13,19 @@ import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.service.CityService;
 import com.qiaomu.modules.sys.service.ProvinceCityDateService;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
+import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -131,6 +133,8 @@ public class CommunityMessageController  extends AbstractController {
             communityCheck.setName(name);
             communityCheck.setContactPhone(contactPhone);
             communityCheck.setAddress(address);
+            communityCheck.setCreateTime(new Date());
+            communityCheck.setIsCheck("0");
             communityCheckService.insert(communityCheck);
             return R.ok("success","保存成功");
         }catch (Exception e){
@@ -142,5 +146,28 @@ public class CommunityMessageController  extends AbstractController {
     }
 
 
+    @ResponseBody
+    @RequestMapping(value = "queryCommunityCheck",method = RequestMethod.POST)
+    @RequiresPermissions("community:check")
+    public R queryCommunity(@RequestParam Map<String, Object> params){
+        PageUtils page =  communityCheckService.queryPage(params);
+        return  R.ok().put("page", page);
+    }
 
+    @RequestMapping(value = "getInfoDataById",method = RequestMethod.GET)
+    public String getInfoDataById(Long id, ModelMap  model){
+        model.addAttribute("model",JSON.toJSONString(communityCheckService.selectById(id)));
+        return "modules/propertyCompany/check";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "addCommunity",method = RequestMethod.POST)
+    public R addCommunity(CommunityCheckEntity community){
+       String info = communityCheckService.save(community);
+        if(info.equals("success")){
+            return R.ok("success","操作成功");
+        }else {
+            return R.ok("error","操作失败");
+        }
+    }
 }

@@ -1,3 +1,4 @@
+/*
 package com.qiaomu.common.config;
 
 import org.slf4j.Logger;
@@ -11,11 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+*/
 /**
  * @author 李品先
  * @description:
  * @Date 2019-07-02 21:16
- */
+ *//*
+
 @Component
 public class InitCORSFilter extends OncePerRequestFilter {
     private Logger logger = LoggerFactory.getLogger(InitCORSFilter.class);
@@ -35,3 +38,4 @@ public class InitCORSFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
+*/

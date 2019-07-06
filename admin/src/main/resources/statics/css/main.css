@@ -52,3 +52,7 @@ tbody > tr > th {font-weight: normal; }
 .form-horizontal{
 	width:550px;padding-top:20px;
 }
+
+.layui-layer-iframe .layui-layer-btn{
+    background: #6bc189;
+}

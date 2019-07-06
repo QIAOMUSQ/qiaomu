@@ -22,9 +22,12 @@ spring:
   freemarker:
     suffix: .html
     request-context-attribute: request
-
-
-
+    template-loader-path: classpath:/templates/
+    charset: UTF-8
+    check-template-location: true
+    settings:
+      classic_compatible: true
+      default_encoding: UTF-8
 
 shiro:
     redis: false # true表示shiro session存到redis里，需要开启redis，才会生效【分布式场景】

@@ -31,4 +31,6 @@ public interface ProvinceCityDateService extends IService<ProvinceCityDateEntity
     List<ProvinceCityDateEntity> getCityDateByProvinceCode(String provinceCode);
 
     ProvinceCityDateEntity getProvCityByCityName(String cityName);
+
+    ProvinceCityDateEntity getProCityByCityCode(String cityCode);
 }
