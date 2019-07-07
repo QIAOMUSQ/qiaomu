@@ -49,7 +49,7 @@ public class ArticleServiceImp implements ArticleService{
     }
 
     @Override
-    public Map<String,Object> addPraiseNum(String userId, String articleId ) {
+    public synchronized Map<String,Object> addPraiseNum(String userId, String articleId ) {
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setArticleId(articleId);
         List<ArticleEntity> articles =  articleDao.query(articleSelectModel);
