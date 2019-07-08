@@ -48,13 +48,14 @@
         </tr>
         <tr>
             <td>是否同意:</td>
-            <td><div class="layui-input-inline">
-                    <select name="isCheck" lay-filter="aihao">
+            <td><!--<div class="layui-input-inline">
+                    <select id="isCheck" name="isCheck" lay-filter="aihao">
                         <option value="0" selected="">未审核</option>
                         <option value="1" >同意</option>
                         <option value="2">不同意</option>
                     </select>
-                </div>
+                </div>-->
+                <input name="isCheck" id="isCheck">
             </td>
         </tr>
         <tr>
@@ -62,7 +63,7 @@
                 意见：
             </td>
             <td colspan="4">
-                <textarea class="K-textbox" style="width: 100%;" name= "remark" rows="2"></textarea>
+                <textarea class="K-textbox" style="width: 100%;" id="remark"  name= "remark" rows="2"></textarea>
             </td>
         </tr>
 
@@ -73,7 +74,18 @@
 </body>
 <script>
 
-    var data= JSON.parse('${model}');;
+    var data= JSON.parse('${model}');
+
+    var isCheck = $("#isCheck").kendoDropDownList({
+        dataTextField: "text",
+        dataValueField: "value",
+        dataSource: [
+            { text: "未审核", value: "0" },
+            { text: "同意", value: "1" },
+            { text: "不同意", value: "2" }
+        ],index:parseInt(data.isCheck)
+    }).data("kendoDropDownList");
+
     console.info(data);
     $("#userPhone").val(data.userPhone);
     $("#communityName").val(data.communityName);
@@ -82,6 +94,9 @@
     $("#address").val(data.address);
     $("#createTime").val(data.time);
     $("#dataId").val(data.id);
+    $("#remark").val(data.remark);
+    $("#isCheck").val();
+    isCheck.SelectedValue = data.isCheck;
     $("#cityCode").val(data.cityCode);
 
 </script>

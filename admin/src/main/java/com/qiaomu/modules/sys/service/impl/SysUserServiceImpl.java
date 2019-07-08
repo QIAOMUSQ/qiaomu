@@ -121,16 +121,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         }
         this.updateById(user);
         UserExtend userExtend = new UserExtend();
-       // userExtend = userExtendService.getUserExtend(user.getUsername());
         if (user.getPropertyCompanyRoleType().equals("1")) {
             userExtend.setCheck("1");
         }
         if (userExtend != null) {
-            userExtend.setPropertyCompanyRoleType(user.getPropertyCompanyRoleType());
+            userExtend.setCompanyRoleType(user.getPropertyCompanyRoleType());
             userExtendService.updateById(userExtend);
         } else {
             userExtend = new UserExtend();
-            userExtend.setPropertyCompanyRoleType(user.getPropertyCompanyRoleType());
+            userExtend.setCompanyRoleType(user.getPropertyCompanyRoleType());
             userExtend.setUserPhone(user.getUsername());
             userExtendService.insert(userExtend);
         }

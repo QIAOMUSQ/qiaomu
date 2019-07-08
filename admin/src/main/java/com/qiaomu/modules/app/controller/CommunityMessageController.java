@@ -1,6 +1,7 @@
 package com.qiaomu.modules.app.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
 import com.qiaomu.modules.app.entity.City;
@@ -9,6 +10,7 @@ import com.qiaomu.modules.app.service.CommunityCheckService;
 import com.qiaomu.modules.sys.controller.AbstractController;
 import com.qiaomu.modules.sys.entity.ProvinceCityDateEntity;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
+import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.service.CityService;
 import com.qiaomu.modules.sys.service.ProvinceCityDateService;
@@ -54,6 +56,7 @@ public class CommunityMessageController  extends AbstractController {
     @Autowired
     private ProvinceCityDateService provinceCityDateService;
 
+
     @ResponseBody
     @RequestMapping(value = "list", method = RequestMethod.POST)
     public R getCommunityList(@RequestParam Map<String, Object> params, ServletRequest request) {
@@ -89,9 +92,14 @@ public class CommunityMessageController  extends AbstractController {
      */
     @ResponseBody
     @RequestMapping(value = "addCommunityMember", method = RequestMethod.POST)
-    public R addCommunityMember(String pathId, String phone, Long communityId, String realName, String address, String identityInfo, String sex) {
+    public Object addCommunityMember(String pathId, String phone, Long communityId, String realName, String address, String identityInfo, String sex) {
         String data = this.communityService.addCommunityMember(pathId, phone, communityId, realName, address, identityInfo, sex);
-        return R.ok("success", data);
+        if(data.equals("保存成功")){
+            return BuildResponse.success(data);
+        }else {
+            return BuildResponse.fail(data);
+        }
+
     }
 
 
@@ -170,4 +178,19 @@ public class CommunityMessageController  extends AbstractController {
             return R.ok("error","操作失败");
         }
     }
+
+
+    /**
+     * 获取用户所在社区权限
+     * @param userId
+     * @param communityId
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "getCommunityUserPermission",method = RequestMethod.POST)
+    public Object getCommunityUserPermission(Long userId,Long communityId){
+        UserExtend user = communityService.getCommunityUserPermission(userId,communityId);
+        return BuildResponse.success(JSON.toJSON(user));
+    }
+
 }

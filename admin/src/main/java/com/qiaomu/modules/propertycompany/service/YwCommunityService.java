@@ -2,6 +2,7 @@ package com.qiaomu.modules.propertycompany.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.qiaomu.common.utils.PageUtils;
+import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.entity.YwCommunity;
 
 import java.util.List;
@@ -58,6 +59,8 @@ public interface YwCommunityService extends IService<YwCommunity> {
      */
     String addCommunityMember(String pathId, String phone, Long communityId, String realName, String address, String identityInfo, String sex);
 
+
+    UserExtend getCommunityUserPermission(Long userId, Long communityId);
 }
 
 

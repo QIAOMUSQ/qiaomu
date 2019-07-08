@@ -3,16 +3,11 @@ package com.qiaomu.modules.sys.service.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.qiaomu.common.utils.Constant;
-import com.qiaomu.common.utils.DicRoleDeptCode;
-import com.qiaomu.common.utils.PageUtils;
-import com.qiaomu.common.utils.Query;
+import com.qiaomu.common.utils.*;
 import com.qiaomu.modules.sys.dao.SysUserDao;
-import com.qiaomu.modules.sys.dao.YwUserCheckInfoDao;
 import com.qiaomu.modules.sys.dao.UserExtendDao;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.entity.YwCommunity;
-import com.qiaomu.modules.sys.entity.YwUserCheckInfo;
 import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
@@ -44,8 +39,6 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
     @Autowired
     private SysUserService sysUserService;
 
-    @Autowired
-    private YwUserCheckInfoDao checkInfoDao;
 
     @Override
     public List<UserExtend> getUserExtend(String userPhone) {
@@ -64,7 +57,7 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
                 new EntityWrapper<UserExtend>()
                         .eq(StringUtils.isNotBlank(userPhone), "USER_PHONE", userPhone)
                         .in(communityIds.size() > 0, "COMMUNITY_ID", communityIds)
-                        .eq(companyId != -1l, "COMPANY_ID", companyId)
+                       // .or(companyId != null && companyId!=-1, "COMPANY_ID", companyId)
                         .ne(StringUtils.isNotBlank(propertyCompanyRoleType), "PROPERTY_COMPANY_ROLE_TYPE", propertyCompanyRoleType)//过滤物业管理员
                         .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER))
         );
@@ -72,6 +65,9 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
         for (UserExtend userExtend : page.getRecords()) {
             YwCommunity community = communityService.queryById(userExtend.getCommunityId());
             userExtend.setCommunityName(community == null ? "" : community.getName());
+            userExtend.setRealName(AESUtil.decrypt(userExtend.getRealName()));
+            userExtend.setAddress(AESUtil.decrypt(userExtend.getAddress()));
+            userExtend.setUserPhone(sysUserService.queryById(userExtend.getUserId()).getUsername());
         }
 
         return new PageUtils(page);
@@ -79,12 +75,7 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
 
     @Override
     public UserExtend getUserExtendInfo(Long id) {
-        UserExtend userExtend = this.selectById(id);
-        YwUserCheckInfo checkInfo = checkInfoDao.selectOneByPhone(userExtend.getUserPhone());
-        if (checkInfo != null) {
-            userExtend.setInfo(checkInfo.getInfo());
-        }
-        return userExtend;
+        return this.selectById(id);
     }
 
 
@@ -98,20 +89,15 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveCheckInfo(String userPhone, String info, String type, String roleType,Long communityId) {
-      //  SysUserEntity user = userDao.getUserByUserName(userPhone);
+        SysUserEntity user = userDao.getUserByUserName(userPhone);
         UserExtend userExtend = new UserExtend();
-        userExtend.setUserPhone(userPhone);
+        userExtend.setUserId(user.getUserId());
         userExtend.setCompanyId(communityId);
         userExtend = this.baseMapper.selectAll(userExtend);
         if (!type.equals("3")) {//1通过
             String[] role_dept = DicRoleDeptCode.role_dept_map.get(roleType).split("_");
             List<Long> roleList = new ArrayList<Long>();
             roleList.add(Long.valueOf(role_dept[0]));
-
-            //user.setRoleIdList(roleList);//设置角色类型
-         //   user.setDeptId(Long.valueOf(role_dept[1]));
-          //  user.setPropertyCompanyRoleType(roleType);
-           // sysUserService.update(user);
         }
 
         userExtend.setCheck(type);//更新审核标志
@@ -121,11 +107,6 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
 
     @Override
     public void delect(Long[] userIds) {
-        for (Long id : userIds) {
-            UserExtend userExtend = this.selectById(id);
-            SysUserEntity userEntity = userDao.getUserByUserName(userExtend.getUserPhone());
-            userDao.deleteById(userEntity.getDeptId());
-        }
         this.deleteBatchIds(Arrays.asList(userIds));
 
     }
@@ -173,24 +154,6 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
                 user.setUsername(newPhone);
             }
             sysUserService.updateById(user);
-            /*
-            UserExtend userExtend = new UserExtend();
-            userExtend.setUserPhone(userPhone);
-            userExtend.setCommunityId(communityId);
-            userExtend = this.baseMapper.selectAll(userExtend);
-            //设置昵称
-            if(StringUtils.isNotBlank(nickName)){
-                userExtend.setNickName(nickName);
-            }
-            //设置性别
-            if(StringUtils.isNotBlank(sex)){
-                userExtend.setSex(sex);
-            }
-            //设置头像
-            if(imgId != null){
-                userExtend.setHandImgId(imgId);
-            }
-            this.baseMapper.updateById(userExtend);*/
             return "success";
         }catch (Exception e){
             e.printStackTrace();

@@ -17,28 +17,28 @@ public class UserExtend implements Serializable {
     private static final long serialVersionUID = 1L;
     @TableId
     private Long id;
-    @TableField(exist = false)
-    private String userPhone;
     private Long userId;
-    private String userIdentity;
+   // private String userIdentity;
     private String address;
-    private Long imgId;
-    private String nickName;
+    //private Long imgId;
+   // private String nickName;
     private String realName;
     private Long communityId;
     private Long companyId;
     private Date createTime;
     private Date checkTime;
-    private String checkUser;
-    private String check;
-    private String propertyCompanyRoleType;
-    private String sex;
-    private Long handImgId;
+    private Long checkUserId;
+    private String check;   //是否审核
+    private String companyRoleType; //用户权限：0：游客  1：成员  2:物业工作人员
+   // private String sex;
+    private String info;
+
+    private boolean status;//状态
 
     @TableField(exist = false)
     private String communityName;
     @TableField(exist = false)
-    private String info;
+    private String userPhone;
 
     public Long getId() {
         return id;
@@ -48,21 +48,6 @@ public class UserExtend implements Serializable {
         this.id = id;
     }
 
-    public String getUserPhone() {
-        return userPhone;
-    }
-
-    public void setUserPhone(String userPhone) {
-        this.userPhone = userPhone;
-    }
-
-    public String getUserIdentity() {
-        return userIdentity;
-    }
-
-    public void setUserIdentity(String userIdentity) {
-        this.userIdentity = userIdentity;
-    }
 
     public String getAddress() {
         return address;
@@ -72,21 +57,6 @@ public class UserExtend implements Serializable {
         this.address = address;
     }
 
-    public Long getImgId() {
-        return imgId;
-    }
-
-    public void setImgId(Long imgId) {
-        this.imgId = imgId;
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
 
     public String getRealName() {
         return realName;
@@ -96,8 +66,6 @@ public class UserExtend implements Serializable {
         this.realName = realName;
     }
 
-
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -106,16 +74,13 @@ public class UserExtend implements Serializable {
         this.createTime = createTime;
     }
 
-
-
-    public String getPropertyCompanyRoleType() {
-        return propertyCompanyRoleType;
+    public String getUserPhone() {
+        return userPhone;
     }
 
-    public void setPropertyCompanyRoleType(String propertyCompanyRoleType) {
-        this.propertyCompanyRoleType = propertyCompanyRoleType;
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
     }
-
 
     public String getCommunityName() {
         return communityName;
@@ -133,21 +98,6 @@ public class UserExtend implements Serializable {
         this.info = info;
     }
 
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public Long getHandImgId() {
-        return handImgId;
-    }
-
-    public void setHandImgId(Long handImgId) {
-        this.handImgId = handImgId;
-    }
 
     public Long getCommunityId() {
         return communityId;
@@ -173,14 +123,6 @@ public class UserExtend implements Serializable {
         this.checkTime = checkTime;
     }
 
-    public String getCheckUser() {
-        return checkUser;
-    }
-
-    public void setCheckUser(String checkUser) {
-        this.checkUser = checkUser;
-    }
-
     public String getCheck() {
         return check;
     }
@@ -195,5 +137,29 @@ public class UserExtend implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getCompanyRoleType() {
+        return companyRoleType;
+    }
+
+    public void setCompanyRoleType(String companyRoleType) {
+        this.companyRoleType = companyRoleType;
+    }
+
+    public Long getCheckUserId() {
+        return checkUserId;
+    }
+
+    public void setCheckUserId(Long checkUserId) {
+        this.checkUserId = checkUserId;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

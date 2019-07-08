@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -31,20 +32,19 @@ import java.util.*;
 
 @Service
 public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommunity> implements YwCommunityService {
-    @Autowired
+
+    @Resource
     private SysUserDao userDao;
 
     @Autowired
     private ProvinceCityDateService provinceCityDateService;
 
-    @Autowired
+    @Resource
     private UserExtendDao userExtendDao;
 
     @Autowired
     private YwCommunityService communityService;
 
-    @Autowired
-    private SysFileService fileService;
 
     public PageUtils queryPage(Map<String, Object> params) {
         String name = (String) params.get("name");
@@ -79,12 +79,9 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
 
     public List<YwCommunity> findAll(YwCommunity community) {
         return this.baseMapper.selectList(new EntityWrapper()
-                .like(StringUtils.isNotBlank(community
-                        .getName()), "name", community.getName())
-                .eq(community
-                        .getCompanyId().longValue() != -1L, "company_id", community.getCompanyId())
-                .eq(community
-                        .getCityId().longValue() != -1L, "city_id", community.getCityId()));
+                .like(StringUtils.isNotBlank(community.getName()), "name", community.getName())
+                .eq(community.getCompanyId() != null && community.getCompanyId() != -1L, "company_id", community.getCompanyId())
+                .eq( community.getCityId() != null &&community.getCityId() != -1L, "city_id", community.getCityId()));
     }
 
     public void save(YwCommunity community) {
@@ -105,14 +102,14 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
         List<YwCommunity> communityList = new ArrayList<>();
         List<Long> communityId = new ArrayList();
 
+        YwCommunity community = new YwCommunity();
+        community.setCompanyId(companyId);
         if (StringUtils.isNotBlank(communityName)) {
-            YwCommunity community = new YwCommunity();
-            community.setCompanyId(companyId);
             community.setName(communityName);
-            communityList = this.communityService.findAll(community);
-            for (YwCommunity communitys : communityList) {
-                communityId.add(communitys.getId());
-            }
+        }
+        communityList = this.communityService.findAll(community);
+        for (YwCommunity communitys : communityList) {
+            communityId.add(communitys.getId());
         }
         return communityId;
     }
@@ -128,23 +125,50 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
         YwCommunity community = this.communityService.queryById(communityId);
 
         SysUserEntity user = userDao.getUserByUserName(phone);
-        user.setRealName(AESUtil.encrypt(realName));
-        //将真实姓名更新到用户信息中
-        userDao.updateById(user);
 
         UserExtend userExtend = new UserExtend();
-        userExtend.setAddress(AESUtil.encrypt(address));
-        userExtend.setImgId(Long.valueOf(pathId));
-        userExtend.setRealName(AESUtil.encrypt(realName));
-        userExtend.setUserIdentity(identityInfo);
-        userExtend.setUserPhone(phone);
         userExtend.setUserId(user.getUserId());
         userExtend.setCommunityId(communityId);
-        userExtend.setCompanyId(community.getCompanyId());
-        userExtend.setSex(sex);
-        userExtend.setCheck("0");
-        userExtend.setCreateTime(new Date());
-        userExtendDao.insert(userExtend);
-        return "ok";
+        List<UserExtend> userList = userExtendDao.selectCommunityList(userExtend);
+        if(userList.size() ==0){
+            userExtend.setAddress(AESUtil.encrypt(address));
+            if(StringUtils.isNotBlank(pathId)){
+            //    userExtend.setImgId(Long.valueOf(pathId));
+            }
+            userExtend.setRealName(AESUtil.encrypt(realName));
+           // userExtend.setUserIdentity(identityInfo);
+
+            if(community.getCompanyId() != null && community.getCompanyId()!=-1l){
+                userExtend.setCompanyId(community.getCompanyId());
+            }
+            userExtend.setStatus(true);
+            userExtend.setCheck("0");
+            userExtend.setCompanyRoleType("0");
+           // userExtend.setSex(sex);
+            userExtend.setCreateTime(new Date());
+            userExtendDao.insert(userExtend);
+            return "保存成功";
+        }else {
+            return "重复提交信息";
+        }
+
+
+    }
+
+
+    @Override
+    public UserExtend getCommunityUserPermission(Long userId, Long communityId) {
+        UserExtend user  = new UserExtend();
+        user.setUserId(userId);
+        user.setCommunityId(communityId);
+        //用户信息
+        user = userExtendDao.selectAll(user);
+        SysUserEntity userEntity = userDao.queryById(userId);
+        user.setUserPhone(userEntity.getUsername());
+        user.setRealName(AESUtil.decrypt(user.getRealName()));
+        user.setAddress(AESUtil.decrypt(user.getAddress()));
+        //物业信息
+        user.setCommunityName(communityService.selectById(user.getCommunityId()).getName());
+        return user;
     }
 }

@@ -14,4 +14,6 @@ public interface UserExtendDao extends BaseMapper<UserExtend> {
     List<UserExtend> getUserExtend(String userPhone);
 
     UserExtend selectAll(UserExtend userExtend);
+
+    List<UserExtend> selectCommunityList(UserExtend userExtend);
 }

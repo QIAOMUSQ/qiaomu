@@ -14,4 +14,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class SysFileServiceImpl extends ServiceImpl<SysFileDao, SysFileEntity> implements SysFileService {
 
+
+
+    @Override
+    public void insertInfo(SysFileEntity fileEntity) {
+         this.baseMapper.insertInfo(fileEntity);
+    }
 }

@@ -9,4 +9,6 @@ import com.qiaomu.modules.sys.entity.SysFileEntity;
  * @Date 2019-01-15 18:43
  */
 public interface SysFileDao extends BaseMapper<SysFileEntity> {
+
+    void insertInfo(SysFileEntity entity);
 }
