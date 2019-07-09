@@ -6,6 +6,7 @@ import com.qiaomu.modules.welfare.entity.PointEntity;
 import com.qiaomu.modules.welfare.entity.TaskEntity;
 import com.qiaomu.modules.welfare.entity.TaskPublishUserEntity;
 import com.qiaomu.modules.welfare.entity.TaskRecevieUserEntity;
+import com.qiaomu.modules.welfare.model.PointRankForm;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public interface WelfareTaskDao extends BaseMapper<InvitationEntity> {
     List<TaskEntity> queryRecevieUserServices(String receiveUserId);
     List<TaskEntity> queryAllunReviewTask(String receiveUserId);
     PointEntity selectPonitByUserId(String userId);
-    List<PointEntity> selectTopPointUser();
+    List<PointRankForm> selectTopPointUser();
 
     void updateTask(TaskEntity TaskEntity);
     void updateTaskUser(TaskPublishUserEntity taskUserEntity);

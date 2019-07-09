@@ -1,7 +1,7 @@
 package com.qiaomu.modules.app.service;
 
-import com.qiaomu.modules.sys.dao.AppUpdateDao;
-import com.qiaomu.modules.sys.entity.AppUpdateEntity;
+import com.qiaomu.modules.app.dao.AppUpdateDao;
+import com.qiaomu.modules.app.entity.AppUpdateEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ public class BaseService {
         this.updateAppDao.addAppUpdateInfo(appUpdateEntity);
     }
 
-    public AppUpdateEntity getMaxVersion() {
-        return this.updateAppDao.getMaxVersion();
+    public AppUpdateEntity getMaxVersion(String clientType) {
+        return this.updateAppDao.getMaxVersion(clientType);
     }
 }

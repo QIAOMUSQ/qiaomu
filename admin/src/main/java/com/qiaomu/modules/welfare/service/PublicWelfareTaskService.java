@@ -4,6 +4,7 @@ import com.qiaomu.modules.welfare.entity.PointEntity;
 import com.qiaomu.modules.welfare.entity.TaskEntity;
 import com.qiaomu.modules.welfare.entity.TaskPublishUserEntity;
 import com.qiaomu.modules.welfare.entity.TaskRecevieUserEntity;
+import com.qiaomu.modules.welfare.model.PointRankForm;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,5 +30,5 @@ public interface PublicWelfareTaskService {
     List<TaskEntity> queryAllunReviewTask(String receiveUserId);
     void updatePonit(PointEntity pointEntity);
     PointEntity selectPonitByUserId(String userId);
-    List<PointEntity> selectTopPointUser();
+    List<PointRankForm> selectTopPointUser();
 }

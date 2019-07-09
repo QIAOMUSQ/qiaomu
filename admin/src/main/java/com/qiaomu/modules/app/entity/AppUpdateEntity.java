@@ -1,4 +1,4 @@
-package com.qiaomu.modules.sys.entity;
+package com.qiaomu.modules.app.entity;
 
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -14,6 +14,8 @@ public class AppUpdateEntity {
     private String appUrl;
 
     private String updateType;
+
+    private String clientType;
 
     private String createdAs;
 
@@ -65,5 +67,13 @@ public class AppUpdateEntity {
 
     public void setUpdatedAs(String updatedAs) {
         this.updatedAs = updatedAs;
+    }
+
+    public String getClientType() {
+        return clientType;
+    }
+
+    public void setClientType(String clientType) {
+        this.clientType = clientType;
     }
 }
