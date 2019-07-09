@@ -35,14 +35,9 @@ public class UpdateAppBussinessImp {
     private BaseService baseService;
 
     public Map<String,Object> uploadFile(HttpServletRequest request) {
-        File path = null;
-        try {
-            path = new File(ResourceUtils.getURL("classpath:").getPath());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+
         //得到上传文件的保存目录，将上传的文件存放于WEB-INF目录下，不允许外界直接访问，保证上传文件的安全
-        String savePath =path.getParentFile().getParentFile().getParent()+File.separator+"staticFile"+File.separator+"outapp"+File.separator;    //需要放到spring容器中，待修改;()
+        String savePath ="/www/app/admin/staticFile/outapp/";    //需要放到spring容器中，待修改;()
 
         //消息提示
         String message = "";
