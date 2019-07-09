@@ -53,11 +53,14 @@ public class ShiroSessionManager extends DefaultWebSessionManager {
 
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         String url = ((ShiroHttpServletRequest) request).getRequestURI().toString();
+        System.out.println( WebUtils.toHttp(request).getRemoteAddr()+":"+WebUtils.toHttp(request).getRemoteHost()+"=====url:" +url+" ========= 参数："+JSON.toJSONString(WebUtils.toHttp(request).getParameterMap()));
         try{
+
           //  System.out.println(DateTime.now().toString("YYYY-MM-dd HH:mm:ss") +"___id："+id);
             if(StringUtils.isEmpty(id) && url.contains("login") ){
                 //如果没有携带id参数则按照父类的方式在cookie进行获取
                 Serializable sessionid = super.getSessionId(request, response);
+                System.out.println("======时间:"+DateTime.now().toString("YYYY-MM-dd HH:mm:ss") +"___id："+sessionid);
                 httpResponse.setHeader(AUTHORIZATION, sessionid.toString());
                 return sessionid;
             }else{
@@ -71,7 +74,7 @@ public class ShiroSessionManager extends DefaultWebSessionManager {
                 return id;
             }
         }catch (Exception e){
-            e.printStackTrace();
+            //e.printStackTrace();
             return "";
         }
     }

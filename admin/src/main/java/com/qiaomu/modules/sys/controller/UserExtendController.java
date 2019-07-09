@@ -2,7 +2,9 @@ package com.qiaomu.modules.sys.controller;
 
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
+import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.service.UserExtendService;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +14,7 @@ import java.util.Map;
 
 /**
  * @author 李品先
- * @description: 物业社区用户
+ * @description: 物业社区用户管理
  * @Date 2019-03-30 17:04
  */
 @Controller
@@ -26,9 +28,11 @@ public class UserExtendController extends AbstractController {
     @RequestMapping(value = "people/list", method = RequestMethod.POST)
     @RequiresPermissions("process:people:list")
     public R list(@RequestParam Map<String, Object> params) {
-        params.put("companyId", getCompanyOrCommunityByType("1"));
+        SysUserEntity user = getUser();
+        if(user.getCompanyId() != null ){
+            params.put("companyId", user.getCompanyId());
+        }
         PageUtils page = userExtendService.queryPage(params);
-
         return R.ok().put("page", page);
     }
 

@@ -5,14 +5,32 @@
 
 
     <select id="getUserExtend" resultType="com.qiaomu.modules.sys.entity.UserExtend">
-        SELECT * FROM yw_user_extend where user_phone = #{userPhone}
+        SELECT * FROM yw_user_extend ue LEFT JOIN  sys_user u ON ue.user_id = u.user_id where u.username = #{userPhone}
     </select>
 
     <select id="selectAll" resultType="com.qiaomu.modules.sys.entity.UserExtend">
-        SELECT * FROM yw_user_extend
+        SELECT * FROM yw_user_extend ue LEFT JOIN  sys_user u ON ue.user_id = u.user_id
         <where>
             <if test="userPhone != null  and userPhone !=''" >
-               AND  user_phone = #{userPhone}
+               AND  u.username = #{userPhone}
+            </if>
+            <if test="companyId != null and companyId !=''">
+                AND  ue.company_id = #{companyId}
+            </if>
+            <if test="communityId != null and communityId !=''">
+                AND  ue.community_id = #{communityId}
+            </if>
+            <if test="userId != null and userId !=''">
+                AND  ue.user_id = #{userId}
+            </if>
+        </where>
+    </select>
+    <select id="selectCommunityList" resultType="com.qiaomu.modules.sys.entity.UserExtend">
+
+        SELECT * FROM yw_user_extend
+        <where>
+            <if test="userId != null  and userId !=''" >
+                AND  user_id = #{userId}
             </if>
             <if test="companyId != null and companyId !=''">
                 AND  company_id = #{companyId}
@@ -20,7 +38,17 @@
             <if test="communityId != null and communityId !=''">
                 AND  community_id = #{communityId}
             </if>
+            <if test="check != null  and check !=''" >
+                AND  check = #{check}
+            </if>
+            <if test="status != null  and status !=''" >
+                AND  status = #{status}
+            </if>
+            <if test="companyRoleType != null  and companyRoleType !=''" >
+                AND  company_role_type = #{companyRoleType}
+            </if>
         </where>
+
     </select>
 
 </mapper>

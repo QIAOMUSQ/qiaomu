@@ -39,15 +39,20 @@ public class CommunityCheckServiceImpl extends ServiceImpl<CommunityCheckDao,Com
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 
         String startTime = (String) params.get("startTime");
         String endTime = (String) params.get("endTime");
         String isCheck = (String) params.get("isCheck");
         if(startTime ==null){
             startTime = DateTime.now().toString("YYYY-MM-dd 00:00:00");
+        }else {
+            startTime +=" 00:00:00";
         }
         if(endTime == null ){
             endTime = DateTime.now().toString("YYYY-MM-dd 23:59:59");
+        }else {
+            endTime +=" 23:59:59";
         }
 
         Page<CommunityCheckEntity> page = selectPage(new Query(params)
@@ -82,12 +87,14 @@ public class CommunityCheckServiceImpl extends ServiceImpl<CommunityCheckDao,Com
             entity.setRemark(community.getRemark());
             entity.setCheckDate(new Date());
             this.updateById(entity);
-            YwCommunity community1 = new YwCommunity();
-            community1.setName(community.getName());
-            community1.setCityId(provinceCityDateService.getProCityByCityCode(community.getCityCode()).getId());
-            community1.setAddress(community.getAddress());
-            community1.setCreateTime(new Date());
-            communityService.save(community1);
+            if(community.getIsCheck().equals("1")){
+                YwCommunity community1 = new YwCommunity();
+                community1.setName(community.getCommunityName());
+                community1.setCityId(provinceCityDateService.getProCityByCityCode(community.getCityCode()).getId());
+                community1.setAddress(community.getAddress());
+                community1.setCreateTime(new Date());
+                communityService.save(community1);
+            }
             return "success";
         }catch (Exception e){
             e.printStackTrace();

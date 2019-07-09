@@ -22,6 +22,7 @@ public class SysFileEntity {
     private Date dateTime;
 
     private String orgName;
+
     private Long fileSize;
 
     public Long getId() {

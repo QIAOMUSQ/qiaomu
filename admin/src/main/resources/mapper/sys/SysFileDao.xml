@@ -4,4 +4,11 @@
 <mapper namespace="com.qiaomu.modules.sys.dao.SysFileDao">
 
 
+    <insert id="insertInfo" parameterType="com.qiaomu.modules.sys.entity.SysFileEntity" useGeneratedKeys="true" keyProperty="id">
+
+        insert into sys_file
+        (PATH,NAME,DATE_TIME,ORG_NAME,FILE_SIZE)
+         VALUES
+		(#{path} ,#{name},#{dateTime},#{orgName},#{fileSize})
+    </insert>
 </mapper>
