@@ -5,6 +5,7 @@ import com.qiaomu.modules.welfare.entity.PointEntity;
 import com.qiaomu.modules.welfare.entity.TaskEntity;
 import com.qiaomu.modules.welfare.entity.TaskPublishUserEntity;
 import com.qiaomu.modules.welfare.entity.TaskRecevieUserEntity;
+import com.qiaomu.modules.welfare.model.PointRankForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -100,7 +101,7 @@ public class PublicWelfareTaskServiceIml implements PublicWelfareTaskService {
     }
 
     @Override
-    public List<PointEntity> selectTopPointUser() {
+    public List<PointRankForm> selectTopPointUser() {
         return welfareTaskDao.selectTopPointUser();
     }
 }

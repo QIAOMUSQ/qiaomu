@@ -1,8 +1,15 @@
 package com.qiaomu.common.config;
 
+import com.qiaomu.modules.app.controller.AppUserController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 
 /**
  * WebMvc配置
@@ -12,9 +19,25 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+    private static final Logger log = LoggerFactory.getLogger(WebConfig.class);
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/statics/**").addResourceLocations("classpath:/statics/");
+        File path = null;
+        try {
+            path = new File(ResourceUtils.getURL("classpath:").getPath());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        String gitPath=path.getParentFile().getParentFile().getParent()+File.separator+"staticFile"+File.separator+"outapp"+File.separator;
+        registry.addResourceHandler("/outapp/**").addResourceLocations("file:"+gitPath);
+        log.info("outpath is "+gitPath);
+
+
+
+
     }
 
 //    @Override

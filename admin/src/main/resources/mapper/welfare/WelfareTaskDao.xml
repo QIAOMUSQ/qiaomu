@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">    
 <mapper namespace="com.qiaomu.modules.welfare.dao.WelfareTaskDao">
+	<resultMap id="pointForm" type="com.qiaomu.modules.welfare.model.PointRankForm">
+		<result property="point" column="points"/>
+		<result property="loginName" column="username"/>
+		<result property="realName" column="real_name"/>
 
+	</resultMap>
 	<!-- 根据key，更新value -->
 	<insert id="newTask" parameterType="com.qiaomu.modules.welfare.entity.TaskEntity" >
 		insert into welfare_task (serviceId ,serviceName,seviceDetail,status,points,createdAt,updatedAt) VALUES
@@ -51,9 +56,9 @@
 		select * from welfare_points_user WHERE userId=#{userId}
 	</select>
 
-	<select id="selectTopPointUser" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.PointEntity">
-		select * from welfare_points_user ORDER by points DESC limit 20
-	</select>
+	<select id="selectTopPointUser" parameterType="String" resultMap="pointForm">
+		select  a.points ,b.username,b.real_name from welfare_points_user as a JOIN sys_user as b where a.userId=b.user_id ORDER by points DESC limit 20
+</select>
 	<update id="updateTask" parameterType="com.qiaomu.modules.welfare.entity.TaskEntity">
 		update welfare_task set
 		<if test="serviceName != null and serviceName !=''">

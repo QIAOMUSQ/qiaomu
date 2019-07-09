@@ -93,11 +93,12 @@ public class ShiroConfig {
         filterMap.put("/swagger-ui.html", "anon");
         filterMap.put("/webjars/**", "anon");
         filterMap.put("/swagger-resources/**", "anon");
-
+        filterMap.put("/upgrade/**", "anon");
         filterMap.put("/mobile/**", "mobileAuthc");
         filterMap.put("/welfare/**", "anon");
         filterMap.put("/article/**", "anon");
         filterMap.put("/statics/**", "anon");
+        filterMap.put("/outapp/**", "anon");
         filterMap.put("/login.html", "anon");
         filterMap.put("/sys/login", "anon");
         filterMap.put("/favicon.ico", "anon");
