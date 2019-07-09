@@ -121,7 +121,7 @@ public class SysFileConcroller {
             if (!pf.exists()) {
                 return;
             }
-            double rate = 0.5; //rate是压缩比率  1为原图  0.1为最模糊
+            double rate = 1; //rate是压缩比率  1为原图  0.1为最模糊
             int[] results = getImgWidth(pf);
             int widthdist = 0;
             int heightdist = 0;

@@ -20,15 +20,8 @@ public interface UserExtendService extends IService<UserExtend> {
 
     UserExtend getUserExtendInfo(Long id);
 
-    /**
-     * 保存审核信息
-     *
-     * @param userPhone 用户手机号
-     * @param info      通过信息
-     * @param type      0:待审核 1：通过 2：不通过 3：禁用
-     * @param roleType  物业角色
-     */
-    void saveCheckInfo(String userPhone, String info, String type, String roleType,Long communityId);
+
+
 
     void delect(Long[] userIds);
 
@@ -45,4 +38,14 @@ public interface UserExtendService extends IService<UserExtend> {
      * @return
      */
     String setPersonalCenter(String userPhone,String newPhone,String nickName, String sex, Long imgId,Long communityId);
+
+    /**
+     * 保存审核信息
+     *
+     * @param id 用户手机号
+     * @param info      通过信息
+     * @param type      0:待审核 1：通过 2：不通过 3：禁用
+     * @param companyRoleType  物业角色
+     */
+    void saveCheckInfo(String info, String type, String companyRoleType, Long id,Long userId);
 }

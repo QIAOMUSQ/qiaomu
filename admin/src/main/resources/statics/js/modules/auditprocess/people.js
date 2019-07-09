@@ -11,9 +11,9 @@ $(function () {
             { label: '所属社区', name: 'communityName',  width: 45 },
             { label: '创建时间', name: 'createTime', width: 85},
             { label: '角色人', name: 'companyRoleType', width: 60,formatter:function (value, options, row) {
-                if(value == "0"){
+                if(value == "5"){
                     return '<span class="label label-danger">游客</span>';
-                }else if(value == "1"){
+                }else if(value == "4"){
                     return '<span class="label label-success">业主</span>';
                 }else if(value == "3"){
                     return '<span class="label label-success" style="background: #ec971f">工作人员</span>';
@@ -108,8 +108,8 @@ var vm = new Vue({
                 return ;
             }
             $.get(baseURL + "communityUser/info/"+userId, function(result){
-                if(result.userExtendInfo.propertyCompanyRoleType == "1"
-                    && result.userExtendInfo.propertyCompanyRoleType !=0){
+                if(result.userExtendInfo.companyRoleType == "1"
+                    && result.userExtendInfo.companyRoleType !=0){
                     confirm('确定要删除选中的记录？', function(){
                         $.ajax({
                             type: "POST",
@@ -134,16 +134,15 @@ var vm = new Vue({
                 }
             });
 
-
         },
         saveOrUpdate: function (type) {
             $.ajax({
                 type: "POST",
                 url: baseURL + "communityUser/saveCheckInfo",
-                data: {"userPhone":$("#userPhone").val(),
+                data: {"id":$("#communityId").val(),
                         "info":$("#info").val(),
                         "type":type,
-                        "roleType": vm.userExtend.propertyCompanyRoleType
+                        "companyRoleType": $("#companyRoleType").val()
                 },
                 success: function(r){
                     if(r.status == "success"){
@@ -158,16 +157,19 @@ var vm = new Vue({
         },
         getUserExtent: function(id){
             $.get(baseURL + "communityUser/info/"+id, function(result){
-                    $("#realName").val(result.userExtendInfo.realName);
-                    $("#userIdentity").val(result.userExtendInfo.userIdentity);
-                    $("#communityName").val(result.userExtendInfo.communityName);
-                    $("#creatTime").val(result.userExtendInfo.creatTime);
-                    $("#info").val(result.userExtendInfo.info);
-                    $("#userPhone").val(result.userExtendInfo.userPhone);
-                    $("#address").val(result.userExtendInfo.address);
-                    vm.userExtend.propertyCompanyRoleType = result.userExtendInfo.propertyCompanyRoleType;
-                    $("#imgUrl").attr("src", baseURL+"/App/upload/showPicture?id="+result.userExtendInfo.imgUrl);
-                    vm.getTypeList();
+                var data = result.userExtendInfo;
+                $("#realName").val(data.realName);
+               // $("#userIdentity").val(data.userIdentity);
+                $("#communityName").val(data.communityName);
+                $("#createTime").val(data.createTime);
+                $("#info").val(data.info);
+                $("#userPhone").val(data.userPhone);
+                $("#address").val(data.address);
+                vm.userExtend.companyRoleType = data.companyRoleType;
+                $("#companyRoleType").val(data.companyRoleType);
+                $("#communityId").val(data.id);
+              //  $("#imgUrl").attr("src", baseURL+"/mobile/sysFile/showPicForMany?id="+data.imgId);
+                vm.getTypeList();
             });
         },
         unUsed: function (type) {
@@ -176,8 +178,8 @@ var vm = new Vue({
                 return ;
             }
             $.get(baseURL + "communityUser/info/"+userId, function(result){
-                if(result.userExtendInfo.propertyCompanyRoleType != 1
-                    && result.userExtendInfo.propertyCompanyRoleType !=0){
+                if(result.userExtendInfo.companyRoleType != 1
+                    && result.userExtendInfo.companyRoleType !=0){
                     $.ajax({
                         type: "POST",
                         url: baseURL + "communityUser/saveCheckInfo",
@@ -209,20 +211,18 @@ var vm = new Vue({
                 console.info(data);
                 var i=0;
                 $.each(data.dict,function (index,item) {
-
                     if(item.value != 1 && item.value != 0){
                         vm.typeList.push({"value":item.value,"name":item.code});
                     }
-                    
                 });
                 $("#roleType").kendoDropDownList({
                     dataTextField: "name",
                     dataValueField: "value",
                     dataSource: vm.typeList,
-                    index:0,
-                    change: onchange
+                    change: onchange,
+                    value:$("#roleType").val()
                 });
-                vm.q.propertyCompanyRoleType = $("#roleType").val();
+                vm.q.companyRoleType = $("#roleType").val();
             });
         }
         ,
@@ -239,5 +239,6 @@ var vm = new Vue({
 });
 
 function onchange() {
-    vm.q.propertyCompanyRoleType = $("#roleType").val();
+   // vm.q.companyRoleType = $("#roleType").val();
+    $("#companyRoleType").val($("#roleType").val());
 }

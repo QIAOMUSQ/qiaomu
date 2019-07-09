@@ -46,17 +46,18 @@ public class UserExtendController extends AbstractController {
     /**
      * 用户审核
      *
-     * @param userPhone 手机号码
+     * @param  id 提交信息id
      * @param info      备注信息
      * @param type      1：通过 2：不通过 3：禁用
-     * @param roleType  物业角色
+     * @param companyRoleType  物业角色
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "saveCheckInfo", method = RequestMethod.POST)
     @RequiresPermissions("process:people:check")
-    public R saveCheckInfo(String userPhone, String info, String type, String roleType,Long CommunityId) {
-        userExtendService.saveCheckInfo(userPhone, info, type, roleType,CommunityId);
+    public R saveCheckInfo(String info, String type, String companyRoleType,Long id) {
+
+        userExtendService.saveCheckInfo(info, type, companyRoleType,id,getUserId());
         return R.ok();
     }
 

@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author 李品先
@@ -75,35 +72,15 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
 
     @Override
     public UserExtend getUserExtendInfo(Long id) {
-        return this.selectById(id);
+        UserExtend  user = this.selectById(id);
+        YwCommunity community = communityService.queryById(user.getCommunityId());
+        user.setCommunityName(community == null ? "" : community.getName());
+        user.setRealName(AESUtil.decrypt(user.getRealName()));
+        user.setAddress(AESUtil.decrypt(user.getAddress()));
+        user.setUserPhone(sysUserService.queryById(user.getUserId()).getUsername());
+        return user;
     }
 
-
-    /**
-     * 用户审核信息
-     *
-     * @param userPhone 用户手机号
-     * @param info      通过信息
-     * @param type      0: 待审核 1：通过 2：不通过 3:禁用
-     */
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void saveCheckInfo(String userPhone, String info, String type, String roleType,Long communityId) {
-        SysUserEntity user = userDao.getUserByUserName(userPhone);
-        UserExtend userExtend = new UserExtend();
-        userExtend.setUserId(user.getUserId());
-        userExtend.setCompanyId(communityId);
-        userExtend = this.baseMapper.selectAll(userExtend);
-        if (!type.equals("3")) {//1通过
-            String[] role_dept = DicRoleDeptCode.role_dept_map.get(roleType).split("_");
-            List<Long> roleList = new ArrayList<Long>();
-            roleList.add(Long.valueOf(role_dept[0]));
-        }
-
-        userExtend.setCheck(type);//更新审核标志
-        this.updateById(userExtend);
-
-    }
 
     @Override
     public void delect(Long[] userIds) {
@@ -159,6 +136,25 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
             e.printStackTrace();
             return "error";
         }
+    }
 
+
+    /**
+     *
+     * @param info      通过信息
+     * @param type      0:待审核 1：通过 2：不通过 3：禁用
+     * @param companyRoleType  物业角色
+     * @param id 用户手机号
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void saveCheckInfo(String info, String type, String companyRoleType, Long id,Long userId) {
+        UserExtend userExtend = this.baseMapper.selectById(id);
+        userExtend.setCompanyRoleType(companyRoleType);
+        userExtend.setInfo(info);
+        userExtend.setCheck(type);
+        userExtend.setCheckTime(new Date());
+        userExtend.setCheckUserId(userId);
+        updateById(userExtend);
     }
 }

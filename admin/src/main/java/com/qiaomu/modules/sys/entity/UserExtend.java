@@ -28,8 +28,8 @@ public class UserExtend implements Serializable {
     private Date createTime;
     private Date checkTime;
     private Long checkUserId;
-    private String check;   //是否审核
-    private String companyRoleType; //用户权限：0：游客  1：成员  2:物业工作人员
+    private String check;   //是否审核 0:待审核 1：通过 2：不通过 3：禁用
+    private String companyRoleType; //用户权限：5：游客  4：业主  3:物业工作人员
    // private String sex;
     private String info;
 

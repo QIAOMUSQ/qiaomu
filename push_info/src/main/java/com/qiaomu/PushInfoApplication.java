@@ -1,6 +1,6 @@
 package com.qiaomu;
 
-import com.qiaomu.websocket.service.NettyServer;
+//import com.qiaomu.websocket.service.NettyServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan({"com.qiaomu"})
 public class PushInfoApplication {
     public static void main(String[] args) {
-       // SpringApplication.run(PushInfoApplication.class,args);
-        new NettyServer().run();
+        SpringApplication.run(PushInfoApplication.class,args);
+       // new NettyServer().run();
     }
 }

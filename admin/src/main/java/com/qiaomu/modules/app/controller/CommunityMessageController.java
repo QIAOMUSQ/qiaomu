@@ -190,7 +190,12 @@ public class CommunityMessageController  extends AbstractController {
     @RequestMapping(value = "getCommunityUserPermission",method = RequestMethod.POST)
     public Object getCommunityUserPermission(Long userId,Long communityId){
         UserExtend user = communityService.getCommunityUserPermission(userId,communityId);
-        return BuildResponse.success(JSON.toJSON(user));
+        if(user != null){
+            return BuildResponse.success(JSON.toJSON(user));
+        }else {
+            return BuildResponse.fail("用户未认证");
+        }
+
     }
 
 }

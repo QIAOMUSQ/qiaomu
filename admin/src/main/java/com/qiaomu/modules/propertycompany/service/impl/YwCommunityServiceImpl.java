@@ -1,5 +1,6 @@
 package com.qiaomu.modules.propertycompany.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -143,7 +144,7 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
             }
             userExtend.setStatus(true);
             userExtend.setCheck("0");
-            userExtend.setCompanyRoleType("0");
+            userExtend.setCompanyRoleType("5");
            // userExtend.setSex(sex);
             userExtend.setCreateTime(new Date());
             userExtendDao.insert(userExtend);
@@ -161,14 +162,21 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
         UserExtend user  = new UserExtend();
         user.setUserId(userId);
         user.setCommunityId(communityId);
-        //用户信息
-        user = userExtendDao.selectAll(user);
-        SysUserEntity userEntity = userDao.queryById(userId);
-        user.setUserPhone(userEntity.getUsername());
-        user.setRealName(AESUtil.decrypt(user.getRealName()));
-        user.setAddress(AESUtil.decrypt(user.getAddress()));
-        //物业信息
-        user.setCommunityName(communityService.selectById(user.getCommunityId()).getName());
-        return user;
+        UserExtend user2 = userExtendDao.selectAll(user);
+        System.out.println("userEntity = [" + JSON.toJSONString(user2));
+        if(user2 != null){
+            //用户信息
+            SysUserEntity userEntity = userDao.queryById(userId);
+
+            if(userEntity !=null && userEntity.getUsername() != null){
+                user2.setUserPhone(userEntity.getUsername());
+            }
+            user2.setRealName(AESUtil.decrypt(user2.getRealName()));
+            user2.setAddress(AESUtil.decrypt(user2.getAddress()));
+            //物业信息
+            user2.setCommunityName(communityService.selectById(user2.getCommunityId()).getName());
+            System.out.println("user2 = [" + JSON.toJSONString(user2) );
+        }
+        return user2;
     }
 }
