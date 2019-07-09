@@ -28,7 +28,7 @@ public class Constant {
     /** 数据权限过滤 */
 	public static final String SQL_FILTER = "sql_filter";
 
-    public static final String SERVER_URL="http://103.26.76.116:8080/admin";//待定，尽量从配置文件读
+    public static final String SERVER_URL="http://103.26.76.116:9999/admin";//待定，尽量从配置文件读
 
 
 	/**
