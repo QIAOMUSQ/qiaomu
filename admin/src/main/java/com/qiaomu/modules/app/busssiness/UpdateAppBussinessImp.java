@@ -31,7 +31,7 @@ import static com.qiaomu.common.utils.Constant.SERVER_URL;
  */
 @Service
 public class UpdateAppBussinessImp {
-
+    @Autowired
     private BaseService baseService;
 
     public Map<String,Object> uploadFile(HttpServletRequest request) {
@@ -50,9 +50,9 @@ public class UpdateAppBussinessImp {
             StandardMultipartHttpServletRequest req = (StandardMultipartHttpServletRequest) request;
 
             Map<String,String[]> params = req.getParameterMap();
-            String appVersion = CommonUtils.getMapValue("appVersion",params).toString();
-            String updateType = CommonUtils.getMapValue("updateType",params).toString();
-            String clientType = CommonUtils.getMapValue("clientType",params).toString();
+            String appVersion = CommonUtils.getMapValue("appVersion",params)[0];
+            String updateType = CommonUtils.getMapValue("updateType",params)[0];
+            String clientType = CommonUtils.getMapValue("clientType",params)[0];
 
 
 
