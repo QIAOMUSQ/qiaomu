@@ -28,7 +28,7 @@ public class UpdateApp {
     /**
      * 列表
      */
-    @RequestMapping("/uploadApp")
+    @RequestMapping("/upgrade/uploadApp")
     public String uploadApp(HttpServletRequest request){
         Map<String,Object> result = updateAppBussiness.uploadFile(request);
 
