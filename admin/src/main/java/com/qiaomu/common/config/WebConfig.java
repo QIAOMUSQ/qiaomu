@@ -32,7 +32,8 @@ public class WebConfig implements WebMvcConfigurer {
         }
 
         String gitPath=path.getParentFile().getParentFile().getParent()+File.separator+"staticFile"+File.separator+"outapp"+File.separator;
-        registry.addResourceHandler("/outapp/**").addResourceLocations(gitPath);
+        registry.addResourceHandler("/outapp/**").addResourceLocations("file:/www/app/admin/staticFile/outapp/");
+        registry.addResourceHandler("/mobile/**").addResourceLocations("file:/www/app/admin/staticFile/");
         log.info("outpath is "+gitPath);
 
 
