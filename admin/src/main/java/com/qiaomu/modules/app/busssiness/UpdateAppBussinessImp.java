@@ -12,11 +12,15 @@ import com.qiaomu.common.utils.R;
 import com.qiaomu.modules.app.entity.AppUpdateEntity;
 import com.qiaomu.modules.app.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -95,7 +99,7 @@ public class UpdateAppBussinessImp {
             return BuildResponse.fail("版本格式错误！");
         }
 
-        if(version.compareTo(maxVersion)>0){
+        if(version.compareTo(maxVersion)<0){
             Map<String,Object> returnMap = BuildResponse.success();
             returnMap.put("isNeedUpdate","1");
             returnMap.put("appUrl",appUpdateEntity.getAppUrl());
@@ -179,5 +183,31 @@ public class UpdateAppBussinessImp {
         }
         return dir;
     }
+
+
+    public ResponseEntity<byte[]> fileDownLoad(HttpServletRequest request) throws Exception{
+        StandardMultipartHttpServletRequest req = (StandardMultipartHttpServletRequest) request;
+
+        Map<String,String[]> params = req.getParameterMap();
+        String url = CommonUtils.getMapValue("url",params)[0];
+        ServletContext servletContext = request.getServletContext();
+        String fileName=url.split("outapp")[1];
+        String realPath = "/www/app/admin/staticFile/outapp/"+fileName;//得到文件所在位置
+        InputStream in=new FileInputStream(new File(realPath));//将该文件加入到输入流之中
+        byte[] body=null;
+        body=new byte[in.available()];// 返回下一次对此输入流调用的方法可以不受阻塞地从此输入流读取（或跳过）的估计剩余字节数
+        in.read(body);//读入到输入流里面
+
+        fileName=new String(fileName.getBytes("gbk"),"iso8859-1");//防止中文乱码
+        HttpHeaders headers=new HttpHeaders();//设置响应头
+        headers.add("Content-Disposition", "attachment;filename="+fileName);
+        HttpStatus statusCode = HttpStatus.OK;//设置响应吗
+        ResponseEntity<byte[]> response=new ResponseEntity<byte[]>(body, headers, statusCode);
+        return response;
+
+
+    }
+
+
 }
 
