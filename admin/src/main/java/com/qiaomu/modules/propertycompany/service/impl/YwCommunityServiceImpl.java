@@ -179,4 +179,6 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
         }
         return user2;
     }
+
+
 }
