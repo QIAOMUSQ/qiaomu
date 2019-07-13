@@ -65,16 +65,18 @@ public class WelfareBussiness {
         Date date = new Date();
         String createdTime = DateUtils.formats(date);
         PointEntity withpoints = publicWelfareTaskService.selectPonitByUserId(publishUserId);
+        Integer point = 0;
         try {
-            Integer point = Integer.valueOf(points);
-            if(Integer.valueOf(withpoints.getPoints())<point){
-                throw new WelfareException("金币不足，不能创建！");
-            }else if(point>10){
-                throw new WelfareException("单次任务金币不能超过10！");
-            }
+            point = Integer.valueOf(points);
         }catch (Exception e){
             throw new WelfareException("任务金币只能是整数");
         }
+        if(Integer.valueOf(withpoints.getPoints())<point){
+            throw new WelfareException("金币不足，不能创建！");
+        }else if(point>10){
+            throw new WelfareException("单次任务金币不能超过10！");
+        }
+
 
         TaskEntity taskEntity = new TaskEntity();
         taskEntity.setPoints(points);
