@@ -16,7 +16,10 @@
 
 package com.qiaomu.common.exception;
 
+import com.alibaba.fastjson.JSON;
+import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.R;
+import com.qiaomu.modules.welfare.exception.WelfareException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.session.UnknownSessionException;
 import org.slf4j.Logger;
@@ -39,33 +42,35 @@ public class RRExceptionHandler {
 	 * 处理自定义异常
 	 */
 	@ExceptionHandler(RRException.class)
-	public R handleRRException(RRException e){
-		R r = new R();
-		r.put("code", e.getCode());
-		r.put("msg", e.getMessage());
-
-		return r;
+	public String handleRRException(RRException e){
+		return JSON.toJSONString(BuildResponse.fail());
 	}
 
 	@ExceptionHandler(DuplicateKeyException.class)
-	public R handleDuplicateKeyException(DuplicateKeyException e){
+	public String handleDuplicateKeyException(DuplicateKeyException e){
 		logger.error(e.getMessage(), e);
-		return R.error(e.getMessage());
+		return JSON.toJSONString(BuildResponse.fail(e.getMessage()));
 	}
 
 	@ExceptionHandler(AuthorizationException.class)
-	public R handleAuthorizationException(AuthorizationException e){
+	public String handleAuthorizationException(AuthorizationException e){
 		logger.error(e.getMessage(), e);
-		return R.error("没有权限，请联系管理员授权");
+		return JSON.toJSONString(BuildResponse.fail("没有权限，请联系管理员授权"));
+	}
+
+	@ExceptionHandler(WelfareException.class)
+	public String handleWelfareException(WelfareException e){
+		logger.error(e.getMessage(), e);
+		return JSON.toJSONString(BuildResponse.fail(e.getMessage()));
 	}
 
 	@ExceptionHandler(Exception.class)
-	public R handleException(Exception e){
+	public String handleException(Exception e){
 		logger.error(e.getMessage(), e);
-		return R.error();
+		return JSON.toJSONString(BuildResponse.fail());
 	}
 	@ExceptionHandler(UnknownSessionException.class)
-	public R UnknownSessionException(UnknownSessionException e){
-		return R.error("请先登录");
+	public String UnknownSessionException(UnknownSessionException e){
+		return JSON.toJSONString(BuildResponse.fail("请先登录"));
 	}
 }
