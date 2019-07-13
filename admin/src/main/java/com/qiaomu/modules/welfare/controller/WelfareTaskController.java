@@ -10,6 +10,7 @@ import com.qiaomu.modules.welfare.entity.PointEntity;
 import com.qiaomu.modules.welfare.entity.TaskEntity;
 import com.qiaomu.modules.welfare.entity.TaskPublishUserEntity;
 import com.qiaomu.modules.welfare.entity.TaskRecevieUserEntity;
+import com.qiaomu.modules.welfare.model.PointRankForm;
 import com.qiaomu.modules.welfare.model.TaskModel;
 import com.qiaomu.modules.welfare.service.PublicWelfareTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,9 +75,12 @@ public class WelfareTaskController {
 
         Date date = new Date();
         String createdTime = DateUtils.formats(date);
-
+        PointEntity withpoints = publicWelfareTaskService.selectPonitByUserId(publishUserId);
         try {
             Integer point = Integer.valueOf(points);
+            if(Integer.valueOf(withpoints.getPoints())<point){
+                return JSON.toJSONString(BuildResponse.fail("积分不足，不能创建！"));
+            }
         }catch (Exception e){
             return JSON.toJSONString(BuildResponse.fail("任务积分只能是整数"));
         }
@@ -101,7 +105,45 @@ public class WelfareTaskController {
 
     }
 
+    /**
+     * 查询所有审核中的任务
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "queryAllSubmitReviewTask",method = RequestMethod.POST)
+    public String queryAllSubmitReviewTask(String receiveUserId){
+        List<TaskEntity>  tasks = publicWelfareTaskService.queryAllSubmitReviewTask(receiveUserId);
+        return JSON.toJSONString(BuildResponse.success(tasks));
 
+    }
+
+    /**
+     * 查询所有执行中的任务
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "queryAllRuningTask",method = RequestMethod.POST)
+    public String queryAllRuningTask(String userId){
+        List<TaskEntity>  publishTasks = publicWelfareTaskService.queryAllRuningTask1(userId);
+        List<TaskEntity>  receiveTasks = publicWelfareTaskService.queryAllRuningTask2(userId);
+        Map<String,Object> tasks = new HashMap<>();
+        tasks.put("publishTasks",publishTasks);
+        tasks.put("receiveTasks",receiveTasks);
+        return JSON.toJSONString(BuildResponse.success(tasks));
+
+    }
+
+    /**
+     * 查询所有已完成的任务
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "queryAllCompleteTask",method = RequestMethod.POST)
+    public String queryAllCompleteTask(String userId){
+        List<TaskEntity>  tasks = publicWelfareTaskService.queryAllCompleteTask(userId);
+        return JSON.toJSONString(BuildResponse.success(tasks));
+
+    }
     /**
      * 查询所有待审核的任务
      * @param
@@ -154,7 +196,7 @@ public class WelfareTaskController {
             return JSON.toJSONString(BuildResponse.fail("任务不可领取"));
         }
         TaskRecevieUserEntity taskRecevieUserEntity = new TaskRecevieUserEntity();
-        taskEntity.setStatus("已领取");
+        taskEntity.setStatus("执行中");
         taskEntity.setServiceId(taskModel.getServiceId());
         taskEntity.setUpdatedAt(updatedTime);
 
@@ -236,7 +278,7 @@ public class WelfareTaskController {
             taskPublishUserEntity.setCreatedAt(updatedTime);
             taskPublishUserEntity.setUpdatedAt(updatedTime);
             publicWelfareTaskService.updateTask(taskEntity);//更新状态
-            publicWelfareTaskService.updateTaskUser(taskPublishUserEntity);
+            publicWelfareTaskService.newTaskUser(taskPublishUserEntity);
         }else{
             return JSON.toJSONString(BuildResponse.fail("不可取消已领取任务"));
         }
@@ -265,6 +307,9 @@ public class WelfareTaskController {
             return JSON.toJSONString(BuildResponse.fail("当前任务不可审核"));
         }
 
+        TaskEntity taskEntity = new TaskEntity();
+        taskEntity.setStatus("审核中");
+        taskEntity.setUpdatedAt(updatedTime);
 
         taskPublishUserEntity.setStatus("待审核");
         taskPublishUserEntity.setServiceId(taskModel.getServiceId());
@@ -277,6 +322,7 @@ public class WelfareTaskController {
         taskRecevieUserEntity.setCreatedAt(updatedTime);
         taskRecevieUserEntity.setUpdatedAt(updatedTime);
 
+        publicWelfareTaskService.updateTask(taskEntity);//更新状态
         publicWelfareTaskService.newTaskUser(taskPublishUserEntity);
         publicWelfareTaskService.newTaskRecevieUser(taskRecevieUserEntity);
         return JSON.toJSONString(BuildResponse.success(taskRecevieUserEntity));
@@ -297,7 +343,7 @@ public class WelfareTaskController {
         TaskRecevieUserEntity taskRecevieUserEntity = publicWelfareTaskService.queryRecevieUserTask(taskModel.getServiceId());
         Assert.isNull(taskPublishUserEntity,"未找到该任务");
         Assert.isNull(taskRecevieUserEntity,"未领取该任务");
-        if(!"待审核".equals(taskRecevieUserEntity.getStatus())){
+        if(!"审核中".equals(taskRecevieUserEntity.getStatus())){
             return JSON.toJSONString(BuildResponse.fail("当前任务不可审核"));
         }
 
@@ -309,32 +355,46 @@ public class WelfareTaskController {
 
         taskRecevieUserEntity.setStatus("已完成");
         taskRecevieUserEntity.setServiceId(taskModel.getServiceId());
-        taskRecevieUserEntity.setReceiveUserId(taskModel.getReceiveUserId());
+        taskRecevieUserEntity.setReceiveUserId(taskRecevieUserEntity.getReceiveUserId());
         taskRecevieUserEntity.setCreatedAt(updatedTime);
         taskRecevieUserEntity.setUpdatedAt(updatedTime);
 
         publicWelfareTaskService.newTaskUser(taskPublishUserEntity);
         publicWelfareTaskService.newTaskRecevieUser(taskRecevieUserEntity);
         PointEntity points = publicWelfareTaskService.selectPonitByUserId(taskModel.getReceiveUserId());
+        PointEntity publisherPoints = publicWelfareTaskService.selectPonitByUserId(taskPublishUserEntity.getPublishUserId());
         //新用户初始积分100
-        if(points==null){
-            String createdTime = DateUtils.formats(date);
-            points.setPoints(100);
-            points.setUserId(taskModel.getReceiveUserId());
-            points.setCreatedAt(updatedTime);
-            points.setUpdatedAt(updatedTime);
-            publicWelfareTaskService.newPonit(points);
-        }
+        points = checkPint(points,taskModel.getReceiveUserId());
+        publisherPoints = checkPint(publisherPoints,taskPublishUserEntity.getPublishUserId());
         //增加任务积分
         TaskEntity taskEntity = publicWelfareTaskService.queryTask(taskModel.getServiceId());
         String taskPoint = taskEntity.getPoints();
         if(taskPoint!=null&&!taskPoint.contains(".")){
-            points.setPoints(Integer.valueOf(taskPoint)+points.getPoints());
+            points.setPoints(String.valueOf(Integer.valueOf(taskPoint)+Integer.valueOf(points.getPoints())));
+            publisherPoints.setPoints(String.valueOf(Integer.valueOf(publisherPoints.getPoints())-Integer.valueOf(taskPoint)));
             publicWelfareTaskService.updatePonit(points);
+            publicWelfareTaskService.updatePonit(publisherPoints);
         }
-
+        taskEntity.setStatus("已完成");
+        taskEntity.setUpdatedAt(updatedTime);
+        publicWelfareTaskService.updateTask(taskEntity);//更新状态
         return JSON.toJSONString(BuildResponse.success(taskPublishUserEntity));
 
+    }
+
+    private PointEntity checkPint(PointEntity points,String userId){
+        Date date = new Date();
+        String updatedTime = DateUtils.formats(date);
+        if(points==null){
+            points = new PointEntity();
+            String createdTime = DateUtils.formats(date);
+            points.setPoints(String.valueOf(100));
+            points.setUserId(userId);
+            points.setCreatedAt(updatedTime);
+            points.setUpdatedAt(updatedTime);
+            publicWelfareTaskService.newPonit(points);
+        }
+        return points;
     }
 
     /**
@@ -367,7 +427,10 @@ public class WelfareTaskController {
         taskRecevieUserEntity.setReceiveUserId(taskModel.getReceiveUserId());
         taskRecevieUserEntity.setCreatedAt(updatedTime);
         taskRecevieUserEntity.setUpdatedAt(updatedTime);
-
+        TaskEntity taskEntity = new TaskEntity();
+        taskEntity.setStatus("执行中");
+        taskEntity.setUpdatedAt(updatedTime);
+        publicWelfareTaskService.updateTask(taskEntity);//更新状态
         publicWelfareTaskService.newTaskUser(taskPublishUserEntity);
         publicWelfareTaskService.newTaskRecevieUser(taskRecevieUserEntity);
         return JSON.toJSONString(BuildResponse.success(taskPublishUserEntity));
@@ -383,16 +446,7 @@ public class WelfareTaskController {
     public String statisticGold(String userId){
         PointEntity points = publicWelfareTaskService.selectPonitByUserId(userId);
         //新用户初始积分100
-        if(points==null){
-            Date date = new Date();
-            String createdTime = DateUtils.formats(date);
-            points.setPoints(100);
-            points.setUserId(userId);
-            points.setCreatedAt(createdTime);
-            points.setUpdatedAt(createdTime);
-            publicWelfareTaskService.newPonit(points);
-        }
-
+        points = checkPint(points,userId);
         Map<String,Object> returnMap = BuildResponse.success();
         returnMap.put("points",points);
         return JSON.toJSONString(returnMap);
@@ -406,8 +460,8 @@ public class WelfareTaskController {
      */
     @RequestMapping(value = "rankByGold",method = RequestMethod.POST)
     public String rankByGold(){
-        publicWelfareTaskService.selectTopPointUser();
-        return JSON.toJSONString(BuildResponse.success());
+        List<PointRankForm> result = publicWelfareTaskService.selectTopPointUser();
+        return JSON.toJSONString(BuildResponse.success(result));
 
     }
 }

@@ -15,11 +15,11 @@ public class PointEntity {
         this.userId = userId;
     }
 
-    public Integer getPoints() {
+    public String getPoints() {
         return points;
     }
 
-    public void setPoints(Integer points) {
+    public void setPoints(String points) {
         this.points = points;
     }
 
@@ -40,7 +40,7 @@ public class PointEntity {
     }
 
     private String userId;
-    private Integer points;
+    private String points;
     private String createdAt;
     private String updatedAt;
 }

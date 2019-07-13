@@ -44,7 +44,24 @@
 		select * from welfare_task where serviceId in (select serviceId from welfare_task_recevie_user where receiveUserId=#{receiveUserId} GROUP BY serviceId)
 	</select>
 	<select id="queryAllunReviewTask" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskEntity">
-		select * from welfare_task where serviceId in (select serviceId from welfare_task_publish_user where publishUserId=#{publishUserId}  and status="待审核" GROUP BY serviceId)
+		select * from welfare_task where status="审核中" and serviceId in (select serviceId from welfare_task_publish_user where publishUserId=#{publishUserId}  and status="待审核" GROUP BY serviceId)
+	</select>
+	<select id="queryAllSubmitReviewTask" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskEntity">
+		select * from welfare_task where status="审核中" and serviceId in (select serviceId from welfare_task_recevie_user where receiveUserId=#{receiveUserId}  and status="审核中" GROUP BY serviceId)
+	</select>
+	<select id="queryAllRuningTask1" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskEntity">
+		select * from welfare_task where status="执行中" and
+		serviceId in (select serviceId from welfare_task_publish_user where publishUserId=#{userId}  and status="执行中" GROUP BY serviceId)
+	</select>
+	<select id="queryAllRuningTask2" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskEntity">
+		select * from welfare_task where status="执行中" and
+		serviceId in (select serviceId from welfare_task_recevie_user where receiveUserId=#{userId}  and status="执行中" GROUP BY serviceId)
+	</select>
+	<select id="queryAllCompleteTask" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskEntity">
+		select * from welfare_task where status="已完成" and
+		(serviceId in (select serviceId from welfare_task_publish_user where publishUserId=#{userId}  and status="已完成" GROUP BY serviceId)
+		OR
+		serviceId in (select serviceId from welfare_task_recevie_user where receiveUserId=#{userId}  and status="已完成" GROUP BY serviceId))
 	</select>
 	<select id="queryPublishUserTaskLast" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskPublishUserEntity">
 		select * from welfare_task_publish_user WHERE serviceId = #{serviceId} ORDER by createdAt DESC Limit 1
