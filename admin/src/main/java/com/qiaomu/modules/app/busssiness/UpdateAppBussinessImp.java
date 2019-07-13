@@ -27,6 +27,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.*;
 
+import static com.qiaomu.common.utils.Constant.OUT_DIR;
 import static com.qiaomu.common.utils.Constant.SERVER_URL;
 
 
@@ -41,7 +42,7 @@ public class UpdateAppBussinessImp {
     public Map<String,Object> uploadFile(HttpServletRequest request) {
 
         //得到上传文件的保存目录，将上传的文件存放于WEB-INF目录下，不允许外界直接访问，保证上传文件的安全
-        String savePath ="/www/app/admin/staticFile/outapp/";    //需要放到spring容器中，待修改;()
+        String savePath =OUT_DIR;    //需要放到spring容器中，待修改;()
 
         //消息提示
         String message = "";
@@ -56,7 +57,7 @@ public class UpdateAppBussinessImp {
 
 
             MultipartFile multipartFile = req.getFile("file");
-            String fileName =mkFileName(multipartFile.getOriginalFilename()) ;
+            String fileName =CommonUtils.mkFileName(multipartFile.getOriginalFilename()) ;
             //String savePathStr = mkFilePath(savePath, fileName);
             File saveFile = new File(savePath+fileName);
             multipartFile.transferTo(saveFile);
@@ -103,6 +104,7 @@ public class UpdateAppBussinessImp {
             Map<String,Object> returnMap = BuildResponse.success();
             returnMap.put("isNeedUpdate","1");
             returnMap.put("appUrl",appUpdateEntity.getAppUrl());
+            returnMap.put("appVersion",appUpdateEntity.getAppVersion());
             return returnMap;
         }else {
             Map<String, Object> returnMap = BuildResponse.success();
@@ -165,24 +167,6 @@ public class UpdateAppBussinessImp {
     }
 
 
-    //生成上传文件的文件名，文件名以：uuid+"_"+文件的原始名称
-    public String mkFileName(String fileName){
-        return UUID.randomUUID().toString()+"_"+fileName;
-    }
-    public String mkFilePath(String savePath,String fileName){
-        //得到文件名的hashCode的值，得到的就是filename这个字符串对象在内存中的地址
-        int hashcode = fileName.hashCode();
-        int dir1 = hashcode&0xf;
-        int dir2 = (hashcode&0xf0)>>4;
-        //构造新的保存目录
-        String dir = savePath + "\\" + dir1 + "\\" + dir2;
-        //File既可以代表文件也可以代表目录
-        File file = new File(dir);
-        if(!file.exists()){
-            file.mkdirs();
-        }
-        return dir;
-    }
 
 
     public ResponseEntity<byte[]> fileDownLoad(HttpServletRequest request) throws Exception{

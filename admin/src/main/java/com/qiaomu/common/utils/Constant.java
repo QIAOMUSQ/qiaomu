@@ -30,6 +30,7 @@ public class Constant {
 
     public static final String SERVER_URL="http://103.26.76.116:9999/admin";//待定，尽量从配置文件读
 
+    public static final String OUT_DIR ="/www/app/admin/staticFile/outapp/";//"E:\\QM\\"   //"/www/app/admin/staticFile/outapp/";
 
 	/**
 	 * 菜单类型

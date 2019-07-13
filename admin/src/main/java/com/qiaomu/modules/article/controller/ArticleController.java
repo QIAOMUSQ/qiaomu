@@ -2,6 +2,7 @@ package com.qiaomu.modules.article.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.qiaomu.common.utils.BuildResponse;
+import com.qiaomu.common.utils.CommonUtils;
 import com.qiaomu.common.utils.R;
 import com.qiaomu.modules.article.entity.ArticleEntity;
 import com.qiaomu.modules.article.entity.CommentEntity;
@@ -12,9 +13,19 @@ import com.qiaomu.modules.infopublish_publish.service.InvitationService;
 import com.qiaomu.modules.sys.controller.AbstractController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static com.qiaomu.common.utils.Constant.OUT_DIR;
+import static com.qiaomu.common.utils.Constant.SERVER_URL;
 
 /**
  * @author wonly
@@ -34,9 +45,48 @@ public class ArticleController extends AbstractController{
      * @return
      */
     @RequestMapping(value = "publishMsg",method = RequestMethod.POST)
-    public String add(@RequestBody ArticleEntity articleEntity){
+    public String add(HttpServletRequest request){
+        //得到上传文件的保存目录，将上传的文件存放于WEB-INF目录下，不允许外界直接访问，保证上传文件的安全
+        String savePath =OUT_DIR+"image/";    //需要放到spring容器中，待修改;()
+
+        StandardMultipartHttpServletRequest req = (StandardMultipartHttpServletRequest) request;
+
+        Map<String,String[]> params = req.getParameterMap();
+        String title = CommonUtils.getMapValue("title",params)[0];
+        String content = CommonUtils.getMapValue("content",params)[0];
+        String category = CommonUtils.getMapValue("category",params)[0];
+        String authorId = CommonUtils.getMapValue("authorId",params)[0];
+        String isPrivate = CommonUtils.getMapValue("isPrivate",params)[0];
+        String communityId = CommonUtils.getMapValue("communityId",params)[0];
+
+        Map<String,String> imageUrls = new HashMap<String,String>();
+        Iterator<String> filenames=req.getFileNames();
+
+        while(filenames.hasNext()){
+            String filekey = filenames.next();
+            MultipartFile multipartFile = req.getFile(filekey);
+            String fileName =CommonUtils.mkFileName(multipartFile.getOriginalFilename()) ;
+            File saveFile = new File(savePath+fileName);
+            try {
+                multipartFile.transferTo(saveFile);
+                imageUrls.put(filekey,SERVER_URL+"/outapp/image/"+fileName);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+        ArticleEntity articleEntity = new ArticleEntity();
+        articleEntity.setTitle(title);
+        articleEntity.setCategory(category);
+        articleEntity.setCommunityId(communityId);
+        articleEntity.setContent(content);
+        articleEntity.setAuthorId(authorId);
+        articleEntity.setIsPrivate(isPrivate);
+        articleEntity.setImageUrls(JSON.toJSONString(imageUrls));
         articleService.add(articleEntity);
-        return JSON.toJSONString(BuildResponse.success());
+        return JSON.toJSONString(BuildResponse.success(JSON.toJSONString(imageUrls)));
 
     }
 

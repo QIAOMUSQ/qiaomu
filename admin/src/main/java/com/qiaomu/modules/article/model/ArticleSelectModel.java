@@ -7,6 +7,24 @@ public class ArticleSelectModel {
     private String category;
     private String title;
     private String authorId;
+    private String communityId;
+    private String isPrivate;
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
+
+    public String getIsPrivate() {
+        return isPrivate;
+    }
+
+    public void setIsPrivate(String isPrivate) {
+        this.isPrivate = isPrivate;
+    }
 
     public String getArticleId() {
         return articleId;

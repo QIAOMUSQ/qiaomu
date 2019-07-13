@@ -6,6 +6,7 @@
 	<select id="query" parameterType="com.qiaomu.modules.article.model.ArticleSelectModel" resultType="com.qiaomu.modules.article.entity.ArticleEntity">
 		select * from pluto_article
 		<where>
+			1=1
 			<if test="category != null and category !=''">
 				AND category = #{category}
 			</if>
@@ -17,6 +18,9 @@
 			</if>
 			<if test="articleId != null and articleId !=''">
 				AND articleId = #{articleId}
+			</if>
+			<if test="communityId != null and communityId !=''">
+				AND isPrivate = "0" OR communityId = #{communityId}
 			</if>
 		</where>
 	</select>
@@ -39,8 +43,8 @@
 	</update>
 
 	<insert id="insertArticle" parameterType="com.qiaomu.modules.article.entity.ArticleEntity">
-		insert into pluto_article (articleId ,content,title,category,commentId,praiseNum,authorId,createdAt,updatedAt) VALUES
-		 (#{articleId},#{content},#{title},#{category},#{commentId},#{praiseNum},#{authorId},#{createdAt},#{updatedAt})
+		insert into pluto_article (articleId ,content,title,category,commentId,praiseNum,authorId,isPrivate,communityId,imageUrls,createdAt,updatedAt) VALUES
+		 (#{articleId},#{content},#{title},#{category},#{commentId},#{praiseNum},#{authorId},#{isPrivate},#{communityId},#{imageUrls},#{createdAt},#{updatedAt})
 	</insert>
 
 	<insert id="insertArticleComment" parameterType="com.qiaomu.modules.article.entity.CommentEntity">

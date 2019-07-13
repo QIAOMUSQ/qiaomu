@@ -14,8 +14,35 @@ public class ArticleEntity {
     private String commentId;
     private Integer praiseNum;
     private String authorId;
+    private String communityId;
+    private String isPrivate;
+    private String imageUrls;
     private String createdAt;
     private String updatedAt;
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
+
+    public String getIsPrivate() {
+        return isPrivate;
+    }
+
+    public void setIsPrivate(String isPrivate) {
+        this.isPrivate = isPrivate;
+    }
+
+    public String getImageUrls() {
+        return imageUrls;
+    }
+
+    public void setImageUrls(String imageUrls) {
+        this.imageUrls = imageUrls;
+    }
+
     public String getArticleId() {
         return articleId;
     }

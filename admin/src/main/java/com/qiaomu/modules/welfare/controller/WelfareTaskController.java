@@ -3,6 +3,7 @@ package com.qiaomu.modules.welfare.controller;
 import com.alibaba.fastjson.JSON;
 import com.qiaomu.common.utils.BuildResponse;
 
+import com.qiaomu.common.utils.CommonUtils;
 import com.qiaomu.common.utils.DateUtils;
 import com.qiaomu.common.validator.Assert;
 import com.qiaomu.modules.welfare.entity.PointEntity;
@@ -15,11 +16,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+
+import static com.qiaomu.common.utils.Constant.OUT_DIR;
+import static com.qiaomu.common.utils.Constant.SERVER_URL;
 
 /**
  * Created by wenglei on 2019/6/15.
@@ -36,26 +42,56 @@ public class WelfareTaskController {
      * @return
      */
     @RequestMapping(value = "publishTask",method = RequestMethod.POST)
-    public String publishTask(TaskModel taskModel){
+    public String publishTask(HttpServletRequest request){
+
+        String savePath =OUT_DIR+"image/";    //需要放到spring容器中，待修改;()
+
+        StandardMultipartHttpServletRequest req = (StandardMultipartHttpServletRequest) request;
+
+        Map<String,String[]> params = req.getParameterMap();
+        String serviceName = CommonUtils.getMapValue("serviceName",params)[0];
+        String seviceDetail = CommonUtils.getMapValue("seviceDetail",params)[0];
+        String points = CommonUtils.getMapValue("points",params)[0];
+        String publishUserId = CommonUtils.getMapValue("publishUserId",params)[0];
+
+        Map<String,String> imageUrls = new HashMap<String,String>();
+        Iterator<String> filenames=req.getFileNames();
+
+
+        while(filenames.hasNext()){
+            String filekey = filenames.next();
+            MultipartFile multipartFile = req.getFile(filekey);
+            String fileName =CommonUtils.mkFileName(multipartFile.getOriginalFilename()) ;
+            File saveFile = new File(savePath+fileName);
+            try {
+                multipartFile.transferTo(saveFile);
+                imageUrls.put(filekey,SERVER_URL+"/outapp/image/"+fileName);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
         Date date = new Date();
         String createdTime = DateUtils.formats(date);
 
         try {
-            Integer point = Integer.valueOf(taskModel.getPoints());
+            Integer point = Integer.valueOf(points);
         }catch (Exception e){
             return JSON.toJSONString(BuildResponse.fail("任务积分只能是整数"));
         }
 
         TaskEntity taskEntity = new TaskEntity();
-        taskEntity.setPoints(taskModel.getPoints());
-        taskEntity.setServiceName(taskModel.getServiceName());
-        taskEntity.setSeviceDetail(taskModel.getSeviceDetail());
+        taskEntity.setPoints(points);
+        taskEntity.setServiceName(serviceName);
+        taskEntity.setSeviceDetail(seviceDetail);
         taskEntity.setStatus("未领取");
         taskEntity.setCreatedAt(createdTime);
         taskEntity.setUpdatedAt(createdTime);
+        taskEntity.setImageUrls(JSON.toJSONString(imageUrls));
         String serviceId = publicWelfareTaskService.newTask(taskEntity);
         TaskPublishUserEntity taskUserEntity = new TaskPublishUserEntity();
-        taskUserEntity.setPublishUserId(taskModel.getPublishUserId());
+        taskUserEntity.setPublishUserId(publishUserId);
         taskUserEntity.setServiceId(serviceId);
         taskUserEntity.setStatus("未执行");
         taskUserEntity.setCreatedAt(createdTime);

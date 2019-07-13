@@ -12,6 +12,7 @@ public class TaskEntity {
     private String seviceDetail;
     private String status;// 已领取、待领取、已取消
     private String points;
+    private String imageUrls;
     private String createdAt;
     private String updatedAt;
     public String getServiceId() {
@@ -72,4 +73,11 @@ public class TaskEntity {
     }
 
 
+    public String getImageUrls() {
+        return imageUrls;
+    }
+
+    public void setImageUrls(String imageUrls) {
+        this.imageUrls = imageUrls;
+    }
 }
