@@ -73,9 +73,14 @@ public class AESUtil {
             }
             //1.构造密钥生成器，指定为AES算法,不区分大小写
             KeyGenerator kgen = KeyGenerator.getInstance(KEY_AES);
+
+            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG" );
+            secureRandom.setSeed(key.getBytes());
+            kgen.init(128,secureRandom);
+
             //2.根据ecnodeRules规则初始化密钥生成器
             //生成一个128位的随机源,根据传入的字节数组
-            kgen.init(128, new SecureRandom(key.getBytes()));
+           // kgen.init(128, new SecureRandom(key.getBytes()));
             //3.产生原始对称密钥
             SecretKey secretKey = kgen.generateKey();
             //4.获得原始对称密钥的字节数组
@@ -142,10 +147,10 @@ public class AESUtil {
             while (scan.hasNextLine()){
                 String str2 = scan.nextLine();
                 System.out.println("输入的数据为：" + str2);
-              //  String encrypt = encrypt(str2, KEY);
-               // System.out.println("加密后：" + encrypt);
-               // String decrypt = decrypt(encrypt, KEY);
-                ///System.out.println("解密后：" + decrypt);
+               String encrypt = encrypt(str2);
+                System.out.println("加密后：" + encrypt);
+                String decrypt = decrypt(encrypt);
+                System.out.println("解密后：" + decrypt);
             }
         }catch (Exception e){
             e.printStackTrace();

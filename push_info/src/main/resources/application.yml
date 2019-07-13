@@ -10,8 +10,19 @@ server:
 
 spring:
   profiles:
-    active: prod
+    active: dev
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  jpa:
+    show-sql: true
+    format-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: false
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+
 

@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://103.26.76.116:6300/qiaomu_dev?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
-    username: qiaomu_dev
-    password: qiaomu
+    url: jdbc:mysql://127.0.0.1:3306/qiaomu_service?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+    username: root
+    password: root
     driver-class-name: com.mysql.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
@@ -37,4 +37,10 @@ logging:
   file: websocket_info.log
   config: classpath:logback-spring.xml
 
-websocketUrl: ws://localhost:8082/Websocket/websocketConnet
+nettyConfig:
+  port: 8090
+  isDistributed: true
+  ssl: true
+  webSocketPath: /nettySocket
+  serverName: iot-netty-chat
+  backlog: 2048
