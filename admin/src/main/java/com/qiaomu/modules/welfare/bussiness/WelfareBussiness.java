@@ -65,6 +65,7 @@ public class WelfareBussiness {
         Date date = new Date();
         String createdTime = DateUtils.formats(date);
         PointEntity withpoints = publicWelfareTaskService.selectPonitByUserId(publishUserId);
+        withpoints = checkPint(withpoints,publishUserId);
         Integer point = 0;
         try {
             point = Integer.valueOf(points);
