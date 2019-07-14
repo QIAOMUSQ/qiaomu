@@ -23,6 +23,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.qiaomu.common.validator.group.AddGroup;
 import com.qiaomu.common.validator.group.UpdateGroup;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -101,6 +102,7 @@ public class SysUserEntity implements Serializable {
 
     private Long companyId;
 
+    @Length(max = 20)
     private String nickName;
 
     private String sex;

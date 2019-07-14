@@ -20,28 +20,31 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Create by UncleCatMySelf in 2018/12/06
  **/
-public class NettyBootstrapServer extends AbstractBootstrapServer {
+@Service
+public class NettyBootstrapServerImpl extends AbstractBootstrapServerImpl {
 
-    private final Logger log = LoggerFactory.getLogger(NettyBootstrapServer.class);
+    private final Logger log = LoggerFactory.getLogger(NettyBootstrapServerImpl.class);
 
+    @Autowired
     private InitNetty serverBean;
-
-    public void setServerBean(InitNetty serverBean) {
-        this.serverBean = serverBean;
-    }
 
     private EventLoopGroup bossGroup;
 
     private EventLoopGroup workGroup;
 
-    ServerBootstrap bootstrap=null ;// 启动辅助类
+
+    ServerBootstrap bootstrap;// 启动辅助类
 
     /**
      * 服务开启
@@ -62,11 +65,12 @@ public class NettyBootstrapServer extends AbstractBootstrapServer {
                 .childOption(ChannelOption.TCP_NODELAY, serverBean.isNodelay())
                 .childOption(ChannelOption.SO_KEEPALIVE, serverBean.isKeepalive())
                 .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
-        bootstrap.bind(IpUtils.getHost(),serverBean.getPort()).addListener((ChannelFutureListener) channelFuture -> {
+        bootstrap.bind(IpUtils.getHost(),serverBean.getPort())
+                .addListener((ChannelFutureListener) channelFuture -> {
             if (channelFuture.isSuccess()) {
                 log.info("服务端启动成功【" + IpUtils.getHost() + ":" + serverBean.getPort() + "】");
                 AutoConfig.address = IpUtils.getHost()+":"+serverBean.getPort();
-                RedisConfig.getInstance();
+                //RedisConfig.getInstance();
             }else{
                 log.info("服务端启动失败【" + IpUtils.getHost() + ":" + serverBean.getPort() + "】");}
         });

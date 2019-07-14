@@ -2,6 +2,7 @@ package com.qiaomu.websocket.bootstrap.backmsg;
 
 
 import com.qiaomu.websocket.common.constant.Constans;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.Map;
  * 列入项目中，默认返回实现
  * Created by MySelf on 2018/11/23.
  */
+@Service
 public class InChatBackMapServiceImpl implements InChatBackMapService {
 
 

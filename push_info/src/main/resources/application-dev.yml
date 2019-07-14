@@ -37,10 +37,10 @@ logging:
   file: websocket_info.log
   config: classpath:logback-spring.xml
 
-nettyConfig:
+netty-config:
   port: 8090
-  isDistributed: true
-  ssl: true
+  distributed: true
+  ssl: false
   webSocketPath: /nettySocket
   serverName: iot-netty-chat
   backlog: 2048

@@ -2,6 +2,7 @@ package com.qiaomu.modules.app.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.qiaomu.common.utils.AESUtil;
+import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.DicRoleDeptCode;
 import com.qiaomu.common.utils.R;
 import com.qiaomu.common.validator.Assert;
@@ -10,6 +11,7 @@ import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.sys.service.UserExtendService;
 import com.qiaomu.modules.sys.shiro.ShiroUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import org.joda.time.DateTime;
@@ -65,7 +67,6 @@ public class AppUserController extends AbstractController {
                userEntity.setPassword("");
                userEntity.setSalt("");
                String session  = response.getHeader(AUTHORIZATION);
-               System.out.printf(session);
                userEntity.setSessionId(session);
                return R.ok("success",JSON.toJSON(userEntity));
            }else {
@@ -119,19 +120,18 @@ public class AppUserController extends AbstractController {
      * @return
      */
     @RequestMapping(value = "modifyPassword",method = RequestMethod.POST)
-    public R modifyPassword(String password, String newPassword) {
+    public Object modifyPassword(Long userId,String password, String newPassword) {
         Assert.isBlank(newPassword, "新密码不为能空");
+        SysUserEntity user = sysUserService.selectById(userId);
+        password = ShiroUtils.sha256(password, user.getSalt());
 
-        password = ShiroUtils.sha256(AESUtil.decrypt(password), getUser().getSalt());
-
-        newPassword = ShiroUtils.sha256(AESUtil.decrypt(newPassword), getUser().getSalt());
+        newPassword = ShiroUtils.sha256(newPassword, user.getSalt());
 
         boolean flag = this.sysUserService.updatePassword(getUserId(), password, newPassword);
         if (!flag) {
-            return R.ok("error","原密码不正确");
+            return BuildResponse.fail("原密码不正确");
         }
-
-        return R.ok();
+        return BuildResponse.success();
     }
 
     @RequestMapping(value = "logout",method = RequestMethod.GET)

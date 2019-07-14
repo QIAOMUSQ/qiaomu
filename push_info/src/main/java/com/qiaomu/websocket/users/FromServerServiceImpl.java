@@ -1,40 +1,40 @@
 package com.qiaomu.websocket.users;
 
 
-import com.qiaomu.websocket.bootstrap.channel.http.FromServerService;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by MySelf on 2019/1/3.
  */
-public enum  FromServerServiceImpl implements FromServerService {
 
-    TYPE1(1,"【系统通知】连接失败"),
-    TYPE2(2,"【系统通知】连接成功");
+public enum  FromServerServiceImpl{
 
-    private Integer code;
+    TYPE1("1","【系统通知】连接失败"),
+    TYPE2("2","【系统通知】连接成功");
+
+    private String code;
 
     private String message;
 
-    FromServerServiceImpl(Integer code, String message){
+    FromServerServiceImpl(String code, String message){
         this.code = code;
         this.message = message;
     }
 
-    public Integer getCode() {
+       public String getCode() {
         return code;
     }
 
-    public String findByCode(Object code) {
-        Integer codes = (Integer)code;
+    public static String findByCode(Object code) {
         for (FromServerServiceImpl item: FromServerServiceImpl.values()) {
-            if (item.code == codes){
+            if (item.code == code){
                 return item.message;
             }
         }
         return null;
     }
 
-    public void setCode(Integer code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
@@ -45,6 +45,7 @@ public enum  FromServerServiceImpl implements FromServerService {
     public void setMessage(String message) {
         this.message = message;
     }
+
 
 
 }

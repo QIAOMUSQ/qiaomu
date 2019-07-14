@@ -18,6 +18,9 @@ import io.netty.channel.Channel;
 import io.netty.handler.codec.http.FullHttpMessage;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.CharsetUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,22 +29,26 @@ import java.util.Map;
 /**
  * Created by MySelf on 2018/11/21.
  */
+@Service
 public class HandlerServiceImpl extends HandlerService {
 
-    private final InChatVerifyService inChatVerifyService;
+    @Autowired
+    private InChatVerifyService inChatVerifyService;
+    @Autowired
+    private  InChatBackMapService inChatBackMapService;
+    @Autowired
+    private  HttpChannelService httpChannelService;
+    @Autowired
+    private  WsChannelService websocketChannelService;
+    @Autowired
+    private  DataAsynchronousTask dataAsynchronousTask;
 
-    private final InChatBackMapService inChatBackMapService = new InChatBackMapServiceImpl();
 
-    private final HttpChannelService httpChannelService = new HttpChannelServiceImpl();
 
-    private final WsChannelService websocketChannelService = new WebSocketChannelService();
-
-    private final DataAsynchronousTask dataAsynchronousTask;
-
-    public HandlerServiceImpl(DataAsynchronousTask dataAsynchronousTask,InChatVerifyService inChatVerifyService) {
+    /*public HandlerServiceImpl(DataAsynchronousTask dataAsynchronousTask,InChatVerifyService inChatVerifyService) {
         this.dataAsynchronousTask = dataAsynchronousTask;
         this.inChatVerifyService = inChatVerifyService;
-    }
+    }*/
 
 
     @Override

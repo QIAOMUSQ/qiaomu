@@ -1,36 +1,40 @@
 package com.qiaomu.websocket.auto;
 
 
+import com.qiaomu.common.reposity.PushMessageRepository;
 import com.qiaomu.websocket.bootstrap.BootstrapServer;
-import com.qiaomu.websocket.bootstrap.NettyBootstrapServer;
+import com.qiaomu.websocket.bootstrap.NettyBootstrapServerImpl;
 import com.qiaomu.websocket.common.bean.InitNetty;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * InChat项目启动服务
  * Create by UncleCatMySelf in 2018/12/06
  **/
-public abstract class InitServer {
-
-//    private InitNetty serverBean;
+@Service
+public class InitServer {
 
     /** 静态化处理，保证唯一，确保用户启动的是他自己指定的，不是框架的
      *  一个数据配置集合
      */
-    private static InitNetty serverBean = ConfigFactory.initNetty;
+    @Autowired
+    private  InitNetty initNetty;
 
-//    public InitServer(InitNetty serverBean) {
-//        this.serverBean = serverBean;
-//    }
     /** netty服务器启动切面 */
-    static BootstrapServer bootstrapServer;
+    @Autowired
+    private BootstrapServer bootstrapServer;
+
+    @Autowired
+    private PushMessageRepository pushMessageRepository;
 
     /**
-     * 主要还是这个{@link NettyBootstrapServer},实例化想要的netty配置服务
+     * 主要还是这个{@link NettyBootstrapServerImpl},实例化想要的netty配置服务
      */
-    public static void open(){
-        if(serverBean!=null){
-            bootstrapServer = new NettyBootstrapServer();
-            bootstrapServer.setServerBean(serverBean);
+    public  void open(){
+        if(initNetty!=null){
+       /*     bootstrapServer = new NettyBootstrapServer();
+           // bootstrapServer.setServerBean(serverBean);*/
             bootstrapServer.start();
         }
     }

@@ -22,7 +22,7 @@ public interface HttpChannelService {
 
     void getList(Channel channel);
 
-    void sendInChat(String token, Map msg);
+    String sendInChat(String token, Map msg);
 
     void sendByInChat(Channel channel, SendInChat sendInChat);
 

@@ -3,6 +3,7 @@ package com.qiaomu.websocket.common.base;
 import com.qiaomu.websocket.common.bean.vo.SendServerVO;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.FullHttpMessage;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import java.util.Map;
  * 业务层伪接口
  * Created by MySelf on 2018/11/21.
  */
+@Service
 public abstract class HandlerService implements HandlerApi {
 
     /**
