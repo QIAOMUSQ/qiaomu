@@ -64,13 +64,9 @@ public class SysFileConcroller {
             try {
                 String orgName = file.getOriginalFilename();
                 Long fileSize = file.getSize();
-
                 String saveName = UUID.randomUUID().toString() + "." + orgName.substring(orgName.lastIndexOf(".") + 1, orgName.length());
-
                 File dir = new File(savePath);
-                if (!dir.exists())
-                    dir.mkdirs();
-
+                if (!dir.exists()) dir.mkdirs();
                 File newFile = new File(savePath + saveName);
                 fileEntity.setDateTime(new Date());
                 FileUtil.writeStream(newFile, file.getInputStream());
@@ -78,9 +74,8 @@ public class SysFileConcroller {
                 fileEntity.setPath(savePath + saveName);
                 fileEntity.setOrgName(orgName);
                 fileEntity.setFileSize(fileSize);
-                System.out.println("file1 = " + JSON.toJSON(fileEntity).toString() );
                 sysFileService.insertInfo(fileEntity);
-                System.out.println("file 2= " + JSON.toJSON(fileEntity).toString() );
+                System.out.println("file 2= " + JSON.toJSON(fileEntity).toString());
                 String result = JSON.toJSONString(fileEntity);
                 out.println(result);
                 out.close();

@@ -4,10 +4,13 @@ package com.qiaomu.websocket.bootstrap.channel.cache;
 import com.qiaomu.websocket.auto.AutoConfig;
 import com.qiaomu.websocket.auto.ConfigFactory;
 import com.qiaomu.websocket.auto.RedisConfig;
+import com.qiaomu.websocket.common.bean.InitNetty;
 import com.qiaomu.websocket.common.constant.NotInChatConstant;
 import com.qiaomu.websocket.common.exception.NotFindLoginChannlException;
 import com.qiaomu.websocket.common.utils.RedisUtil;
 import io.netty.channel.Channel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 
 import java.util.Map;
@@ -18,12 +21,15 @@ import java.util.concurrent.ConcurrentHashMap;
  * WebSocket链接实例本地存储
  * Created by MySelf on 2018/11/26.
  */
-public class WsCacheMap {
+@Service
+public class WsCacheMapService {
 
+    @Autowired
+    private InitNetty initNetty;
     /**
      * 存储用户标识与链接实例
      */
-    private final static Map<String,Channel> maps = new ConcurrentHashMap<String,Channel>();
+    private  Map<String,Channel> maps = new ConcurrentHashMap<String,Channel>();
 
     /**
      * 存储链接地址与用户标识
@@ -38,7 +44,8 @@ public class WsCacheMap {
     /**
      * 是否启动分布式
      */
-    private final static Boolean isDistributed = ConfigFactory.initNetty.getDistributed();
+
+   // private  Boolean isDistributed =    ;
 
     private final static String address = AutoConfig.address;
 
@@ -47,15 +54,15 @@ public class WsCacheMap {
      * @param token {@link String} 用户标签
      * @param channel {@link Channel} 链接实例
      */
-    public static void saveWs(String token,Channel channel){
+    public  void saveWs(String token,Channel channel){
         maps.put(token,channel);
-        if (isDistributed){
+        if (initNetty.getDistributed()){
             jedis.set(token, RedisUtil.convertMD5(address,token));
         }
     }
 
     /**
-     * 存储登录信息
+     * 存入redis中，存储登录信息
      * @param address 登录地址
      * @param token 用户标签
      */
@@ -68,8 +75,8 @@ public class WsCacheMap {
      * @param token {@link String} 用户标识
      * @return {@link Channel} 链接实例
      */
-    public static Channel getByToken(String token){
-        if (isDistributed){
+    public  Channel getByToken(String token){
+        if (initNetty.getDistributed()){
            if (!maps.containsKey(token)){
                //转分布式发送
                return null;
@@ -91,10 +98,10 @@ public class WsCacheMap {
      * 删除链接数据
      * @param token {@link String} 用户标识
      */
-    public static void deleteWs(String token){
+    public  void deleteWs(String token){
         try {
             maps.remove(token);
-            if (isDistributed){
+            if (initNetty.getDistributed()){
                 jedis.del(token);
             }
         }catch (NullPointerException e){
@@ -114,8 +121,8 @@ public class WsCacheMap {
      * 获取链接数
      * @return {@link Integer} 链接数
      */
-    public static Integer getSize(){
-        if (isDistributed){
+    public  Integer getSize(){
+        if (initNetty.getDistributed()){
             return jedis.keys("*").size();
         }
         return maps.size();
@@ -126,8 +133,8 @@ public class WsCacheMap {
      * @param token {@link String} 用户标识
      * @return {@link Boolean} 是否存在
      */
-    public static boolean hasToken(String token){
-        if (isDistributed){
+    public  boolean hasToken(String token){
+        if (initNetty.getDistributed()){
             return jedis.exists(token);
         }
         return maps.containsKey(token);
@@ -137,8 +144,8 @@ public class WsCacheMap {
      * 获取在线用户标签列表
      * @return {@link Set} 标识列表
      */
-    public static Set<String> getTokenList(){
-        if (isDistributed){
+    public  Set<String> getTokenList(){
+        if (initNetty.getDistributed()){
             return jedis.keys("*");
         }
         Set keys = maps.keySet();

@@ -20,7 +20,10 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Map;
@@ -28,16 +31,22 @@ import java.util.Map;
 /**
  * Create by UncleCatMySelf in 2018/12/06
  */
+@Component
 @ChannelHandler.Sharable
 public class DefaultHandler extends Handler {
 
     private final Logger log = LoggerFactory.getLogger(DefaultHandler.class);
 
-    private final HandlerApi handlerApi;
+    @Autowired
+    private  HandlerApi handlerApi;
 
-    public DefaultHandler(HandlerApi handlerApi) {
-        super(handlerApi);
-        this.handlerApi = handlerApi;
+    public  DefaultHandler defaultHandler;
+
+
+    @PostConstruct
+    public void init(){
+        defaultHandler = this;
+        defaultHandler.handlerApi= this.handlerApi;
     }
 
     @Override

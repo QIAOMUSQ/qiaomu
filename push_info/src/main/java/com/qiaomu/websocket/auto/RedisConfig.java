@@ -18,16 +18,17 @@ public class RedisConfig {
 
     public static Jedis jedis;
 
+
     /**
      * 如果配置启动分布式，则自动初始化jedis
      */
-    private RedisConfig(){
+   /* private RedisConfig(){
         if (ConfigFactory.initNetty.getDistributed()){
             this.jedis = new Jedis(ConfigFactory.RedisIP);
             log.info(LogConstant.REDIS_START + jedis.ping());
         }
     }
-
+*/
     public static RedisConfig getInstance(){
         return instance;
     }

@@ -1,6 +1,5 @@
 package com.qiaomu.websocket.common.base;
 
-
 import com.qiaomu.websocket.common.constant.LogConstant;
 import com.qiaomu.websocket.common.exception.NotFindLoginChannlException;
 import io.netty.channel.ChannelHandlerContext;
@@ -10,20 +9,31 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 /**
  * Netty实现初始层
  * Create by UncleCatMySelf in 2018/12/06
  */
+@Component
 public abstract class Handler extends SimpleChannelInboundHandler<Object> {
 
     private static final Logger log = LoggerFactory.getLogger(Handler.class);
 
-    HandlerApi handlerApi;
+    @Autowired
+    private HandlerApi handlerApi;
 
-    public Handler(HandlerApi handlerApi){
-        this.handlerApi = handlerApi;
-    }
+
+    //private Handler handler;
+
+   /* @PostConstruct
+    public void init(){
+        handler= this;
+        handler.handlerApi = this.handlerApi;
+    }*/
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {

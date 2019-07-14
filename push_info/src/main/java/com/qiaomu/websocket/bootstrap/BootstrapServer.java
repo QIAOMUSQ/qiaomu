@@ -10,7 +10,7 @@ public interface BootstrapServer {
 
     void shutdown();
 
-    void setServerBean(InitNetty serverBean);
+    //void setServerBean(InitNetty serverBean);
 
     void start();
 

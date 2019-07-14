@@ -2,42 +2,36 @@ package com.qiaomu.websocket.common.bean;
 
 
 import com.qiaomu.websocket.bootstrap.handler.DefaultHandler;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 /**
  * 初始化Netty配置
  * Create by UncleCatMySelf in 2018/12/06
  */
+
 @Configuration
-@ConfigurationProperties(prefix = "nettyConfig")
+@ConfigurationProperties(prefix = "netty-config")
 public class InitNetty {
 
     /** 通信地址 */
-    @Value("${port}")
     private int port;
     /**
      * 服务端接受连接的队列长度，如果队列已满，客户端连接将被拒绝
      */
-    @Value("${backlog}")
     private int backlog;
 
     /**服务名称*/
-    @Value("${serverName}")
     private String serverName;
 
-
-    @Value("${webSocketPath}")
     private String webSocketPath;
 
     /** 是否启动分布式 */
-    @Value("${isDistributed}")
+
     private Boolean isDistributed ;
 
     /** 是否启动加密 */
-    @Value("${ssl}")
+
     private boolean ssl;
 
     /**
@@ -52,8 +46,6 @@ public class InitNetty {
 
     /**是否保持链接**/
     private boolean keepalive = true;
-
-
 
     private boolean nodelay = true;
 
@@ -80,7 +72,7 @@ public class InitNetty {
 
     private String jksCertificatePassword = "123456";
 
-    private Class<DefaultHandler> webSocketHandler = DefaultHandler.class;
+    //private Class<DefaultHandler> webSocketHandler = DefaultHandler.class;
 
     public Boolean getDistributed() {
         return isDistributed;
@@ -237,10 +229,17 @@ public class InitNetty {
         return webSocketPath;
     }
 
-
-    public Class<DefaultHandler> getWebSocketHandler() {
-        return webSocketHandler;
+    public void setServerName(String serverName) {
+        this.serverName = serverName;
     }
+
+    public void setWebSocketPath(String webSocketPath) {
+        this.webSocketPath = webSocketPath;
+    }
+
+   /* public Class<DefaultHandler> getWebSocketHandler() {
+        return webSocketHandler;
+    }*/
 
     public boolean isSsl() {
         return ssl;
@@ -273,4 +272,33 @@ public class InitNetty {
     public void setJksCertificatePassword(String jksCertificatePassword) {
         this.jksCertificatePassword = jksCertificatePassword;
     }
+
+    public void setKeepalive(boolean keepalive) {
+        this.keepalive = keepalive;
+    }
+
+    public void setNodelay(boolean nodelay) {
+        this.nodelay = nodelay;
+    }
+
+    public void setReuseaddr(boolean reuseaddr) {
+        this.reuseaddr = reuseaddr;
+    }
+
+    public int getSndbuf() {
+        return sndbuf;
+    }
+
+    public void setSndbuf(int sndbuf) {
+        this.sndbuf = sndbuf;
+    }
+
+    public void setMaxContext(int maxContext) {
+        this.maxContext = maxContext;
+    }
+
+   /* public void setWebSocketHandler(Class<DefaultHandler> webSocketHandler) {
+        this.webSocketHandler = webSocketHandler;
+    }*/
+
 }

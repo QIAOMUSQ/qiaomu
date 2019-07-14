@@ -19,7 +19,7 @@
         <module>common</module>
         <module>admin</module>
         <module>push_info</module>
-        <!-- <module>api</module>
+         <!-- <module>api</module>
          <module>generator</module>
          <module>application</module>-->
     </modules>

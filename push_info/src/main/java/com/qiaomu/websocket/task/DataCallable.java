@@ -4,6 +4,7 @@ package com.qiaomu.websocket.task;
 
 import com.qiaomu.websocket.bootstrap.data.InChatToDataBaseService;
 import com.qiaomu.websocket.common.utils.MessageChangeUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -15,7 +16,8 @@ import java.util.concurrent.Callable;
 public class DataCallable implements Callable<Boolean>{
 
     /** 用户读数据接口伪实现 */
-    private final InChatToDataBaseService inChatToDataBaseService;
+    @Autowired
+    private  InChatToDataBaseService inChatToDataBaseService;
     /** 消息数据 */
     private final Map<String,Object> maps;
 

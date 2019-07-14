@@ -5,6 +5,8 @@ import com.qiaomu.websocket.bootstrap.data.InChatToDataBaseService;
 import com.qiaomu.websocket.common.constant.LogConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -16,17 +18,16 @@ import java.util.concurrent.FutureTask;
  * 数据异步转移方法
  * Created by MySelf on 2018/12/3.
  */
+@Service
 public class DataAsynchronousTask {
 
     private final Logger log = LoggerFactory.getLogger(DataAsynchronousTask.class);
 
     /** 用户读数据接口伪实现 */
-    private final InChatToDataBaseService inChatToDataBaseService;
+    @Autowired
+    private  InChatToDataBaseService inChatToDataBaseService;
 
 
-    public DataAsynchronousTask(InChatToDataBaseService inChatToDataBaseService){
-        this.inChatToDataBaseService = inChatToDataBaseService;
-    }
 
     /**
      * 将Netty数据消息借助这个方法已新线程发送给用户实现读方法

@@ -1,16 +1,12 @@
 package com.qiaomu.websocket.bootstrap;
 
 
-
-import com.qiaomu.websocket.auto.ConfigFactory;
 import com.qiaomu.websocket.bootstrap.handler.DefaultHandler;
-import com.qiaomu.websocket.common.base.HandlerServiceImpl;
 import com.qiaomu.websocket.common.bean.InitNetty;
 import com.qiaomu.websocket.common.constant.BootstrapConstant;
 import com.qiaomu.websocket.common.constant.NotInChatConstant;
 import com.qiaomu.websocket.common.ssl.SecureSocketSslContextFactory;
 import com.qiaomu.websocket.common.utils.SslUtil;
-import com.qiaomu.websocket.task.DataAsynchronousTask;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
@@ -20,6 +16,8 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.internal.SystemPropertyUtil;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -31,11 +29,16 @@ import java.util.concurrent.Executors;
 /**
  * Create by UncleCatMySelf in 2018/12/06
  **/
-public abstract class AbstractBootstrapServer implements BootstrapServer {
+@Service
+public abstract class AbstractBootstrapServerImpl implements BootstrapServer {
 
-    private   String PROTOCOL = "TLS";
+    private  String PROTOCOL = "TLS";
 
-    private   SSLContext SERVER_CONTEXT;
+    private  SSLContext SERVER_CONTEXT;
+
+
+    @Autowired
+    private DefaultHandler defaultHandler;
 
     /**
      * @param channelPipeline  channelPipeline
@@ -59,7 +62,7 @@ public abstract class AbstractBootstrapServer implements BootstrapServer {
         }
         intProtocolHandler(channelPipeline,serverBean);
         channelPipeline.addLast(new IdleStateHandler(serverBean.getHeart(),0,0));
-        channelPipeline.addLast(new DefaultHandler(new HandlerServiceImpl(new DataAsynchronousTask(ConfigFactory.inChatToDataBaseService),ConfigFactory.inChatVerifyService)));
+        channelPipeline.addLast("DefaultHandler",defaultHandler);
     }
 
     private  void intProtocolHandler(ChannelPipeline channelPipeline, InitNetty serverBean){

@@ -2,10 +2,12 @@ package com.qiaomu.websocket.users;
 
 import com.alibaba.fastjson.JSONArray;
 import com.qiaomu.websocket.bootstrap.verify.InChatVerifyService;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by MySelf on 2019/1/3.
  */
+@Service
 public class VerifyServiceImpl implements InChatVerifyService {
 
 
