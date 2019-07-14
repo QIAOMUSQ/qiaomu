@@ -35,14 +35,11 @@ public class PushInfoApplication implements InitializingBean {
 
     public static void main(String[] args) {
         SpringApplication.run(PushInfoApplication.class,args);
-      //  new InitServer().open();
-
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
         System.out.println(this.initNetty);
-       // new InitServer().open();
         initServer.open();
     }
 }

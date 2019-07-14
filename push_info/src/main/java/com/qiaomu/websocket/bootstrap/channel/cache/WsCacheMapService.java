@@ -10,12 +10,15 @@ import com.qiaomu.websocket.common.exception.NotFindLoginChannlException;
 import com.qiaomu.websocket.common.utils.RedisUtil;
 import io.netty.channel.Channel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.qiaomu.websocket.auto.RedisConfig.jedis;
 
 /**
  * WebSocket链接实例本地存储
@@ -39,8 +42,10 @@ public class WsCacheMapService {
     /**
      * Redis连接实例
      */
-    private final static Jedis jedis = RedisConfig.jedis;
+   // private final static Jedis jedis = RedisConfig.jedis;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
     /**
      * 是否启动分布式
      */
@@ -57,7 +62,7 @@ public class WsCacheMapService {
     public  void saveWs(String token,Channel channel){
         maps.put(token,channel);
         if (initNetty.getDistributed()){
-            jedis.set(token, RedisUtil.convertMD5(address,token));
+            redisTemplate.opsForValue().set(token,RedisUtil.convertMD5(address,token));
         }
     }
 
@@ -66,7 +71,7 @@ public class WsCacheMapService {
      * @param address 登录地址
      * @param token 用户标签
      */
-    public static void saveAd(String address,String token){
+    public  void saveAd(String address,String token){
         addMaps.put(address, token);
     }
 
@@ -90,7 +95,7 @@ public class WsCacheMapService {
      * @param address {@link String} 链接地址
      * @return {@link String}
      */
-    public static String getByAddress(String address){
+    public  String getByAddress(String address){
         return addMaps.get(address);
     }
 
@@ -102,7 +107,7 @@ public class WsCacheMapService {
         try {
             maps.remove(token);
             if (initNetty.getDistributed()){
-                jedis.del(token);
+                redisTemplate.delete(token);
             }
         }catch (NullPointerException e){
             throw new NotFindLoginChannlException(NotInChatConstant.Not_Login);
@@ -113,7 +118,7 @@ public class WsCacheMapService {
      * 删除链接地址
      * @param address
      */
-    public static void deleteAd(String address){
+    public  void deleteAd(String address){
         addMaps.remove(address);
     }
 
@@ -123,7 +128,7 @@ public class WsCacheMapService {
      */
     public  Integer getSize(){
         if (initNetty.getDistributed()){
-            return jedis.keys("*").size();
+            return redisTemplate.keys("*").size();
         }
         return maps.size();
     }
@@ -135,7 +140,8 @@ public class WsCacheMapService {
      */
     public  boolean hasToken(String token){
         if (initNetty.getDistributed()){
-            return jedis.exists(token);
+
+            return redisTemplate.hasKey(token);
         }
         return maps.containsKey(token);
     }
@@ -146,13 +152,13 @@ public class WsCacheMapService {
      */
     public  Set<String> getTokenList(){
         if (initNetty.getDistributed()){
-            return jedis.keys("*");
+            return redisTemplate.keys("*");
         }
         Set keys = maps.keySet();
         return keys;
     }
 
-    public static String getByJedis(String token) {
-        return jedis.get(token);
+    public String getByJedis(String token) {
+        return (String) redisTemplate.opsForValue().get(token);
     }
 }

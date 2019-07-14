@@ -39,7 +39,7 @@ logging:
 
 netty-config:
   port: 8090
-  isDistributed: true
+  distributed: true
   ssl: false
   webSocketPath: /nettySocket
   serverName: iot-netty-chat

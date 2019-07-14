@@ -21,8 +21,12 @@ public class WebSocketChannelService implements WsChannelService {
 
     @Override
     public void loginWsSuccess(Channel channel, String token) {
-        wsCacheMap.saveWs(token,channel);
-        wsCacheMap.saveAd(channel.remoteAddress().toString(),token);
+        try {
+            wsCacheMap.saveWs(token,channel);
+            wsCacheMap.saveAd(channel.remoteAddress().toString(),token);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -37,7 +41,7 @@ public class WebSocketChannelService implements WsChannelService {
 
     @Override
     public void close(Channel channel) {
-        String token = WsCacheMapService.getByAddress(channel.remoteAddress().toString());
+        String token = wsCacheMap.getByAddress(channel.remoteAddress().toString());
         wsCacheMap.deleteAd(channel.remoteAddress().toString());
         wsCacheMap.deleteWs(token);
         channel.close();

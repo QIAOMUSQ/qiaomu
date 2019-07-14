@@ -67,12 +67,7 @@ public class AppUserController extends AbstractController {
                userEntity.setPassword("");
                userEntity.setSalt("");
                String session  = response.getHeader(AUTHORIZATION);
-               System.out.printf(session);
                userEntity.setSessionId(session);
-               if(StringUtils.isNotBlank(userEntity.getRealName())){
-                   userEntity.setNickName(AESUtil.decrypt(userEntity.getRealName()));
-               }
-
                return R.ok("success",JSON.toJSON(userEntity));
            }else {
                return R.ok("error","客户端出现问题");

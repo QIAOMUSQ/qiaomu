@@ -28,7 +28,7 @@ public class InitNetty {
 
     /** 是否启动分布式 */
 
-    private Boolean isDistributed ;
+    private Boolean distributed ;
 
     /** 是否启动加密 */
 
@@ -74,12 +74,13 @@ public class InitNetty {
 
     //private Class<DefaultHandler> webSocketHandler = DefaultHandler.class;
 
+
     public Boolean getDistributed() {
-        return isDistributed;
+        return distributed;
     }
 
     public void setDistributed(Boolean distributed) {
-        isDistributed = distributed;
+        this.distributed = distributed;
     }
 
     /**
