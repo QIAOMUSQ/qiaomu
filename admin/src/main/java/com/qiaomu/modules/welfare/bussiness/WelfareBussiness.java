@@ -364,5 +364,9 @@ public class WelfareBussiness {
 
     }
 
+    public List<TaskEntity> queryAllTask(String communityId){
+        return publicWelfareTaskService.queryAllTask(communityId);
+    }
+
 
 }

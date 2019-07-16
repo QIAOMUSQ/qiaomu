@@ -33,7 +33,7 @@ public interface WelfareTaskDao extends BaseMapper<InvitationEntity> {
     List<TaskEntity> queryAllRuningTask1(String userId);
     List<TaskEntity> queryAllRuningTask2(String userId);
 
-
+    List<TaskEntity> queryAllTask(String communityId);
     void updateTask(TaskEntity TaskEntity);
     void updateTaskUser(TaskPublishUserEntity taskUserEntity);
     void updateTaskRecevieUser(TaskRecevieUserEntity taskRecevieUserEntity);
