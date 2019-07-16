@@ -9,8 +9,8 @@
 	</resultMap>
 	<!-- 根据key，更新value -->
 	<insert id="newTask" parameterType="com.qiaomu.modules.welfare.entity.TaskEntity" >
-		insert into welfare_task (serviceId ,serviceName,seviceDetail,status,points,imageUrls,createdAt,updatedAt) VALUES
-		(#{serviceId} ,#{serviceName},#{seviceDetail},#{status},#{points},#{imageUrls},#{createdAt},#{updatedAt})
+		insert into welfare_task (serviceId ,serviceName,seviceDetail,communityId,status,points,imageUrls,createdAt,updatedAt) VALUES
+		(#{serviceId} ,#{serviceName},#{seviceDetail},#{communityId},#{status},#{points},#{imageUrls},#{createdAt},#{updatedAt})
 	</insert>
 
 	<insert id="newTaskUser" parameterType="com.qiaomu.modules.welfare.entity.TaskPublishUserEntity" >
@@ -30,7 +30,9 @@
 		(#{userId} ,#{points},#{createdAt},#{updatedAt})
 	</insert>
 
-
+	<select id="queryAllTask" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskEntity">
+		select * from welfare_task WHERE status="未领取" and communityId=#{communityId} ORDER  by createdAt Limit 100
+	</select>
 	<select id="queryTask" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskEntity">
 		select * from welfare_task WHERE serviceId = #{serviceId}
 	</select>
@@ -74,7 +76,7 @@
 	</select>
 
 	<select id="selectTopPointUser" parameterType="String" resultMap="pointForm">
-		select  a.points ,b.username,b.real_name from welfare_points_user as a JOIN sys_user as b where a.userId=b.user_id ORDER by points DESC limit 20
+		select  a.points ,b.username,b.real_name from welfare_points_user as a JOIN sys_user as b where a.userId=b.user_id and a.communityId=#{communityId} ORDER by ABS(a.points) DESC limit 20
 </select>
 	<update id="updateTask" parameterType="com.qiaomu.modules.welfare.entity.TaskEntity">
 		update welfare_task set

@@ -62,7 +62,17 @@ public class WelfareTaskController {
         return JSON.toJSONString(BuildResponse.success(tasks));
 
     }
+    /**
+     * 查询所有发布的任务
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "queryAllTask",method = RequestMethod.POST)
+    public String queryAllTask(String communityId){
+        List<TaskEntity>  tasks = welfareBussiness.queryAllTask(communityId);
+        return JSON.toJSONString(BuildResponse.success(tasks));
 
+    }
     /**
      * 查询所有执行中的任务
      * @param
@@ -211,8 +221,8 @@ public class WelfareTaskController {
      * @return
      */
     @RequestMapping(value = "rankByGold",method = RequestMethod.POST)
-    public String rankByGold(){
-        List<PointRankForm> result = welfareBussiness.rankByGold();
+    public String rankByGold(String communityId){
+        List<PointRankForm> result = welfareBussiness.rankByGold(communityId);
         return JSON.toJSONString(BuildResponse.success(result));
     }
 }

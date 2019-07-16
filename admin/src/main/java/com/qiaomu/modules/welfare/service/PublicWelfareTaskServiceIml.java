@@ -101,8 +101,13 @@ public class PublicWelfareTaskServiceIml implements PublicWelfareTaskService {
     }
 
     @Override
-    public List<PointRankForm> selectTopPointUser() {
-        return welfareTaskDao.selectTopPointUser();
+    public List<PointRankForm> selectTopPointUser(String communityId) {
+        return welfareTaskDao.selectTopPointUser(communityId);
+    }
+
+    @Override
+    public List<TaskEntity> queryAllTask(String communityId) {
+        return welfareTaskDao.queryAllTask(communityId);
     }
 
     @Override

@@ -12,6 +12,7 @@ public class TaskEntity {
     private String seviceDetail;
     private String status;// 已领取、待领取、已取消
     private String points;
+    private String communityId;
     private String imageUrls;
     private String createdAt;
     private String updatedAt;
@@ -79,5 +80,13 @@ public class TaskEntity {
 
     public void setImageUrls(String imageUrls) {
         this.imageUrls = imageUrls;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }
