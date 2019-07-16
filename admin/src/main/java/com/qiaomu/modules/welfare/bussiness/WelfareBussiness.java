@@ -43,6 +43,8 @@ public class WelfareBussiness {
         String seviceDetail = CommonUtils.getMapValue("seviceDetail",params)[0];
         String points = CommonUtils.getMapValue("points",params)[0];
         String publishUserId = CommonUtils.getMapValue("publishUserId",params)[0];
+        String communityId = CommonUtils.getMapValue("communityId",params)[0];
+
 
         Map<String,String> imageUrls = new HashMap<String,String>();
         Iterator<String> filenames=req.getFileNames();
@@ -81,6 +83,7 @@ public class WelfareBussiness {
 
         TaskEntity taskEntity = new TaskEntity();
         taskEntity.setPoints(points);
+        taskEntity.setCommunityId(communityId);
         taskEntity.setServiceName(serviceName);
         taskEntity.setSeviceDetail(seviceDetail);
         taskEntity.setStatus(UNGET.value);
@@ -358,8 +361,8 @@ public class WelfareBussiness {
         return tasks;
     }
 
-    public List<PointRankForm> rankByGold(){
-        List<PointRankForm> result = publicWelfareTaskService.selectTopPointUser();
+    public List<PointRankForm> rankByGold(String communityId){
+        List<PointRankForm> result = publicWelfareTaskService.selectTopPointUser(communityId);
         return result;
 
     }

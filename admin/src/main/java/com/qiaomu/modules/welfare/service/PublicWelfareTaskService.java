@@ -30,7 +30,7 @@ public interface PublicWelfareTaskService {
     List<TaskEntity> queryAllunReviewTask(String receiveUserId);
     void updatePonit(PointEntity pointEntity);
     PointEntity selectPonitByUserId(String userId);
-    List<PointRankForm> selectTopPointUser();
+    List<PointRankForm> selectTopPointUser(String communityId);
     List<TaskEntity> queryAllTask(String communityId);
     List<TaskEntity> queryAllSubmitReviewTask(String receiveUserId);
     List<TaskEntity> queryAllRuningTask1(String userId);

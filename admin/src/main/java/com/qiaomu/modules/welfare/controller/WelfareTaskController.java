@@ -221,8 +221,8 @@ public class WelfareTaskController {
      * @return
      */
     @RequestMapping(value = "rankByGold",method = RequestMethod.POST)
-    public String rankByGold(){
-        List<PointRankForm> result = welfareBussiness.rankByGold();
+    public String rankByGold(String communityId){
+        List<PointRankForm> result = welfareBussiness.rankByGold(communityId);
         return JSON.toJSONString(BuildResponse.success(result));
     }
 }
