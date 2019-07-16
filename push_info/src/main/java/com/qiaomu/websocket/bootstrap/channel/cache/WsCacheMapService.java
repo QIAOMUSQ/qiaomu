@@ -2,8 +2,6 @@ package com.qiaomu.websocket.bootstrap.channel.cache;
 
 
 import com.qiaomu.websocket.auto.AutoConfig;
-import com.qiaomu.websocket.auto.ConfigFactory;
-import com.qiaomu.websocket.auto.RedisConfig;
 import com.qiaomu.websocket.common.bean.InitNetty;
 import com.qiaomu.websocket.common.constant.NotInChatConstant;
 import com.qiaomu.websocket.common.exception.NotFindLoginChannlException;
@@ -12,13 +10,10 @@ import io.netty.channel.Channel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import redis.clients.jedis.Jedis;
 
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static com.qiaomu.websocket.auto.RedisConfig.jedis;
 
 /**
  * WebSocket链接实例本地存储
@@ -39,18 +34,11 @@ public class WsCacheMapService {
      */
     private final static Map<String,String> addMaps = new ConcurrentHashMap<>();
 
-    /**
-     * Redis连接实例
-     */
-   // private final static Jedis jedis = RedisConfig.jedis;
-
     @Autowired
     private RedisTemplate redisTemplate;
     /**
      * 是否启动分布式
      */
-
-   // private  Boolean isDistributed =    ;
 
     private final static String address = AutoConfig.address;
 
@@ -81,6 +69,7 @@ public class WsCacheMapService {
      * @return {@link Channel} 链接实例
      */
     public  Channel getByToken(String token){
+        //若是分布式
         if (initNetty.getDistributed()){
            if (!maps.containsKey(token)){
                //转分布式发送

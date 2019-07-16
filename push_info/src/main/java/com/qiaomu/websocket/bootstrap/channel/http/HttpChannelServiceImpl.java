@@ -35,8 +35,6 @@ public class HttpChannelServiceImpl implements HttpChannelService {
 
     private static final Logger log = LoggerFactory.getLogger(HttpChannelServiceImpl.class);
 
-   /* @Autowired
-    private FromServerServiceImpl fromServerService;*/
 
     @Autowired
     private WsCacheMapService cacheMap;
@@ -116,6 +114,7 @@ public class HttpChannelServiceImpl implements HttpChannelService {
 
     @Override
     public String sendInChat(String token, Map msg) {
+        //从redis 中获取用户登录的服务器地址
         String tokens = cacheMap.getByJedis(token);
         String address = RedisUtil.getAddress(RedisUtil.convertMD5(tokens));
         String[] str = address.split(":");

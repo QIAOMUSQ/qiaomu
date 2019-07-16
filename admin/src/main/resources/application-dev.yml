@@ -59,3 +59,5 @@ logging:
   level.com.qiaomu: info
   path: logs/
   file: admin.log
+
+web-socket-url: 127.0.0.1:8081

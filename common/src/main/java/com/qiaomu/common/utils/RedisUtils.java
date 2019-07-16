@@ -106,4 +106,8 @@ public class RedisUtils {
     private <T> T fromJson(String json, Class<T> clazz){
         return JSON.parseObject(json, clazz);
     }
+
+    public void opsForListLeftPush(String key, Object object){
+        listOperations.leftPush(key,object);
+    }
 }

@@ -27,7 +27,8 @@ public class DataAsynchronousTask {
     @Autowired
     private  InChatToDataBaseService inChatToDataBaseService;
 
-
+  //  @Autowired
+    //private ExecutorService executorService;
 
     /**
      * 将Netty数据消息借助这个方法已新线程发送给用户实现读方法

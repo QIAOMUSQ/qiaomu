@@ -8,6 +8,11 @@ import com.alibaba.fastjson.JSONArray;
  */
 public interface InChatVerifyService {
 
+    /**
+     * token 验证
+     * @param token
+     * @return
+     */
     boolean verifyToken(String token);
 
     /**

@@ -33,8 +33,6 @@ public class InitServer {
      */
     public  void open(){
         if(initNetty!=null){
-       /*     bootstrapServer = new NettyBootstrapServer();
-           // bootstrapServer.setServerBean(serverBean);*/
             bootstrapServer.start();
         }
     }

@@ -22,6 +22,12 @@ public interface HttpChannelService {
 
     void getList(Channel channel);
 
+    /**
+     * 转分布式发送
+     * @param token token(手机号码)
+     * @param msg  消息
+     * @return
+     */
     String sendInChat(String token, Map msg);
 
     void sendByInChat(Channel channel, SendInChat sendInChat);

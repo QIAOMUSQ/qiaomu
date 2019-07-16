@@ -1,6 +1,8 @@
 package com.qiaomu.websocket.bootstrap.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.qiaomu.common.entity.PushMessage;
+import com.qiaomu.common.reposity.PushMessageRepository;
 import com.qiaomu.websocket.common.base.Handler;
 import com.qiaomu.websocket.common.base.HandlerApi;
 import com.qiaomu.websocket.common.base.HandlerService;
@@ -18,6 +20,7 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +42,9 @@ public class DefaultHandler extends Handler {
 
     @Autowired
     private  HandlerApi handlerApi;
+
+    @Autowired
+    private PushMessageRepository messageRepository;
 
     public  DefaultHandler defaultHandler;
 
@@ -145,6 +151,9 @@ public class DefaultHandler extends Handler {
                 handlerService.verify(channel,maps);
                 handlerService.sendPhotoToMe(channel,maps);
                 break;
+            //消息发送成功返回的安全码
+            case Constans.SECURITY_CODE:
+                changeStatusMessageInfo(maps);
             default:
                 break;
         }
@@ -160,5 +169,21 @@ public class DefaultHandler extends Handler {
 //        log.error("exception",cause);
         log.info(LogConstant.EXCEPTIONCAUGHT+ctx.channel().remoteAddress().toString()+LogConstant.DISCONNECT);
         ctx.close();
+    }
+
+    /**
+     * 用户发送给信息成功的回调函数
+     * 更改该条信息的状态
+     * @param maps
+     */
+    private void changeStatusMessageInfo(Map<String,Object> maps){
+        String ok = (String) maps.get("ok");
+        Long messageId = (Long)maps.get("messageId");
+        if(StringUtils.isNotBlank(ok) && messageId!=null){
+            PushMessage message = messageRepository.getOne(messageId);
+            message.setStatus(true);
+            messageRepository.save(message);
+        }
+
     }
 }

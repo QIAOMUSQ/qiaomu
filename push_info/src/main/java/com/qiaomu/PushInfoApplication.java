@@ -30,6 +30,7 @@ public class PushInfoApplication implements InitializingBean {
     private PushMessageRepository pushMessageRepository;
 
 
+
     @Autowired
     private InitServer initServer;
 
@@ -39,7 +40,7 @@ public class PushInfoApplication implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        System.out.println(this.initNetty);
         initServer.open();
+        //redisGetMessage.startRedisMessage();
     }
 }

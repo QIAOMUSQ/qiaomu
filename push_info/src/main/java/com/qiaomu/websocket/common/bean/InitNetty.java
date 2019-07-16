@@ -1,7 +1,6 @@
 package com.qiaomu.websocket.common.bean;
 
 
-import com.qiaomu.websocket.bootstrap.handler.DefaultHandler;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 

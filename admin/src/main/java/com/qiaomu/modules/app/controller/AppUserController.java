@@ -160,4 +160,14 @@ public class AppUserController extends AbstractController {
 
     }
 
+    /**
+     * 根据用户ID 获取用户信息
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "getUserInfoByUserId")
+    public Object getUserInfoById(Long userId){
+        return BuildResponse.success(JSON.toJSON(sysUserService.selectById(userId)));
+    }
+
 }

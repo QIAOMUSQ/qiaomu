@@ -22,6 +22,7 @@ public class HttpUtil {
         System.out.println(url);
         HttpMethod method = msg.method();
         String meName = method.name();
+        //获取用户数
         if (url.equals(HttpConstant.URI_GETSIZE) && meName.equals(HttpConstant.GET)){
             return HttpConstant.GETSIZE;
         }else if (url.equals(HttpConstant.URI_SENDFROMSERVER) && meName.equals(HttpConstant.POST)){

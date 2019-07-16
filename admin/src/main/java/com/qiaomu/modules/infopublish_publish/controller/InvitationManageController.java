@@ -20,7 +20,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping(value = "invitation")
-public class InvitationManageController extends AbstractController{
+public class InvitationManageController extends AbstractController {
     @Autowired
     private InvitationService invitationService;
 

@@ -2,7 +2,6 @@ package com.qiaomu.websocket.bootstrap;
 
 
 import com.qiaomu.websocket.auto.AutoConfig;
-import com.qiaomu.websocket.auto.RedisConfig;
 import com.qiaomu.websocket.common.bean.InitNetty;
 import com.qiaomu.websocket.common.ip.IpUtils;
 import com.qiaomu.websocket.common.utils.RemotingUtil;
@@ -21,10 +20,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -69,6 +66,7 @@ public class NettyBootstrapServerImpl extends AbstractBootstrapServerImpl {
                 .addListener((ChannelFutureListener) channelFuture -> {
             if (channelFuture.isSuccess()) {
                 log.info("服务端启动成功【" + IpUtils.getHost() + ":" + serverBean.getPort() + "】");
+                //将本服务的地址信息存入自动配置类中
                 AutoConfig.address = IpUtils.getHost()+":"+serverBean.getPort();
                 //RedisConfig.getInstance();
             }else{

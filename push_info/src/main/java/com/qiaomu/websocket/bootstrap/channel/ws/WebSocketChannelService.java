@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 /**
- * Created by MySelf on 2018/11/26.
+ *  聊天业务消息处理
+ *
  */
 @Service
 public class WebSocketChannelService implements WsChannelService {
@@ -22,7 +23,9 @@ public class WebSocketChannelService implements WsChannelService {
     @Override
     public void loginWsSuccess(Channel channel, String token) {
         try {
+            //存储连接
             wsCacheMap.saveWs(token,channel);
+            //存储入redis
             wsCacheMap.saveAd(channel.remoteAddress().toString(),token);
         }catch (Exception e){
             e.printStackTrace();
