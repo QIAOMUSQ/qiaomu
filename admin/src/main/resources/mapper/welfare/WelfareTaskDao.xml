@@ -31,7 +31,7 @@
 	</insert>
 
 	<select id="queryAllTask" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskEntity">
-		select * from welfare_task WHERE status="未领取" ORDER  by createdAt Limit 100
+		select * from welfare_task WHERE status="未领取" and communityId=#{communityId} ORDER  by createdAt Limit 100
 	</select>
 	<select id="queryTask" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskEntity">
 		select * from welfare_task WHERE serviceId = #{serviceId}
