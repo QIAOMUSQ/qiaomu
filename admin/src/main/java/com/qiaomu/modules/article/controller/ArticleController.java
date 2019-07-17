@@ -158,8 +158,9 @@ public class ArticleController extends AbstractController{
      * @return
      */
     @RequestMapping(value = "queryAll",method = RequestMethod.POST)
-    public String queryAll(){
+    public String queryAll(String communityId){
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
+        articleSelectModel.setCommunityId(communityId);
         List<ArticleEntity> articles = articleService.query(articleSelectModel);
         return JSON.toJSONString(BuildResponse.success(articles));
 

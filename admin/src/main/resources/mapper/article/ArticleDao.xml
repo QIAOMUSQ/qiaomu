@@ -20,7 +20,7 @@
 				AND articleId = #{articleId}
 			</if>
 			<if test="communityId != null and communityId !=''">
-				AND isPrivate = "0" OR communityId = #{communityId}
+				AND (isPrivate = "0" OR communityId = #{communityId})
 			</if>
 		</where>
 	</select>
