@@ -76,7 +76,9 @@
 	</select>
 
 	<select id="selectTopPointUser" parameterType="String" resultMap="pointForm">
-		select  a.points ,b.username,b.real_name from welfare_points_user as a JOIN sys_user as b where a.userId=b.user_id and a.communityId=#{communityId} ORDER by ABS(a.points) DESC limit 20
+		select  a.points ,b.username,b.real_name from welfare_points_user as a JOIN sys_user as b
+		where a.userId=b.user_id and a.userId in (select  user_id from yw_user_extend where community_id=#{community_id})
+		ORDER by ABS(a.points) DESC limit 20
 </select>
 	<update id="updateTask" parameterType="com.qiaomu.modules.welfare.entity.TaskEntity">
 		update welfare_task set
