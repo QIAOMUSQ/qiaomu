@@ -25,9 +25,14 @@ public class PushMessage {
      *  0:推送到个人
      *  1：推送到群组
      *  2：推送到社区
-     *  4：推送到全部用户
+     *  3：推送到全部用户
      */
     private String type;
+    /**
+     * 消息类型
+     * 1.
+     */
+    private String infoType;
     private String message; //推送信息
     private Long communityId;   //被推送人的社区id
     private boolean status; //状态，是否已经推送 true:已推送 false:未推送
@@ -102,5 +107,13 @@ public class PushMessage {
 
     public void setUserPhone(String userPhone) {
         this.userPhone = userPhone;
+    }
+
+    public String getInfoType() {
+        return infoType;
+    }
+
+    public void setInfoType(String infoType) {
+        this.infoType = infoType;
     }
 }

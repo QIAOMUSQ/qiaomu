@@ -30,6 +30,7 @@ import javax.annotation.PostConstruct;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Create by UncleCatMySelf in 2018/12/06
@@ -177,12 +178,17 @@ public class DefaultHandler extends Handler {
      * @param maps
      */
     private void changeStatusMessageInfo(Map<String,Object> maps){
-        String ok = (String) maps.get("ok");
-        Long messageId = (Long)maps.get("messageId");
-        if(StringUtils.isNotBlank(ok) && messageId!=null){
-            PushMessage message = messageRepository.getOne(messageId);
-            message.setStatus(true);
-            messageRepository.save(message);
+        try {
+            String ok = (String) maps.get("ok");
+            Long messageId = Long.valueOf((Integer)maps.get("messageId"));
+            if(StringUtils.isNotBlank(ok) && messageId!=null){
+                Optional<PushMessage> message = messageRepository.findById(messageId);
+                PushMessage mess = message.get();
+                mess.setStatus(true);
+                messageRepository.save(mess);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
     }

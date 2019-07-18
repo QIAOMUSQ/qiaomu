@@ -9,8 +9,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.security.KeyStore;
 
-import static com.sun.org.apache.xalan.internal.utils.SecuritySupport.getResourceAsStream;
-
 /**
  * Created by MySelf on 2019/1/8.
  */
@@ -24,7 +22,7 @@ public class SslUtil {
             if(null == sslContext){
                 KeyStore ks = KeyStore.getInstance(type); /// "JKS"  　　　　  　　
               //  InputStream ksInputStream = new FileInputStream(UtilConstant.PATH_PREFIX+path); /// 证书存放地址
-                InputStream ksInputStream =  getResourceAsStream(UtilConstant.PATH_PREFIX+path);
+                InputStream ksInputStream =  new FileInputStream(UtilConstant.PATH_PREFIX+path);
                 ks.load(ksInputStream, password.toCharArray());
                 KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
                 kmf.init(ks, password.toCharArray());

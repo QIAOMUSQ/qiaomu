@@ -9,5 +9,14 @@ import com.qiaomu.modules.infopublish_publish.entity.PushMessage;
  */
 public interface PushRedisMessageService {
 
+    /**
+     * 推送信息服务
+     * type:类型
+     *  0:推送到个人
+     *  1：推送到群组
+     *  2：推送到社区
+     *  3：推送到全部用户
+     * @param messages
+     */
     void pushMessageToRedis(PushMessage messages);
 }
