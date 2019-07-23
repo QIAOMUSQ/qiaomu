@@ -13,6 +13,8 @@ import com.qiaomu.modules.welfare.exception.WelfareException;
 import com.qiaomu.modules.welfare.model.PointRankForm;
 import com.qiaomu.modules.welfare.model.TaskModel;
 import com.qiaomu.modules.welfare.service.PublicWelfareTaskService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +33,7 @@ import static com.qiaomu.modules.welfare.constant.Status.*;
  */
 @Service
 public class WelfareBussiness {
+    private Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private PublicWelfareTaskService publicWelfareTaskService;
 
@@ -200,6 +203,7 @@ public class WelfareBussiness {
         TaskEntity taskEntity = new TaskEntity();
         taskEntity.setStatus(REVIEWED.value);
         taskEntity.setUpdatedAt(updatedTime);
+        taskEntity.setServiceId(taskModel.getServiceId());
 
         taskPublishUserEntity.setStatus(REVIEWING.value);
         taskPublishUserEntity.setServiceId(taskModel.getServiceId());
@@ -246,10 +250,10 @@ public class WelfareBussiness {
 
         publicWelfareTaskService.newTaskUser(taskPublishUserEntity);
         publicWelfareTaskService.newTaskRecevieUser(taskRecevieUserEntity);
-        PointEntity points = publicWelfareTaskService.selectPonitByUserId(taskModel.getReceiveUserId());
+        PointEntity points = publicWelfareTaskService.selectPonitByUserId(taskRecevieUserEntity.getReceiveUserId());
         PointEntity publisherPoints = publicWelfareTaskService.selectPonitByUserId(taskPublishUserEntity.getPublishUserId());
         //新用户初始金币100
-        points = checkPint(points,taskModel.getReceiveUserId());
+        points = checkPint(points,taskRecevieUserEntity.getReceiveUserId());
         publisherPoints = checkPint(publisherPoints,taskPublishUserEntity.getPublishUserId());
         //增加任务金币
         TaskEntity taskEntity = publicWelfareTaskService.queryTask(taskModel.getServiceId());
@@ -291,7 +295,7 @@ public class WelfareBussiness {
         TaskRecevieUserEntity taskRecevieUserEntity = publicWelfareTaskService.queryRecevieUserTask(taskModel.getServiceId());
         Assert.isNull(taskPublishUserEntity,"未找到该任务");
         Assert.isNull(taskRecevieUserEntity,"未领取该任务");
-        if(!REVIEWING.value.equals(taskRecevieUserEntity.getStatus())){
+        if(!REVIEWED.value.equals(taskRecevieUserEntity.getStatus())){
             throw new WelfareException("当前任务不可审核");
         }
 
