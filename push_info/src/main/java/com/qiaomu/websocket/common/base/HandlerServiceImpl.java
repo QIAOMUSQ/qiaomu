@@ -2,15 +2,11 @@ package com.qiaomu.websocket.common.base;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-
 import com.google.gson.Gson;
 import com.qiaomu.common.entity.PushMessage;
 import com.qiaomu.common.reposity.PushMessageRepository;
 import com.qiaomu.websocket.bootstrap.backmsg.InChatBackMapService;
-import com.qiaomu.websocket.bootstrap.backmsg.InChatBackMapServiceImpl;
 import com.qiaomu.websocket.bootstrap.channel.http.HttpChannelService;
-import com.qiaomu.websocket.bootstrap.channel.http.HttpChannelServiceImpl;
-import com.qiaomu.websocket.bootstrap.channel.ws.WebSocketChannelService;
 import com.qiaomu.websocket.bootstrap.channel.ws.WsChannelService;
 import com.qiaomu.websocket.bootstrap.verify.InChatVerifyService;
 import com.qiaomu.websocket.common.bean.SendInChat;
@@ -22,7 +18,6 @@ import io.netty.handler.codec.http.FullHttpMessage;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.CharsetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -118,7 +113,7 @@ public class HandlerServiceImpl extends HandlerService {
     public void sendToText(Channel channel, Map<String, Object> maps) {
         Gson gson = new Gson();
         String otherOne = (String) maps.get(Constans.ONE);
-        String value = (String) maps.get(Constans.VALUE);
+        Object value =  maps.get(Constans.VALUE);
         String token = (String) maps.get(Constans.TOKEN);
         //返回给自己
       //  channel.writeAndFlush(new TextWebSocketFrame(gson.toJson(inChatBackMapService.sendBack(otherOne,value))));
@@ -127,10 +122,9 @@ public class HandlerServiceImpl extends HandlerService {
             Channel other = websocketChannelService.getChannel(otherOne);
             if (other == null){
                 //转http分布式
-                httpChannelService.sendInChat(otherOne,inChatBackMapService.getMsg(token,value));
+                httpChannelService.sendInChat(otherOne,inChatBackMapService.getMsg(token,JSON.toJSONString(value)));
             }else{
-                other.writeAndFlush(new TextWebSocketFrame(
-                        gson.toJson(inChatBackMapService.getMsg(token,value))));
+                other.writeAndFlush(new TextWebSocketFrame(gson.toJson(JSON.toJSON(value))));
             }
         }else {
             maps.put(Constans.ON_ONLINE,otherOne);
@@ -210,8 +204,8 @@ public class HandlerServiceImpl extends HandlerService {
                //登陆成功后，返回消息给用户
                channel.writeAndFlush(new TextWebSocketFrame(gson.toJson(inChatBackMapService.loginSuccess())));
                websocketChannelService.loginWsSuccess(channel,token);
-               //查询数据库中该用户是否有离线消息，若有，则立即推送
-              List<PushMessage> messageList =  pushMessageRepository.findByPhone(token);
+               //查询数据库中该用户是否有离线未发消息，若有，则立即推送
+              List<PushMessage> messageList =  pushMessageRepository.findByPhoneAndStatus(token,false);
                if(messageList.size()>0){
                     for (PushMessage message : messageList){
                         channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(message)));

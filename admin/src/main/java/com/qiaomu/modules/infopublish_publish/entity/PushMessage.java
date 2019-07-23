@@ -10,7 +10,15 @@ import java.io.Serializable;
 public class PushMessage implements Serializable {
     private static final long serialVersionUID = 1L;
     private String phone;   //被推送人号码
+    /**
+     * 推送类型
+     *  0:推送到个人
+     *  1：推送到群组
+     *  2：推送到社区
+     *  4：推送到全部用户
+     */
     private String type;    //推送类型
+    private String infoType;//消息类型
     private String time;    //推送时间
     private Long communityId;   //被推送人社区id
     private String message; //推送信息
@@ -62,5 +70,13 @@ public class PushMessage implements Serializable {
 
     public void setUserPhone(String userPhone) {
         this.userPhone = userPhone;
+    }
+
+    public String getInfoType() {
+        return infoType;
+    }
+
+    public void setInfoType(String infoType) {
+        this.infoType = infoType;
     }
 }

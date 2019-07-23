@@ -19,10 +19,18 @@ public class PushRedisMessageServiceImpl implements PushRedisMessageService {
     private RedisTemplate redisTemplate;
 
 
+    /**
+     * type:类型
+     *  0:推送到个人
+     *  1：推送到群组
+     *  2：推送到社区
+     *  3：推送到全部用户
+     *  type=0时，接收人phone一定不为空
+     * @param message
+     */
     @Override
     public void pushMessageToRedis(PushMessage message) {
         redisTemplate.convertAndSend("message",message);
-       // redisTemplate.opsForList().rightPush("message_history", JSON.toJSONString(message));
-        redisTemplate.boundHashOps("message_history").put("history_"+message.getPhone()+"_"+message.getTime(),JSON.toJSONString(message));
+        redisTemplate.boundHashOps("message_history").put("history_"+message.getPhone()+"_"+message.getTime().replace(" ","").replace("-","").replace(":",""),JSON.toJSONString(message));
     }
 }

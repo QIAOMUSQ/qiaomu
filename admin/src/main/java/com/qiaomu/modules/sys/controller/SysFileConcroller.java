@@ -4,30 +4,21 @@ import com.alibaba.fastjson.JSON;
 import com.qiaomu.modules.sys.entity.SysFileEntity;
 import com.qiaomu.modules.sys.service.SysFileService;
 import jodd.io.FileUtil;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -36,7 +27,7 @@ import java.util.UUID;
  * @Date 2019-01-15 18:58
  */
 @Controller
-@RequestMapping("mobile/sysFile")
+@RequestMapping("welfare/sysFile")
 public class SysFileConcroller {
 
     @Autowired

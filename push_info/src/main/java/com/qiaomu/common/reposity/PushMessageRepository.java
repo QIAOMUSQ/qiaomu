@@ -11,5 +11,6 @@ import java.util.List;
  * @Date 2019-07-10 15:00
  */
 public interface PushMessageRepository extends JpaRepository<PushMessage,Long> {
-    List<PushMessage> findByPhone(String phone);
+
+    List<PushMessage> findByPhoneAndStatus(String phone, boolean status);
 }

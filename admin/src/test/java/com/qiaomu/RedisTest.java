@@ -3,6 +3,7 @@ package com.qiaomu;
 import com.alibaba.fastjson.JSON;
 import com.qiaomu.common.utils.RedisUtils;
 import com.qiaomu.modules.infopublish_publish.entity.PushMessage;
+import com.qiaomu.modules.infopublish_publish.service.PushRedisMessageService;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.joda.time.DateTime;
@@ -25,6 +26,8 @@ public class RedisTest {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private PushRedisMessageService redisMessageService;
     @Test
     public void contextLoads() {
         SysUserEntity user = new SysUserEntity();
@@ -50,5 +53,20 @@ public class RedisTest {
       }
 
     }
+
+    @Test
+    public void testPushMessage(){
+        PushMessage message = new PushMessage();
+        message.setMessage("测试");
+        message.setPhone("15157150200");
+        message.setType("0");
+        message.setTime(DateTime.now().toString("YYYY-MM-dd HH:mm:ss"));
+        message.setCommunityId(1l);
+        message.setUserPhone("15157150201");
+        redisMessageService.pushMessageToRedis(message);
+        Object object = redisTemplate.boundHashOps("message_history").get("history_"+message.getPhone()+"_"+message.getTime().replace(" ","").replace("-","").replace(":",""));
+        System.out.println(message);
+    }
+
 
 }
