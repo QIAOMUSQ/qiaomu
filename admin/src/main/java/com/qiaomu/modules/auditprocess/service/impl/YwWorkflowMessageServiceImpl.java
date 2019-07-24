@@ -3,6 +3,7 @@ package com.qiaomu.modules.auditprocess.service.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.qiaomu.common.utils.AESUtil;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
 import com.qiaomu.common.utils.StringCommonUtils;
@@ -74,24 +75,16 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
             processMessage.setCommunityName(this.communityService.queryById(processMessage.getCommunityId()).getName());
             processMessage.setDicValue(this.dictService.getdictCodeByTypeValue(processMessage.getDicValue(), "property_process"));
             if(processMessage.getPhoneOneId() !=null){
-                name =  userService.queryById(processMessage.getPhoneOneId()).getRealName();
-                processMessage.setPhoneOneName(returnNullData(name));
-                name = null;
+                processMessage.setPhoneOneName(AESUtil.decrypt(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getPhoneOneId(),processMessage.getCommunityId(),",")));
             }
             if(processMessage.getPhoneTwoId() !=null ){
-                name = userService.queryById(processMessage.getPhoneTwoId()).getRealName();
-                processMessage.setPhoneTwoName(returnNullData(name));
-                name = null;
+                processMessage.setPhoneTwoName(AESUtil.decrypt(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getPhoneTwoId(),processMessage.getCommunityId(),",")));
             }
            if(processMessage.getReportPersonId() !=null ){
-               name = userService.queryById(processMessage.getReportPersonId()).getRealName();
-               processMessage.setReportPersonName(returnNullData(name));
-               name = null;
+               processMessage.setReportPersonName(AESUtil.decrypt(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getReportPersonId(),processMessage.getCommunityId(),",")));
            }
             if(processMessage.getSuperintendentId() !=null){
-                name = userService.queryById(processMessage.getSuperintendentId()).getRealName();
-                processMessage.setSuperintendentName(returnNullData(name));
-                name = null;
+                processMessage.setSuperintendentName(AESUtil.decrypt(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getSuperintendentId(),processMessage.getCommunityId(),",")));
             }
 
         }
@@ -100,11 +93,10 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
 
     @Transactional
     public void save(YwWorkflowMessage processMessage) {
-       /* processMessage.setPhoneOneName(userExtendService.getUserByPhone(processMessage.getPhoneOne()));
-        processMessage.setPhoneTwoName(userExtendService.getUserByPhone(processMessage.getPhoneTwo()));
-        processMessage.setReportPersonName(userExtendService.getUserByPhone(processMessage.getReportPerson()));
-        processMessage.setSuperintendentName(userExtendService.getUserByPhone(processMessage.getSuperintendentPhone()));
-*/
+        processMessage.setPhoneOneId(userService.getUserIdsByPhones(processMessage.getPhoneOneId(),","));
+        processMessage.setPhoneTwoId(userService.getUserIdsByPhones(processMessage.getPhoneTwoId(),","));
+        processMessage.setReportPersonId(userService.getUserIdsByPhones(processMessage.getReportPersonId(),","));
+        processMessage.setSuperintendentId(userService.getUserIdsByPhones(processMessage.getSuperintendentId(),","));
         if (processMessage.getId() != null) {
             updateById(processMessage);
         } else {
@@ -119,5 +111,6 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
        processMessage.setCommunityName(this.communityService.queryById(processMessage.getCommunityId()).getName());
         return processMessage;
     }
+
 
 }

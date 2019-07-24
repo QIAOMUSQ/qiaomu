@@ -46,6 +46,8 @@ public class CommunityController extends AbstractController {
     public R save(@RequestBody YwCommunity community) {
         //对社区进行分类
         //community.setCompanyId(getCompanyOrCommunityByType("1"));
+        SysUserEntity user = getUser();
+        community.setCompanyId(user.getCompanyId());
         communityService.save(community);
         return R.ok();
     }

@@ -9,6 +9,7 @@ import com.qiaomu.modules.app.dao.CommunityCheckDao;
 import com.qiaomu.modules.app.entity.CommunityCheckEntity;
 import com.qiaomu.modules.app.service.CommunityCheckService;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
+import com.qiaomu.modules.propertycompany.service.YwPropertyCompanyService;
 import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.service.ProvinceCityDateService;
 import org.apache.commons.lang.StringUtils;
@@ -37,6 +38,9 @@ public class CommunityCheckServiceImpl extends ServiceImpl<CommunityCheckDao,Com
     @Autowired
     private YwCommunityService communityService;
 
+    @Autowired
+    private YwPropertyCompanyService companyService;
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -46,23 +50,26 @@ public class CommunityCheckServiceImpl extends ServiceImpl<CommunityCheckDao,Com
         String isCheck = (String) params.get("isCheck");
         if(startTime ==null){
             startTime = DateTime.now().toString("YYYY-MM-dd 00:00:00");
-        }else {
-            startTime +=" 00:00:00";
         }
         if(endTime == null ){
             endTime = DateTime.now().toString("YYYY-MM-dd 23:59:59");
-        }else {
-            endTime +=" 23:59:59";
         }
 
         Page<CommunityCheckEntity> page = selectPage(new Query(params)
                 .getPage(), new EntityWrapper()
-                .between("CREATE_TIME",startTime,endTime)
+                .between((StringUtils.isNotBlank(startTime)&&StringUtils.isNotBlank(endTime)),"CREATE_TIME",startTime,endTime)
                 .eq(StringUtils.isNotBlank(isCheck),"is_check",isCheck)
                 .addFilterIfNeed(params.get("sql_filter") != null,
                         (String) params.get("sql_filter"), new Object[0]));
         for (CommunityCheckEntity community : page.getRecords()){
             community.setCityName(provinceCityDateService.getProCityByCityCode(community.getCityCode()).getCityName());
+            if(community.getCommunityId() != null){
+                YwCommunity community1 = communityService.selectById(community.getCommunityId());
+                if(community1.getCompanyId()!=null){
+                    community.setCompanyName(companyService.selectById(community1.getCompanyId()).getName());
+                }
+            }
+
         }
         return new PageUtils(page);
     }
@@ -86,7 +93,6 @@ public class CommunityCheckServiceImpl extends ServiceImpl<CommunityCheckDao,Com
             entity.setIsCheck(community.getIsCheck());
             entity.setRemark(community.getRemark());
             entity.setCheckDate(new Date());
-            this.updateById(entity);
             if(community.getIsCheck().equals("1")){
                 YwCommunity community1 = new YwCommunity();
                 community1.setName(community.getCommunityName());
@@ -94,8 +100,29 @@ public class CommunityCheckServiceImpl extends ServiceImpl<CommunityCheckDao,Com
                 community1.setAddress(community.getAddress());
                 community1.setCreateTime(new Date());
                 communityService.save(community1);
+                entity.setCommunityId(community1.getId());
             }
+            this.updateById(entity);
             return "success";
+        }catch (Exception e){
+            e.printStackTrace();
+            return "error";
+        }
+
+    }
+
+    @Override
+    @Transactional
+    public String changeCompany(Long checkCommunityId, Long companyId) {
+        try {
+            CommunityCheckEntity communityCheckEntity = this.selectById(checkCommunityId);
+            if(!communityCheckEntity.getIsCheck().equals("1")){
+                return "通过状态下才能设置";
+            }
+            YwCommunity community = communityService.queryById(communityCheckEntity.getCommunityId());
+            community.setCompanyId(companyId);
+            communityService.updateById(community);
+            return "ok";
         }catch (Exception e){
             e.printStackTrace();
             return "error";

@@ -147,7 +147,7 @@ var vm = new Vue({
         },
         selectProvince:function () {
             //查询省份
-            $.post(baseURL + "App/provinceCity/getPrivateDate", function(result){
+            $.post(baseURL + "mobile/provinceCity/getPrivateDate", function(result){
                 vm.provinceList = [];
                 var i= 0;
                 $.each(result.data,function (index,item) {
@@ -163,7 +163,7 @@ var vm = new Vue({
             vm.queryCity(event.target.value);
         },
         queryCity:function (value) {
-            $.post(baseURL + "App/provinceCity/getCityDateByProvinceCode",{"provinceCode":value},function(result){
+            $.post(baseURL + "mobile/provinceCity/getCityDateByProvinceCode",{"provinceCode":value},function(result){
                 vm.cityList =[];
                 var i =0;
                 $.each(result.data,function (index,item) {

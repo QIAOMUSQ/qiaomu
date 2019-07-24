@@ -31,7 +31,7 @@ import static com.qiaomu.common.utils.StringCommonUtils.returnNullData;
 
 /**
  * @author 李品先
- * @description:
+ * @description: 流程审核
  * @Date 2019-04-21 16:05
  */
 @Service
@@ -89,29 +89,21 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
         for (YwWorkflowInfo workflowInfo : page.getRecords()) {
             YwWorkflowMessage workflowMessage = this.workflowMessageService.getById(workflowInfo.getWorkflowId());
             if(workflowMessage.getPhoneOneId() !=null){
-                user = userService.queryById(workflowMessage.getPhoneOneId());
-                workflowInfo.setDetailPhoneOneName(returnNullData(user.getRealName()));
+                workflowInfo.setDetailPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getPhoneOneId(),workflowMessage.getCommunityId(),","));
                 workflowInfo.setDetailPhoneOne(user.getUsername());
-                user = null;
             }
             if(workflowMessage.getPhoneTwoId() !=null){
-                user  = userService.queryById(workflowMessage.getPhoneTwoId());
-                workflowInfo.setDetailPhoneTwoName(returnNullData(user.getRealName()));
+                workflowInfo.setDetailPhoneTwoName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getPhoneTwoId(),workflowMessage.getCommunityId(),","));
                 workflowInfo.setDetailPhoneTwo(user.getUsername());
-                user = null;
             }
 
             if(workflowMessage.getReportPersonId() != null){
-                user = userService.queryById(workflowMessage.getReportPersonId());
-                workflowInfo.setDetailPhoneReportName(returnNullData(user.getRealName()));
+                workflowInfo.setDetailPhoneReportName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getReportPersonId(),workflowMessage.getCommunityId(),","));
                 workflowInfo.setDetailPhoneReport(user.getUsername());
-                user = null;
             }
             if(workflowMessage.getSuperintendentId() != null ){
-                user = userService.queryById(workflowMessage.getSuperintendentId());
-                workflowInfo.setSuperintendentName(returnNullData(user.getRealName()));
+                workflowInfo.setSuperintendentName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getSuperintendentId(),workflowMessage.getCommunityId(),","));
                 workflowInfo.setSuperintendentPhone(user.getUsername());
-                user = null;
             }
             workflowInfo.setProcessName(workflowMessage.getProcessName());
         }

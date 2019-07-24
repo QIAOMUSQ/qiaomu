@@ -62,6 +62,7 @@ var vm = new Vue({
         add: function(){
             vm.showList = false;
             vm.title = "新增";
+            cleanImg();
             vm.getLoginAdministrator();
         },
 
@@ -72,6 +73,7 @@ var vm = new Vue({
             }
             vm.showList = false;
             vm.title = "修改";
+            cleanImg();
             vm.getCompany(id);
 
             
@@ -115,6 +117,7 @@ var vm = new Vue({
             });
         },
         getCompany: function(id){
+
             $.get(baseURL + "propertyCompanyManage/info/"+id, function(data){
                 vm.company.id = data.company.id;
                 vm.company.name = data.company.name;
@@ -124,6 +127,31 @@ var vm = new Vue({
                 vm.company.companyImg=data.company.companyImg;
                 vm.company.adminPhone = data.company.adminPhone;
                 vm.getLoginAdministrator();
+                console.info(data.company);
+                var imgStr = data.company.companyImg;
+                $("#imgId").val(imgStr);
+                var imgs = imgStr.split("_");
+                var imgHtml = "";
+                $.each(imgs,function (index,item) {
+                    if(parseInt(item)){
+                        imgHtml += '<li id="fileBox_WU_FILE_'+index+'" class="">'+
+                            '<div class="viewThumb">'+
+                            '<input type="hidden">'+
+                            '<div class="diyBar" style="display: none;">'+
+                            '<div class="diyProgress" style="width: 100%;">上传完成</div>'+
+                            '</div>'+
+                            '<p class="diyControl">'+
+                            '<span class="diyLeft"><i></i></span>'+
+                            '<span class="diyCancel"><i></i></span>'+
+                            '<span class="diyRight"><i></i></span>'+
+                            '</p>'+
+                            '<img src="'+baseURL+ 'welfare/sysFile/showPicForMany?id='+item+'"/>'+
+                            '</div>'+
+                            '</li>';
+                    }
+
+                });
+                $(".upload-pick").before(imgHtml);
             });
         },
        
@@ -138,13 +166,6 @@ var vm = new Vue({
         getLoginAdministrator:function () {
             $.post(baseURL + "sys/user/getLoginUser", {"deptId":6},function(result){
                 console.info(result);
-                /*vm.userList = [];
-                var i =0;
-                $.each(result.user,function (index,item) {
-                    if(item.userName == vm.company.adminPhone){i = index;}
-                    vm.userList.push({value:item.username,text:item.username});
-                })
-                vm.loginUser =vm.userList[i].value;*/
                 $("#userId").kendoDropDownList({
                     dataTextField: "username",
                     dataValueField: "userId",
@@ -160,4 +181,19 @@ var vm = new Vue({
 
 function onchange() {
     vm.company.administratorId = $("#userId").val();
+}
+function cleanImg() {
+    vm.company.id =null;
+    vm.company.name = null;
+    vm.company.legalPerson=null;
+    vm.company.telPhone = null;
+    vm.company.address =null;
+    vm.company.companyImg=null;
+    vm.company.adminPhone = null;
+    $("#imgId").val("");
+    $(".clearfix").html("");
+    $(".clearfix").append('<li class="upload-pick">'+
+        '<div class="webuploader-container clearfix" id="fish_file"></div>'+
+        '</li>');
+    ImgFile();
 }

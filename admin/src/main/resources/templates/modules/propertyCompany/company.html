@@ -100,11 +100,9 @@
 <script src="${request.contextPath}/statics/plugins/diyUpload/js/webuploader.min.js" type="text/javascript"></script>
 
 <script>
-
-
-
-    $(function(){
+    function ImgFile() {
         //上传图片
+
         $('#fish_file').diyUpload({
             url:'${request.contextPath}/welfare/sysFile/upload',
             success:function(response,fileBox) {
@@ -136,7 +134,7 @@
                 type:"image/jpeg"
             }
         });
-    });
+    }
 
 </script>
 </body>

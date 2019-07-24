@@ -15,4 +15,6 @@ public interface CommunityCheckService extends IService<CommunityCheckEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     String save(CommunityCheckEntity community);
+
+    String changeCompany(Long checkCommunityId, Long companyId);
 }

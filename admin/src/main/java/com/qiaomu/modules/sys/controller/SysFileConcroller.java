@@ -107,7 +107,7 @@ public class SysFileConcroller {
             if (!pf.exists()) {
                 return;
             }
-            double rate = 0.5; //rate是压缩比率  1为原图  0.1为最模糊
+            double rate = 0.2; //rate是压缩比率  1为原图  0.1为最模糊
             int[] results = getImgWidth(pf);
             int widthdist = 0;
             int heightdist = 0;
@@ -119,11 +119,8 @@ public class SysFileConcroller {
                     heightdist = (int) (results[1] * rate);
                 }
                 Image src = javax.imageio.ImageIO.read(pf);
-                BufferedImage tag = new BufferedImage((int) widthdist, (int) heightdist,
-                        BufferedImage.TYPE_INT_RGB);
-
-                tag.getGraphics().drawImage(src.getScaledInstance(widthdist, heightdist, Image.SCALE_SMOOTH), 0, 0,
-                        null);
+                BufferedImage tag = new BufferedImage((int) widthdist, (int) heightdist, BufferedImage.TYPE_INT_RGB);
+                tag.getGraphics().drawImage(src.getScaledInstance(widthdist, heightdist, Image.SCALE_SMOOTH), 0, 0, null);
                 ServletOutputStream fout = response.getOutputStream();
                 ImageIO.write(tag, "jpg", fout);
                 fout.close();
