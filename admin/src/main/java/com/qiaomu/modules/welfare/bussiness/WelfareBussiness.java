@@ -244,7 +244,6 @@ public class WelfareBussiness {
 
         taskRecevieUserEntity.setStatus(COMPLETE.value);
         taskRecevieUserEntity.setServiceId(taskModel.getServiceId());
-        taskRecevieUserEntity.setReceiveUserId(taskRecevieUserEntity.getReceiveUserId());
         taskRecevieUserEntity.setCreatedAt(updatedTime);
         taskRecevieUserEntity.setUpdatedAt(updatedTime);
 
@@ -307,7 +306,6 @@ public class WelfareBussiness {
 
         taskRecevieUserEntity.setStatus(RUN.value);
         taskRecevieUserEntity.setServiceId(taskModel.getServiceId());
-        taskRecevieUserEntity.setReceiveUserId(taskModel.getReceiveUserId());
         taskRecevieUserEntity.setCreatedAt(updatedTime);
         taskRecevieUserEntity.setUpdatedAt(updatedTime);
         TaskEntity taskEntity = new TaskEntity();
