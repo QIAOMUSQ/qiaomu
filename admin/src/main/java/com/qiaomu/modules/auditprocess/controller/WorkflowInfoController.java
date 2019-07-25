@@ -1,8 +1,11 @@
 package com.qiaomu.modules.auditprocess.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.qiaomu.common.exception.RRException;
+import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
+import com.qiaomu.modules.article.exception.CommentException;
 import com.qiaomu.modules.auditprocess.entity.YwWorkflowMessage;
 import com.qiaomu.modules.auditprocess.service.YwWorkflowInfoService;
 import com.qiaomu.modules.auditprocess.service.YwWorkflowMessageService;
@@ -41,7 +44,7 @@ public class WorkflowInfoController extends AbstractController {
     @ResponseBody
     @RequestMapping(value = "process/list", method = RequestMethod.POST)
     @RequiresPermissions("process:check:list")
-    public R list(@RequestParam Map<String, Object> params) {
+    public R list(@RequestParam Map<Object, Object> params) {
         params.put("companyId", getCompanyId());
         PageUtils page = this.WorkflowCheckService.queryPage(params);
         return R.ok().put("page", page);
@@ -49,76 +52,44 @@ public class WorkflowInfoController extends AbstractController {
 
     /**
      * 保存流程信息
-     * @param userPhone 用户号码
+     * @param userId 用户号码
      * @param location  处理位置
      * @param detail    事件详情
      * @param pictureId 图片id字符串
-     * @param ServiceDate 维修时间
-     * @param WorkflowId 流程ID
+     * @param serviceDate 维修时间
+     * @param workflowId 流程ID
      * @param communityId  社区ID
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "saveWorkflowInfo",method = RequestMethod.POST)
-    public R saveWorkflowInfo(String userPhone,String location,
+    public Object saveWorkflowInfo(Long userId,String location,
                               String detail,String pictureId,
-                              String ServiceDate,Long WorkflowId,
+                              String serviceDate,Long workflowId,
                               Long communityId){
-        if(communityId != null){
-            String info = WorkflowCheckService.saveWorkflowInfo(userPhone,
-                    location,detail,
-                    pictureId,ServiceDate,
-                    WorkflowId,communityId);
-            if(info.equals("success")){
-                return R.ok(info,"保存成功");
+        try {
+            if(communityId != null){
+               String info = WorkflowCheckService.saveWorkflowInfo(userId,
+                        location,detail,
+                        pictureId,serviceDate,
+                        workflowId,communityId);
+                return JSON.toJSONString(BuildResponse.success(info));
             }else {
-                return R.ok(info,"失败");
+                return JSON.toJSONString(BuildResponse.fail("请进行个人信息验证"));
             }
-
-        }else {
-            return R.ok("error","请进行个人信息验证");
+        }catch (Exception e){
+            if(e instanceof RRException){
+                return JSON.toJSONString(BuildResponse.fail("1001",((RRException) e).getMsg()));
+            }else{
+                return JSON.toJSONString(BuildResponse.fail());
+            }
         }
     }
 
 
-
     /**
-     * 根据字典值获取社区或者物业流程信息
-     * @param userPhone 用戶賬戶
-     * @param workflowType 字典值 1:供水维修  2:电力报修  3:煤气维修   4:建筑报修
-     * @param page 当前页
-     * @param limit 每页数
-     * @param communityId 社区id
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "getCompanyCommunityWorkFlowInfoByDict",method = RequestMethod.POST)
-    public R getCompanyCommunityWorkFlowInfoByDict(String userPhone,Long communityId,String workflowType,Integer page,Integer limit){
-        Map<String, Object> params = new HashMap<>();
-        params.put("page",page);
-        params.put("limit",limit);
-        params.put("phone",userPhone);
-        params.put("workflowType",workflowType);
-
-        if(communityId == null) {
-            SysUserEntity user = getUser();
-            if(user.getCompanyId() != null && !"".equals(user.getCompanyId()) ){
-                params.put("companyId",user.getCompanyId());
-            }else {
-                R.ok("error","请进行个人信息验证");
-            }
-        }else {
-            params.put("communityId",communityId);
-        }
-        PageUtils pageUtil = this.workflowMessageService.queryPage(params);
-        return R.ok().put("page", pageUtil);
-
-    }
-
-
-    /**
-     * 根据字典值和状态编码获取用户申请流程信息
-     * @param userPhone 用户号码
+     * 获取用户申请流程信息
+     * @param userId 用户id
      * @param workflowType  工作流类型 1:供水维修  2:电力报修  3:煤气维修   4:建筑报修
      * @param type  流程状态 0：申请 1：一级接收 11：一级受理完成 2：二级接收 21：二级受理完成  3：上报  4：通过  5：不通过 6:终止
      * @param communityId 社区ID
@@ -126,11 +97,12 @@ public class WorkflowInfoController extends AbstractController {
      */
     @ResponseBody
     @RequestMapping(value = "getUserApplyWorkflowInfo",method = RequestMethod.POST)
-    public R getUserApplyWorkflowInfo(String userPhone,Long communityId,String workflowType,String type,Integer page,Integer limit){
-        Map<String, Object> params = new HashMap<>();
+    public Object getUserApplyWorkflowInfo(Long userId,Long communityId,String workflowType,
+                                      String type,Integer page,Integer limit){
+        Map<Object, Object> params = new HashMap<>();
         params.put("page",page);
         params.put("limit",limit);
-        params.put("phone",userPhone);
+        params.put("userId",userId);
         params.put("workflowType",workflowType);
         params.put("type",type);
         if(communityId == null) {
@@ -138,35 +110,35 @@ public class WorkflowInfoController extends AbstractController {
             if(user.getCompanyId() != null && !"".equals(user.getCompanyId()) ){
                 params.put("companyId",user.getCompanyId());
             }else {
-                R.ok("error","请进行个人信息验证");
+                return BuildResponse.fail("请进行个人信息验证");
             }
         }else {
             params.put("communityId",communityId);
         }
-        return R.ok().put("page", this.WorkflowCheckService.queryPage(params));
+        return BuildResponse.success(JSON.toJSON(this.WorkflowCheckService.queryPage(params)));
     }
 
     /**
      * 更新用户流程信息
-     * @param userPhone 用户手机
-     * @param detailOpinionOne  第一处理人号码
-     * @param detailOpinionTwo 第二处理人
-     * @param detailOpinionReport  上报人
-     * @param userOpinion   用户意见
-     * @param type  流程状态 0：申请 1：一级受理 11：一级受理完成 2：二级受理 21：二级受理完成  3：上报  4：通过  5：不通过 6:终止
+     * @param opinionSuperintendent 监管人意见
+     * @param opinionOne 第一处理人意见
+     * @param opinionTwo 第二处理人意见
+     * @param opinionReport 上报人意见
+     * @param userOpinion 用户意见
+     * @param type 流程状态 0：申请 1：一级受理 11：一级受理完成 2：二级受理 21：二级受理完成  3：上报  4：通过  5：不通过 6:终止
      * @param id 流程信息ID
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "updateUserWorkflowInfo",method = RequestMethod.POST)
-    public R updateUserWorkflowInfo(String userPhone,String detailOpinionOne,
-                                    String detailOpinionTwo,String detailOpinionReport,
+    public Object updateUserWorkflowInfo(String opinionSuperintendent,String opinionOne,
+                                    String opinionTwo,String opinionReport,
                                     String userOpinion,String type,Long id){
-        Boolean info = WorkflowCheckService.updateUserWorkflowInfo(userPhone,detailOpinionOne,detailOpinionTwo, detailOpinionReport,userOpinion,type,id);
+        Boolean info = WorkflowCheckService.updateUserWorkflowInfo(opinionSuperintendent,opinionOne,opinionTwo, opinionReport,userOpinion,type,id);
         if(info){
-            return R.ok("success","更新成功");
+            return BuildResponse.success("更新成功");
         }else {
-            return R.ok("error","更新失败");
+            return BuildResponse.fail("更新失败");
         }
 
     }
@@ -179,8 +151,40 @@ public class WorkflowInfoController extends AbstractController {
      */
     @ResponseBody
     @RequestMapping(value = "getUserWorkflowById",method = RequestMethod.POST)
-    public R getUserWorkflowById(Long id){
-        return R.ok("success", JSON.toJSON(WorkflowCheckService.selectById(id)));
+    public Object getUserWorkflowById(Long id){
+        return BuildResponse.success(JSON.toJSON(WorkflowCheckService.selectById(id)));
     }
 
+
+
+    /**
+     * 获取社区或者物业流程信息
+     * @param workflowType 字典值 1:供水维修  2:电力报修  3:煤气维修   4:建筑报修
+     * @param page 当前页
+     * @param limit 每页数
+     * @param communityId 社区id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "getCompanyCommunityWorkFlowInfo",method = RequestMethod.POST)
+    public Object getCompanyCommunityWorkFlowInfo(Long communityId,String workflowType,Integer page,Integer limit){
+        Map<String, Object> params = new HashMap<>();
+        params.put("page",page);
+        params.put("limit",limit);
+        params.put("workflowType",workflowType);
+
+        if(communityId == null) {
+            SysUserEntity user = getUser();
+            if(user.getCompanyId() != null && !"".equals(user.getCompanyId()) ){
+                params.put("companyId",user.getCompanyId());
+            }else {
+                return JSON.toJSONString(BuildResponse.fail("请进行个人信息验证"));
+            }
+        }else {
+            params.put("communityId",communityId);
+        }
+        PageUtils pageUtil = this.workflowMessageService.queryPage(params);
+        return BuildResponse.success(JSON.toJSON(pageUtil));
+
+    }
 }

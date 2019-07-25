@@ -1,5 +1,7 @@
 package com.qiaomu.modules.auditprocess.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
 import com.qiaomu.modules.auditprocess.entity.YwWorkflowMessage;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -46,8 +49,6 @@ public class WorkflowMessageController extends AbstractController {
     @RequestMapping(value = "process/save", method = RequestMethod.POST)
     @RequiresPermissions(value = {"message:add", "message:update"}, logical = Logical.OR)
     public R save(@RequestBody YwWorkflowMessage workflowMessage) {
-      /*  processMessage.setCompanyId(getCompanyOrCommunityByType("1"));
-        this.workflowMessageService.save(processMessage);*/
         SysUserEntity user = getUser();
         workflowMessage.setCompanyId(user.getCompanyId());
         workflowMessageService.save(workflowMessage);
@@ -68,4 +69,6 @@ public class WorkflowMessageController extends AbstractController {
         this.workflowMessageService.deleteBatchIds(Arrays.asList(ids));
         return R.ok();
     }
+
+
 }

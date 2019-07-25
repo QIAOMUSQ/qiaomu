@@ -1,6 +1,6 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: baseURL + 'processCheck/process/list',
+        url: baseURL + 'mobile/processCheck/process/list',
         datatype: "json",
         mtype:"POST",
         colModel: [

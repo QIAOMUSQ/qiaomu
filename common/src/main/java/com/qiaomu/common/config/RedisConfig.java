@@ -42,7 +42,7 @@ public class RedisConfig {
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashValueSerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new JdkSerializationRedisSerializer());
+        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         redisTemplate.setConnectionFactory(factory);
         return redisTemplate;
     }

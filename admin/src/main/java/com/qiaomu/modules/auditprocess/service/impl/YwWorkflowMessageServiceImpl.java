@@ -61,7 +61,6 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
             //不指定社区，获取整个物业信息
              companyId = (Long) params.get("companyId");
         }
-
         Page<YwWorkflowMessage> page = selectPage(new Query(params).getPage(),
                 new EntityWrapper()
                         .like(StringUtils.isNotBlank(processName), "process_name", processName)

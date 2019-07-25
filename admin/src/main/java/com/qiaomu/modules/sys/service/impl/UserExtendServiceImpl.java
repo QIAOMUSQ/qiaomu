@@ -176,7 +176,7 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
                     userExtend.setCommunityId(communityId);
                     userExtend = baseMapper.selectAll(userExtend);
                     if(userExtend !=null ){
-                        names += userExtend.getRealName()+",";
+                        names += AESUtil.decrypt(userExtend.getRealName())+",";
                     }
 
                 }

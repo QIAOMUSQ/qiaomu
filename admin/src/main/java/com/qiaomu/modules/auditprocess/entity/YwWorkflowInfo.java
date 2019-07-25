@@ -42,6 +42,8 @@ public class YwWorkflowInfo implements Serializable {
 
     private String finalityOpinion;//评审终结意见
 
+    private Date finalityDate;
+
     @TableField(exist = false)
     private String detailPhoneOne;  //  第一处理人号码
     @TableField(exist = false)
@@ -63,6 +65,10 @@ public class YwWorkflowInfo implements Serializable {
     private String detailPhoneTwoName;
     @TableField(exist = false)
     private String detailPhoneReportName;
+    @TableField(exist = false)
+    private String communityName;
+    @TableField(exist = false)
+    private String typeName;
 
     public Long getId() {
         return this.id;
@@ -296,5 +302,29 @@ public class YwWorkflowInfo implements Serializable {
 
     public void setSuperintendentPhone(String superintendentPhone) {
         this.superintendentPhone = superintendentPhone;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public Date getFinalityDate() {
+        return finalityDate;
+    }
+
+    public void setFinalityDate(Date finalityDate) {
+        this.finalityDate = finalityDate;
     }
 }
