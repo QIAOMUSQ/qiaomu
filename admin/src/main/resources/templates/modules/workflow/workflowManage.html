@@ -39,6 +39,14 @@
                 </div>
             </div>
             <div class="form-group">
+                <div class="col-sm-2 control-label">社区名称</div>
+                <div class="col-sm-10">
+                    <input id="communityName" class="form-control" @click="getCommunity()"  readonly="readonly" />
+                    <input  style="display:none;" class="form-control" v-model="processMessage.communityId" />
+                </div>
+                <input  style="display:none;" class="form-control" v-model="processMessage.id" />
+            </div>
+            <div class="form-group">
                 <div class="col-sm-2 control-label">流程类型</div>
                 <div class="col-sm-10">
                     <input id="dicValue" />
@@ -48,39 +56,32 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">一级处理人</div>
                 <div class="col-sm-10">
-                    <input id="phoneOne" @click="getUser('phoneOne')"  class="form-control" readonly="readonly"  />
-                    <input style="display:none;"  class="form-control" v-model="processMessage.phoneOne" />
+                    <input id="phoneOne" @click="getUser('phoneOneId')"  class="form-control" readonly="readonly"  />
+                    <input style="display:none;"  class="form-control" v-model="processMessage.phoneOneId" />
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">二级处理人</div>
                 <div class="col-sm-10">
-                    <input id="phoneTwo" @click="getUser('phoneTwo')" class="form-control" readonly="readonly"/>
-                    <input style="display:none;"  class="form-control" v-model="processMessage.phoneTwo"/>
+                    <input id="phoneTwo" @click="getUser('phoneTwoId')" class="form-control" readonly="readonly"/>
+                    <input style="display:none;"  class="form-control" v-model="processMessage.phoneTwoId"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">上报人</div>
                 <div class="col-sm-10">
-                    <input id="reportPerson" class="form-control" @click="getUser('reportPerson')" readonly="readonly"/>
-                    <input style="display:none;"  class="form-control" v-model="processMessage.reportPerson"  />
+                    <input id="reportPerson" class="form-control" @click="getUser('reportPersonId')" readonly="readonly"/>
+                    <input style="display:none;"  class="form-control" v-model="processMessage.reportPersonId"  />
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">监管人</div>
                 <div class="col-sm-10">
-                    <input id="superintendentPhone" class="form-control" @click="getUser('superintendentPhone')" readonly="readonly"/>
-                    <input  style="display:none;"  class="form-control" v-model="processMessage.superintendentPhone"  />
+                    <input id="superintendentPhone" class="form-control" @click="getUser('superintendentId')" readonly="readonly"/>
+                    <input  style="display:none;"  class="form-control" v-model="processMessage.superintendentId"  />
                 </div>
             </div>
-            <div class="form-group">
-                <div class="col-sm-2 control-label">社区名称</div>
-                <div class="col-sm-10">
-                    <input id="communityName" class="form-control" @click="getCommunity()"  readonly="readonly" />
-                    <input  style="display:none;" class="form-control" v-model="processMessage.communityId" />
-                </div>
-                <input  style="display:none;" class="form-control" v-model="processMessage.id" />
-            </div>
+
 
             <div class="form-group">
                 <div class="col-sm-2 control-label"></div>
@@ -104,7 +105,7 @@
     <table id="jqCommunityGrid"></table>
     <div id="jqCommunityGridPager"></div>
 </div>
-<script src="${request.contextPath}/statics/js/modules/auditprocess/processManage.js?_${.now?long}"></script>
+<script src="${request.contextPath}/statics/js/modules/workflow/workflowManage.js?_${.now?long}"></script>
 </body>
 <script>
 

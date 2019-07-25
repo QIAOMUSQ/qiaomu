@@ -126,99 +126,65 @@ var vm = new Vue({
                 $("#reportPerson").val(result.process.reportPersonName);
                 $("#communityName").val(result.process.communityName);
                 $("#superintendentPhone").val(result.process.superintendentName);
-                vm.processMessage.phoneOne =result.process.phoneOne ;
-                vm.processMessage.phoneTwo =result.process.phoneTwo ;
-                vm.processMessage.reportPerson =result.process.reportPerson;
+                vm.processMessage.phoneOneId =result.process.phoneOneId ;
+                vm.processMessage.phoneTwoId =result.process.phoneTwoId ;
+                vm.processMessage.reportPersonId =result.process.reportPersonId;
                 vm.processMessage.processName =result.process.processName;
                 vm.processMessage.dicValue = result.process.dicValue;
                 vm.processMessage.communityId = result.process.communityId;
-                vm.processMessage.superintendentPhone = result.process.superintendentPhone;
+                vm.processMessage.superintendentId = result.process.superintendentId;
                 vm.processMessage.id = result.process.id;
                 vm.getDictor();
             });
         },
         //加载用户
-        loadUser:function () {
-            $("#jqUserGrid").jqGrid({
-                url: baseURL + 'communityUser/people/list',
-                datatype: "json",
-                mtype:"POST",
-                postData:{"companyRoleType":"3"},
-                colModel: [
-                    { label: '', name: 'id', width: 45,hidden:true  },
-                    { label: '用户手机', name: 'userPhone', width: 75 },
-                    { label: '真实姓名', name: 'realName', width: 75 },
-                    { label: '所属社区', name: 'communityName',  width: 45 }
-                ],
-                viewrecords: true,
-                height: 250,
-                width:700,
-                rowNum: 5,
-                rowList : [5,10,30,50],
-                rownumbers: true,
-                rownumWidth: 25,
-                autowidth:true,
-                multiselect: true,
-                pager: "#jqUserGridPager",
-                jsonReader : {
-                    root: "page.list",
-                    page: "page.currPage",
-                    total: "page.totalPage",
-                    records: "page.totalCount"
-                },
-                prmNames : {
-                    page:"page",
-                    rows:"limit",
-                    order: "order"
-                },
-                gridComplete:function(){
-                    //隐藏grid底部滚动条
-                    $("#jqUserGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
-                }
-            });
-            $("#jqUserGrid").jqGrid("resetSelection");
-
-        },
         getUser: function(type){
-            layer.open({
-                type: 1,
-                skin: 'layui-layer-molv',
-                title: "用户信息",
-                area: ['750px', '450px'],
-                fixed:false,
-                content:jQuery("#userGrid"),
-                closeBtn:1,
-                btn: ['确定','取消'],
-                btn1: function (index) {
-                    var grid = $("#jqUserGrid");
-                    var ids = grid.getGridParam("selarrrow");
-                    var name = "";
-                    var phone = "";
-                    $.each(ids,function (index,item) {
-                        phone+=grid.getRowData(item).userPhone +"_";
-                        name +=grid.getRowData(item).realName+" ";
-                    });
+            var communityId = vm.processMessage.communityId;
+            debugger;
+            if(communityId=='' || communityId ==undefined){
+                return alert("请选择社区");
+            }else {
+                layer.open({
+                    type: 1,
+                    skin: 'layui-layer-molv',
+                    title: "用户信息",
+                    area: ['750px', '450px'],
+                    fixed:false,
+                    content:jQuery("#userGrid"),
+                    closeBtn:1,
+                    btn: ['确定','取消'],
+                    btn1: function (index) {
+                        var grid = $("#jqUserGrid");
+                        var ids = grid.getGridParam("selarrrow");
+                        var name = "";
+                        var phone = "";
 
-                    if(type=="phoneOne"){
-                         vm.processMessage.phoneOne =phone;
-                        $("#phoneOne").val(name);
-                    }else if(type=="phoneTwo") {
-                        vm.processMessage.phoneTwo =phone;
-                        $("#phoneTwo").val(name);
-                    }else if (type=="reportPerson"){
-                        vm.processMessage.reportPerson =phone;
-                        $("#reportPerson").val(name);
-                    }else {
-                        vm.processMessage.superintendentPhone =phone;
-                        $("#superintendentPhone").val(name);
+                        $.each(ids,function (index,item) {
+                            phone+=grid.getRowData(item).userPhone +",";
+                            name +=grid.getRowData(item).realName+" ";
+                        });
+
+                        if(type=="phoneOneId"){
+                             vm.processMessage.phoneOneId =phone;
+                            $("#phoneOne").val(name);
+                        }else if(type=="phoneTwoId") {
+                            vm.processMessage.phoneTwoId =phone;
+                            $("#phoneTwo").val(name);
+                        }else if (type=="reportPersonId"){
+                            vm.processMessage.reportPersonId =phone;
+                            $("#reportPerson").val(name);
+                        }else {
+                            vm.processMessage.superintendentId =phone;
+                            $("#superintendentPhone").val(name);
+                        }
+                        layer.close(index);
+
                     }
-                    layer.close(index);
-
-                }
-            });
-            layer.ready(function () {
-                vm.loadUser();
-            });
+                });
+                layer.ready(function () {
+                    loadUser(communityId);
+                });
+            }
         },
         getDictor:function () {
             vm.typeList=[];
@@ -257,6 +223,15 @@ var vm = new Vue({
                     });
                     vm.processMessage.communityId =parseInt(ids[0]);
                     $("#communityName").val(name);
+                    vm.processMessage.phoneOneId =null;
+                    vm.processMessage.phoneTwoId  =null;
+                    vm.processMessage.reportPersonId =null;
+                    vm.processMessage.superintendentId =null;
+                    $("#phoneOne").val("");
+                    $("#phoneTwo").val("");
+                    $("#reportPerson").val("");
+                    $("#superintendentPhone").val("");
+
                     layer.close(index);
 
                 }
@@ -304,8 +279,7 @@ var vm = new Vue({
                 }
             });
             $("#jqCommunityGrid").jqGrid("resetSelection");
-        }
-        ,
+        },
         reload: function () {
             $("#userTable").css("display","none");
             vm.processMessage=[];
@@ -325,19 +299,63 @@ var vm = new Vue({
     }
 });
 
+function loadUser (communityId) {
+    $("#jqUserGrid").jqGrid({
+        url: baseURL + 'communityUser/people/list',
+        datatype: "json",
+        mtype:"POST",
+        postData:{companyRoleType:"3",communityId:communityId},
+        colModel: [
+            { label: '', name: 'id', width: 45,hidden:true  },
+            { label: '用户手机', name: 'userPhone', width: 75 },
+            { label: '真实姓名', name: 'realName', width: 75 },
+            { label: '所属社区', name: 'communityName',  width: 45 }
+        ],
+        viewrecords: false,
+        height: 250,
+        width:700,
+        rowNum: 5,
+        rowList : [5,10,30,50],
+        rownumbers: true,
+        rownumWidth: 25,
+        autowidth:true,
+        multiselect: true,
+        pager: "#jqUserGridPager",
+        jsonReader : {
+            root: "page.list",
+            page: "page.currPage",
+            total: "page.totalPage",
+            records: "page.totalCount"
+        },
+        prmNames : {
+            page:"page",
+            rows:"limit",
+            order: "order"
+        },
+        gridComplete:function(){
+            //隐藏grid底部滚动条
+            $("#jqUserGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+        }
+    });
+    $("#jqUserGrid").jqGrid('setGridParam',{
+        postData:{companyRoleType:"3",communityId:communityId}
+    },true).trigger("reloadGrid");
+
+}
+
 function onchange(e) {
     vm.processMessage.dicValue = $("#dicValue").val();
 }
 
 function saveOrUpdate() {
     debugger;
-    if(vm.processMessage.phoneOne == undefined || vm.processMessage.phoneOne ==""){
+    if(vm.processMessage.phoneOneId == undefined || vm.processMessage.phoneOne ==""){
         return alert('请选择一级处理人');
     }
-    if(vm.processMessage.phoneTwo  == undefined || vm.processMessage.phoneTwo ==""){
+    if(vm.processMessage.phoneTwoId  == undefined || vm.processMessage.phoneTwo ==""){
         return alert('请选择二级处理人');
     }
-    if(vm.processMessage.reportPerson  ==undefined || vm.processMessage.reportPerson  =="" ){
+    if(vm.processMessage.reportPersonId  ==undefined || vm.processMessage.reportPerson  =="" ){
         return alert('请选择上报人');
     }
     if( vm.processMessage.processName  ==undefined || vm.processMessage.processName  =="" ){
@@ -349,7 +367,7 @@ function saveOrUpdate() {
     if(vm.processMessage.communityId  ==undefined || vm.processMessage.communityId  ==""){
         return alert('请选择社区');
     }
-    if(vm.processMessage.superintendentPhone  ==undefined || vm.processMessage.superintendentPhone  ==""){
+    if(vm.processMessage.superintendentId  ==undefined || vm.processMessage.superintendentPhone  ==""){
         return alert('请选择监管人');
     }
     $.ajax({

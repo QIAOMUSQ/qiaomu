@@ -163,4 +163,38 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         return baseMapper.getUserByUserName(phone);
 
     }
+
+    @Override
+    public String getNameByIds(String idString,String type) {
+        String names = "";
+        if(StringUtils.isNotBlank(idString)){
+            String[] ids = idString.split(type);
+            for(String id : ids){
+                if(StringUtils.isNotBlank(id)){
+                    names +=baseMapper.queryById(Long.valueOf(id)).getUsername()+",";
+                }
+            }
+            if (names.length()>0){
+                names = names.substring(0,names.length()-1);
+            }
+        }
+        return names;
+    }
+
+    @Override
+    public String getUserIdsByPhones(String phones, String type) {
+        String ids = "";
+        if(StringUtils.isNotBlank(phones)){
+            String[] phoneS = phones.split(type);
+            for(String phone : phoneS){
+                if(StringUtils.isNotBlank(phone)){
+                    ids += baseMapper.getUserByUserName(phone).getUserId()+",";
+                }
+            }
+            if (ids.length()>0){
+                ids = ids.substring(0,ids.length()-1);
+            }
+        }
+        return ids;
+    }
 }

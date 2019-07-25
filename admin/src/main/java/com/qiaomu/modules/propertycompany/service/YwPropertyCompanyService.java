@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * @author 李品先
- * @description:
+ * @description: 物业公司
  * @Date 2019-04-21 16:19
  */
 public interface YwPropertyCompanyService extends IService<YwPropertyCompany> {

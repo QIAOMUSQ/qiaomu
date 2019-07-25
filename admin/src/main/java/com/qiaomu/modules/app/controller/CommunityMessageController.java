@@ -162,12 +162,23 @@ public class CommunityMessageController  extends AbstractController {
         return  R.ok().put("page", page);
     }
 
+    /**
+     * 跳转审核页面
+     * @param id
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "getInfoDataById",method = RequestMethod.GET)
     public String getInfoDataById(Long id, ModelMap  model){
         model.addAttribute("model",JSON.toJSONString(communityCheckService.selectById(id)));
         return "modules/propertyCompany/check";
     }
 
+    /**
+     * 新增社区
+     * @param community
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "addCommunity",method = RequestMethod.POST)
     public R addCommunity(CommunityCheckEntity community){
@@ -194,6 +205,24 @@ public class CommunityMessageController  extends AbstractController {
             return BuildResponse.success(JSON.toJSON(user));
         }else {
             return BuildResponse.fail("用户未认证");
+        }
+
+    }
+
+    /**
+     * 设置物业公司
+     * @param checkCommunityId
+     * @param companyId
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "changeCompany",method = RequestMethod.POST)
+    public Object changeCompany(Long checkCommunityId,Long companyId){
+        String info = communityCheckService.changeCompany(checkCommunityId,companyId);
+        if(info.equals("ok")){
+            return BuildResponse.success(info);
+        }else {
+            return  BuildResponse.fail(info);
         }
 
     }

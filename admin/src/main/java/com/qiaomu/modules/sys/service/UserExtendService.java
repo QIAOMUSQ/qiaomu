@@ -48,4 +48,13 @@ public interface UserExtendService extends IService<UserExtend> {
      * @param companyRoleType  物业角色
      */
     void saveCheckInfo(String info, String type, String companyRoleType, Long id,Long userId);
+
+    /**
+     * 获取用户真实姓名
+     * @param userIds
+     * @param communityId
+     * @param type 分割字符串类型
+     * @return
+     */
+    String getRealNamesByUserIdsAndCommunityId(String userIds,Long communityId,String type);
 }

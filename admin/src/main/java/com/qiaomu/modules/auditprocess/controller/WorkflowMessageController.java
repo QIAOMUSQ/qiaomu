@@ -5,6 +5,7 @@ import com.qiaomu.common.utils.R;
 import com.qiaomu.modules.auditprocess.entity.YwWorkflowMessage;
 import com.qiaomu.modules.auditprocess.service.YwWorkflowMessageService;
 import com.qiaomu.modules.sys.controller.AbstractController;
+import com.qiaomu.modules.sys.entity.SysUserEntity;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +45,12 @@ public class WorkflowMessageController extends AbstractController {
     @ResponseBody
     @RequestMapping(value = "process/save", method = RequestMethod.POST)
     @RequiresPermissions(value = {"message:add", "message:update"}, logical = Logical.OR)
-    public R save(@RequestBody YwWorkflowMessage processMessage) {
+    public R save(@RequestBody YwWorkflowMessage workflowMessage) {
       /*  processMessage.setCompanyId(getCompanyOrCommunityByType("1"));
         this.workflowMessageService.save(processMessage);*/
+        SysUserEntity user = getUser();
+        workflowMessage.setCompanyId(user.getCompanyId());
+        workflowMessageService.save(workflowMessage);
         return R.ok();
     }
 

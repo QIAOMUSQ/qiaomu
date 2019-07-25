@@ -70,4 +70,14 @@ public interface SysUserService extends IService<SysUserEntity> {
     List<SysUserEntity> getLoginUser(Long deptId);
 
     SysUserEntity isExist(String phone);
+
+    /**
+     * 根据id字符串和间隔字符类获取用户名
+     * @param idString
+     * @param type
+     * @return
+     */
+    String getNameByIds(String idString,String type);
+
+    String getUserIdsByPhones(String phones,String type);
 }

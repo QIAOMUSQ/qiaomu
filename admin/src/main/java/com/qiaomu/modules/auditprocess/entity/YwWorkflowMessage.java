@@ -19,15 +19,13 @@ public class YwWorkflowMessage implements Serializable {
     @TableId
     private Long id;
     private Long communityId;   //社区id
-    private Long phoneOneId;    //第一处理人
-    private Long phoneTwoId;    //  第二处理人
-    private Long reportPersonId;    //上报人
-    private Long superintendentId; //监管人
+    private String phoneOneId;    //第一处理人
+    private String phoneTwoId;    //  第二处理人
+    private String reportPersonId;    //上报人
+    private String superintendentId; //监管人
     private String processName; //流程名称
     private String dicValue; //字典值
     private Long companyId; //物业ID
-
-
 
     @TableField(exist = false)
     private String communityName;
@@ -49,36 +47,35 @@ public class YwWorkflowMessage implements Serializable {
         this.id = id;
     }
 
-
-    public Long getPhoneOneId() {
+    public String getPhoneOneId() {
         return phoneOneId;
     }
 
-    public void setPhoneOneId(Long phoneOneId) {
+    public void setPhoneOneId(String phoneOneId) {
         this.phoneOneId = phoneOneId;
     }
 
-    public Long getPhoneTwoId() {
+    public String getPhoneTwoId() {
         return phoneTwoId;
     }
 
-    public void setPhoneTwoId(Long phoneTwoId) {
+    public void setPhoneTwoId(String phoneTwoId) {
         this.phoneTwoId = phoneTwoId;
     }
 
-    public Long getReportPersonId() {
+    public String getReportPersonId() {
         return reportPersonId;
     }
 
-    public void setReportPersonId(Long reportPersonId) {
+    public void setReportPersonId(String reportPersonId) {
         this.reportPersonId = reportPersonId;
     }
 
-    public Long getSuperintendentId() {
+    public String getSuperintendentId() {
         return superintendentId;
     }
 
-    public void setSuperintendentId(Long superintendentId) {
+    public void setSuperintendentId(String superintendentId) {
         this.superintendentId = superintendentId;
     }
 

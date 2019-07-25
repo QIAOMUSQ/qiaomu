@@ -47,15 +47,20 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
         String userPhone = (String) params.get("userPhone");
         String communityName = (String) params.get("communityName");
         Long companyId = (Long) params.get("companyId");
-        String propertyCompanyRoleType = (String) params.get("companyRoleType");
-        List<Long> communityIds = communityService.getCommunityIdList(communityName, companyId);
+        String companyRoleType = (String) params.get("companyRoleType");
+        String communityId= (String) params.get("communityId");
+        List<Long> communityIds = new ArrayList<>();
+        if(!StringUtils.isNotBlank(communityId)){
+            communityIds = communityService.getCommunityIdList(communityName, companyId);
+        }
+
         Page<UserExtend> page = this.selectPage(
                 new Query<UserExtend>(params).getPage(),
                 new EntityWrapper<UserExtend>()
                         .eq(StringUtils.isNotBlank(userPhone), "USER_PHONE", userPhone)
                         .in(communityIds.size() > 0, "COMMUNITY_ID", communityIds)
-                       // .or(companyId != null && companyId!=-1, "COMPANY_ID", companyId)
-                        .ne(StringUtils.isNotBlank(propertyCompanyRoleType), "PROPERTY_COMPANY_ROLE_TYPE", propertyCompanyRoleType)//过滤物业管理员
+                        .eq(StringUtils.isNotBlank(communityId),"COMMUNITY_ID", Long.valueOf(communityId))
+                        .eq(StringUtils.isNotBlank(companyRoleType), "COMPANY_ROLE_TYPE", companyRoleType)//过滤物业管理员
                         .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER))
         );
 
@@ -64,6 +69,7 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
             userExtend.setCommunityName(community == null ? "" : community.getName());
             userExtend.setRealName(AESUtil.decrypt(userExtend.getRealName()));
             userExtend.setAddress(AESUtil.decrypt(userExtend.getAddress()));
+            //获取手机号码
             userExtend.setUserPhone(sysUserService.queryById(userExtend.getUserId()).getUsername());
         }
 
@@ -156,5 +162,29 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
         userExtend.setCheckTime(new Date());
         userExtend.setCheckUserId(userId);
         updateById(userExtend);
+    }
+
+    @Override
+    public String getRealNamesByUserIdsAndCommunityId(String userIds, Long communityId, String type) {
+        String names = "";
+        if(StringUtils.isNotBlank(userIds)){
+            String[] ids = userIds.split(type);
+            for(String id : ids){
+                if(StringUtils.isNotBlank(id)){
+                    UserExtend userExtend =new UserExtend();
+                    userExtend.setUserId(Long.valueOf(id));
+                    userExtend.setCommunityId(communityId);
+                    userExtend = baseMapper.selectAll(userExtend);
+                    if(userExtend !=null ){
+                        names += userExtend.getRealName()+",";
+                    }
+
+                }
+            }
+            if (names.length()>0){
+                names = names.substring(0,names.length()-1);
+            }
+        }
+        return names;
     }
 }

@@ -42,6 +42,10 @@ public class CommunityCheckEntity implements Serializable {
 
     private Date checkDate;
     private String remark;
+    private Long communityId;
+    @TableField(exist = false)
+    private String companyName;
+
     @TableField(exist = false)
     private String time;
     public Long getId() {
@@ -146,5 +150,21 @@ public class CommunityCheckEntity implements Serializable {
 
     public void setCheckDate(Date checkDate) {
         this.checkDate = checkDate;
+    }
+
+    public Long getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(Long communityId) {
+        this.communityId = communityId;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 }
