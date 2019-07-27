@@ -10,6 +10,7 @@ public class ArticlePraiseEntity {
 
     private String isPraise;
     private String userId;
+    private String articleId;
     public String getIsPraise() {
         return isPraise;
     }
@@ -27,4 +28,11 @@ public class ArticlePraiseEntity {
         this.userId = userId;
     }
 
+    public String getArticleId() {
+        return articleId;
+    }
+
+    public void setArticleId(String articleId) {
+        this.articleId = articleId;
+    }
 }

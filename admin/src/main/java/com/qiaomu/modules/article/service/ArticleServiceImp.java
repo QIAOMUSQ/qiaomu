@@ -63,6 +63,7 @@ public class ArticleServiceImp implements ArticleService{
         List<ArticleEntity> articles =  articleDao.query(articleSelectModel);
         ArticlePraiseEntity articlePraiseEntity = new ArticlePraiseEntity();
         articlePraiseEntity.setUserId(userId);
+        articlePraiseEntity.setArticleId(articleId);
         String isPraise = articleDao.queryPraise(articlePraiseEntity);
         Integer praiseNum = articles.get(0).getPraiseNum();
         if(praiseNum==null){

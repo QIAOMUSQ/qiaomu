@@ -26,7 +26,7 @@
 	</select>
 
 	<select id="queryPraise" parameterType="com.qiaomu.modules.article.entity.ArticlePraiseEntity" resultType="java.lang.String">
-	select isPraise from pluto_article_praise WHERE userId = #{userId}
+	select isPraise from pluto_article_praise WHERE userId = #{userId} and articleId=#{articleId}
 	</select>
 	<update id="updateArticlePraiseNum" parameterType="com.qiaomu.modules.article.entity.ArticleEntity">
 		update pluto_article set praiseNum = #{praiseNum} where articleId = #{articleId}
