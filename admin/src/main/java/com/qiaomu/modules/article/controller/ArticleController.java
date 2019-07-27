@@ -9,6 +9,7 @@ import com.qiaomu.modules.article.exception.CommentException;
 import com.qiaomu.modules.article.model.ArticleSelectModel;
 import com.qiaomu.modules.article.service.ArticleService;
 import com.qiaomu.modules.sys.controller.AbstractController;
+import com.qiaomu.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +37,8 @@ public class ArticleController extends AbstractController{
 
     @Autowired
     private ArticleService articleService;
+
+
 
     /**
      * 发布新闻

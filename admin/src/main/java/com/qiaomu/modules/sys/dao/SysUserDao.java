@@ -54,4 +54,6 @@ public interface SysUserDao extends BaseMapper<SysUserEntity> {
     List<SysUserEntity> getLoginUser(Long deptId);
 
     SysUserEntity getUserByUserName(String userName);
+
+    String queryUserImageUrl(String userId);
 }

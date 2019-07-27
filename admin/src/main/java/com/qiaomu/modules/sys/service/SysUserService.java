@@ -80,4 +80,6 @@ public interface SysUserService extends IService<SysUserEntity> {
     String getNameByIds(String idString,String type);
 
     String getUserIdsByPhones(String phones,String type);
+
+    String queryUserImageUrl(String userId);
 }

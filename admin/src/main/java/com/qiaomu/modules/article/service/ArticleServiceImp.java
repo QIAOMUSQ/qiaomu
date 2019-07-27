@@ -7,6 +7,7 @@ import com.qiaomu.modules.article.entity.ArticlePraiseEntity;
 import com.qiaomu.modules.article.entity.CommentEntity;
 import com.qiaomu.modules.article.exception.CommentException;
 import com.qiaomu.modules.article.model.ArticleSelectModel;
+import com.qiaomu.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,9 @@ public class ArticleServiceImp implements ArticleService{
     @Autowired
     private ArticleDao articleDao;
 
+    @Autowired
+    private SysUserService sysUserService;
+
     @Override
     public void add(ArticleEntity articleEntity) {
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
@@ -36,6 +40,10 @@ public class ArticleServiceImp implements ArticleService{
         articleEntity.setCreatedAt(DateUtils.formats(date));
         articleEntity.setUpdatedAt(DateUtils.formats(date));
         try {
+            String headUrl = sysUserService.queryUserImageUrl(articleEntity.getAuthorId());
+            if(headUrl!=null){
+                articleEntity.setHeadUrl(headUrl);
+            }
             articleDao.insertArticle(articleEntity);
         }catch (Exception e){
             e.printStackTrace();

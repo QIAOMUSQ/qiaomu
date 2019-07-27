@@ -64,6 +64,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     @Autowired
     private UserExtendService userExtendService;
 
+    @Autowired
+    private SysUserDao sysUserDao;
+
 
     @Override
     public List<Long> queryAllMenuId(Long userId) {
@@ -220,5 +223,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
             }
         }
         return ids;
+    }
+
+    @Override
+    public String queryUserImageUrl(String userId) {
+        return sysUserDao.queryUserImageUrl(userId);
     }
 }

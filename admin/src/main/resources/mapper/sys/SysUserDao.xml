@@ -18,6 +18,12 @@
 		where ur.user_id = #{userId}
 	</select>
 
+	<select id="queryUserImageUrl" resultType="java.lang.String" parameterType="java.lang.String">
+		select a.path  from sys_file as a
+		JOIN sys_user  as b
+		where   b.id=#{userId} AND b.hand_img_id = a.id
+	</select>
+
 	<select id="queryById" resultType="com.qiaomu.modules.sys.entity.SysUserEntity">
 		SELECT * FROM sys_user WHERE user_id = #{userId}
 	</select>

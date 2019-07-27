@@ -43,8 +43,8 @@
 	</update>
 
 	<insert id="insertArticle" parameterType="com.qiaomu.modules.article.entity.ArticleEntity">
-		insert into pluto_article (articleId ,content,title,category,commentId,praiseNum,authorId,isPrivate,communityId,imageUrls,createdAt,updatedAt) VALUES
-		 (#{articleId},#{content},#{title},#{category},#{commentId},#{praiseNum},#{authorId},#{isPrivate},#{communityId},#{imageUrls},#{createdAt},#{updatedAt})
+		insert into pluto_article (articleId ,content,title,category,commentId,praiseNum,authorId,isPrivate,communityId,imageUrls,headUrl,createdAt,updatedAt) VALUES
+		 (#{articleId},#{content},#{title},#{category},#{commentId},#{praiseNum},#{authorId},#{isPrivate},#{communityId},#{imageUrls},#{headUrl},#{createdAt},#{updatedAt})
 	</insert>
 
 	<insert id="insertArticleComment" parameterType="com.qiaomu.modules.article.entity.CommentEntity">
