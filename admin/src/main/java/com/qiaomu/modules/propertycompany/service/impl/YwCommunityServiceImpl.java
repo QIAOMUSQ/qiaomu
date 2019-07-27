@@ -81,8 +81,8 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
     public List<YwCommunity> findAll(YwCommunity community) {
         return this.baseMapper.selectList(new EntityWrapper()
                 .like(StringUtils.isNotBlank(community.getName()), "name", community.getName())
-                .eq(community.getCompanyId() != null && community.getCompanyId() != -1L, "company_id", community.getCompanyId())
-                .eq( community.getCityId() != null &&community.getCityId() != -1L, "city_id", community.getCityId()));
+                .eq(community.getCompanyId() != null, "company_id", community.getCompanyId())
+                .eq( community.getCityId() != null, "city_id", community.getCityId()));
     }
 
     public void save(YwCommunity community) {
@@ -109,6 +109,7 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
             community.setName(communityName);
         }
         communityList = this.communityService.findAll(community);
+
         for (YwCommunity communitys : communityList) {
             communityId.add(communitys.getId());
         }

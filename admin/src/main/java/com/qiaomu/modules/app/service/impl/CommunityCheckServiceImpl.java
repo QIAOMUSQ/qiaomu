@@ -119,6 +119,7 @@ public class CommunityCheckServiceImpl extends ServiceImpl<CommunityCheckDao,Com
             if(!communityCheckEntity.getIsCheck().equals("1")){
                 return "通过状态下才能设置";
             }
+            System.out.println("checkCommunityId = [" + checkCommunityId + "], companyId = [" + companyId + "]");
             YwCommunity community = communityService.queryById(communityCheckEntity.getCommunityId());
             community.setCompanyId(companyId);
             communityService.updateById(community);

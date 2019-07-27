@@ -11,12 +11,16 @@ $(function () {
             { label: '所属社区', name: 'communityName',  width: 45 },
             { label: '创建时间', name: 'createTime', width: 85},
             { label: '角色人', name: 'companyRoleType', width: 60,formatter:function (value, options, row) {
-                if(value == "5"){
+                if(value == "4"){
                     return '<span class="label label-danger">游客</span>';
-                }else if(value == "4"){
-                    return '<span class="label label-success">业主</span>';
                 }else if(value == "3"){
-                    return '<span class="label label-success" style="background: #ec971f">工作人员</span>';
+                    return '<span class="label label-success">业主</span>';
+                }else if(value == "2"){
+                    return '<span class="label label-success" style="background: #ec971f">游客</span>';
+                }else if(value == "1"){
+                    return '<span class="label label-success" style="background: #ec971f">物业公司管理员</span>';
+                }else if(value == "0"){
+                    return '<span class="label label-success" style="background: #ec971f">超级管理员</span>';
                 }
             }},
             { label: '审核账户', name: 'checkUser', width: 60},

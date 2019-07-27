@@ -74,16 +74,16 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
             processMessage.setCommunityName(this.communityService.queryById(processMessage.getCommunityId()).getName());
             processMessage.setDicValue(this.dictService.getdictCodeByTypeValue(processMessage.getDicValue(), "property_process"));
             if(processMessage.getPhoneOneId() !=null){
-                processMessage.setPhoneOneName(AESUtil.decrypt(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getPhoneOneId(),processMessage.getCommunityId(),",")));
+                processMessage.setPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getPhoneOneId(),processMessage.getCommunityId(),","));
             }
             if(processMessage.getPhoneTwoId() !=null ){
-                processMessage.setPhoneTwoName(AESUtil.decrypt(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getPhoneTwoId(),processMessage.getCommunityId(),",")));
+                processMessage.setPhoneTwoName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getPhoneTwoId(),processMessage.getCommunityId(),","));
             }
            if(processMessage.getReportPersonId() !=null ){
-               processMessage.setReportPersonName(AESUtil.decrypt(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getReportPersonId(),processMessage.getCommunityId(),",")));
+               processMessage.setReportPersonName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getReportPersonId(),processMessage.getCommunityId(),","));
            }
             if(processMessage.getSuperintendentId() !=null){
-                processMessage.setSuperintendentName(AESUtil.decrypt(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getSuperintendentId(),processMessage.getCommunityId(),",")));
+                processMessage.setSuperintendentName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getSuperintendentId(),processMessage.getCommunityId(),","));
             }
 
         }

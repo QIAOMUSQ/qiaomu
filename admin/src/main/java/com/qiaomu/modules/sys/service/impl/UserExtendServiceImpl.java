@@ -1,5 +1,6 @@
 package com.qiaomu.modules.sys.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -48,10 +49,14 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
         String communityName = (String) params.get("communityName");
         Long companyId = (Long) params.get("companyId");
         String companyRoleType = (String) params.get("companyRoleType");
-        String communityId= (String) params.get("communityId");
+        String communityIdS= (String) params.get("communityId");
         List<Long> communityIds = new ArrayList<>();
-        if(!StringUtils.isNotBlank(communityId)){
+        Long communityId= null;
+        if(StringUtils.isNotBlank(communityIdS)){
+            communityId= Long.valueOf(communityIdS);
+        }else {
             communityIds = communityService.getCommunityIdList(communityName, companyId);
+            System.out.println("communityIds = [" + JSON.toJSON(communityIds) + "]");
         }
 
         Page<UserExtend> page = this.selectPage(
@@ -59,7 +64,7 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
                 new EntityWrapper<UserExtend>()
                         .eq(StringUtils.isNotBlank(userPhone), "USER_PHONE", userPhone)
                         .in(communityIds.size() > 0, "COMMUNITY_ID", communityIds)
-                        .eq(StringUtils.isNotBlank(communityId),"COMMUNITY_ID", Long.valueOf(communityId))
+                        .eq(communityId != null,"COMMUNITY_ID", communityId)
                         .eq(StringUtils.isNotBlank(companyRoleType), "COMPANY_ROLE_TYPE", companyRoleType)//过滤物业管理员
                         .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER))
         );
@@ -186,5 +191,10 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
             }
         }
         return names;
+    }
+
+    @Override
+    public UserExtend getUserCommunity(Long userId) {
+        return baseMapper.getUserCommunity(userId);
     }
 }

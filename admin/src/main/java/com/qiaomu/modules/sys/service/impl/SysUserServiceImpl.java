@@ -120,8 +120,32 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
             user.setPassword(ShiroUtils.sha256(user.getPassword(), user.getSalt()));
         }
         this.updateById(user);
-        UserExtend userExtend = new UserExtend();
-        if (user.getPropertyCompanyRoleType().equals("1")) {
+        UserExtend userExtend  =  userExtendService.getUserCommunity(user.getUserId());
+        if(userExtend ==null){
+            userExtend = new UserExtend();
+        }
+        if (user.getPropertyCompanyRoleType() !=null) {
+            //5：游客  4：业主  3:物业工作人员 2:物业管理员
+            /*if(user.getPropertyCompanyRoleType().equals("1")){//物业公司管理员
+                userExtend.setCompanyRoleType(user.getPropertyCompanyRoleType());
+            }else  if(user.getPropertyCompanyRoleType().equals("2")){//物业工作人员
+                userExtend.setCompanyRoleType("3");
+            }else if(user.getPropertyCompanyRoleType().equals("3")){//物业业主
+                userExtend.setCompanyRoleType("4");
+            }else if(user.getPropertyCompanyRoleType().equals("4")){//游客
+                userExtend.setCompanyRoleType("2");
+            }*/
+            userExtend.setCompanyRoleType(user.getPropertyCompanyRoleType());
+
+        }
+        userExtend.setCheck("1");
+        if(userExtend.getId()==null){
+            userExtend.setUserId(user.getUserId());
+            userExtendService.insert(userExtend);
+        }else {
+            userExtendService.updateById(userExtend);
+        }
+        /*if (user.getPropertyCompanyRoleType() !=null && user.getPropertyCompanyRoleType().equals("1")) {
             userExtend.setCheck("1");
         }
         if (userExtend != null) {
@@ -132,7 +156,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
             userExtend.setCompanyRoleType(user.getPropertyCompanyRoleType());
             userExtend.setUserPhone(user.getUsername());
             userExtendService.insert(userExtend);
-        }
+        }*/
 
         //保存用户与角色关系
         sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());

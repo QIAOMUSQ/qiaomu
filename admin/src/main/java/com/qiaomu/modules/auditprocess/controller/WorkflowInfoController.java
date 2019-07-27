@@ -52,7 +52,7 @@ public class WorkflowInfoController extends AbstractController {
 
     /**
      * 保存流程信息
-     * @param userId 用户号码
+     * @param userId 用户id
      * @param location  处理位置
      * @param detail    事件详情
      * @param pictureId 图片id字符串

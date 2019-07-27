@@ -50,5 +50,8 @@
         </where>
 
     </select>
+    <select id="getUserCommunity" resultType="com.qiaomu.modules.sys.entity.UserExtend" parameterType="Long">
+         SELECT * FROM yw_user_extend where user_id = #{userId}
+    </select>
 
 </mapper>

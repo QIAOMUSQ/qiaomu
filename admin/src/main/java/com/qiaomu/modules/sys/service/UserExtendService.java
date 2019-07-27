@@ -21,8 +21,6 @@ public interface UserExtendService extends IService<UserExtend> {
     UserExtend getUserExtendInfo(Long id);
 
 
-
-
     void delect(Long[] userIds);
 
     String getUserByPhone(String phone);
@@ -57,4 +55,6 @@ public interface UserExtendService extends IService<UserExtend> {
      * @return
      */
     String getRealNamesByUserIdsAndCommunityId(String userIds,Long communityId,String type);
+
+    UserExtend getUserCommunity(Long userId);
 }
