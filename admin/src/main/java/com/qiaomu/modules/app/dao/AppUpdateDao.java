@@ -2,7 +2,7 @@ package com.qiaomu.modules.app.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.qiaomu.modules.app.entity.AppUpdateEntity;
-import com.qiaomu.modules.infopublish_publish.entity.InvitationEntity;
+import com.qiaomu.modules.infopublish.entity.InvitationEntity;
 
 
 /**

@@ -1,9 +1,9 @@
-package com.qiaomu.modules.infopublish_publish.controller;
+package com.qiaomu.modules.infopublish.controller;
 
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
-import com.qiaomu.modules.infopublish_publish.entity.InvitationEntity;
-import com.qiaomu.modules.infopublish_publish.service.InvitationService;
+import com.qiaomu.modules.infopublish.entity.InvitationEntity;
+import com.qiaomu.modules.infopublish.service.InvitationService;
 import com.qiaomu.modules.sys.controller.AbstractController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

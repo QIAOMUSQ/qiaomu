@@ -5,7 +5,7 @@ import com.qiaomu.modules.article.entity.ArticleEntity;
 import com.qiaomu.modules.article.entity.ArticlePraiseEntity;
 import com.qiaomu.modules.article.entity.CommentEntity;
 import com.qiaomu.modules.article.model.ArticleSelectModel;
-import com.qiaomu.modules.infopublish_publish.entity.InvitationEntity;
+import com.qiaomu.modules.infopublish.entity.InvitationEntity;
 
 import java.util.List;
 

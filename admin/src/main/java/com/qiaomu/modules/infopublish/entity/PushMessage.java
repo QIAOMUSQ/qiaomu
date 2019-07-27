@@ -1,4 +1,4 @@
-package com.qiaomu.modules.infopublish_publish.entity;
+package com.qiaomu.modules.infopublish.entity;
 
 import java.io.Serializable;
 
@@ -78,5 +78,17 @@ public class PushMessage implements Serializable {
 
     public void setInfoType(String infoType) {
         this.infoType = infoType;
+    }
+
+    public PushMessage(String phone, String type, String infoType, String time, String message, String userPhone) {
+        this.phone = phone;
+        this.type = type;
+        this.infoType = infoType;
+        this.time = time;
+        this.message = message;
+        this.userPhone = userPhone;
+    }
+
+    public PushMessage() {
     }
 }

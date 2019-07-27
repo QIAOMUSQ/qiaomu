@@ -6,14 +6,13 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.qiaomu.common.exception.RRException;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
-import com.qiaomu.common.utils.R;
-import com.qiaomu.modules.article.exception.CommentException;
 import com.qiaomu.modules.auditprocess.dao.YwWorkflowInfoDao;
 import com.qiaomu.modules.auditprocess.entity.YwWorkflowInfo;
 import com.qiaomu.modules.auditprocess.entity.YwWorkflowMessage;
 import com.qiaomu.modules.auditprocess.service.YwWorkflowInfoService;
 import com.qiaomu.modules.auditprocess.service.YwWorkflowMessageService;
-import com.qiaomu.modules.sys.entity.SysUserEntity;
+import com.qiaomu.modules.infopublish.entity.PushMessage;
+import com.qiaomu.modules.infopublish.service.PushRedisMessageService;
 import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.service.SysDictService;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
@@ -23,15 +22,10 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
-
-import static com.qiaomu.common.utils.StringCommonUtils.returnNullData;
 
 /**
  * @author 李品先
@@ -56,6 +50,8 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
 
     @Autowired
     private SysUserService userService;
+
+    private PushRedisMessageService pushRedisMessageService;
 
     public PageUtils queryPage(Map<Object, Object> params) {
         Long companyId = null;//
@@ -88,8 +84,6 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
                         .eq(StringUtils.isNotBlank(type),"type",type)
                         .eq(communityId !=null , "community_id", communityId)
                         .addFilterIfNeed(params.get("sql_filter") != null, (String) params.get("sql_filter"), new Object[0]));
-
-       // SysUserEntity user = null;
         for (YwWorkflowInfo workflowInfo : page.getRecords()) {
             YwWorkflowMessage workflowMessage = this.workflowMessageService.getById(workflowInfo.getWorkflowId());
             if(workflowMessage.getPhoneOneId() !=null){
@@ -147,11 +141,12 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
         workflow.setWorkflowType(workflowMessage.getDicValue());
         workflow.setType("0");
         try{
-            workflow.setServiceDate(sdf.parse(serviceDate));
+            workflow.setServiceDate(serviceDate);
             workflow.setCreateTime(new Date());
             workflow.setCompanyId(community.getCompanyId());
             workflow.setCommunityId(communityId);
             this.insert(workflow);
+            findPushUser(workflow,"0");
             return "success";
         }catch (Exception e){
             e.printStackTrace();
@@ -167,7 +162,7 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
      * @param opinionTwo 第二处理人
      * @param opinionReport  上报人
      * @param userOpinion   用户意见
-     * @param type  流程状态 0：申请 1：一级受理 11：一级受理完成 2：二级受理 21：二级受理完成  3：上报  4：通过  5：不通过 6:终止
+     * @param type 流程状态 0：申请 1：一级接受受理 11：一级受理完成 2：二级接受受理 21：二级受理完成  3：上报  4：通过  5：不通过 6:终止
      * @param id 流程信息ID
      * @return
      */
@@ -196,6 +191,7 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
             }
             workflowInfo.setType(type);
             updateById(workflowInfo);
+            findPushUser(workflowInfo,type);
             return true;
         }catch (Exception e){
             e.printStackTrace();
@@ -203,7 +199,49 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
         }
     }
 
-    private void pushMessage(YwWorkflowInfo info,String type){
+    /**
+     * 推送信息
+     * @param info
+     * @param type 0：用户新增推送信息
+     *             2：用户完成该阶段信息推送下一阶段处理人
+     */
+    private void findPushUser(YwWorkflowInfo info,String type){
+        Long workFlow = info.getWorkflowId();
+        YwWorkflowMessage workflowMessage = workflowMessageService.getById(workFlow);
 
+        //type  流程状态 0：申请 1：一级接受受理 11：一级受理完成
+        // 2：二级主管接受受理 21：二级受理完成  3：上报  4：通过  5：不通过 6:终止
+        PushMessage message = new PushMessage();
+        if (info.getType().equals("0")){
+            //用户建立新流程申请
+            String idString =workflowMessage.getPhoneOneId();
+            pushRedisMessageService.pushMessage(info.getUserId(),idString,"报修申请","0","请及时处理新流程");
+        }else if(info.getType().equals("1")){
+            //一级处理人接受处理提醒用户
+            pushRedisMessageService.pushMessage(info.getUserId(),info.getUserId()+"","报修申请","0","您的申请工作人员已经受理");
+        }else if(info.getType().equals("11")){
+            //一级处理人处理完成提醒用户
+            pushRedisMessageService.pushMessage(info.getUserId(),info.getUserId()+"","报修申请","0","您的申请工作人员已经受理完成");
+            String idString =workflowMessage.getPhoneTwoId();
+            //当有下级处理人推送通知
+            if(idString != null){
+                pushRedisMessageService.pushMessage(info.getUserId(),idString,"报修申请","0","新流程需要您受理，请及时处理");
+            }
+        }else if(info.getType().equals("2")){
+            //二级主管接受受理提醒用户
+            pushRedisMessageService.pushMessage(info.getUserId(),info.getUserId()+"","报修申请","0","二级主管接受受理");
+        }else if(info.getType().equals("21")){
+            //二级主管完成受理，并提醒用户
+            pushRedisMessageService.pushMessage(info.getUserId(),info.getUserId()+"","报修申请","0","二级主管完成受理");
+            String idString =workflowMessage.getReportPersonId();
+            if(idString !=null ){
+                pushRedisMessageService.pushMessage(info.getUserId(),idString,"报修申请","0","新流程需要您受理，请及时处理");
+            }
+        }else if(info.getType().equals("3")){
+            pushRedisMessageService.pushMessage(info.getUserId(),info.getUserId()+"","报修申请","0","您提交的申请流程信息已经上报到管理层");
+        }else if(info.getType().equals("6")){
+            pushRedisMessageService.pushMessage(info.getUserId(),info.getUserId()+"","报修申请","0","您提交的申请流程已经终止,有什么疑问请联系处理人员");
+        }
     }
+
 }

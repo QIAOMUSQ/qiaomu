@@ -1,7 +1,7 @@
-package com.qiaomu.modules.infopublish_publish.dao;
+package com.qiaomu.modules.infopublish.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.qiaomu.modules.infopublish_publish.entity.InvitationEntity;
+import com.qiaomu.modules.infopublish.entity.InvitationEntity;
 
 /**
  * @author 李品先

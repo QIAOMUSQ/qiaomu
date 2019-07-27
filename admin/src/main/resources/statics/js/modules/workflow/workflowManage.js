@@ -352,12 +352,12 @@ function saveOrUpdate() {
     if(vm.processMessage.phoneOneId == undefined || vm.processMessage.phoneOne ==""){
         return alert('请选择一级处理人');
     }
-    if(vm.processMessage.phoneTwoId  == undefined || vm.processMessage.phoneTwo ==""){
+  /*  if(vm.processMessage.phoneTwoId  == undefined || vm.processMessage.phoneTwo ==""){
         return alert('请选择二级处理人');
-    }
-    if(vm.processMessage.reportPersonId  ==undefined || vm.processMessage.reportPerson  =="" ){
+    }*/
+    /*if(vm.processMessage.reportPersonId  ==undefined || vm.processMessage.reportPerson  =="" ){
         return alert('请选择上报人');
-    }
+    }*/
     if( vm.processMessage.processName  ==undefined || vm.processMessage.processName  =="" ){
         return alert('请填写流程名称');
     }

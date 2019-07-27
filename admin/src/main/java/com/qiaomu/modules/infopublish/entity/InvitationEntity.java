@@ -1,4 +1,4 @@
-package com.qiaomu.modules.infopublish_publish.entity;
+package com.qiaomu.modules.infopublish.entity;
 
 import com.baomidou.mybatisplus.annotations.TableName;
 import org.hibernate.validator.constraints.Length;

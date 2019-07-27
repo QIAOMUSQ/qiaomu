@@ -37,7 +37,7 @@ public class YwWorkflowInfo implements Serializable {
     private Date createTime;    //发起时间
     private String location;    //事发位置
     private String pictureId;
-    private Date serviceDate;//上门维修时间
+    private String serviceDate;//上门维修时间
     private String workflowType;//流程类型
 
     private String finalityOpinion;//评审终结意见
@@ -224,11 +224,11 @@ public class YwWorkflowInfo implements Serializable {
         this.pictureId = pictureId;
     }
 
-    public Date getServiceDate() {
+    public String getServiceDate() {
         return serviceDate;
     }
 
-    public void setServiceDate(Date serviceDate) {
+    public void setServiceDate(String serviceDate) {
         this.serviceDate = serviceDate;
     }
 

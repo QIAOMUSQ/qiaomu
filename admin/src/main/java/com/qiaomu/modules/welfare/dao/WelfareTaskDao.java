@@ -1,7 +1,7 @@
 package com.qiaomu.modules.welfare.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.qiaomu.modules.infopublish_publish.entity.InvitationEntity;
+import com.qiaomu.modules.infopublish.entity.InvitationEntity;
 import com.qiaomu.modules.welfare.entity.PointEntity;
 import com.qiaomu.modules.welfare.entity.TaskEntity;
 import com.qiaomu.modules.welfare.entity.TaskPublishUserEntity;

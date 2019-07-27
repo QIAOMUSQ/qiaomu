@@ -1,8 +1,8 @@
-package com.qiaomu.modules.infopublish_publish.service;
+package com.qiaomu.modules.infopublish.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.qiaomu.common.utils.PageUtils;
-import com.qiaomu.modules.infopublish_publish.entity.InvitationEntity;
+import com.qiaomu.modules.infopublish.entity.InvitationEntity;
 
 import java.util.Map;
 

@@ -1,4 +1,4 @@
-package com.qiaomu.modules.infopublish_publish.service.impl;
+package com.qiaomu.modules.infopublish.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -6,9 +6,9 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.qiaomu.common.utils.Constant;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
-import com.qiaomu.modules.infopublish_publish.dao.InvitationDao;
-import com.qiaomu.modules.infopublish_publish.entity.InvitationEntity;
-import com.qiaomu.modules.infopublish_publish.service.InvitationService;
+import com.qiaomu.modules.infopublish.dao.InvitationDao;
+import com.qiaomu.modules.infopublish.entity.InvitationEntity;
+import com.qiaomu.modules.infopublish.service.InvitationService;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
