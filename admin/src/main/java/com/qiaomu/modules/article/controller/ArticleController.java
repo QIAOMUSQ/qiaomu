@@ -168,6 +168,21 @@ public class ArticleController extends AbstractController{
     }
 
     /**
+     * 查询所有文章
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "queryAllByCommunityIdAndCategary",method = RequestMethod.POST)
+    public String queryAllByCommunityIdAndCategary(String communityId,String category){
+        ArticleSelectModel articleSelectModel = new ArticleSelectModel();
+        articleSelectModel.setCommunityId(communityId);
+        articleSelectModel.setCategory(category);
+        List<ArticleEntity> articles = articleService.query(articleSelectModel);
+        return JSON.toJSONString(BuildResponse.success(articles));
+
+    }
+
+    /**
      * 查询指定类型的文章
      * @param
      * @return

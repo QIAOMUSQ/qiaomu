@@ -36,7 +36,7 @@
 	</update>
 
 	<insert id="insertArticlePraise" parameterType="com.qiaomu.modules.article.entity.ArticlePraiseEntity">
-		insert into pluto_article_praise (userId,isPraise) VALUES (#{userId},#{isPraise})
+		insert into pluto_article_praise (userId,isPraise,articleId) VALUES (#{userId},#{isPraise},#{articleId})
 	</insert>
 	<update id="updateArticlePraise" parameterType="com.qiaomu.modules.article.entity.ArticlePraiseEntity">
 		update pluto_article_praise set isPraise = #{isPraise} where userId = #{userId}
