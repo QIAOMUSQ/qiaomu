@@ -17,6 +17,8 @@ public class SysFileEntity {
 
     private String path;
 
+    private String servicePath;
+
     private String name;
 
     private Date dateTime;
@@ -71,5 +73,13 @@ public class SysFileEntity {
 
     public void setFileSize(Long fileSize) {
         this.fileSize = fileSize;
+    }
+
+    public String getServicePath() {
+        return servicePath;
+    }
+
+    public void setServicePath(String servicePath) {
+        this.servicePath = servicePath;
     }
 }

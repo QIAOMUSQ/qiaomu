@@ -51,7 +51,7 @@ spring:
         min-idle: 5       # 连接池中的最小空闲连接
 
 file:
-  save: /www/file/
+  save: /www/app/admin/staticFile/outapp/image/
 
 logging:
   level: info

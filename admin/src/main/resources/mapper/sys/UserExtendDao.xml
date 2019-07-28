@@ -11,6 +11,7 @@
     <select id="selectAll" resultType="com.qiaomu.modules.sys.entity.UserExtend">
         SELECT * FROM yw_user_extend ue LEFT JOIN  sys_user u ON ue.user_id = u.user_id
         <where>
+            1=1
             <if test="userPhone != null  and userPhone !=''" >
                AND  u.username = #{userPhone}
             </if>
@@ -29,6 +30,7 @@
 
         SELECT * FROM yw_user_extend
         <where>
+            1=1
             <if test="userId != null  and userId !=''" >
                 AND  user_id = #{userId}
             </if>

@@ -69,6 +69,8 @@ public class YwWorkflowInfo implements Serializable {
     private String communityName;
     @TableField(exist = false)
     private String typeName;
+    @TableField(exist = false)
+    private String userName;
 
     public Long getId() {
         return this.id;
@@ -326,5 +328,13 @@ public class YwWorkflowInfo implements Serializable {
 
     public void setFinalityDate(Date finalityDate) {
         this.finalityDate = finalityDate;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

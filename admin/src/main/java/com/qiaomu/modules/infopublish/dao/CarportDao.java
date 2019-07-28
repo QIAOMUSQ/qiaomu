@@ -3,6 +3,8 @@ package com.qiaomu.modules.infopublish.dao;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.qiaomu.modules.infopublish.entity.CarportEntity;
 
+import java.util.List;
+
 /**
  * @author 李品先
  * @description:
@@ -10,4 +12,5 @@ import com.qiaomu.modules.infopublish.entity.CarportEntity;
  */
 
 public interface CarportDao  extends BaseMapper<CarportEntity> {
+    List<CarportEntity> selectAll(CarportEntity carport);
 }

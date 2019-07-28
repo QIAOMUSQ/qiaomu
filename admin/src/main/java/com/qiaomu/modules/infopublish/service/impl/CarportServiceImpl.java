@@ -6,6 +6,8 @@ import com.qiaomu.modules.infopublish.entity.CarportEntity;
 import com.qiaomu.modules.infopublish.service.CarportService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author 李品先
  * @description:
@@ -13,4 +15,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CarportServiceImpl extends ServiceImpl<CarportDao,CarportEntity> implements CarportService {
+    @Override
+    public List<CarportEntity> selectAll(CarportEntity carport) {
+        return this.baseMapper.selectAll(carport);
+    }
 }

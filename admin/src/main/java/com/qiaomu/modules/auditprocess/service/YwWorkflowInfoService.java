@@ -5,6 +5,7 @@ import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
 import com.qiaomu.modules.auditprocess.entity.YwWorkflowInfo;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,4 +41,6 @@ public interface YwWorkflowInfoService extends IService<YwWorkflowInfo> {
      * @return
      */
     Boolean updateUserWorkflowInfo(String opinionSuperintendent, String opinionOne, String opinionTwo, String opinionReport, String userOpinion, String type, Long id);
+
+    List<YwWorkflowInfo> getAll (Long userId,Long communityId,String workflowType, String type);
 }
