@@ -51,6 +51,7 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
     @Autowired
     private SysUserService userService;
 
+    @Autowired
     private PushRedisMessageService pushRedisMessageService;
 
     public PageUtils queryPage(Map<Object, Object> params) {
@@ -146,7 +147,7 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
             workflow.setCompanyId(community.getCompanyId());
             workflow.setCommunityId(communityId);
             this.insert(workflow);
-            findPushUser(workflow,"0");
+          //  findPushUser(workflow,"0");
             return "success";
         }catch (Exception e){
             e.printStackTrace();
@@ -191,7 +192,7 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
             }
             workflowInfo.setType(type);
             updateById(workflowInfo);
-            findPushUser(workflowInfo,type);
+           // findPushUser(workflowInfo,type);
             return true;
         }catch (Exception e){
             e.printStackTrace();

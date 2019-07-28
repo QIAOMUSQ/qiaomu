@@ -65,8 +65,10 @@ public class SysFileConcroller {
                 File newFile = new File(savePath + saveName);
                 fileEntity.setDateTime(new Date());
                 FileUtil.writeStream(newFile, file.getInputStream());
+
                 fileEntity.setName(saveName);
-                fileEntity.setPath(savePath + saveName);
+                fileEntity.setServicePath(savePath + saveName);
+                fileEntity.setPath("http://103.26.76.116:9999/admin/outapp/image/" + saveName);
                 fileEntity.setOrgName(orgName);
                 fileEntity.setFileSize(fileSize);
                 sysFileService.insertInfo(fileEntity);
@@ -155,7 +157,7 @@ public class SysFileConcroller {
         try {
             if (null != id && id != -1) {
                 SysFileEntity fileEntity =  sysFileService.selectById(id);
-                InputStream in=new FileInputStream(new File(fileEntity.getPath()));//将该文件加入到输入流之中
+                InputStream in=new FileInputStream(new File(fileEntity.getServicePath()));//将该文件加入到输入流之中
                 byte[] body=null;
                 body=new byte[in.available()];// 返回下一次对此输入流调用的方法可以不受阻塞地从此输入流读取（或跳过）的估计剩余字节数
                 in.read(body);//读入到输入流里面

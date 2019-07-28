@@ -4,4 +4,22 @@
 <mapper namespace="com.qiaomu.modules.infopublish.dao.CarportDao">
 
 
+    <select id="selectAll" resultType="com.qiaomu.modules.infopublish.entity.CarportEntity">
+        SELECT * from yw_carport
+        <where>
+            1=1
+            <if test="userId !='' and userId !=null">
+                AND user_id= #{userId}
+            </if>
+            <if test="communityId !='' and communityId !=null">
+                and community_id = #{communityId}
+            </if>
+            <if test="type !='' and type !=null">
+                and type = #{type}
+            </if>
+            <if test="status !='' and status !=null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
 </mapper>

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author 李品先
@@ -32,6 +33,10 @@ public class CarportEntity implements Serializable {
     private String location;
 
     private String type;//1:出租车位 2：求租车位;3：车位出售
+
+    private String status;
+
+    private Date createTime;
 
     public Long getId() {
         return id;
@@ -103,5 +108,21 @@ public class CarportEntity implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

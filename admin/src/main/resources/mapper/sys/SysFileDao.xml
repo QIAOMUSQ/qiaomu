@@ -7,8 +7,8 @@
     <insert id="insertInfo" parameterType="com.qiaomu.modules.sys.entity.SysFileEntity" useGeneratedKeys="true" keyProperty="id">
 
         insert into sys_file
-        (PATH,NAME,DATE_TIME,ORG_NAME,FILE_SIZE)
+        (PATH,NAME,DATE_TIME,ORG_NAME,FILE_SIZE,SERVICE_PATH)
          VALUES
-		(#{path} ,#{name},#{dateTime},#{orgName},#{fileSize})
+		(#{path} ,#{name},#{dateTime},#{orgName},#{fileSize},#{servicePath})
     </insert>
 </mapper>
