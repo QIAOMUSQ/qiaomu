@@ -5,7 +5,7 @@ $(function () {
         mtype:"POST",
         colModel: [
             { label: '', name: 'id', width: 45,hidden:true  },
-            { label: '业主', name: 'clientPhone', width: 75 },
+            { label: '业主', name: 'userName', width: 75 },
             { label: '流程名称', name: 'processName', width: 75 },
             { label: '一级处理时间', name: 'detailOneDate', sortable: false, width: 75 },
             { label: '二级级处理时间', name: 'detailTwoDate',  width: 75 },

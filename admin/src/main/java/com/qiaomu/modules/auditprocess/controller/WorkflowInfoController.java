@@ -97,9 +97,8 @@ public class WorkflowInfoController extends AbstractController {
      */
     @ResponseBody
     @RequestMapping(value = "getUserApplyWorkflowInfo",method = RequestMethod.POST)
-    public Object getUserApplyWorkflowInfo(Long userId,Long communityId,String workflowType,
-                                      String type,Integer page,Integer limit){
-        Map<Object, Object> params = new HashMap<>();
+    public Object getUserApplyWorkflowInfo(Long userId,Long communityId,String workflowType, String type,Integer page,Integer limit){
+        /*Map<Object, Object> params = new HashMap<>();
         params.put("page",page);
         params.put("limit",limit);
         params.put("userId",userId);
@@ -114,8 +113,9 @@ public class WorkflowInfoController extends AbstractController {
             }
         }else {
             params.put("communityId",communityId);
-        }
-        return BuildResponse.success(JSON.toJSON(this.WorkflowCheckService.queryPage(params)));
+        }*/
+
+        return BuildResponse.success(JSON.toJSON(this.WorkflowCheckService.getAll(userId,communityId,workflowType,type)));
     }
 
     /**
