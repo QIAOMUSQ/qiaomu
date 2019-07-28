@@ -16,6 +16,7 @@ public class TaskEntity {
     private String imageUrls;
     private String createdAt;
     private String updatedAt;
+    private String headUrl;
     public String getServiceId() {
         return serviceId;
     }
@@ -88,5 +89,13 @@ public class TaskEntity {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getHeadUrl() {
+        return headUrl;
+    }
+
+    public void setHeadUrl(String headUrl) {
+        this.headUrl = headUrl;
     }
 }

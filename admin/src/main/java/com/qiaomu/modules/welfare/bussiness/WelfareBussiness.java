@@ -5,6 +5,7 @@ import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.CommonUtils;
 import com.qiaomu.common.utils.DateUtils;
 import com.qiaomu.common.validator.Assert;
+import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.welfare.entity.PointEntity;
 import com.qiaomu.modules.welfare.entity.TaskEntity;
 import com.qiaomu.modules.welfare.entity.TaskPublishUserEntity;
@@ -34,6 +35,9 @@ import static com.qiaomu.modules.welfare.constant.Status.*;
 @Service
 public class WelfareBussiness {
     private Logger logger = LoggerFactory.getLogger(getClass());
+    @Autowired
+    private SysUserService sysUserService;
+
     @Autowired
     private PublicWelfareTaskService publicWelfareTaskService;
 
@@ -93,6 +97,12 @@ public class WelfareBussiness {
         taskEntity.setCreatedAt(createdTime);
         taskEntity.setUpdatedAt(createdTime);
         taskEntity.setImageUrls(JSON.toJSONString(imageUrls));
+
+        String headUrl = sysUserService.queryUserImageUrl(publishUserId);
+        if(headUrl!=null){
+            taskEntity.setHeadUrl(headUrl);
+        }
+
         String serviceId = publicWelfareTaskService.newTask(taskEntity);
         TaskPublishUserEntity taskUserEntity = new TaskPublishUserEntity();
         taskUserEntity.setPublishUserId(publishUserId);

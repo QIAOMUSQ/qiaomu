@@ -9,8 +9,8 @@
 	</resultMap>
 	<!-- 根据key，更新value -->
 	<insert id="newTask" parameterType="com.qiaomu.modules.welfare.entity.TaskEntity" >
-		insert into welfare_task (serviceId ,serviceName,seviceDetail,communityId,status,points,imageUrls,createdAt,updatedAt) VALUES
-		(#{serviceId} ,#{serviceName},#{seviceDetail},#{communityId},#{status},#{points},#{imageUrls},#{createdAt},#{updatedAt})
+		insert into welfare_task (serviceId ,serviceName,seviceDetail,communityId,status,points,imageUrls,headUrl,createdAt,updatedAt) VALUES
+		(#{serviceId} ,#{serviceName},#{seviceDetail},#{communityId},#{status},#{points},#{imageUrls},#{headUrl},#{createdAt},#{updatedAt})
 	</insert>
 
 	<insert id="newTaskUser" parameterType="com.qiaomu.modules.welfare.entity.TaskPublishUserEntity" >
