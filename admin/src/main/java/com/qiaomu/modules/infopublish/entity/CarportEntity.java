@@ -1,5 +1,6 @@
 package com.qiaomu.modules.infopublish.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -26,17 +27,16 @@ public class CarportEntity implements Serializable {
 
     private String content;
 
-    private String imgs;
+    private String imgPath;
 
-    private String contactPerson;
-
-    private String location;
+    private Long browsePerson;//浏览人数
 
     private String type;//1:出租车位 2：求租车位;3：车位出售
 
-    private String status;
-
     private Date createTime;
+
+    @TableField(exist = false)
+    private String handImg;
 
     public Long getId() {
         return id;
@@ -78,29 +78,23 @@ public class CarportEntity implements Serializable {
         this.content = content;
     }
 
-    public String getImgs() {
-        return imgs;
+    public String getImgPath() {
+        return imgPath;
     }
 
-    public void setImgs(String imgs) {
-        this.imgs = imgs;
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
     }
 
-    public String getContactPerson() {
-        return contactPerson;
+    public Long getBrowsePerson() {
+        return browsePerson;
     }
 
-    public void setContactPerson(String contactPerson) {
-        this.contactPerson = contactPerson;
+    public void setBrowsePerson(Long browsePerson) {
+        this.browsePerson = browsePerson;
     }
 
-    public String getLocation() {
-        return location;
-    }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
 
     public String getType() {
         return type;
@@ -110,13 +104,6 @@ public class CarportEntity implements Serializable {
         this.type = type;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public Date getCreateTime() {
         return createTime;
@@ -124,5 +111,13 @@ public class CarportEntity implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getHandImg() {
+        return handImg;
+    }
+
+    public void setHandImg(String handImg) {
+        this.handImg = handImg;
     }
 }

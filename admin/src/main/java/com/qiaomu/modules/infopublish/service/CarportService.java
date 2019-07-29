@@ -3,6 +3,7 @@ package com.qiaomu.modules.infopublish.service;
 import com.baomidou.mybatisplus.service.IService;
 import com.qiaomu.modules.infopublish.entity.CarportEntity;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -13,4 +14,8 @@ import java.util.List;
 public interface CarportService extends IService<CarportEntity> {
 
     List<CarportEntity> selectAll(CarportEntity carport);
+
+    Boolean save(CarportEntity carport, HttpServletRequest request);
+
+    CarportEntity getCarportById(Long id);
 }

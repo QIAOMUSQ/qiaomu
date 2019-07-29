@@ -1,29 +1,24 @@
-package com.qiaomu.modules.auditprocess.controller;
+package com.qiaomu.modules.workflow.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.qiaomu.common.exception.RRException;
 import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
-import com.qiaomu.modules.article.exception.CommentException;
-import com.qiaomu.modules.auditprocess.entity.YwWorkflowMessage;
-import com.qiaomu.modules.auditprocess.service.YwWorkflowInfoService;
-import com.qiaomu.modules.auditprocess.service.YwWorkflowMessageService;
+import com.qiaomu.modules.workflow.service.YwWorkflowInfoService;
+import com.qiaomu.modules.workflow.service.YwWorkflowMessageService;
 import com.qiaomu.modules.sys.controller.AbstractController;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
-import com.qiaomu.modules.sys.entity.UserExtend;
-import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,13 +61,13 @@ public class WorkflowInfoController extends AbstractController {
     public Object saveWorkflowInfo(Long userId,String location,
                               String detail,String pictureId,
                               String serviceDate,Long workflowId,
-                              Long communityId){
+                              Long communityId,HttpServletRequest request){
         try {
             if(communityId != null){
                String info = WorkflowCheckService.saveWorkflowInfo(userId,
-                        location,detail,
+                       location,detail,
                         pictureId,serviceDate,
-                        workflowId,communityId);
+                        workflowId,communityId,request);
                 return JSON.toJSONString(BuildResponse.success(info));
             }else {
                 return JSON.toJSONString(BuildResponse.fail("请进行个人信息验证"));

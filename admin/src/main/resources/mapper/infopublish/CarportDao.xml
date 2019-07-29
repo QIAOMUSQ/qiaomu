@@ -17,9 +17,6 @@
             <if test="type !='' and type !=null">
                 and type = #{type}
             </if>
-            <if test="status !='' and status !=null">
-                and status = #{status}
-            </if>
         </where>
     </select>
 </mapper>

@@ -1,7 +1,7 @@
-package com.qiaomu.modules.auditprocess.dao;
+package com.qiaomu.modules.workflow.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.qiaomu.modules.auditprocess.entity.YwWorkflowInfo;
+import com.qiaomu.modules.workflow.entity.YwWorkflowInfo;
 
 import java.util.List;
 

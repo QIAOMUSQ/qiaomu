@@ -1,20 +1,20 @@
-package com.qiaomu.modules.auditprocess.service.impl;
+package com.qiaomu.modules.workflow.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.qiaomu.common.exception.RRException;
-import com.qiaomu.common.utils.AESUtil;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
-import com.qiaomu.modules.auditprocess.dao.YwWorkflowInfoDao;
-import com.qiaomu.modules.auditprocess.entity.YwWorkflowInfo;
-import com.qiaomu.modules.auditprocess.entity.YwWorkflowMessage;
-import com.qiaomu.modules.auditprocess.service.YwWorkflowInfoService;
-import com.qiaomu.modules.auditprocess.service.YwWorkflowMessageService;
+import com.qiaomu.modules.sys.service.SysFileService;
+import com.qiaomu.modules.workflow.dao.YwWorkflowInfoDao;
+import com.qiaomu.modules.workflow.entity.YwWorkflowInfo;
+import com.qiaomu.modules.workflow.entity.YwWorkflowMessage;
+import com.qiaomu.modules.workflow.service.YwWorkflowInfoService;
+import com.qiaomu.modules.workflow.service.YwWorkflowMessageService;
 import com.qiaomu.modules.infopublish.entity.PushMessage;
 import com.qiaomu.modules.infopublish.service.PushRedisMessageService;
-import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.service.SysDictService;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
@@ -22,8 +22,11 @@ import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.sys.service.UserExtendService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -56,6 +59,9 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
 
     @Autowired
     private PushRedisMessageService pushRedisMessageService;
+
+    @Autowired
+    private SysFileService fileService;
 
     public PageUtils queryPage(Map<Object, Object> params) {
         Long companyId = null;//
@@ -108,9 +114,9 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
                 workflowInfo.setSuperintendentPhone(workflowMessage.getSuperintendentId());
             }
             workflowInfo.setProcessName(workflowMessage.getProcessName());
-            UserExtend user = userExtendService.getUserCommunity(workflowInfo.getUserId());
-            if(user!=null && user.getRealName() !=null){
-                workflowInfo.setUserName(AESUtil.decrypt(user.getRealName()));
+            String user = userExtendService.getRealNamesByUserIdsAndCommunityId(workflowInfo.getUserId().toString(),workflowMessage.getCommunityId(),",");
+            if(user!=null){
+                workflowInfo.setUserName(user);
             }
 
         }
@@ -130,9 +136,10 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
      * @return
      */
     @Override
+    @Transactional
     public String saveWorkflowInfo(Long userId, String location,
                                          String detail, String pictureId,
-                                         String serviceDate, Long workflowId, Long communityId) {
+                                         String serviceDate, Long workflowId, Long communityId,HttpServletRequest request) {
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         YwWorkflowMessage workflowMessage = workflowMessageService.getById(workflowId);
         YwCommunity community =  communityService.queryById(communityId);
@@ -140,16 +147,18 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
         if(community.getCompanyId() == null){
             throw new RRException("社区未分配!");
         }
-        YwWorkflowInfo workflow = new YwWorkflowInfo();
 
-        workflow.setUserId(userId);
-        workflow.setWorkflowId(workflowId);
-        workflow.setLocation(location);
-        workflow.setDetail(detail);
-        workflow.setPictureId(pictureId);
-        workflow.setWorkflowType(workflowMessage.getDicValue());
-        workflow.setType("0");
         try{
+            YwWorkflowInfo workflow = new YwWorkflowInfo();
+
+            workflow.setUserId(userId);
+            workflow.setWorkflowId(workflowId);
+            workflow.setLocation(location);
+            workflow.setDetail(detail);
+           // workflow.setPictureId(pictureId);
+            workflow.setPictureId(JSON.toJSONString(fileService.imageUrls(request)));
+            workflow.setWorkflowType(workflowMessage.getDicValue());
+            workflow.setType("0");
             workflow.setServiceDate(serviceDate);
             workflow.setCreateTime(new Date());
             workflow.setCompanyId(community.getCompanyId());

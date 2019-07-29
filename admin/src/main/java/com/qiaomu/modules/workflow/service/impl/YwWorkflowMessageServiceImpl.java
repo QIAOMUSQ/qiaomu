@@ -1,15 +1,13 @@
-package com.qiaomu.modules.auditprocess.service.impl;
+package com.qiaomu.modules.workflow.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.qiaomu.common.utils.AESUtil;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
-import com.qiaomu.common.utils.StringCommonUtils;
-import com.qiaomu.modules.auditprocess.dao.YwWorkflowMessageDao;
-import com.qiaomu.modules.auditprocess.entity.YwWorkflowMessage;
-import com.qiaomu.modules.auditprocess.service.YwWorkflowMessageService;
+import com.qiaomu.modules.workflow.dao.YwWorkflowMessageDao;
+import com.qiaomu.modules.workflow.entity.YwWorkflowMessage;
+import com.qiaomu.modules.workflow.service.YwWorkflowMessageService;
 import com.qiaomu.modules.sys.service.SysDictService;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
 import com.qiaomu.modules.sys.service.SysUserService;
@@ -19,12 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
-
-import static com.qiaomu.common.utils.StringCommonUtils.returnNullData;
 
 /**
  * @author 李品先
