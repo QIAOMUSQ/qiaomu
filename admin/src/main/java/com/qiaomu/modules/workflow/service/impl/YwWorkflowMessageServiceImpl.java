@@ -1,5 +1,6 @@
 package com.qiaomu.modules.workflow.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -86,10 +87,12 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
 
     @Transactional
     public void save(YwWorkflowMessage processMessage) {
-        processMessage.setPhoneOneId(userService.getUserIdsByPhones(processMessage.getPhoneOneId(),","));
+        System.out.println("processMessage = [" + JSON.toJSONString(processMessage) + "]");
+       /* processMessage.setPhoneOneId(userService.getUserIdsByPhones(processMessage.getPhoneOneId(),","));
         processMessage.setPhoneTwoId(userService.getUserIdsByPhones(processMessage.getPhoneTwoId(),","));
         processMessage.setReportPersonId(userService.getUserIdsByPhones(processMessage.getReportPersonId(),","));
         processMessage.setSuperintendentId(userService.getUserIdsByPhones(processMessage.getSuperintendentId(),","));
+       */
         if (processMessage.getId() != null) {
             updateById(processMessage);
         } else {
@@ -100,8 +103,21 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
 
 
     public YwWorkflowMessage getById(Long id) {
-        YwWorkflowMessage processMessage = (YwWorkflowMessage) selectById(id);
-       processMessage.setCommunityName(this.communityService.queryById(processMessage.getCommunityId()).getName());
+        YwWorkflowMessage processMessage = selectById(id);
+        processMessage.setCommunityName(this.communityService.queryById(processMessage.getCommunityId()).getName());
+        processMessage.setDicValue(this.dictService.getdictCodeByTypeValue(processMessage.getDicValue(), "property_process"));
+        if(processMessage.getPhoneOneId() !=null){
+            processMessage.setPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getPhoneOneId(),processMessage.getCommunityId(),","));
+        }
+        if(processMessage.getPhoneTwoId() !=null ){
+            processMessage.setPhoneTwoName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getPhoneTwoId(),processMessage.getCommunityId(),","));
+        }
+        if(processMessage.getReportPersonId() !=null ){
+            processMessage.setReportPersonName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getReportPersonId(),processMessage.getCommunityId(),","));
+        }
+        if(processMessage.getSuperintendentId() !=null){
+            processMessage.setSuperintendentName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getSuperintendentId(),processMessage.getCommunityId(),","));
+        }
         return processMessage;
     }
 

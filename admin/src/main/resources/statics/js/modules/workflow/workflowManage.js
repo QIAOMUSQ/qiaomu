@@ -7,8 +7,8 @@ $(function () {
             { label: '', name: 'id', width: 45,hidden:true,index: "id", key: true   },
             { label: '流程名称', name: 'processName', width: 45,sortable: false},
             { label: '流程类型', name: 'dicValue', width: 75 ,sortable: false},
-            { label: '一级处理人', name: 'phoneOneName', width: 90 ,sortable: false},
-            { label: '二级处理人', name: 'phoneTwoName', width: 90 ,sortable: false},
+            { label: '处理人员', name: 'phoneOneName', width: 90 ,sortable: false},
+            { label: '主管人员', name: 'phoneTwoName', width: 90 ,sortable: false},
             { label: '上报人', name: 'reportPersonName', width: 70 ,sortable: false},
             { label: '社区名称', name: 'communityName', width: 60,sortable: false},
             { label: '创建时间', name: 'createTime', index: "create_time", width: 85}
@@ -126,6 +126,7 @@ var vm = new Vue({
                 $("#reportPerson").val(result.process.reportPersonName);
                 $("#communityName").val(result.process.communityName);
                 $("#superintendentPhone").val(result.process.superintendentName);
+                $("#processName").val(result.process.processName);
                 vm.processMessage.phoneOneId =result.process.phoneOneId ;
                 vm.processMessage.phoneTwoId =result.process.phoneTwoId ;
                 vm.processMessage.reportPersonId =result.process.reportPersonId;
@@ -140,7 +141,6 @@ var vm = new Vue({
         //加载用户
         getUser: function(type){
             var communityId = vm.processMessage.communityId;
-            debugger;
             if(communityId=='' || communityId ==undefined){
                 return alert("请选择社区");
             }else {
@@ -157,28 +157,30 @@ var vm = new Vue({
                         var grid = $("#jqUserGrid");
                         var ids = grid.getGridParam("selarrrow");
                         var name = "";
-                        var phone = "";
+                        //var phone = "";
+                        var userId="";
 
                         $.each(ids,function (index,item) {
-                            phone+=grid.getRowData(item).userPhone +",";
+                           // phone+=grid.getRowData(item).userPhone +",";
+                            userId += grid.getRowData(item).userId+",";
                             name +=grid.getRowData(item).realName+" ";
                         });
 
+                        userId = userId.substring(0,userId.length-1);
                         if(type=="phoneOneId"){
-                             vm.processMessage.phoneOneId =phone;
+                             vm.processMessage.phoneOneId =userId;
                             $("#phoneOne").val(name);
                         }else if(type=="phoneTwoId") {
-                            vm.processMessage.phoneTwoId =phone;
+                            vm.processMessage.phoneTwoId =userId;
                             $("#phoneTwo").val(name);
                         }else if (type=="reportPersonId"){
-                            vm.processMessage.reportPersonId =phone;
+                            vm.processMessage.reportPersonId =userId;
                             $("#reportPerson").val(name);
                         }else {
-                            vm.processMessage.superintendentId =phone;
+                            vm.processMessage.superintendentId =userId;
                             $("#superintendentPhone").val(name);
                         }
                         layer.close(index);
-
                     }
                 });
                 layer.ready(function () {
@@ -300,13 +302,19 @@ var vm = new Vue({
 });
 
 function loadUser (communityId) {
+    $('#jqUserGrid').jqGrid('clearGridData');
+    $('#jqUserGrid').jqGrid('setGridParam', {
+        url: baseURL + 'communityUser/people/list',
+        postData:{companyRoleType:"2",communityId:communityId}
+    }).trigger('reloadGrid');
     $("#jqUserGrid").jqGrid({
         url: baseURL + 'communityUser/people/list',
         datatype: "json",
         mtype:"POST",
-        postData:{companyRoleType:"3",communityId:communityId},
+        postData:{companyRoleType:"2",communityId:communityId},
         colModel: [
             { label: '', name: 'id', width: 45,hidden:true  },
+            { label: 'userId', name: 'userId',hidden:true },
             { label: '用户手机', name: 'userPhone', width: 75 },
             { label: '真实姓名', name: 'realName', width: 75 },
             { label: '所属社区', name: 'communityName',  width: 45 }
@@ -337,10 +345,6 @@ function loadUser (communityId) {
             $("#jqUserGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
         }
     });
-    $("#jqUserGrid").jqGrid('setGridParam',{
-        postData:{companyRoleType:"3",communityId:communityId}
-    },true).trigger("reloadGrid");
-
 }
 
 function onchange(e) {
@@ -348,16 +352,10 @@ function onchange(e) {
 }
 
 function saveOrUpdate() {
-    debugger;
     if(vm.processMessage.phoneOneId == undefined || vm.processMessage.phoneOne ==""){
-        return alert('请选择一级处理人');
+        return alert('请选择处理人员');
     }
-  /*  if(vm.processMessage.phoneTwoId  == undefined || vm.processMessage.phoneTwo ==""){
-        return alert('请选择二级处理人');
-    }*/
-    /*if(vm.processMessage.reportPersonId  ==undefined || vm.processMessage.reportPerson  =="" ){
-        return alert('请选择上报人');
-    }*/
+
     if( vm.processMessage.processName  ==undefined || vm.processMessage.processName  =="" ){
         return alert('请填写流程名称');
     }

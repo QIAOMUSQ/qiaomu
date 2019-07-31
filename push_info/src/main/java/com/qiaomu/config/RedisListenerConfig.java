@@ -27,7 +27,7 @@ public class RedisListenerConfig {
                                             MessageListenerAdapter listenerAdapter) {
 
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory);//EXISTS
+        container.setConnectionFactory(connectionFactory);
         container.addMessageListener(listenerAdapter, new PatternTopic("message"));
         return container;
     }
@@ -38,7 +38,6 @@ public class RedisListenerConfig {
      */
     @Bean
     MessageListenerAdapter listenerAdapter(RedisReceiverMessage redisReceiverMessage) {
-        System.out.println("消息适配器进来了");
         return new MessageListenerAdapter(redisReceiverMessage, "redisReceiverMessage");
     }
 
