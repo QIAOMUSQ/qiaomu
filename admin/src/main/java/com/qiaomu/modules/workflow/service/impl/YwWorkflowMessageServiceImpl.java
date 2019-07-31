@@ -86,18 +86,20 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
     }
 
     @Transactional
-    public void save(YwWorkflowMessage processMessage) {
-        System.out.println("processMessage = [" + JSON.toJSONString(processMessage) + "]");
-       /* processMessage.setPhoneOneId(userService.getUserIdsByPhones(processMessage.getPhoneOneId(),","));
-        processMessage.setPhoneTwoId(userService.getUserIdsByPhones(processMessage.getPhoneTwoId(),","));
-        processMessage.setReportPersonId(userService.getUserIdsByPhones(processMessage.getReportPersonId(),","));
-        processMessage.setSuperintendentId(userService.getUserIdsByPhones(processMessage.getSuperintendentId(),","));
-       */
-        if (processMessage.getId() != null) {
-            updateById(processMessage);
+    public void save(YwWorkflowMessage process) {
+        if (process.getId() != null) {
+            YwWorkflowMessage workflowMessage = this.baseMapper.selectById(process.getId());
+            workflowMessage.setPhoneOneId(process.getPhoneOneId());
+            workflowMessage.setPhoneTwoId(process.getPhoneTwoId());
+            workflowMessage.setReportPersonId(process.getReportPersonId());
+            workflowMessage.setSuperintendentId(process.getSuperintendentId());
+            workflowMessage.setProcessName(process.getProcessName());
+            workflowMessage.setCommunityId(process.getCommunityId());
+            workflowMessage.setDicValue(process.getDicValue());
+            this.baseMapper.updateAllColumnById(workflowMessage);
         } else {
-            processMessage.setCreateTime(new Date());
-            insert(processMessage);
+            process.setCreateTime(new Date());
+            insert(process);
         }
     }
 

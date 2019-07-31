@@ -85,10 +85,8 @@ var vm = new Vue({
             if(id == null){
                 return ;
             }
-
             vm.showList = false;
             vm.title = "修改";
-
             vm.getProcess(id);
             //获取角色信息
 
@@ -157,16 +155,15 @@ var vm = new Vue({
                         var grid = $("#jqUserGrid");
                         var ids = grid.getGridParam("selarrrow");
                         var name = "";
-                        //var phone = "";
                         var userId="";
-
+                        debugger;
                         $.each(ids,function (index,item) {
-                           // phone+=grid.getRowData(item).userPhone +",";
                             userId += grid.getRowData(item).userId+",";
                             name +=grid.getRowData(item).realName+" ";
                         });
-
-                        userId = userId.substring(0,userId.length-1);
+                        if(userId.length>0){
+                            userId = userId.substring(0,userId.length-1);
+                        }
                         if(type=="phoneOneId"){
                              vm.processMessage.phoneOneId =userId;
                             $("#phoneOne").val(name);
@@ -284,7 +281,10 @@ var vm = new Vue({
         },
         reload: function () {
             $("#userTable").css("display","none");
-            vm.processMessage=[];
+            vm.processMessage={
+                communityId:null,
+                id:null
+            };
             $("#phoneOne").val("");
             $("#phoneTwo").val("");
             $("#reportPerson").val("");
@@ -368,11 +368,12 @@ function saveOrUpdate() {
     if(vm.processMessage.superintendentId  ==undefined || vm.processMessage.superintendentPhone  ==""){
         return alert('请选择监管人');
     }
+    debugger
     $.ajax({
         type: "POST",
         url: baseURL + "processMessage/process/save",
         contentType: "application/json",
-        data: JSON.stringify(vm.processMessage),
+         data: JSON.stringify(vm.processMessage),
         success: function(r){
             console.info(r);
             if(r.status == "success"){
