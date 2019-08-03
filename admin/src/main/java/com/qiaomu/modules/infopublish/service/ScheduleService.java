@@ -38,7 +38,10 @@ public class ScheduleService {
         System.out.println("获取map键值对:" + key + "-" + value);
         Long id = Long.valueOf(key.substring(8,key.length()));
         CarportEntity carport = carportDao.selectById(id);
-        carport.setBrowsePerson(Long.valueOf((String) value));
-        carportDao.updateById(carport);
+        if(carport!=null){
+            carport.setBrowsePerson(Long.valueOf((String) value));
+            carportDao.updateById(carport);
+        }
+
     }
 }

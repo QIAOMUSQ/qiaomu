@@ -17,7 +17,10 @@
             <maxHistory>15</maxHistory> <!-- 保留15天 -->
         </rollingPolicy>
     </appender>
-
+    <logger name="java.sql.Statement" level="DEBUG" />
+    <logger name="java.sql.PreparedStatement" level="DEBUG" />
+    <logger name="java.sql.ResultSet" level="DEBUG" />
+    <!--<logger name="com.qiaomu.modules.xxx.dao" level="DEBUG" />-->
     <root level="${logLevel}">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>

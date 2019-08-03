@@ -4,5 +4,16 @@
 <mapper namespace="com.qiaomu.modules.workflow.dao.YwWorkflowMessageDao">
 
 
-
+    <select id="getAll" resultType="com.qiaomu.modules.workflow.entity.YwWorkflowMessage">
+        SELECT * from yw_workflow_message
+        <where>
+            1=1
+            <if test="communityId !=null and communityId!=''">
+                and community_id = #{communityId}
+            </if>
+            <if test="dicValue !=null and dicValue!=''">
+                and dic_value = #{dicValue}
+            </if>
+        </where>
+    </select>
 </mapper>

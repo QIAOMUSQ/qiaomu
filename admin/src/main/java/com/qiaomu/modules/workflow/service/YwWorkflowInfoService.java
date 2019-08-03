@@ -42,5 +42,5 @@ public interface YwWorkflowInfoService extends IService<YwWorkflowInfo> {
      */
     Boolean updateUserWorkflowInfo(String opinionSuperintendent, String opinionOne, String opinionTwo, String opinionReport, String userOpinion, String type, Long id);
 
-    List<YwWorkflowInfo> getAll (Long userId,Long communityId,String workflowType, String type);
+    List<YwWorkflowInfo> getAll (Long userId,Long communityId,String workflowType, String type,String status);
 }

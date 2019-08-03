@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,7 +68,7 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
         String name = null;
         for (YwWorkflowMessage processMessage : page.getRecords()) {
             processMessage.setCommunityName(this.communityService.queryById(processMessage.getCommunityId()).getName());
-            processMessage.setDicValue(this.dictService.getdictCodeByTypeValue(processMessage.getDicValue(), "property_process"));
+            processMessage.setDicValueName(this.dictService.getdictCodeByTypeValue(processMessage.getDicValue(), "property_process"));
             if(processMessage.getPhoneOneId() !=null){
                 processMessage.setPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getPhoneOneId(),processMessage.getCommunityId(),","));
             }
@@ -107,7 +108,7 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
     public YwWorkflowMessage getById(Long id) {
         YwWorkflowMessage processMessage = selectById(id);
         processMessage.setCommunityName(this.communityService.queryById(processMessage.getCommunityId()).getName());
-        processMessage.setDicValue(this.dictService.getdictCodeByTypeValue(processMessage.getDicValue(), "property_process"));
+        processMessage.setDicValueName(this.dictService.getdictCodeByTypeValue(processMessage.getDicValue(), "property_process"));
         if(processMessage.getPhoneOneId() !=null){
             processMessage.setPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getPhoneOneId(),processMessage.getCommunityId(),","));
         }
@@ -123,5 +124,26 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
         return processMessage;
     }
 
+    @Override
+    public List<YwWorkflowMessage> getAll(YwWorkflowMessage workflowMessage) {
+        List<YwWorkflowMessage> list = this.baseMapper.getAll(workflowMessage);
+        for (YwWorkflowMessage message : list) {
+            message.setCommunityName(this.communityService.queryById(message.getCommunityId()).getName());
+            message.setDicValueName(this.dictService.getdictCodeByTypeValue(message.getDicValue(), "property_process"));
+            if(message.getPhoneOneId() !=null){
+                message.setPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(message.getPhoneOneId(),message.getCommunityId(),","));
+            }
+            if(message.getPhoneTwoId() !=null ){
+                message.setPhoneTwoName(userExtendService.getRealNamesByUserIdsAndCommunityId(message.getPhoneTwoId(),message.getCommunityId(),","));
+            }
+            if(message.getReportPersonId() !=null ){
+                message.setReportPersonName(userExtendService.getRealNamesByUserIdsAndCommunityId(message.getReportPersonId(),message.getCommunityId(),","));
+            }
+            if(message.getSuperintendentId() !=null){
+                message.setSuperintendentName(userExtendService.getRealNamesByUserIdsAndCommunityId(message.getSuperintendentId(),message.getCommunityId(),","));
+            }
 
+        }
+        return list;
+    }
 }
