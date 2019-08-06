@@ -30,22 +30,10 @@ public class MyServletRequest implements ServletRequestListener {
     @Override
     public void requestInitialized(ServletRequestEvent servletRequestEvent) {
         HttpServletRequest request = (HttpServletRequest)servletRequestEvent.getServletRequest();
-        String url  = request.getRequestURI().toString();
-        /*if(url.contains("/App/")){
-            Session session = (Session) request.getSession();
-
-        }
-*/
-
-       /*
-
-        String name = request.getParameter("phone");
-        if(name != null && !"".equals(name)){
-            YwUserExtend userExtend = userExtendService.getUserExtend(name);
-            //request.setAttribute("");
-        }
-
         String url = request.getRequestURL().toString();//根据url进行判断处理
-        System.out.println(url);*/
+        if(url.contains("login")){
+            //String params =  request.get;
+        }
+        System.out.println(url);
     }
 }

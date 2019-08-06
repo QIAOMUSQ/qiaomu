@@ -7,7 +7,10 @@ import com.qiaomu.modules.sys.service.SysUserService;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * @author 李品先
@@ -20,6 +23,8 @@ public class PushRedisMessageServiceImpl implements PushRedisMessageService {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Autowired
+    private RedisTemplate<String, String> stringRedisTemplate;
 
     @Autowired
     private SysUserService userService;
@@ -34,7 +39,8 @@ public class PushRedisMessageServiceImpl implements PushRedisMessageService {
      */
     @Override
     public void pushMessageToRedis(PushMessage message) {
-        redisTemplate.convertAndSend("message",message);
+       // byte[] msg =jackson2JsonRedisSerializer.serialize(message);
+        stringRedisTemplate.convertAndSend("message",JSON.toJSONString(message));
         redisTemplate.boundHashOps("message_history").put("history_"+message.getPhone()+"_"+message.getTime().replace(" ","").replace("-","").replace(":",""),JSON.toJSONString(message));
     }
 
@@ -52,8 +58,8 @@ public class PushRedisMessageServiceImpl implements PushRedisMessageService {
         for (String id : ids){
             String phone  = userService.queryById(Long.valueOf(id)).getUsername();
             String userPhone = userService.queryById(userId).getUsername();
-            PushMessage data = new PushMessage(phone,type,infoType, DateTime.now().toString("YYYY-MM-dd HH:mm:ss"),message,userPhone);
-            redisTemplate.convertAndSend("message",data);
+            PushMessage data = new PushMessage(phone,type,infoType, DateTime.now().toString("yyyy-MM-dd HH:mm:ss"),message,userPhone);
+            stringRedisTemplate.convertAndSend("message",JSON.toJSONString(data));
             redisTemplate.boundHashOps("message_history").put("history_"+data.getPhone()+"_"+data.getTime().replace(" ","").replace("-","").replace(":",""),JSON.toJSONString(data));
         }
     }

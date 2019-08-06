@@ -57,7 +57,7 @@ public class RedisTest {
     @Test
     public void testPushMessage(){
         PushMessage message = new PushMessage();
-        message.setMessage("测试");
+        message.setMessage("测试222");
         message.setPhone("15157150200");
         message.setType("0");
         message.setTime(DateTime.now().toString("YYYY-MM-dd HH:mm:ss"));

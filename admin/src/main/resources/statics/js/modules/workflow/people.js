@@ -16,7 +16,7 @@ $(function () {
                 }else if(value == "3"){
                     return '<span class="label label-success">业主</span>';
                 }else if(value == "2"){
-                    return '<span class="label label-success" style="background: #ec971f">游客</span>';
+                    return '<span class="label label-success" style="background: #ec971f">物业工作人员</span>';
                 }else if(value == "1"){
                     return '<span class="label label-success" style="background: #ec971f">物业公司管理员</span>';
                 }else if(value == "0"){
@@ -215,6 +215,7 @@ var vm = new Vue({
                 console.info(data);
                 var i=0;
                 $.each(data.dict,function (index,item) {
+                    //过滤物业管理员和超级管理员
                     if(item.value != 1 && item.value != 0){
                         vm.typeList.push({"value":item.value,"name":item.code});
                     }

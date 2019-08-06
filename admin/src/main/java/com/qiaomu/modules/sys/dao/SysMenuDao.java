@@ -42,4 +42,6 @@ public interface SysMenuDao extends BaseMapper<SysMenuEntity> {
      */
     List<SysMenuEntity> queryNotButtonList();
 
+    List<SysMenuEntity> selectAllList();
 }
+

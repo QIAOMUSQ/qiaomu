@@ -32,6 +32,7 @@ public class Constant {
 
     public static final String OUT_DIR ="/www/app/admin/staticFile/outapp/";//"E:\\QM\\"   //"/www/app/admin/staticFile/outapp/";
 
+    public static final String REDIS_KEY_CARPORT="CARPORT_";//redis中車位分享浏览量key
 	/**
 	 * 菜单类型
 	 */

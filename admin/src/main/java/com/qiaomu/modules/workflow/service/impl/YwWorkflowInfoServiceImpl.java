@@ -1,20 +1,20 @@
-package com.qiaomu.modules.auditprocess.service.impl;
+package com.qiaomu.modules.workflow.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.qiaomu.common.exception.RRException;
-import com.qiaomu.common.utils.AESUtil;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
-import com.qiaomu.modules.auditprocess.dao.YwWorkflowInfoDao;
-import com.qiaomu.modules.auditprocess.entity.YwWorkflowInfo;
-import com.qiaomu.modules.auditprocess.entity.YwWorkflowMessage;
-import com.qiaomu.modules.auditprocess.service.YwWorkflowInfoService;
-import com.qiaomu.modules.auditprocess.service.YwWorkflowMessageService;
+import com.qiaomu.modules.sys.service.SysFileService;
+import com.qiaomu.modules.workflow.dao.YwWorkflowInfoDao;
+import com.qiaomu.modules.workflow.entity.YwWorkflowInfo;
+import com.qiaomu.modules.workflow.entity.YwWorkflowMessage;
+import com.qiaomu.modules.workflow.service.YwWorkflowInfoService;
+import com.qiaomu.modules.workflow.service.YwWorkflowMessageService;
 import com.qiaomu.modules.infopublish.entity.PushMessage;
 import com.qiaomu.modules.infopublish.service.PushRedisMessageService;
-import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.service.SysDictService;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
@@ -22,8 +22,12 @@ import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.sys.service.UserExtendService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -56,6 +60,9 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
 
     @Autowired
     private PushRedisMessageService pushRedisMessageService;
+
+    @Autowired
+    private SysFileService fileService;
 
     public PageUtils queryPage(Map<Object, Object> params) {
         Long companyId = null;//
@@ -108,9 +115,9 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
                 workflowInfo.setSuperintendentPhone(workflowMessage.getSuperintendentId());
             }
             workflowInfo.setProcessName(workflowMessage.getProcessName());
-            UserExtend user = userExtendService.getUserCommunity(workflowInfo.getUserId());
-            if(user!=null && user.getRealName() !=null){
-                workflowInfo.setUserName(AESUtil.decrypt(user.getRealName()));
+            String user = userExtendService.getRealNamesByUserIdsAndCommunityId(workflowInfo.getUserId().toString(),workflowMessage.getCommunityId(),",");
+            if(user!=null){
+                workflowInfo.setUserName(user);
             }
 
         }
@@ -130,26 +137,28 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
      * @return
      */
     @Override
+    @Transactional
     public String saveWorkflowInfo(Long userId, String location,
                                          String detail, String pictureId,
-                                         String serviceDate, Long workflowId, Long communityId) {
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                         String serviceDate, Long workflowId, Long communityId,HttpServletRequest request) {
         YwWorkflowMessage workflowMessage = workflowMessageService.getById(workflowId);
         YwCommunity community =  communityService.queryById(communityId);
         //当社区未进行物业公司或者街道分配
         if(community.getCompanyId() == null){
             throw new RRException("社区未分配!");
         }
-        YwWorkflowInfo workflow = new YwWorkflowInfo();
 
-        workflow.setUserId(userId);
-        workflow.setWorkflowId(workflowId);
-        workflow.setLocation(location);
-        workflow.setDetail(detail);
-        workflow.setPictureId(pictureId);
-        workflow.setWorkflowType(workflowMessage.getDicValue());
-        workflow.setType("0");
         try{
+            YwWorkflowInfo workflow = new YwWorkflowInfo();
+
+            workflow.setUserId(userId);
+            workflow.setWorkflowId(workflowId);
+            workflow.setLocation(location);
+            workflow.setDetail(detail);
+            workflow.setPictureId(JSON.toJSONString(fileService.imageUrls(request)));
+            workflow.setWorkflowType(workflowMessage.getDicValue());
+            workflow.setType("0");
+            workflow.setStatus("0");
             workflow.setServiceDate(serviceDate);
             workflow.setCreateTime(new Date());
             workflow.setCompanyId(community.getCompanyId());
@@ -171,7 +180,9 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
      * @param opinionTwo 第二处理人
      * @param opinionReport  上报人
      * @param userOpinion   用户意见
-     * @param type 流程状态 0：申请 1：一级接受受理 11：一级受理完成 2：二级接受受理 21：二级受理完成  3：上报  4：通过  5：不通过 6:终止
+     * @param type 流程状态 0：申请 1：一级接受受理 11：一级受理完成 2：
+     *             二级接受受理 21：二级受理完成  3：上报
+     *             4：通过  5：不通过 6:终止
      * @param id 流程信息ID
      * @return
      */
@@ -194,6 +205,7 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
             if (StringUtils.isNotBlank(opinionSuperintendent)){
                 workflowInfo.setFinalityOpinion(opinionSuperintendent);
                 workflowInfo.setFinalityDate(new Date());
+                workflowInfo.setStatus("1");
             }
             if(StringUtils.isNotBlank(userOpinion)){
                 workflowInfo.setUserOpinion(userOpinion);
@@ -256,12 +268,13 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
 
 
     @Override
-    public List<YwWorkflowInfo> getAll(Long userId, Long communityId, String workflowType, String type) {
+    public List<YwWorkflowInfo> getAll(Long userId, Long communityId, String workflowType, String type,String status) {
         YwWorkflowInfo condition = new YwWorkflowInfo();
         condition.setUserId(userId);
         condition.setCommunityId(communityId);
         condition.setWorkflowType(workflowType);
         condition.setType(type);
+        condition.setStatus(status);
         List<YwWorkflowInfo> infoList = this.baseMapper.getAll(condition);
         for (YwWorkflowInfo Info : infoList) {
             YwWorkflowMessage workflowMessage = this.workflowMessageService.getById(Info.getWorkflowId());
@@ -285,5 +298,30 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
             Info.setProcessName(workflowMessage.getProcessName());
         }
         return infoList;
+    }
+
+    @Override
+    public YwWorkflowInfo selectById(Serializable id) {
+        YwWorkflowInfo info = super.selectById(id);
+        YwWorkflowMessage workflowMessage = this.workflowMessageService.getById(info.getWorkflowId());
+        if(workflowMessage.getPhoneOneId() !=null){
+            info.setDetailPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getPhoneOneId(),workflowMessage.getCommunityId(),","));
+            info.setDetailPhoneOne(workflowMessage.getPhoneOneId());
+        }
+        if(workflowMessage.getPhoneTwoId() !=null){
+            info.setDetailPhoneTwoName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getPhoneTwoId(),workflowMessage.getCommunityId(),","));
+            info.setDetailPhoneTwo(workflowMessage.getPhoneTwoId() );
+        }
+
+        if(workflowMessage.getReportPersonId() != null){
+            info.setDetailPhoneReportName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getReportPersonId(),workflowMessage.getCommunityId(),","));
+            info.setDetailPhoneReport(workflowMessage.getReportPersonId());
+        }
+        if(workflowMessage.getSuperintendentId() != null ){
+            info.setSuperintendentName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getSuperintendentId(),workflowMessage.getCommunityId(),","));
+            info.setSuperintendentPhone(workflowMessage.getSuperintendentId());
+        }
+        info.setProcessName(workflowMessage.getProcessName());
+        return  info;
     }
 }

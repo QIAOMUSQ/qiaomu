@@ -41,11 +41,6 @@ public class ShiroSessionManager extends DefaultWebSessionManager {
        // 初次登陆将session放入请求头中
         String id = WebUtils.toHttp(request).getHeader(AUTHORIZATION);
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-       /* Map<String,String[]> param = WebUtils.toHttp(request).getParameterMap();
-        String[] author = param.get("Authorization");
-       if(id == null && author !=null ){
-           id= author[0];
-       }*/
         if(id == null){
             if(WebUtils.toHttp(request).getCookies() != null){
                 Cookie[] cookies = (Cookie[])WebUtils.toHttp(request).getCookies() ;

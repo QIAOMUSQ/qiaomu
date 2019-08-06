@@ -1,10 +1,10 @@
-package com.qiaomu.modules.auditprocess.service;
+package com.qiaomu.modules.workflow.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.qiaomu.common.utils.PageUtils;
-import com.qiaomu.common.utils.R;
-import com.qiaomu.modules.auditprocess.entity.YwWorkflowInfo;
+import com.qiaomu.modules.workflow.entity.YwWorkflowInfo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +27,7 @@ public interface YwWorkflowInfoService extends IService<YwWorkflowInfo> {
      * @param communityId 社区ID
      * @return
      */
-    String saveWorkflowInfo(Long userId, String location, String detail, String pictureId, String serviceDate, Long workflowId, Long communityId);
+    String saveWorkflowInfo(Long userId, String location, String detail, String pictureId, String serviceDate, Long workflowId, Long communityId,HttpServletRequest request);
 
     /**
      * 更新用户流程信息
@@ -42,5 +42,5 @@ public interface YwWorkflowInfoService extends IService<YwWorkflowInfo> {
      */
     Boolean updateUserWorkflowInfo(String opinionSuperintendent, String opinionOne, String opinionTwo, String opinionReport, String userOpinion, String type, Long id);
 
-    List<YwWorkflowInfo> getAll (Long userId,Long communityId,String workflowType, String type);
+    List<YwWorkflowInfo> getAll (Long userId,Long communityId,String workflowType, String type,String status);
 }

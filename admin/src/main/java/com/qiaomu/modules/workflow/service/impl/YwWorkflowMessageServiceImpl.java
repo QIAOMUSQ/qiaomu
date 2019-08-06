@@ -1,15 +1,14 @@
-package com.qiaomu.modules.auditprocess.service.impl;
+package com.qiaomu.modules.workflow.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.qiaomu.common.utils.AESUtil;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
-import com.qiaomu.common.utils.StringCommonUtils;
-import com.qiaomu.modules.auditprocess.dao.YwWorkflowMessageDao;
-import com.qiaomu.modules.auditprocess.entity.YwWorkflowMessage;
-import com.qiaomu.modules.auditprocess.service.YwWorkflowMessageService;
+import com.qiaomu.modules.workflow.dao.YwWorkflowMessageDao;
+import com.qiaomu.modules.workflow.entity.YwWorkflowMessage;
+import com.qiaomu.modules.workflow.service.YwWorkflowMessageService;
 import com.qiaomu.modules.sys.service.SysDictService;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
 import com.qiaomu.modules.sys.service.SysUserService;
@@ -19,12 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import static com.qiaomu.common.utils.StringCommonUtils.returnNullData;
 
 /**
  * @author 李品先
@@ -72,7 +68,7 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
         String name = null;
         for (YwWorkflowMessage processMessage : page.getRecords()) {
             processMessage.setCommunityName(this.communityService.queryById(processMessage.getCommunityId()).getName());
-            processMessage.setDicValue(this.dictService.getdictCodeByTypeValue(processMessage.getDicValue(), "property_process"));
+            processMessage.setDicValueName(this.dictService.getdictCodeByTypeValue(processMessage.getDicValue(), "property_process"));
             if(processMessage.getPhoneOneId() !=null){
                 processMessage.setPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getPhoneOneId(),processMessage.getCommunityId(),","));
             }
@@ -91,25 +87,63 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
     }
 
     @Transactional
-    public void save(YwWorkflowMessage processMessage) {
-        processMessage.setPhoneOneId(userService.getUserIdsByPhones(processMessage.getPhoneOneId(),","));
-        processMessage.setPhoneTwoId(userService.getUserIdsByPhones(processMessage.getPhoneTwoId(),","));
-        processMessage.setReportPersonId(userService.getUserIdsByPhones(processMessage.getReportPersonId(),","));
-        processMessage.setSuperintendentId(userService.getUserIdsByPhones(processMessage.getSuperintendentId(),","));
-        if (processMessage.getId() != null) {
-            updateById(processMessage);
+    public void save(YwWorkflowMessage process) {
+        if (process.getId() != null) {
+            YwWorkflowMessage workflowMessage = this.baseMapper.selectById(process.getId());
+            workflowMessage.setPhoneOneId(process.getPhoneOneId());
+            workflowMessage.setPhoneTwoId(process.getPhoneTwoId());
+            workflowMessage.setReportPersonId(process.getReportPersonId());
+            workflowMessage.setSuperintendentId(process.getSuperintendentId());
+            workflowMessage.setProcessName(process.getProcessName());
+            workflowMessage.setCommunityId(process.getCommunityId());
+            workflowMessage.setDicValue(process.getDicValue());
+            this.baseMapper.updateAllColumnById(workflowMessage);
         } else {
-            processMessage.setCreateTime(new Date());
-            insert(processMessage);
+            process.setCreateTime(new Date());
+            insert(process);
         }
     }
 
 
     public YwWorkflowMessage getById(Long id) {
-        YwWorkflowMessage processMessage = (YwWorkflowMessage) selectById(id);
-       processMessage.setCommunityName(this.communityService.queryById(processMessage.getCommunityId()).getName());
+        YwWorkflowMessage processMessage = selectById(id);
+        processMessage.setCommunityName(this.communityService.queryById(processMessage.getCommunityId()).getName());
+        processMessage.setDicValueName(this.dictService.getdictCodeByTypeValue(processMessage.getDicValue(), "property_process"));
+        if(processMessage.getPhoneOneId() !=null){
+            processMessage.setPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getPhoneOneId(),processMessage.getCommunityId(),","));
+        }
+        if(processMessage.getPhoneTwoId() !=null ){
+            processMessage.setPhoneTwoName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getPhoneTwoId(),processMessage.getCommunityId(),","));
+        }
+        if(processMessage.getReportPersonId() !=null ){
+            processMessage.setReportPersonName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getReportPersonId(),processMessage.getCommunityId(),","));
+        }
+        if(processMessage.getSuperintendentId() !=null){
+            processMessage.setSuperintendentName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getSuperintendentId(),processMessage.getCommunityId(),","));
+        }
         return processMessage;
     }
 
+    @Override
+    public List<YwWorkflowMessage> getAll(YwWorkflowMessage workflowMessage) {
+        List<YwWorkflowMessage> list = this.baseMapper.getAll(workflowMessage);
+        for (YwWorkflowMessage message : list) {
+            message.setCommunityName(this.communityService.queryById(message.getCommunityId()).getName());
+            message.setDicValueName(this.dictService.getdictCodeByTypeValue(message.getDicValue(), "property_process"));
+            if(message.getPhoneOneId() !=null){
+                message.setPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(message.getPhoneOneId(),message.getCommunityId(),","));
+            }
+            if(message.getPhoneTwoId() !=null ){
+                message.setPhoneTwoName(userExtendService.getRealNamesByUserIdsAndCommunityId(message.getPhoneTwoId(),message.getCommunityId(),","));
+            }
+            if(message.getReportPersonId() !=null ){
+                message.setReportPersonName(userExtendService.getRealNamesByUserIdsAndCommunityId(message.getReportPersonId(),message.getCommunityId(),","));
+            }
+            if(message.getSuperintendentId() !=null){
+                message.setSuperintendentName(userExtendService.getRealNamesByUserIdsAndCommunityId(message.getSuperintendentId(),message.getCommunityId(),","));
+            }
 
+        }
+        return list;
+    }
 }

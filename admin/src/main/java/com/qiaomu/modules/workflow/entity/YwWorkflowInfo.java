@@ -1,4 +1,4 @@
-package com.qiaomu.modules.auditprocess.entity;
+package com.qiaomu.modules.workflow.entity;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
@@ -18,7 +18,7 @@ public class YwWorkflowInfo implements Serializable {
 
     @TableId
     private Long id;
-    private String type;//流程状态 0：申请 1：一级接收 11：一级受理完成 2：二级接收 21：二级受理完成  3：上报  4通过  5不通过
+    private String type;//流程状态 0：申请 1：处理人员 11：一级受理完成 2：二级接收 21：二级受理完成  3：上报  4通过  5不通过
     private Long userId;
     private Long communityId;   //社区id
     private Long companyId;     //  物业id
@@ -39,10 +39,9 @@ public class YwWorkflowInfo implements Serializable {
     private String pictureId;
     private String serviceDate;//上门维修时间
     private String workflowType;//流程类型
-
     private String finalityOpinion;//评审终结意见
-
     private Date finalityDate;
+    private String status;
 
     @TableField(exist = false)
     private String detailPhoneOne;  //  第一处理人号码
@@ -50,13 +49,10 @@ public class YwWorkflowInfo implements Serializable {
     private String detailPhoneTwo;
     @TableField(exist = false)
     private String detailPhoneReport;   //上报人号码
-
-
     @TableField(exist = false)
     private String superintendentName;//评审人名称
     @TableField(exist = false)
     private String superintendentPhone;//评审号码
-
     @TableField(exist = false)
     private String processName;
     @TableField(exist = false)
@@ -336,5 +332,13 @@ public class YwWorkflowInfo implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

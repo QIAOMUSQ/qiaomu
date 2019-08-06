@@ -3,6 +3,9 @@ package com.qiaomu.modules.sys.service;
 import com.baomidou.mybatisplus.service.IService;
 import com.qiaomu.modules.sys.entity.SysFileEntity;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
+
 /**
  * @author 李品先
  * @description:
@@ -10,4 +13,5 @@ import com.qiaomu.modules.sys.entity.SysFileEntity;
  */
 public interface SysFileService extends IService<SysFileEntity> {
     void insertInfo(SysFileEntity fileEntity);
+    Map<String,String> imageUrls(HttpServletRequest request);
 }

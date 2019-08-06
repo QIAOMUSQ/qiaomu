@@ -10,5 +10,8 @@
 	<select id="queryNotButtonList" resultType="com.qiaomu.modules.sys.entity.SysMenuEntity">
 		select * from sys_menu where type != 2 order by order_num asc 
 	</select>
-	
+	<select id="selectAllList" resultType="com.qiaomu.modules.sys.entity.SysMenuEntity">
+		select * from sys_menu
+	</select>
+
 </mapper>

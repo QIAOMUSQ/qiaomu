@@ -1,4 +1,4 @@
-package com.qiaomu.modules.auditprocess.entity;
+package com.qiaomu.modules.workflow.entity;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
@@ -26,7 +26,6 @@ public class YwWorkflowMessage implements Serializable {
     private String processName; //流程名称
     private String dicValue; //字典值
     private Long companyId; //物业ID
-
     @TableField(exist = false)
     private String communityName;
     @TableField(exist = false)
@@ -37,6 +36,8 @@ public class YwWorkflowMessage implements Serializable {
     private String reportPersonName;
     @TableField(exist = false)
     private String superintendentName;
+    @TableField(exist = false)
+    private String dicValueName; //字典值
     private Date createTime;
 
     public Long getId() {
@@ -158,5 +159,13 @@ public class YwWorkflowMessage implements Serializable {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public String getDicValueName() {
+        return dicValueName;
+    }
+
+    public void setDicValueName(String dicValueName) {
+        this.dicValueName = dicValueName;
     }
 }

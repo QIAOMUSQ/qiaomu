@@ -1,10 +1,7 @@
 package com.qiaomu.modules.app.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.qiaomu.common.utils.AESUtil;
-import com.qiaomu.common.utils.BuildResponse;
-import com.qiaomu.common.utils.DicRoleDeptCode;
-import com.qiaomu.common.utils.R;
+import com.qiaomu.common.utils.*;
 import com.qiaomu.common.validator.Assert;
 import com.qiaomu.modules.sys.controller.AbstractController;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
@@ -108,6 +105,7 @@ public class AppUserController extends AbstractController {
         user.setRoleIdList(roleList);
         user.setDeptId(9l);
         user.setStatus(Integer.valueOf(1));
+        user.setNickName(RandomName.randomName(true,4));
         this.sysUserService.save(user);
         return R.ok();
     }
