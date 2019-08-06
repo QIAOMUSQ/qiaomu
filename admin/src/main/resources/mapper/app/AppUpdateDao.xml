@@ -8,7 +8,7 @@
     </insert>
 
     <select id="getMaxVersion" resultType="com.qiaomu.modules.app.entity.AppUpdateEntity" parameterType="String">
-        SELECT * FROM pluto_updateAppinfo where clientType=#{clientType} ORDER BY appVersion DESC LIMIT 1
+        SELECT * FROM pluto_updateAppinfo where clientType=#{clientType} ORDER BY appVersion DESC, id DESC LIMIT 1
     </select>
 
 

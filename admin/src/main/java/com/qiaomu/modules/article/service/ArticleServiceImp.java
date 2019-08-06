@@ -96,8 +96,8 @@ public class ArticleServiceImp implements ArticleService{
     public void addComment (CommentEntity commentEntity) throws Exception{
         Map<String,String> returnMap = new HashMap<String,String>();
         List<CommentEntity> commentEntities = articleDao.queryCommentByUserId(commentEntity.getUserId());
-        if(commentEntities.size()>3){
-            throw new CommentException("最多只能评论3次！");
+        if(commentEntities.size()>100){
+            throw new CommentException("最多只能评论100次！");
         }
         Date date = new Date();
         commentEntity.setCreatedAt(DateUtils.formats(date));

@@ -64,7 +64,7 @@ public class UpdateAppBussinessImp {
 
             AppUpdateEntity appUpdateEntity = new AppUpdateEntity();
             appUpdateEntity.setAppVersion(appVersion);
-            appUpdateEntity.setCreatedAs(DateUtils.format(new Date(),"yyyy-MM-dd"));
+            appUpdateEntity.setCreatedAs(DateUtils.formats(new Date()));
             appUpdateEntity.setUpdateType(updateType);
             appUpdateEntity.setClientType(clientType);
 
