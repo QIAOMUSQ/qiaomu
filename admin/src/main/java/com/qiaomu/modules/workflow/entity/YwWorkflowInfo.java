@@ -18,19 +18,16 @@ public class YwWorkflowInfo implements Serializable {
 
     @TableId
     private Long id;
-    private String type;//流程状态 0：申请 1：处理人员 11：一级受理完成 2：二级接收 21：二级受理完成  3：上报  4通过  5不通过
+    /**
+     *  0：申请 1：处理人员处理 2: 处理完成
+     */
+    private String type;//流程状态
     private Long userId;
     private Long communityId;   //社区id
     private Long companyId;     //  物业id
 
-    private String detailOpinionOne;    //  第一处理人意见
+    private String detailOpinionOne;    // 工作人员
     private Date detailOneDate;     //处理时间
-
-    private String detailOpinionTwo;
-    private Date detailTwoDate;
-
-    private String detailOpinionReport; //上报人意见
-    private Date reportDate;
     private String userOpinion; //用户评价
     private Long workflowId; //流程类型id
     private String detail;  //事务描述细节
@@ -39,34 +36,24 @@ public class YwWorkflowInfo implements Serializable {
     private String pictureId;
     private String serviceDate;//上门维修时间
     private String workflowType;//流程类型
-    private String finalityOpinion;//评审终结意见
     private Date finalityDate;
     private String status;
+    private String starType;//星级评级
 
     @TableField(exist = false)
     private String detailPhoneOne;  //  第一处理人号码
     @TableField(exist = false)
-    private String detailPhoneTwo;
-    @TableField(exist = false)
-    private String detailPhoneReport;   //上报人号码
-    @TableField(exist = false)
-    private String superintendentName;//评审人名称
-    @TableField(exist = false)
-    private String superintendentPhone;//评审号码
-    @TableField(exist = false)
     private String processName;
     @TableField(exist = false)
     private String detailPhoneOneName;
-    @TableField(exist = false)
-    private String detailPhoneTwoName;
-    @TableField(exist = false)
-    private String detailPhoneReportName;
     @TableField(exist = false)
     private String communityName;
     @TableField(exist = false)
     private String typeName;
     @TableField(exist = false)
     private String userName;
+    @TableField(exist = false)
+    private String workflowIds; //流程类型id
 
     public Long getId() {
         return this.id;
@@ -83,8 +70,6 @@ public class YwWorkflowInfo implements Serializable {
     public void setType(String type) {
         this.type = type;
     }
-
-
 
     public Long getCommunityId() {
         return communityId;
@@ -126,47 +111,7 @@ public class YwWorkflowInfo implements Serializable {
         this.detailOneDate = detailOneDate;
     }
 
-    public String getDetailPhoneTwo() {
-        return this.detailPhoneTwo;
-    }
-
-    public void setDetailPhoneTwo(String detailPhoneTwo) {
-        this.detailPhoneTwo = detailPhoneTwo;
-    }
-
-    public String getDetailOpinionTwo() {
-        return this.detailOpinionTwo;
-    }
-
-    public void setDetailOpinionTwo(String detailOpinionTwo) {
-        this.detailOpinionTwo = detailOpinionTwo;
-    }
-
-    public Date getDetailTwoDate() {
-        return this.detailTwoDate;
-    }
-
-    public void setDetailTwoDate(Date detailTwoDate) {
-        this.detailTwoDate = detailTwoDate;
-    }
-
-    public String getDetailPhoneReport() {
-        return this.detailPhoneReport;
-    }
-
-    public void setDetailPhoneReport(String detailPhoneReport) {
-        this.detailPhoneReport = detailPhoneReport;
-    }
-
-    public String getDetailOpinionReport() {
-        return this.detailOpinionReport;
-    }
-
-    public void setDetailOpinionReport(String detailOpinionReport) {
-        this.detailOpinionReport = detailOpinionReport;
-    }
-
-    public String getUserOpinion() {
+   public String getUserOpinion() {
         return this.userOpinion;
     }
 
@@ -238,45 +183,6 @@ public class YwWorkflowInfo implements Serializable {
         this.workflowType = workflowType;
     }
 
-    public String getDetailPhoneOneName() {
-        return detailPhoneOneName;
-    }
-
-    public void setDetailPhoneOneName(String detailPhoneOneName) {
-        this.detailPhoneOneName = detailPhoneOneName;
-    }
-
-    public String getDetailPhoneTwoName() {
-        return detailPhoneTwoName;
-    }
-
-    public void setDetailPhoneTwoName(String detailPhoneTwoName) {
-        this.detailPhoneTwoName = detailPhoneTwoName;
-    }
-
-    public String getDetailPhoneReportName() {
-        return detailPhoneReportName;
-    }
-
-    public void setDetailPhoneReportName(String detailPhoneReportName) {
-        this.detailPhoneReportName = detailPhoneReportName;
-    }
-
-    public Date getReportDate() {
-        return reportDate;
-    }
-
-    public void setReportDate(Date reportDate) {
-        this.reportDate = reportDate;
-    }
-
-    public String getFinalityOpinion() {
-        return finalityOpinion;
-    }
-
-    public void setFinalityOpinion(String finalityOpinion) {
-        this.finalityOpinion = finalityOpinion;
-    }
 
     public Long getUserId() {
         return userId;
@@ -286,21 +192,6 @@ public class YwWorkflowInfo implements Serializable {
         this.userId = userId;
     }
 
-    public String getSuperintendentName() {
-        return superintendentName;
-    }
-
-    public void setSuperintendentName(String superintendentName) {
-        this.superintendentName = superintendentName;
-    }
-
-    public String getSuperintendentPhone() {
-        return superintendentPhone;
-    }
-
-    public void setSuperintendentPhone(String superintendentPhone) {
-        this.superintendentPhone = superintendentPhone;
-    }
 
     public String getCommunityName() {
         return communityName;
@@ -340,5 +231,29 @@ public class YwWorkflowInfo implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getWorkflowIds() {
+        return workflowIds;
+    }
+
+    public void setWorkflowIds(String workflowIds) {
+        this.workflowIds = workflowIds;
+    }
+
+    public String getDetailPhoneOneName() {
+        return detailPhoneOneName;
+    }
+
+    public void setDetailPhoneOneName(String detailPhoneOneName) {
+        this.detailPhoneOneName = detailPhoneOneName;
+    }
+
+    public String getStarType() {
+        return starType;
+    }
+
+    public void setStarType(String starType) {
+        this.starType = starType;
     }
 }

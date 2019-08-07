@@ -5,6 +5,7 @@ import com.qiaomu.common.exception.RRException;
 import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
+import com.qiaomu.modules.workflow.entity.YwWorkflowInfo;
 import com.qiaomu.modules.workflow.entity.YwWorkflowMessage;
 import com.qiaomu.modules.workflow.service.YwWorkflowInfoService;
 import com.qiaomu.modules.workflow.service.YwWorkflowMessageService;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -88,7 +90,7 @@ public class WorkflowInfoController extends AbstractController {
      * 获取用户申请流程信息
      * @param userId 用户id
      * @param workflowType  工作流类型 1:供水维修  2:电力报修  3:煤气维修   4:建筑报修
-     * @param type  流程状态 0：申请 1：一级接收 11：一级受理完成 2：二级接收 21：二级受理完成  3：上报  4：通过  5：不通过 6:终止
+     * @param type  流程状态 0：申请 1：处理人员处理 2: 处理完成
      * @param communityId 社区ID
      * @param status 流程状态
      * @return
@@ -101,21 +103,16 @@ public class WorkflowInfoController extends AbstractController {
 
     /**
      * 更新用户流程信息
-     * @param opinionSuperintendent 监管人意见
-     * @param opinionOne 第一处理人意见
-     * @param opinionTwo 第二处理人意见
-     * @param opinionReport 上报人意见
+     * @param opinionOne 工作人员
      * @param userOpinion 用户意见
-     * @param type 流程状态 0：申请 1：一级受理 11：一级受理完成 2：二级受理 21：二级受理完成  3：上报  4：通过  5：不通过 6:终止
+     * @param type 流程状态  0：申请 1：处理人员处理 2: 处理完成
      * @param id 流程信息ID
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "updateUserWorkflowInfo",method = RequestMethod.POST)
-    public Object updateUserWorkflowInfo(String opinionSuperintendent,String opinionOne,
-                                    String opinionTwo,String opinionReport,
-                                    String userOpinion,String type,Long id){
-        Boolean info = WorkflowCheckService.updateUserWorkflowInfo(opinionSuperintendent,opinionOne,opinionTwo, opinionReport,userOpinion,type,id);
+    public Object updateUserWorkflowInfo(String opinionOne,String userOpinion,String type,Long id,String starType){
+        Boolean info = WorkflowCheckService.updateUserWorkflowInfo(opinionOne,userOpinion,type,id,starType);
         if(info){
             return BuildResponse.success("更新成功");
         }else {
@@ -136,8 +133,6 @@ public class WorkflowInfoController extends AbstractController {
         return BuildResponse.success(JSON.toJSON(WorkflowCheckService.selectById(id)));
     }
 
-
-
     /**
      * 获取社区或者物业流程信息
      * @param workflowType 字典值 1:供水维修  2:电力报修  3:煤气维修   4:建筑报修
@@ -151,6 +146,12 @@ public class WorkflowInfoController extends AbstractController {
         message.setCommunityId(communityId);
         message.setDicValue(workflowType);
         return BuildResponse.success(JSON.toJSON(this.workflowMessageService.getAll(message)));
+    }
 
+    @ResponseBody
+    @RequestMapping(value = "getUserDetailWorkflow",method = RequestMethod.POST)
+    public Object getUserDetailWorkflow(Long userId,Long communityId){
+        List<YwWorkflowInfo>  list = WorkflowCheckService.getUserDetailWorkflow(userId,communityId);
+        return BuildResponse.success(JSON.toJSON(list));
     }
 }

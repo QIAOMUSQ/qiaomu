@@ -9,8 +9,10 @@ import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
 import com.qiaomu.modules.sys.service.SysFileService;
 import com.qiaomu.modules.workflow.dao.YwWorkflowInfoDao;
+import com.qiaomu.modules.workflow.entity.UserWorkflow;
 import com.qiaomu.modules.workflow.entity.YwWorkflowInfo;
 import com.qiaomu.modules.workflow.entity.YwWorkflowMessage;
+import com.qiaomu.modules.workflow.service.UserWorkflowService;
 import com.qiaomu.modules.workflow.service.YwWorkflowInfoService;
 import com.qiaomu.modules.workflow.service.YwWorkflowMessageService;
 import com.qiaomu.modules.infopublish.entity.PushMessage;
@@ -30,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -64,11 +67,13 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
     @Autowired
     private SysFileService fileService;
 
+    @Autowired
+    private UserWorkflowService userWorkflowService;
+
     public PageUtils queryPage(Map<Object, Object> params) {
+        YwWorkflowInfo info = new YwWorkflowInfo();
         Long companyId = null;//
         String communityName = (String) params.get("communityName");
-        String processName = (String) params.get("processName");
-        //String userId = (String) params.get("userId");
         String type = (String) params.get("type");
         String workflowType = (String) params.get("workflowType");//字典值
 
@@ -76,44 +81,33 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
         //若不指定社区则查询该物业下所有社区
         if(params.get("communityId") != null){
             communityId = (Long) params.get("communityId");
+            info.setCommunityId(communityId);
         }else {
             companyId = (Long) params.get("companyId");
+            info.setCompanyId(companyId);
         }
-        Long userId = null;
+        if (StringUtils.isNotBlank(workflowType)){
+            info.setWorkflowType(workflowType);
+        }
+        if(StringUtils.isNotBlank(type)){
+            info.setType(type);
+        }
         if(params.get("userId") != null){
-             userId = (Long)params.get("userId");
+            Long  userId = (Long)params.get("userId");
+            info.setUserId(userId);
         }
+        if (StringUtils.isNotBlank(communityName))info.setCommunityName(communityName);
         //获取用户社区内真实姓名
 
-        Page<YwWorkflowInfo> page = selectPage(
-                new Query(params).getPage(),
-                new EntityWrapper()
-                        .like(StringUtils.isNotBlank(processName), "process_name", processName)
-                        .eq(companyId !=null,"COMPANY_ID", companyId)
-                        .eq(userId != null ,"USER_ID",userId)
-                        .eq(StringUtils.isNotBlank(workflowType),"workflow_type",workflowType)
-                        .eq(StringUtils.isNotBlank(type),"type",type)
-                        .eq(communityId !=null , "community_id", communityId)
-                        .addFilterIfNeed(params.get("sql_filter") != null, (String) params.get("sql_filter"), new Object[0]));
+        Page<YwWorkflowInfo> page = new Query(params).getPage();// 当前页，总条
+        page.setRecords(this.baseMapper.selectPageAll(page,info));
         for (YwWorkflowInfo workflowInfo : page.getRecords()) {
             YwWorkflowMessage workflowMessage = this.workflowMessageService.getById(workflowInfo.getWorkflowId());
             if(workflowMessage.getPhoneOneId() !=null){
                 workflowInfo.setDetailPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getPhoneOneId(),workflowMessage.getCommunityId(),","));
                 workflowInfo.setDetailPhoneOne(workflowMessage.getPhoneOneId());
             }
-            if(workflowMessage.getPhoneTwoId() !=null){
-                workflowInfo.setDetailPhoneTwoName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getPhoneTwoId(),workflowMessage.getCommunityId(),","));
-                workflowInfo.setDetailPhoneTwo(workflowMessage.getPhoneTwoId() );
-            }
 
-            if(workflowMessage.getReportPersonId() != null){
-                workflowInfo.setDetailPhoneReportName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getReportPersonId(),workflowMessage.getCommunityId(),","));
-                workflowInfo.setDetailPhoneReport(workflowMessage.getReportPersonId());
-            }
-            if(workflowMessage.getSuperintendentId() != null ){
-                workflowInfo.setSuperintendentName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getSuperintendentId(),workflowMessage.getCommunityId(),","));
-                workflowInfo.setSuperintendentPhone(workflowMessage.getSuperintendentId());
-            }
             workflowInfo.setProcessName(workflowMessage.getProcessName());
             String user = userExtendService.getRealNamesByUserIdsAndCommunityId(workflowInfo.getUserId().toString(),workflowMessage.getCommunityId(),",");
             if(user!=null){
@@ -161,7 +155,7 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
             workflow.setStatus("0");
             workflow.setServiceDate(serviceDate);
             workflow.setCreateTime(new Date());
-            workflow.setCompanyId(community.getCompanyId());
+            //workflow.setCompanyId(community.getCompanyId());
             workflow.setCommunityId(communityId);
             this.insert(workflow);
           //  findPushUser(workflow,"0");
@@ -175,40 +169,27 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
 
     /**
      *
-     * @param opinionSuperintendent 监管人意见
-     * @param opinionOne  第一处理人号码
-     * @param opinionTwo 第二处理人
-     * @param opinionReport  上报人
+     * @param opinionOne  第一处理人意见
      * @param userOpinion   用户意见
-     * @param type 流程状态 0：申请 1：一级接受受理 11：一级受理完成 2：
-     *             二级接受受理 21：二级受理完成  3：上报
-     *             4：通过  5：不通过 6:终止
+     * @param type 流程状态 0：申请 1：处理人员处理 2: 处理完成
      * @param id 流程信息ID
      * @return
      */
     @Override
-    public Boolean updateUserWorkflowInfo(String opinionSuperintendent, String opinionOne, String opinionTwo, String opinionReport, String userOpinion, String type, Long id) {
+    public Boolean updateUserWorkflowInfo( String opinionOne, String userOpinion, String type, Long id,String starType) {
         try {
             YwWorkflowInfo workflowInfo = this.selectById(id);
             if(StringUtils.isNotBlank(opinionOne)){
                 workflowInfo.setDetailOpinionOne(opinionOne);
                 workflowInfo.setDetailOneDate(new Date());
             }
-            if (StringUtils.isNotBlank(opinionTwo)){
-                workflowInfo.setDetailOpinionTwo(opinionTwo);
-                workflowInfo.setDetailTwoDate(new Date());
-            }
-            if (StringUtils.isNotBlank(opinionReport)){
-                workflowInfo.setDetailOpinionReport(opinionReport);
-                workflowInfo.setReportDate(new Date());
-            }
-            if (StringUtils.isNotBlank(opinionSuperintendent)){
-                workflowInfo.setFinalityOpinion(opinionSuperintendent);
+            if(StringUtils.isNotBlank(userOpinion)){
+                workflowInfo.setUserOpinion(userOpinion);
                 workflowInfo.setFinalityDate(new Date());
                 workflowInfo.setStatus("1");
             }
-            if(StringUtils.isNotBlank(userOpinion)){
-                workflowInfo.setUserOpinion(userOpinion);
+            if(StringUtils.isNotBlank(starType)){
+                workflowInfo.setStarType(starType);
             }
             workflowInfo.setType(type);
             updateById(workflowInfo);
@@ -231,8 +212,7 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
         Long workFlow = info.getWorkflowId();
         YwWorkflowMessage workflowMessage = workflowMessageService.getById(workFlow);
 
-        //type  流程状态 0：申请 1：一级接受受理 11：一级受理完成
-        // 2：二级主管接受受理 21：二级受理完成  3：上报  4：通过  5：不通过 6:终止
+        //type  流程状态  0：申请 1：处理人员处理 2: 处理完成
         PushMessage message = new PushMessage();
         if (info.getType().equals("0")){
             //用户建立新流程申请
@@ -240,29 +220,7 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
             pushRedisMessageService.pushMessage(info.getUserId(),idString,"报修申请","0","请及时处理新流程");
         }else if(info.getType().equals("1")){
             //一级处理人接受处理提醒用户
-            pushRedisMessageService.pushMessage(info.getUserId(),info.getUserId()+"","报修申请","0","您的申请工作人员已经受理");
-        }else if(info.getType().equals("11")){
-            //一级处理人处理完成提醒用户
             pushRedisMessageService.pushMessage(info.getUserId(),info.getUserId()+"","报修申请","0","您的申请工作人员已经受理完成");
-            String idString =workflowMessage.getPhoneTwoId();
-            //当有下级处理人推送通知
-            if(idString != null){
-                pushRedisMessageService.pushMessage(info.getUserId(),idString,"报修申请","0","新流程需要您受理，请及时处理");
-            }
-        }else if(info.getType().equals("2")){
-            //二级主管接受受理提醒用户
-            pushRedisMessageService.pushMessage(info.getUserId(),info.getUserId()+"","报修申请","0","二级主管接受受理");
-        }else if(info.getType().equals("21")){
-            //二级主管完成受理，并提醒用户
-            pushRedisMessageService.pushMessage(info.getUserId(),info.getUserId()+"","报修申请","0","二级主管完成受理");
-            String idString =workflowMessage.getReportPersonId();
-            if(idString !=null ){
-                pushRedisMessageService.pushMessage(info.getUserId(),idString,"报修申请","0","新流程需要您受理，请及时处理");
-            }
-        }else if(info.getType().equals("3")){
-            pushRedisMessageService.pushMessage(info.getUserId(),info.getUserId()+"","报修申请","0","您提交的申请流程信息已经上报到管理层");
-        }else if(info.getType().equals("6")){
-            pushRedisMessageService.pushMessage(info.getUserId(),info.getUserId()+"","报修申请","0","您提交的申请流程已经终止,有什么疑问请联系处理人员");
         }
     }
 
@@ -282,19 +240,7 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
                 Info.setDetailPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getPhoneOneId(),workflowMessage.getCommunityId(),","));
                 Info.setDetailPhoneOne(workflowMessage.getPhoneOneId());
             }
-            if(workflowMessage.getPhoneTwoId() !=null){
-                Info.setDetailPhoneTwoName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getPhoneTwoId(),workflowMessage.getCommunityId(),","));
-                Info.setDetailPhoneTwo(workflowMessage.getPhoneTwoId() );
-            }
 
-            if(workflowMessage.getReportPersonId() != null){
-                Info.setDetailPhoneReportName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getReportPersonId(),workflowMessage.getCommunityId(),","));
-                Info.setDetailPhoneReport(workflowMessage.getReportPersonId());
-            }
-            if(workflowMessage.getSuperintendentId() != null ){
-                Info.setSuperintendentName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getSuperintendentId(),workflowMessage.getCommunityId(),","));
-                Info.setSuperintendentPhone(workflowMessage.getSuperintendentId());
-            }
             Info.setProcessName(workflowMessage.getProcessName());
         }
         return infoList;
@@ -308,20 +254,16 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
             info.setDetailPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getPhoneOneId(),workflowMessage.getCommunityId(),","));
             info.setDetailPhoneOne(workflowMessage.getPhoneOneId());
         }
-        if(workflowMessage.getPhoneTwoId() !=null){
-            info.setDetailPhoneTwoName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getPhoneTwoId(),workflowMessage.getCommunityId(),","));
-            info.setDetailPhoneTwo(workflowMessage.getPhoneTwoId() );
-        }
 
-        if(workflowMessage.getReportPersonId() != null){
-            info.setDetailPhoneReportName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getReportPersonId(),workflowMessage.getCommunityId(),","));
-            info.setDetailPhoneReport(workflowMessage.getReportPersonId());
-        }
-        if(workflowMessage.getSuperintendentId() != null ){
-            info.setSuperintendentName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getSuperintendentId(),workflowMessage.getCommunityId(),","));
-            info.setSuperintendentPhone(workflowMessage.getSuperintendentId());
-        }
         info.setProcessName(workflowMessage.getProcessName());
         return  info;
+    }
+
+    @Override
+    public List<YwWorkflowInfo> getUserDetailWorkflow(Long userId, Long communityId) {
+        YwWorkflowInfo workflowInfo = new YwWorkflowInfo();
+        workflowInfo.setCommunityId(communityId);
+        workflowInfo.setUserId(userId);
+        return this.baseMapper.getAllWorker(workflowInfo);
     }
 }

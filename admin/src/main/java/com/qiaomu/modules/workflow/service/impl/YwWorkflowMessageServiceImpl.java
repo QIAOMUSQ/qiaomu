@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
+import com.qiaomu.modules.workflow.dao.UserWorkflowDao;
 import com.qiaomu.modules.workflow.dao.YwWorkflowMessageDao;
 import com.qiaomu.modules.workflow.entity.YwWorkflowMessage;
+import com.qiaomu.modules.workflow.service.UserWorkflowService;
 import com.qiaomu.modules.workflow.service.YwWorkflowMessageService;
 import com.qiaomu.modules.sys.service.SysDictService;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +45,10 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
 
     @Autowired
     private SysDictService dictService;
+
+    @Autowired
+    private UserWorkflowService userWorkflowService;
+
 
     public PageUtils queryPage(Map<String, Object> params) {
         Long companyId = null;
@@ -72,15 +79,6 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
             if(processMessage.getPhoneOneId() !=null){
                 processMessage.setPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getPhoneOneId(),processMessage.getCommunityId(),","));
             }
-            if(processMessage.getPhoneTwoId() !=null ){
-                processMessage.setPhoneTwoName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getPhoneTwoId(),processMessage.getCommunityId(),","));
-            }
-           if(processMessage.getReportPersonId() !=null ){
-               processMessage.setReportPersonName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getReportPersonId(),processMessage.getCommunityId(),","));
-           }
-            if(processMessage.getSuperintendentId() !=null){
-                processMessage.setSuperintendentName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getSuperintendentId(),processMessage.getCommunityId(),","));
-            }
 
         }
         return new PageUtils(page);
@@ -91,17 +89,18 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
         if (process.getId() != null) {
             YwWorkflowMessage workflowMessage = this.baseMapper.selectById(process.getId());
             workflowMessage.setPhoneOneId(process.getPhoneOneId());
-            workflowMessage.setPhoneTwoId(process.getPhoneTwoId());
-            workflowMessage.setReportPersonId(process.getReportPersonId());
-            workflowMessage.setSuperintendentId(process.getSuperintendentId());
             workflowMessage.setProcessName(process.getProcessName());
             workflowMessage.setCommunityId(process.getCommunityId());
             workflowMessage.setDicValue(process.getDicValue());
             this.baseMapper.updateAllColumnById(workflowMessage);
+            //将流程和工作人员关联信息存库
+            userWorkflowService.changeInfo(workflowMessage);
         } else {
             process.setCreateTime(new Date());
             insert(process);
+            userWorkflowService.changeInfo(process);
         }
+
     }
 
 
@@ -112,15 +111,7 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
         if(processMessage.getPhoneOneId() !=null){
             processMessage.setPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getPhoneOneId(),processMessage.getCommunityId(),","));
         }
-        if(processMessage.getPhoneTwoId() !=null ){
-            processMessage.setPhoneTwoName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getPhoneTwoId(),processMessage.getCommunityId(),","));
-        }
-        if(processMessage.getReportPersonId() !=null ){
-            processMessage.setReportPersonName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getReportPersonId(),processMessage.getCommunityId(),","));
-        }
-        if(processMessage.getSuperintendentId() !=null){
-            processMessage.setSuperintendentName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getSuperintendentId(),processMessage.getCommunityId(),","));
-        }
+
         return processMessage;
     }
 
@@ -133,17 +124,10 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
             if(message.getPhoneOneId() !=null){
                 message.setPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(message.getPhoneOneId(),message.getCommunityId(),","));
             }
-            if(message.getPhoneTwoId() !=null ){
-                message.setPhoneTwoName(userExtendService.getRealNamesByUserIdsAndCommunityId(message.getPhoneTwoId(),message.getCommunityId(),","));
-            }
-            if(message.getReportPersonId() !=null ){
-                message.setReportPersonName(userExtendService.getRealNamesByUserIdsAndCommunityId(message.getReportPersonId(),message.getCommunityId(),","));
-            }
-            if(message.getSuperintendentId() !=null){
-                message.setSuperintendentName(userExtendService.getRealNamesByUserIdsAndCommunityId(message.getSuperintendentId(),message.getCommunityId(),","));
-            }
-
         }
         return list;
     }
+
+
+
 }

@@ -20,9 +20,9 @@ public class YwWorkflowMessage implements Serializable {
     private Long id;
     private Long communityId;   //社区id
     private String phoneOneId;    //第一处理人
-    private String phoneTwoId;    //  第二处理人
-    private String reportPersonId;    //上报人
-    private String superintendentId; //监管人
+   /* private String phoneTwoId;    //  第二处理人
+    private String reportPersonId;    //上报人()
+    private String superintendentId; //监管人*/
     private String processName; //流程名称
     private String dicValue; //字典值
     private Long companyId; //物业ID
@@ -30,12 +30,12 @@ public class YwWorkflowMessage implements Serializable {
     private String communityName;
     @TableField(exist = false)
     private String phoneOneName;
-    @TableField(exist = false)
+   /* @TableField(exist = false)
     private String phoneTwoName;
     @TableField(exist = false)
     private String reportPersonName;
     @TableField(exist = false)
-    private String superintendentName;
+    private String superintendentName;*/
     @TableField(exist = false)
     private String dicValueName; //字典值
     private Date createTime;
@@ -54,30 +54,6 @@ public class YwWorkflowMessage implements Serializable {
 
     public void setPhoneOneId(String phoneOneId) {
         this.phoneOneId = phoneOneId;
-    }
-
-    public String getPhoneTwoId() {
-        return phoneTwoId;
-    }
-
-    public void setPhoneTwoId(String phoneTwoId) {
-        this.phoneTwoId = phoneTwoId;
-    }
-
-    public String getReportPersonId() {
-        return reportPersonId;
-    }
-
-    public void setReportPersonId(String reportPersonId) {
-        this.reportPersonId = reportPersonId;
-    }
-
-    public String getSuperintendentId() {
-        return superintendentId;
-    }
-
-    public void setSuperintendentId(String superintendentId) {
-        this.superintendentId = superintendentId;
     }
 
     public String getProcessName() {
@@ -128,32 +104,7 @@ public class YwWorkflowMessage implements Serializable {
         this.phoneOneName = phoneOneName;
     }
 
-    public String getPhoneTwoName() {
-        return this.phoneTwoName;
-    }
-
-    public void setPhoneTwoName(String phoneTwoName) {
-        this.phoneTwoName = phoneTwoName;
-    }
-
-    public String getReportPersonName() {
-        return this.reportPersonName;
-    }
-
-    public void setReportPersonName(String reportPersonName) {
-        this.reportPersonName = reportPersonName;
-    }
-
-
-    public String getSuperintendentName() {
-        return superintendentName;
-    }
-
-    public void setSuperintendentName(String superintendentName) {
-        this.superintendentName = superintendentName;
-    }
-
-    public Long getCompanyId() {
+     public Long getCompanyId() {
         return companyId;
     }
 

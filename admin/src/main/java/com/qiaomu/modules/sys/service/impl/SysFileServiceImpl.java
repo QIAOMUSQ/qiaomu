@@ -40,24 +40,29 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileDao, SysFileEntity> i
     @Override
     public Map<String, String> imageUrls(HttpServletRequest request) {
         Map<String,String> imageUrls = new HashMap<String,String>();
-        StandardMultipartHttpServletRequest req = (StandardMultipartHttpServletRequest) request;
-        Iterator<String> filenames=req.getFileNames();
+        try {
+            StandardMultipartHttpServletRequest req = (StandardMultipartHttpServletRequest) request;
+            Iterator<String> filenames=req.getFileNames();
 
-        File dir = new File(savePath);
-        if (!dir.exists()) dir.mkdirs();
-        while(filenames.hasNext()){
-            String filekey = filenames.next();
-            MultipartFile multipartFile = req.getFile(filekey);
-            String fileName = CommonUtils.mkFileName(multipartFile.getOriginalFilename()) ;
-            File saveFile = new File(savePath+fileName);
-            try {
-                multipartFile.transferTo(saveFile);
-                imageUrls.put(filekey,SERVER_URL+"/outapp/image/"+fileName);
-            } catch (IOException e) {
-                e.printStackTrace();
+            File dir = new File(savePath);
+            if (!dir.exists()) dir.mkdirs();
+            while(filenames.hasNext()){
+                String filekey = filenames.next();
+                MultipartFile multipartFile = req.getFile(filekey);
+                String fileName = CommonUtils.mkFileName(multipartFile.getOriginalFilename()) ;
+                File saveFile = new File(savePath+fileName);
+                try {
+                    multipartFile.transferTo(saveFile);
+                    imageUrls.put(filekey,SERVER_URL+"/outapp/image/"+fileName);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
-
+            return imageUrls;
+        }catch (Exception e){
+            return new HashMap<String, String>();
         }
-        return imageUrls;
+
     }
 }

@@ -7,6 +7,9 @@ $(function () {
             { label: '', name: 'id', width: 45,hidden:true,index: "id", key: true   },
             { label: '流程名称', name: 'processName', width: 45,sortable: false},
             { label: '流程类型', name: 'dicValueName', width: 75 ,sortable: false},
+            /*{ label: '处理人员', name: 'phoneOneName', width: 90 ,sortable: false},
+            { label: '主管人员', name: 'phoneTwoName', width: 90 ,sortable: false},
+            { label: '上报人', name: 'reportPersonName', width: 70 ,sortable: false},*/
             { label: '社区名称', name: 'communityName', width: 60,sortable: false},
             { label: '创建时间', name: 'createTime', index: "create_time", width: 85}
         ],
@@ -117,12 +120,19 @@ var vm = new Vue({
             $.get(baseURL + "processMessage/getProcess/"+id, function(result){
                 console.info(result);
                 $("#phoneOne").val(result.process.phoneOneName);
+                $("#phoneTwo").val(result.process.phoneTwoName);
+                $("#reportPerson").val(result.process.reportPersonName);
                 $("#communityName").val(result.process.communityName);
+                $("#superintendentPhone").val(result.process.superintendentName);
                 $("#processName").val(result.process.processName);
                 vm.processMessage.phoneOneId =result.process.phoneOneId ;
                 vm.processMessage.processName =result.process.processName;
                 vm.processMessage.dicValue = result.process.dicValue;
                 vm.processMessage.communityId = result.process.communityId;
+                
+              /*  vm.processMessage.phoneTwoId =result.process.phoneTwoId ;
+                vm.processMessage.reportPersonId =result.process.reportPersonId;
+                vm.processMessage.superintendentId = result.process.superintendentId;*/
                 vm.processMessage.id = result.process.id;
                 vm.getDictor();
             });
@@ -158,6 +168,15 @@ var vm = new Vue({
                         if(type=="phoneOneId"){
                              vm.processMessage.phoneOneId =userId;
                             $("#phoneOne").val(name);
+                        }else if(type=="phoneTwoId") {
+                            vm.processMessage.phoneTwoId =userId;
+                            $("#phoneTwo").val(name);
+                        }else if (type=="reportPersonId"){
+                            vm.processMessage.reportPersonId =userId;
+                            $("#reportPerson").val(name);
+                        }else {
+                            vm.processMessage.superintendentId =userId;
+                            $("#superintendentPhone").val(name);
                         }
                         layer.close(index);
                     }
@@ -205,7 +224,13 @@ var vm = new Vue({
                     vm.processMessage.communityId =parseInt(ids[0]);
                     $("#communityName").val(name);
                     vm.processMessage.phoneOneId =null;
+                    vm.processMessage.phoneTwoId  =null;
+                    vm.processMessage.reportPersonId =null;
+                    vm.processMessage.superintendentId =null;
                     $("#phoneOne").val("");
+                    $("#phoneTwo").val("");
+                    $("#reportPerson").val("");
+                    $("#superintendentPhone").val("");
 
                     layer.close(index);
 
@@ -262,7 +287,10 @@ var vm = new Vue({
                 id:null
             };
             $("#phoneOne").val("");
+            $("#phoneTwo").val("");
+            $("#reportPerson").val("");
             $("#communityName").val("");
+            $("#superintendentPhone").val("");
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam','page');
             $("#jqGrid").jqGrid('setGridParam',{
@@ -337,6 +365,9 @@ function saveOrUpdate() {
     }
     if(vm.processMessage.communityId  ==undefined || vm.processMessage.communityId  ==""){
         return alert('请选择社区');
+    }
+    if(vm.processMessage.superintendentId  ==undefined || vm.processMessage.superintendentPhone  ==""){
+        return alert('请选择监管人');
     }
     debugger
     $.ajax({

@@ -2,8 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.qiaomu.modules.workflow.dao.YwWorkflowInfoDao">
-
-
     <select id="getAll" resultType="com.qiaomu.modules.workflow.entity.YwWorkflowInfo">
         SELECT * FROM  yw_workflow_info
         <where>
@@ -20,10 +18,51 @@
             <if test="type !=null and type !=''">
                 AND type= #{type}
             </if>
+            <if test="workflowId !=null and workflowId !=''">
+                AND workflow_id= #{workflowId}
+            </if>
+            <if test="workflowIds !=null and workflowIds !=''">
+                AND workflow_id in #{workflowIds}
+            </if>
             <if test="status !=null and status !=''">
                 AND status= #{status}
             </if>
         </where>
         ORDER BY create_time DESC
     </select>
+    <select id="selectPageAll" resultType="com.qiaomu.modules.workflow.entity.YwWorkflowInfo">
+        SELECT
+            *
+        FROM
+            yw_workflow_info w
+        LEFT  JOIN yw_community c ON w.community_id = c.id
+        LEFT JOIN yw_property_company p ON p.id = c.company_id
+       <where>
+           1=1
+           <if test="companyId != null and companyId!=''">
+              and p.id = #{companyId}
+           </if>
+           <if test="communityName != null and communityName!=''">
+               and c.name like "%"#{communityName}"%"
+           </if>
+       </where>
+    </select>
+    <select id="getAllWorker" resultType="com.qiaomu.modules.workflow.entity.YwWorkflowInfo">
+         SELECT
+            *
+        FROM
+            yw_workflow_info w 
+        LEFT JOIN yw_user_workflow u ON u.workflow_id = w.workflow_id
+        LEFT JOIN  yw_workflow_message m on m.id=  w.workflow_id
+        <where>
+            1=1
+            <if test="communityId !=null and communityId!=''">
+               AND u.community_id = #{communityId}
+            </if>
+            <if test="userId !=null and userId != ''">
+               and u.user_id = #{userId}
+            </if>
+        </where>
+    </select>
+
 </mapper>
