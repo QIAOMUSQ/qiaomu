@@ -1,6 +1,7 @@
 package com.qiaomu.modules.article.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.CommonUtils;
 import com.qiaomu.modules.article.entity.ArticleEntity;
@@ -9,8 +10,11 @@ import com.qiaomu.modules.article.exception.CommentException;
 import com.qiaomu.modules.article.model.ArticleSelectModel;
 import com.qiaomu.modules.article.service.ArticleService;
 import com.qiaomu.modules.sys.controller.AbstractController;
+import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.service.SysUserService;
+import com.qiaomu.modules.sys.service.impl.SysUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
@@ -18,10 +22,7 @@ import org.springframework.web.multipart.support.StandardMultipartHttpServletReq
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.qiaomu.common.utils.Constant.OUT_DIR;
 import static com.qiaomu.common.utils.Constant.SERVER_URL;
@@ -37,7 +38,10 @@ public class ArticleController extends AbstractController{
 
     @Autowired
     private ArticleService articleService;
-
+    @Autowired
+    private SysUserService sysUserService;
+    @Autowired
+    private SysUserServiceImpl sysUserServiceImpl;
 
 
     /**
@@ -120,8 +124,24 @@ public class ArticleController extends AbstractController{
     public String queryComment(CommentEntity commentEntity){
 
         List<CommentEntity> commentEntities = articleService.queryComment(commentEntity);
+        List<JSONObject> returnList = new ArrayList<>();
 
-        return JSON.toJSONString(BuildResponse.success(commentEntities));
+        for(CommentEntity commentEntity1:commentEntities){
+            String headUrl = sysUserService.queryUserImageUrl(commentEntity1.getUserId());
+            JSONObject json = (JSONObject)JSON.toJSON(commentEntity1);
+            SysUserEntity sysUserEntity = sysUserServiceImpl.queryById(Long.valueOf(commentEntity1.getUserId()));
+            json.put("headUrl",headUrl);
+            String nickName = sysUserEntity.getNickName();
+            if(nickName==null||nickName.isEmpty()){
+                json.put("name",sysUserEntity.getUsername());
+            }else{
+                json.put("name",nickName);
+            }
+
+            returnList.add(json);
+        }
+
+        return JSON.toJSONString(BuildResponse.success(returnList));
 
     }
 
