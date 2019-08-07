@@ -1,6 +1,7 @@
 package com.qiaomu.modules.welfare.bussiness;
 
 import com.alibaba.fastjson.JSON;
+import com.qiaomu.common.utils.AESUtil;
 import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.CommonUtils;
 import com.qiaomu.common.utils.DateUtils;
@@ -375,6 +376,11 @@ public class WelfareBussiness {
 
     public List<PointRankForm> rankByGold(String communityId){
         List<PointRankForm> result = publicWelfareTaskService.selectTopPointUser(communityId);
+        for(PointRankForm pointRankForm:result) {
+            if(pointRankForm.getRealName()!=null) {
+                pointRankForm.setRealName(AESUtil.decrypt(pointRankForm.getRealName()));
+            }
+        }
         return result;
 
     }
