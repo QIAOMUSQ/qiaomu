@@ -6,7 +6,11 @@ import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.CommonUtils;
 import com.qiaomu.common.utils.DateUtils;
 import com.qiaomu.common.validator.Assert;
+
+import com.qiaomu.modules.sys.entity.SysUserEntity;
+import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.service.SysUserService;
+
 import com.qiaomu.modules.welfare.entity.PointEntity;
 import com.qiaomu.modules.welfare.entity.TaskEntity;
 import com.qiaomu.modules.welfare.entity.TaskPublishUserEntity;
@@ -41,6 +45,7 @@ public class WelfareBussiness {
 
     @Autowired
     private PublicWelfareTaskService publicWelfareTaskService;
+
 
 
     public void publishTask(StandardMultipartHttpServletRequest req){
@@ -118,11 +123,19 @@ public class WelfareBussiness {
         Date date = new Date();
         String updatedTime = DateUtils.formats(date);
 
+
         TaskEntity taskEntity = new TaskEntity();
         TaskPublishUserEntity taskPublishUserEntity = publicWelfareTaskService.queryPublishUserTaskLast(taskModel.getServiceId());
         if(taskPublishUserEntity!=null&&!UNRUN.value.equals(taskPublishUserEntity.getStatus())){
             throw new WelfareException("任务不可领取");
         }
+
+        SysUserEntity sysUserEntity = sysUserService.queryById(Long.valueOf(taskModel.getReceiveUserId()));
+        if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
+            throw new WelfareException("请先实名认证后再领取！");
+        }
+
+
         TaskRecevieUserEntity taskRecevieUserEntity = new TaskRecevieUserEntity();
         taskEntity.setStatus(RUN.value);
         taskEntity.setServiceId(taskModel.getServiceId());
