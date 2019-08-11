@@ -44,4 +44,22 @@
 			sys_user
 		WHERE username = #{userName};
 	</select>
+	<select id="getUserNameInIds" resultType="com.qiaomu.modules.sys.entity.SysUserEntity" parameterType="string">
+		SELECT
+			GROUP_CONCAT(u.username SEPARATOR ',') username
+		FROM
+			sys_user u
+		WHERE
+			u.user_id IN (#{idString})
+	</select>
+	<select id="getuserRealName" resultType="com.qiaomu.modules.sys.entity.SysUserEntity" parameterType="string">
+		SELECT
+			GROUP_CONCAT(u.real_name SEPARATOR ',') real_name
+		FROM
+			sys_user u
+		WHERE
+			u.user_id IN (#{ids})
+	</select>
+
+
 </mapper>

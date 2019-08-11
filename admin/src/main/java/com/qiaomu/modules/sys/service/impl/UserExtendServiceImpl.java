@@ -166,10 +166,15 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
         userExtend.setCheck(type);
         userExtend.setCheckTime(new Date());
         userExtend.setCheckUserId(userId);
+        if(type.equals(1)){
+           SysUserEntity user =  sysUserService.queryById(userExtend.getUserId());
+            user.setRealName(userExtend.getRealName());
+            sysUserService.updateById(user);
+        }
         updateById(userExtend);
     }
 
-    @Override
+    /*@Override
     public String getRealNamesByUserIdsAndCommunityId(String userIds, Long communityId, String type) {
         String names = "";
         if(StringUtils.isNotBlank(userIds)){
@@ -191,7 +196,7 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
             }
         }
         return names;
-    }
+    }*/
 
     @Override
     public UserExtend getUserCommunity(Long userId) {

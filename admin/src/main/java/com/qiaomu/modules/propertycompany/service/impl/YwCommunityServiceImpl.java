@@ -145,7 +145,7 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
             }
             userExtend.setStatus(true);
             userExtend.setCheck("0");
-            userExtend.setCompanyRoleType("5");
+            userExtend.setCompanyRoleType("4");
            // userExtend.setSex(sex);
             userExtend.setCreateTime(new Date());
             userExtendDao.insert(userExtend);

@@ -21,6 +21,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.qiaomu.common.annotation.DataFilter;
+import com.qiaomu.common.utils.AESUtil;
 import com.qiaomu.common.utils.Constant;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
@@ -192,18 +193,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     }
 
     @Override
-    public String getNameByIds(String idString,String type) {
+    public String getUserNameByIds(String idString,String type) {
         String names = "";
         if(StringUtils.isNotBlank(idString)){
-            String[] ids = idString.split(type);
-            for(String id : ids){
-                if(StringUtils.isNotBlank(id)){
-                    names +=baseMapper.queryById(Long.valueOf(id)).getUsername()+",";
-                }
-            }
-            if (names.length()>0){
-                names = names.substring(0,names.length()-1);
-            }
+            SysUserEntity user = baseMapper.getUserNameInIds(idString);
+            names =  user.getUsername();
         }
         return names;
     }
@@ -228,5 +222,24 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     @Override
     public String queryUserImageUrl(String userId) {
         return sysUserDao.queryUserImageUrl(userId);
+    }
+
+    @Override
+    public String getRealNameByIds(String ids) {
+        String name = "";
+        if(StringUtils.isNotBlank(ids)){
+            SysUserEntity user = baseMapper.getuserRealName(ids);
+            String realName=user.getRealName();
+            if(StringUtils.isNotBlank(realName)){
+                String[] names = realName.split(",");
+                for (String str : names){
+                    name+= AESUtil.decrypt(str)+",";
+                }
+                if (name.length()>0){
+                    name = name.substring(0,name.length()-1);
+                }
+            }
+        }
+        return name;
     }
 }

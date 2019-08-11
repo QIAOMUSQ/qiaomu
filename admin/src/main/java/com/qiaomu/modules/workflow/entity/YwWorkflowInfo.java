@@ -26,7 +26,7 @@ public class YwWorkflowInfo implements Serializable {
     private Long communityId;   //社区id
     private Long companyId;     //  物业id
 
-    private String detailOpinionOne;    // 工作人员
+    private String detailOpinionOne;    // 工作人员意见
     private Date detailOneDate;     //处理时间
     private String userOpinion; //用户评价
     private Long workflowId; //流程类型id
@@ -54,6 +54,10 @@ public class YwWorkflowInfo implements Serializable {
     private String userName;
     @TableField(exist = false)
     private String workflowIds; //流程类型id
+    @TableField(exist = false)
+    private String realName; //流程类型id
+    @TableField(exist = false)
+    private String detailPhone;
 
     public Long getId() {
         return this.id;
@@ -255,5 +259,21 @@ public class YwWorkflowInfo implements Serializable {
 
     public void setStarType(String starType) {
         this.starType = starType;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getDetailPhone() {
+        return detailPhone;
+    }
+
+    public void setDetailPhone(String detailPhone) {
+        this.detailPhone = detailPhone;
     }
 }

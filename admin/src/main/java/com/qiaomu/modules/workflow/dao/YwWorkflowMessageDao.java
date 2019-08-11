@@ -3,6 +3,7 @@ package com.qiaomu.modules.workflow.dao;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.qiaomu.modules.workflow.entity.YwWorkflowMessage;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,4 +13,7 @@ import java.util.List;
  */
 public interface YwWorkflowMessageDao extends BaseMapper<YwWorkflowMessage> {
     List<YwWorkflowMessage> getAll(YwWorkflowMessage workflowMessage);
+
+    @Override
+    YwWorkflowMessage selectById(Serializable serializable);
 }

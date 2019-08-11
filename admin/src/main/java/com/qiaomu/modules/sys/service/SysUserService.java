@@ -77,9 +77,11 @@ public interface SysUserService extends IService<SysUserEntity> {
      * @param type
      * @return
      */
-    String getNameByIds(String idString,String type);
+    String getUserNameByIds(String idString,String type);
 
     String getUserIdsByPhones(String phones,String type);
 
     String queryUserImageUrl(String userId);
+
+    String getRealNameByIds(String ids);
 }

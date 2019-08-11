@@ -175,7 +175,6 @@ var vm = new Vue({
             });
         },
         selectCity:function (event) {
-            console.info(event.target.value);
             vm.community.cityCode = event.target.value;
         }
     }

@@ -104,12 +104,12 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
         for (YwWorkflowInfo workflowInfo : page.getRecords()) {
             YwWorkflowMessage workflowMessage = this.workflowMessageService.getById(workflowInfo.getWorkflowId());
             if(workflowMessage.getPhoneOneId() !=null){
-                workflowInfo.setDetailPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getPhoneOneId(),workflowMessage.getCommunityId(),","));
+                workflowInfo.setDetailPhoneOneName(userService.getRealNameByIds(workflowMessage.getPhoneOneId()));
                 workflowInfo.setDetailPhoneOne(workflowMessage.getPhoneOneId());
             }
 
             workflowInfo.setProcessName(workflowMessage.getProcessName());
-            String user = userExtendService.getRealNamesByUserIdsAndCommunityId(workflowInfo.getUserId().toString(),workflowMessage.getCommunityId(),",");
+            String user = userService.getRealNameByIds(workflowInfo.getUserId().toString());
             if(user!=null){
                 workflowInfo.setUserName(user);
             }
@@ -237,8 +237,9 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
         for (YwWorkflowInfo Info : infoList) {
             YwWorkflowMessage workflowMessage = this.workflowMessageService.getById(Info.getWorkflowId());
             if(workflowMessage.getPhoneOneId() !=null){
-                Info.setDetailPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getPhoneOneId(),workflowMessage.getCommunityId(),","));
+                Info.setDetailPhoneOneName(userService.getRealNameByIds(workflowMessage.getPhoneOneId()));
                 Info.setDetailPhoneOne(workflowMessage.getPhoneOneId());
+                Info.setDetailPhone(userService.getUserNameByIds(workflowMessage.getPhoneOneId(),","));
             }
 
             Info.setProcessName(workflowMessage.getProcessName());
@@ -251,8 +252,9 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
         YwWorkflowInfo info = super.selectById(id);
         YwWorkflowMessage workflowMessage = this.workflowMessageService.getById(info.getWorkflowId());
         if(workflowMessage.getPhoneOneId() !=null){
-            info.setDetailPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(workflowMessage.getPhoneOneId(),workflowMessage.getCommunityId(),","));
+            info.setDetailPhoneOneName(userService.getRealNameByIds(workflowMessage.getPhoneOneId()));
             info.setDetailPhoneOne(workflowMessage.getPhoneOneId());
+            info.setDetailPhone(userService.getUserNameByIds(workflowMessage.getPhoneOneId(),","));
         }
 
         info.setProcessName(workflowMessage.getProcessName());

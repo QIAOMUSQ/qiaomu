@@ -53,8 +53,8 @@ public interface UserExtendService extends IService<UserExtend> {
      * @param communityId
      * @param type 分割字符串类型
      * @return
-     */
-    String getRealNamesByUserIdsAndCommunityId(String userIds,Long communityId,String type);
+     *//*
+    String getRealNamesByUserIdsAndCommunityId(String userIds,Long communityId,String type);*/
 
     UserExtend getUserCommunity(Long userId);
 }

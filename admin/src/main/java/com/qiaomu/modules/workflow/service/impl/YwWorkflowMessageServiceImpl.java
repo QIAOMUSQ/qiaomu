@@ -77,7 +77,7 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
             processMessage.setCommunityName(this.communityService.queryById(processMessage.getCommunityId()).getName());
             processMessage.setDicValueName(this.dictService.getdictCodeByTypeValue(processMessage.getDicValue(), "property_process"));
             if(processMessage.getPhoneOneId() !=null){
-                processMessage.setPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getPhoneOneId(),processMessage.getCommunityId(),","));
+                processMessage.setUserName(userService.getRealNameByIds(processMessage.getPhoneOneId()));
             }
 
         }
@@ -108,9 +108,7 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
         YwWorkflowMessage processMessage = selectById(id);
         processMessage.setCommunityName(this.communityService.queryById(processMessage.getCommunityId()).getName());
         processMessage.setDicValueName(this.dictService.getdictCodeByTypeValue(processMessage.getDicValue(), "property_process"));
-        if(processMessage.getPhoneOneId() !=null){
-            processMessage.setPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(processMessage.getPhoneOneId(),processMessage.getCommunityId(),","));
-        }
+
 
         return processMessage;
     }
@@ -121,9 +119,6 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
         for (YwWorkflowMessage message : list) {
             message.setCommunityName(this.communityService.queryById(message.getCommunityId()).getName());
             message.setDicValueName(this.dictService.getdictCodeByTypeValue(message.getDicValue(), "property_process"));
-            if(message.getPhoneOneId() !=null){
-                message.setPhoneOneName(userExtendService.getRealNamesByUserIdsAndCommunityId(message.getPhoneOneId(),message.getCommunityId(),","));
-            }
         }
         return list;
     }

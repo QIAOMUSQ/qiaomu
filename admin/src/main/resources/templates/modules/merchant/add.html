@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <#include "/header.html">
+</head>
+<body>
+<form id="form">
+    <table class="table table-striped">
+        <tr>
+            <td>名称</td>
+            <td><input id="name" name="name" class="K-textbox" /></td>
+            <td>联系方式</td>
+            <td><input id="contactPhone" name="contactPhone" class="K-textbox"/></td>
+        </tr>
+        <tr>
+            <td>地址</td>
+            <td colspan="4"><input id="location" name="location"  class="K-textbox"/></td>
+        </tr>
+    </table>
+</form>
+</body>
+<script>
+    var data= JSON.parse('${merchant}');
+
+</script>
+</html>

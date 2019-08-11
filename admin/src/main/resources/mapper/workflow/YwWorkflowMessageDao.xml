@@ -5,15 +5,31 @@
 
 
     <select id="getAll" resultType="com.qiaomu.modules.workflow.entity.YwWorkflowMessage">
-        SELECT * from yw_workflow_message
+        SELECT
+          w.*, s.username,
+          s.real_name
+        FROM
+          yw_workflow_message w
+        LEFT JOIN sys_user s ON s.user_id = w.phone_one_id
         <where>
             1=1
             <if test="communityId !=null and communityId!=''">
-                and community_id = #{communityId}
+                and w.community_id = #{communityId}
             </if>
             <if test="dicValue !=null and dicValue!=''">
-                and dic_value = #{dicValue}
+                and w.dic_value = #{dicValue}
             </if>
         </where>
+    </select>
+
+    <select id="selectById" resultType="com.qiaomu.modules.workflow.entity.YwWorkflowMessage" parameterType="long">
+        SELECT
+          w.*, s.username,
+          s.real_name
+        FROM
+          yw_workflow_message w
+        LEFT JOIN sys_user s ON s.user_id = w.phone_one_id
+        WHERE w.id = #{id}
+
     </select>
 </mapper>

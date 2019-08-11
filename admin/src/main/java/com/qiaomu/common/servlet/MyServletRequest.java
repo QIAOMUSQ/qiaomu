@@ -2,12 +2,14 @@ package com.qiaomu.common.servlet;
 
 import com.qiaomu.modules.sys.service.UserExtendService;
 import org.apache.shiro.session.Session;
+import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * @author 李品先
@@ -27,13 +29,20 @@ public class MyServletRequest implements ServletRequestListener {
 
     }
 
+    /**
+     * 主要监听用户登录次数
+     * @param servletRequestEvent
+     */
     @Override
     public void requestInitialized(ServletRequestEvent servletRequestEvent) {
         HttpServletRequest request = (HttpServletRequest)servletRequestEvent.getServletRequest();
-        String url = request.getRequestURL().toString();//根据url进行判断处理
+       /* String url = request.getRequestURL().toString();//根据url进行判断处理
         if(url.contains("login")){
-            //String params =  request.get;
+            Map<String,String[]> params =  WebUtils.toHttp(request).getParameterMap();
+            String phone =params.get("phone")[0];
+            String password =params.get("password")[0];
+
         }
-        System.out.println(url);
+        System.out.println(url);*/
     }
 }

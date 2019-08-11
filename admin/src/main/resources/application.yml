@@ -13,7 +13,7 @@ server:
 
 spring:
   profiles:
-    active: prod
+    active: dev
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -25,7 +25,7 @@ spring:
   freemarker:
     suffix: .html
     request-context-attribute: request
-    template-loader-path: classpath:/templates/,classpath:/statics/
+    template-loader-path: classpath:/templates/*,classpath:/statics/
     charset: UTF-8
     check-template-location: true
     settings:
