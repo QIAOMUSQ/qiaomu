@@ -11,6 +11,8 @@ import com.qiaomu.modules.workflow.entity.YwWorkflowInfo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,5 +33,27 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantDao,Merchant>  impl
         }
         page.setRecords(this.baseMapper.selectPageAll(page,info));
         return new PageUtils(page);
+    }
+
+    @Override
+    public boolean save(Merchant merchant) {
+        try{
+            if(merchant.getId()==null){
+                merchant.setCreateTime(new Date());
+                baseMapper.insert(merchant);
+            }else {
+                baseMapper.updateById(merchant);
+            }
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+    @Override
+    public List<Merchant> getAll() {
+        return baseMapper.selectAll();
     }
 }

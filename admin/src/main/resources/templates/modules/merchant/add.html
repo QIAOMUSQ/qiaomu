@@ -18,11 +18,15 @@
             <td>地址</td>
             <td colspan="4"><input id="location" name="location"  class="K-textbox"/></td>
         </tr>
+        <input id="id" name="id" style="display: none"/>
     </table>
 </form>
 </body>
 <script>
     var data= JSON.parse('${merchant}');
-
+    $("#id").val(data.id);
+    $("#name").val(data.name);
+    $("#contactPhone").val(data.contactPhone);
+    $("#location").val(data.location);
 </script>
 </html>

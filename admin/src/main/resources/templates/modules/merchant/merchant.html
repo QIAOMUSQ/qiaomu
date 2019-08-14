@@ -17,10 +17,10 @@
                     <a class="btn btn-primary" onclick="add()" ><i class="fa fa-plus"></i>&nbsp;新增</a>
                 </#if>
                 <#if shiro.hasPermission("merchant:update")>
-                    <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+                    <a class="btn btn-primary" onclick="update()"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
                 </#if>
                 <#if shiro.hasPermission("merchant:delete")>
-                    <a class="btn btn-primary" @click="delete"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+                    <a class="btn btn-primary" onclick="deleteById()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
                 </#if>
             </div>
             <table id="jqGrid"></table>
@@ -40,7 +40,7 @@
             { label: '名称', name: 'name',  width: 45 },
             { label: '联系方式', name: 'contactPhone', width: 75 },
             { label: '地址', name: 'location', width: 90 },
-            { label: '时间', name: 'creatTime', width: 100 }
+            { label: '时间', name: 'createTime', width: 100 }
         ],
         viewrecords: true,
         height: 385,
@@ -77,12 +77,11 @@
         }).trigger("reloadGrid");
     }
     function add() {
-
         layer.open({
             type: 2,
             skin: 'layui-layer-molv',
             title: "社区审核",
-            area: ['650px', '350px'],
+            area: ['650px', '250px'],
             fixed:false,
             content: baseURL + "merchant/add",
             closeBtn:1,
@@ -91,27 +90,75 @@
                 var form = layer.getChildFrame('form', index);
                 $.ajax({
                     type:"POST",
-                    url:baseURL + "mobile/communityMessage/addCommunity",
+                    url:baseURL + "merchant/save",
                     datType:"JSON",
                     data:form.serialize(),
                     success:function (data) {
-                        if(data.status== "success"){
-                            vm.reload();
-                            layer.msg(data.data);
-                            layer.close(index); //如果设定了yes回调，需进行手工关闭
-                        }else {
-                            layer.msg(data.data);
-                        }
+                        console.info(data)
+                        layer.close(index);
+                        reload();
                     }
                 });
 
-            },
-            btn2: function (index) {
+            }
+        });
+    }
+
+    function update() {
+        var id = getSelectedRow();
+        if(id == null){
+            return ;
+        }
+        layer.open({
+            type: 2,
+            skin: 'layui-layer-molv',
+            title: "社区审核",
+            area: ['650px', '250px'],
+            fixed:false,
+            content: baseURL + "merchant/add?id="+id,
+            closeBtn:1,
+            btn: ['确定','取消'],
+            yes:function(index,layero){//    //点击确定回调
+                var form = layer.getChildFrame('form', index);
+                debugger;
+                console.info(form.serialize());
+                $.ajax({
+                    type:"POST",
+                    url:baseURL + "merchant/save",
+                    datType:"JSON",
+                    data:form.serialize(),
+                    success:function (data) {
+                        console.info(data)
+                        layer.close(index);
+                        reload();
+                    }
+                });
 
             }
         });
-        layer.ready(function () {
+    }
 
+    function deleteById (){
+        var ids = getSelectedRows();
+        if(ids == null){
+            return ;
+        }
+        confirm('确定要删除选中的记录？', function(){
+            $.ajax({
+                type: "POST",
+                url: baseURL + "merchant/delete",
+                contentType: "application/json",
+                data: JSON.stringify(ids),
+                success: function(r){
+                    if(r.status == "success"){
+                        alert('操作成功', function(){
+                            reload();
+                        });
+                    }else{
+                        alert(r.msg);
+                    }
+                }
+            });
         });
     }
 </script>

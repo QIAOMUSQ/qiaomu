@@ -19,7 +19,7 @@ public class CommunityAdvertise implements Serializable {
 
     private Long communityId;
 
-    private int number;
+    private Long advertiseId;
 
     public Long getId() {
         return id;
@@ -37,11 +37,11 @@ public class CommunityAdvertise implements Serializable {
         this.communityId = communityId;
     }
 
-    public int getNumber() {
-        return number;
+    public Long getAdvertiseId() {
+        return advertiseId;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setAdvertiseId(Long advertiseId) {
+        this.advertiseId = advertiseId;
     }
 }

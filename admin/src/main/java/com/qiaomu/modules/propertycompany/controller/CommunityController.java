@@ -1,17 +1,20 @@
 package com.qiaomu.modules.propertycompany.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
 import com.qiaomu.modules.sys.controller.AbstractController;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,7 +45,7 @@ public class CommunityController extends AbstractController {
 
     @ResponseBody
     @RequestMapping(value = "save", method = RequestMethod.POST)
-    @RequiresPermissions({"community:save", "community:update"})
+    @RequiresPermissions(value = {"community:save", "community:update"},logical = Logical.OR)
     public R save(@RequestBody YwCommunity community) {
         //对社区进行分类
         //community.setCompanyId(getCompanyOrCommunityByType("1"));
@@ -70,5 +73,10 @@ public class CommunityController extends AbstractController {
         return R.ok();
     }
 
+    @ResponseBody
+    @RequestMapping(value = "getAllCommunity",method = RequestMethod.GET)
+    public R getAllCommunity(){
+        return R.ok().put("data", JSON.toJSON(communityService.findAllByCondition(new YwCommunity())));
+    }
 
 }

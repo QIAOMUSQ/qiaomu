@@ -3,5 +3,22 @@
 <mapper namespace="com.qiaomu.modules.propertycompany.dao.AdvertiseDao">
 
 
-
+    <select id="selectPageAll" resultType="com.qiaomu.modules.propertycompany.entity.Advertise">
+        SELECT * FROM yw_advertise a LEFT JOIN yw_merchant m ON a.merchant_id = m.id
+        <where>
+            1=1
+            <if test="name !=null and name !=''">
+                and m.name = #{name}
+            </if>
+        </where>
+    </select>
+    <select id="getAdvertiseByCommunity" resultType="com.qiaomu.modules.propertycompany.entity.Advertise">
+        SELECT
+            *
+        FROM
+            yw_advertise a
+        LEFT JOIN yw_community_advertise m ON m.advertise_id = a.id
+        WHERE
+          	m.community_id =#{communityId}
+    </select>
 </mapper>

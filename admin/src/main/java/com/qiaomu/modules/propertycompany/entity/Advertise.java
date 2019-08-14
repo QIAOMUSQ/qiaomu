@@ -1,5 +1,6 @@
 package com.qiaomu.modules.propertycompany.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
@@ -28,9 +29,9 @@ public class Advertise implements Serializable {
 
     private Date createTime;
 
-    private Date startTime;//生效开始时间
+    private String startTime;//生效开始时间
 
-    private Date endTime;//生效结束时间
+    private String endTime;//生效结束时间
 
     private Long merchantId;//商户id
 
@@ -43,6 +44,9 @@ public class Advertise implements Serializable {
     private String showLocation;//显示位置 1：主页头，2：公告位置 3：霸屏3秒
 
     private String type;//广告类型 1:全部图片 2：部分图片 3：全部文字
+
+    @TableField(exist = false)
+    private String name;
 
     public Long getId() {
         return id;
@@ -92,19 +96,19 @@ public class Advertise implements Serializable {
         this.createTime = createTime;
     }
 
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
@@ -154,5 +158,13 @@ public class Advertise implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

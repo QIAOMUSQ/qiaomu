@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <#include "/header.html">
+        <link rel="stylesheet" href="${request.contextPath}/statics/plugins/diyUpload/globle.css"/>
+        <style>
+            table tr td {
+                text-align: center;
+                font-size: 14px;
+
+            }
+            .K-textbox{
+                width: 100%;
+            }
+            body{
+                background: #e0e59b;
+            }
+            .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+                height: 32px;
+                line-height: 32px;
+            }
+            input[type=radio] {
+                margin: 4px 19px 0px;
+                line-height: normal;
+            }
+            .upImg_name{
+                height: 32px;
+                line-height: 32px;
+                padding-left: 21px;
+                font-size: 14px;
+            }
+            .upImg{
+                position: absolute;
+                left: 105px;
+            }
+            .time_div{
+                height: 32px;
+                line-height: 32px;
+                width: 30%;
+            }
+            .table{
+                margin-bottom:0px;
+            }
+        </style>
+        <script src="${request.contextPath}/statics/plugins/layui/lay/modules/laydate/laydate.js"></script>
+        <script src="${request.contextPath}/statics/plugins/layui/layui.js"></script>
+</head>
+<body>
+<form id="form">
+    <table class="table table-striped">
+        <tr>
+            <td>名称</td>
+            <td><input id="name" name="name" class="K-textbox" /></td>
+            <td>标题</td>
+            <td><input id="title" name="title" class="K-textbox"/></td>
+            <td>商户</td>
+            <td><input id="merchant" name="merchantId" class="K-textbox"/></td>
+        </tr>
+        <tr>
+            <td>简介</td>
+            <td colspan="3"><input id="brief" name="brief"  class="K-textbox"/></td>
+            <td>显示位置</td>
+            <td><input id="showLocation" name="showLocation"  class="K-textbox"/></td>
+        </tr>
+        <tr>
+            <td>外链支持</td>
+            <td>
+                <input type="radio" id="inlineRadio1" value="1" name="https" >
+                <label for="inlineRadio1">是 </label>
+                <input type="radio" id="inlineRadio2" value="0" name="https" checked="">
+                <label for="inlineRadio2">否</label>
+            </td>
+            <td>外链地址</td>
+            <td><input id="httpsUrl" name="httpsUrl"  class="K-textbox" readonly="true"/></td>
+            <td>广告类型</td>
+            <td><input id="type" name="type"  class="K-textbox"/></td>
+        </tr>
+        <tr>
+            <td>推送社区</td>
+            <td colspan="5"><input id="communityId" name="communityIds"  class="K-textbox"/></td>
+        </tr>
+        <tr>
+            <td>有效期</td>
+            <td colspan="5">
+                <div style="position: absolute;width: 100%;">
+                    <div class="time_div">
+                        <span class="time_span">开始时间</span>
+                        <input id="startTime" name="startTime" class="time_span"/>
+                    </div>
+                    <div class="time_div" style="position: absolute; left: 33%;top: 0px;">
+                        <span class="time_span">结束时间</span>
+                        <input id="endTime" name="endTime" class="time_span"/>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>内容</td>
+            <td colspan="5"><textarea rows="3" cols="3" id="content" name="content"  class="K-textbox" wrap="hard"></textarea></td>
+        </tr>
+        <input id="id" name="id" style="display: none"/>
+    </table>
+    <div>
+        <span class="upImg_name">上传图片</span>
+        <span class="upImg">
+            <div class="form-group">
+                <ul class="upload-ul clearfix">
+                    <li class="upload-pick">
+                        <div class="webuploader-container clearfix" id="fish_file"></div>
+                    </li>
+                </ul>
+            </div>
+        </span>
+        <input id="imgId" name="imgs" style="display: none"/>
+    </div>
+</form>
+</body>
+
+<script src="${request.contextPath}/statics/plugins/diyUpload/js/diyUpload.js" type="text/javascript"></script>
+<script src="${request.contextPath}/statics/plugins/diyUpload/js/webuploader.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        var locationData = [
+            { text: "主页头", value: "1" },
+            { text: "公告位置", value: "2" },
+            { text: "霸屏3秒", value: "3" }
+        ];
+        $("#showLocation").kendoDropDownList({
+            dataSource: locationData,
+            dataTextField: "text",
+            dataValueField: "value"
+        });
+        var typeData = [
+            { text: "全部图片", value: "1" },
+            { text: "部分图片", value: "2" },
+            { text: "全部文字", value: "3" }
+        ];
+        $("#type").kendoDropDownList({
+            dataSource: typeData,
+            dataTextField: "text",
+            dataValueField: "value"
+        });
+
+        $.get(baseURL + "communityMessage/getAllCommunity", function(result){
+            var array = new Array();
+
+            $.each(result.data,function (index,item) {
+                array.push({"text":item.name,"value":item.id});
+            });
+            console.info(array);
+            $("#communityId").kendoMultiSelect({
+                dataTextField: "text",
+                dataValueField: "value",
+                dataSource: array,
+                change:function (e) {
+                    var value = this.value();
+                    console.info(value);
+                    $("#communityId").val(value);
+                }
+            });
+        });
+        $("input:radio[name='https']").change(function (){
+            var opt=$("input:radio[name='https']:checked").val();//①
+            if(opt == 1){
+                document.getElementById("httpsUrl").readOnly=false;
+            }else {
+                document.getElementById("httpsUrl").readOnly=true;
+            }
+        });
+
+        ImgFile();
+        $("#startTime").kendoDatePicker({
+            value:new Date(),
+            culture: "zh-CN" ,//指定为中文
+            format: "yyyy-MM-dd"
+        });
+        $("#endTime").kendoDatePicker({
+            value:new Date(),
+            culture: "zh-CN" ,//指定为中文
+            format: "yyyy-MM-dd"
+        });
+
+        $.get(baseURL + "merchant/getAll", function(result){
+            var array = new Array();
+
+            $.each(result.data,function (index,item) {
+                array.push({"text":item.name,"value":item.id});
+            });
+
+            $("#merchant").kendoDropDownList({
+                dataTextField: "text",
+                dataValueField: "value",
+                dataSource: array
+            });
+        });
+    });
+
+    var imgMap = new Array();
+    function ImgFile() {
+
+        //上传图片
+
+        $('#fish_file').diyUpload({
+            url:'${request.contextPath}/welfare/sysFile/upload',
+            success:function(response,fileBox) {
+                if(response){
+                    imgMap.push({name:response.orgName,path:response.path});
+                    $("#imgId").val(JSON.stringify(imgMap));
+                 }else{
+                    alert("图片上传失败！");
+                }
+            },
+            // 选完文件后，是否自动上传。
+            auto: true,
+            error:function( err ) { },
+            buttonText : '',
+            accept: {
+                title: "Images",
+                extensions: 'gif,jpg,jpeg,bmp,png'
+            },
+            thumb:{
+                width:120,
+                height:90,
+                quality:100,
+                allowMagnify:true,
+                crop:true,
+                type:"image/jpeg"
+            }
+        });
+    }
+
+</script>
+</html>

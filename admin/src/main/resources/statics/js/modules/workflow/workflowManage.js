@@ -338,7 +338,6 @@ function saveOrUpdate() {
     if(vm.processMessage.communityId  ==undefined || vm.processMessage.communityId  ==""){
         return alert('请选择社区');
     }
-    debugger
     $.ajax({
         type: "POST",
         url: baseURL + "processMessage/process/save",

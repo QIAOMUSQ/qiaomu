@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qiaomu.modules.propertycompany.dao.CommunityAdvertiseDao">
+    <select id="selectListByCondition"
+            resultType="com.qiaomu.modules.propertycompany.entity.CommunityAdvertise">
+        SELECT * FROM yw_community_advertise
+        <where>
+            1=1
+            <if test="communityId !=null">
+                and community_id =#{communityId}
+            </if>
+            <if test="advertiseId !=null">
+                and advertise_id =#{advertiseId}
+            </if>
+        </where>
 
+    </select>
 
-
+    <delete id="deleteByAdvertiseId">
+        DELETE from yw_community_advertise WHERE advertise_id in (#{deleteIds})
+    </delete>
 </mapper>

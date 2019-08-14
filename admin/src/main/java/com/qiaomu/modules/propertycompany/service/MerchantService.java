@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.service.IService;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.modules.propertycompany.entity.Merchant;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,4 +14,8 @@ import java.util.Map;
  */
 public interface MerchantService extends IService<Merchant> {
     PageUtils pageList(Map<String, Object> params);
+
+    boolean save(Merchant merchant);
+
+    List<Merchant> getAll();
 }

@@ -61,6 +61,8 @@ public interface YwCommunityService extends IService<YwCommunity> {
 
 
     UserExtend getCommunityUserPermission(Long userId, Long communityId);
+
+
 }
 
 

@@ -12,4 +12,7 @@
              </if>
          </where>
     </select>
+    <select id="selectAll" resultType="com.qiaomu.modules.propertycompany.entity.Merchant">
+         SELECT * FROM yw_merchant
+    </select>
 </mapper>

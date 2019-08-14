@@ -16,4 +16,6 @@ import java.util.List;
 public interface MerchantDao extends BaseMapper<Merchant> {
 
     List<Merchant> selectPageAll(Pagination page, Merchant info);
+
+    List<Merchant> selectAll();
 }
