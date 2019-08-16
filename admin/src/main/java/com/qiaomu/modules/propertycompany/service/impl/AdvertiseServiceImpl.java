@@ -51,6 +51,7 @@ public class AdvertiseServiceImpl extends ServiceImpl<AdvertiseDao,Advertise> im
         try {
             if (advertise.getId()== null){
                 advertise.setCreateTime(new Date());
+                advertise.setImgs(advertise.getImgs().replace("\\",""));
                 this.baseMapper.insert(advertise);
                 String[] ids = advertise.getCommunityIds().split(",");
                 for (String id:ids){

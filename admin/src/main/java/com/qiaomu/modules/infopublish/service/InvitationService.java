@@ -13,4 +13,8 @@ import java.util.Map;
  */
 public interface InvitationService extends IService<InvitationEntity> {
     PageUtils queryPage(Map<String, Object> params);
+
+
+    void save(InvitationEntity invitation);
+
 }

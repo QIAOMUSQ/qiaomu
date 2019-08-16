@@ -40,6 +40,9 @@ public class SysFileConcroller {
     @Value("${file.save}")
     private String savePath;
 
+    @Value("${file.img-path}")
+    private String imgPath;
+
     /**
      * 文件上传
      *
@@ -68,7 +71,7 @@ public class SysFileConcroller {
 
                 fileEntity.setName(saveName);
                 fileEntity.setServicePath(savePath + saveName);
-                fileEntity.setPath("http://103.26.76.116:9999/admin/outapp/image/" + saveName);
+                fileEntity.setPath(imgPath + saveName);
                 fileEntity.setOrgName(orgName);
                 fileEntity.setFileSize(fileSize);
                 sysFileService.insertInfo(fileEntity);

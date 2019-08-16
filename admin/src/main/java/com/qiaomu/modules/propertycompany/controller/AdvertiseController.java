@@ -53,7 +53,7 @@ public class AdvertiseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "getAdvertiseByCommunity")
+    @RequestMapping(value = "getAdvertiseByCommunity",method = RequestMethod.POST)
     public Object getAdvertiseByCommunity(Long communityId){
        return BuildResponse.success(JSON.toJSON(advertiseService.getAdvertiseByCommunity(communityId)));
     }

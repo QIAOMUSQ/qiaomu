@@ -52,6 +52,7 @@ spring:
 
 file:
   save: /www/app/admin/staticFile/outapp/image/
+  img-path: http://103.26.76.116:9999/admin/outapp/image/
 
 logging:
   level: info

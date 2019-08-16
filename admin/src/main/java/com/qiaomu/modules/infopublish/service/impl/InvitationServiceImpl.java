@@ -1,16 +1,19 @@
 package com.qiaomu.modules.infopublish.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.qiaomu.common.utils.Constant;
+import com.qiaomu.common.exception.RRException;
+import com.qiaomu.common.exception.RRExceptionHandler;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
 import com.qiaomu.modules.infopublish.dao.InvitationDao;
 import com.qiaomu.modules.infopublish.entity.InvitationEntity;
 import com.qiaomu.modules.infopublish.service.InvitationService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -20,27 +23,32 @@ import java.util.Map;
  */
 @Service
 public class InvitationServiceImpl extends ServiceImpl<InvitationDao,InvitationEntity> implements InvitationService{
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-
-        /**
-         * 查找条件
-         * 1：用户名
-         * 2：信息类型
-         */
-        Long communityId = (Long) params.get("communityId");
-        String userPhone  = (String) params.get("userPhone");
-        String infoType = (String)params.get("infoType");
-        Page<InvitationEntity> page = this.selectPage(
-                new Query<InvitationEntity>(params).getPage(),
-                new EntityWrapper<InvitationEntity>()
-                        .eq("TYPE",1)
-                        .eq("COMMUNITY_ID",communityId)
-                        .or("TYPE",0)
-                        .eq(infoType!=null,"info_type",infoType)
-                        .eq(userPhone!=null,"user_phone",userPhone)
-                        .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER))
-        );
+        InvitationEntity entity = new InvitationEntity();
+        entity.setCompanyId((Long) params.get("companyId"));
+        if(StringUtils.isNotBlank((String) params.get("communityId"))){
+            entity.setCommunityId(Long.valueOf((String)params.get("communityId")));
+        }
+        if(StringUtils.isNotBlank((String) params.get("title"))){
+            entity.setTitle((String) params.get("title"));
+        }
+        Page<InvitationEntity> page = new Query(params).getPage();// 当前页，总条
+        page.setRecords(this.baseMapper.selectPageAll(page,entity));
         return new PageUtils(page);
     }
+
+    @Override
+    @Transactional
+    public void save(InvitationEntity invitation) {
+        try {
+            invitation.setImgJson(invitation.getImgJson().replace("\\",""));
+            invitation.setCreateTime(new Date());
+            this.baseMapper.insert(invitation);
+        }catch (Exception e){
+            throw new RRException("异常", "500");
+        }
+    }
+
 }
