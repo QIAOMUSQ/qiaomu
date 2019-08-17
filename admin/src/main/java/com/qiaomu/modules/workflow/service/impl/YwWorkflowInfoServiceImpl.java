@@ -74,6 +74,10 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
         YwWorkflowInfo info = new YwWorkflowInfo();
         Long companyId = null;//
         String communityName = (String) params.get("communityName");
+        if (StringUtils.isNotBlank(communityName)){
+            info.setCommunityIds(communityService.getCommunityIdList(communityName,null));
+        }
+
         String type = (String) params.get("type");
         String workflowType = (String) params.get("workflowType");//字典值
 
@@ -96,19 +100,19 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
             Long  userId = (Long)params.get("userId");
             info.setUserId(userId);
         }
-        if (StringUtils.isNotBlank(communityName))info.setCommunityName(communityName);
+
         //获取用户社区内真实姓名
 
         Page<YwWorkflowInfo> page = new Query(params).getPage();// 当前页，总条
         page.setRecords(this.baseMapper.selectPageAll(page,info));
         for (YwWorkflowInfo workflowInfo : page.getRecords()) {
-            YwWorkflowMessage workflowMessage = this.workflowMessageService.getById(workflowInfo.getWorkflowId());
-            if(workflowMessage.getPhoneOneId() !=null){
-                workflowInfo.setDetailPhoneOneName(userService.getRealNameByIds(workflowMessage.getPhoneOneId()));
-                workflowInfo.setDetailPhoneOne(workflowMessage.getPhoneOneId());
+           // YwWorkflowMessage workflowMessage = this.workflowMessageService.getById(workflowInfo.getWorkflowId());
+            if(workflowInfo.getPhoneOneId() !=null){
+                workflowInfo.setDetailPhoneOneName(userService.getRealNameByIds(workflowInfo.getPhoneOneId()));
+               // workflowInfo.setDetailPhoneOne(workflowMessage.getPhoneOneId());
             }
 
-            workflowInfo.setProcessName(workflowMessage.getProcessName());
+           // workflowInfo.setProcessName(workflowMessage.getProcessName());
             String user = userService.getRealNameByIds(workflowInfo.getUserId().toString());
             if(user!=null){
                 workflowInfo.setUserName(user);

@@ -30,23 +30,42 @@
         </where>
         ORDER BY create_time DESC
     </select>
+
+    <!--communityId/companyId/workflowType/type/userId/communityName-->
     <select id="selectPageAll" resultType="com.qiaomu.modules.workflow.entity.YwWorkflowInfo">
         SELECT
-            *
+          *
         FROM
-            yw_workflow_info w
-        LEFT  JOIN yw_community c ON w.community_id = c.id
-        LEFT JOIN yw_property_company p ON p.id = c.company_id
-       <where>
-           1=1
-           <if test="companyId != null and companyId!=''">
-              and p.id = #{companyId}
-           </if>
-           <if test="communityName != null and communityName!=''">
-               and c.name like "%"#{communityName}"%"
-           </if>
-       </where>
+            yw_workflow_info w,
+            yw_workflow_message m,
+            yw_community c
+        WHERE
+             m.id = w.workflow_id
+            <if test="companyId != null and companyId!=''">
+                and c.company_id = #{companyId}
+            </if>
+            <if test="communityId != null and communityId!=''">
+               and w.community_id = #{communityId}
+            </if>
+            <if test="workflowType != null and workflowType!=''">
+               and w.workflow_type = #{workflowType}
+            </if>
+            <if test="type != null and type!=''">
+               and w.type = #{type}
+            </if>
+            <if test="userId != null and userId!=''">
+               and w.user_id = #{userId}
+            </if>
+            <if test="communityIds != null">
+                and w.community_id in
+                <foreach item="communityIds" collection="array" open="(" separator="," close=")">
+                    #{communityIds}
+                </foreach>
+
+            </if>
     </select>
+
+
     <select id="getAllWorker" resultType="com.qiaomu.modules.workflow.entity.YwWorkflowInfo">
          SELECT
             *

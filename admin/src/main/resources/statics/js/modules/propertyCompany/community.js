@@ -14,7 +14,7 @@ $(function () {
             { label: '城市', name: 'cityName', width: 75 },
             { label: '地址', name: 'address', width: 90 },
             { label: '描述', name: 'describe', width: 90 },
-            { label: '时间', name: 'creatTime', width: 100 }
+            { label: '时间', name: 'createTime', width: 100 }
         ],
         viewrecords: true,
         height: 385,

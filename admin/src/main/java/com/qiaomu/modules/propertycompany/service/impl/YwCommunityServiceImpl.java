@@ -43,19 +43,29 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
     @Resource
     private UserExtendDao userExtendDao;
 
-    @Autowired
-    private YwCommunityService communityService;
-
 
     public PageUtils queryPage(Map<String, Object> params) {
         String name = (String) params.get("name");
         Long companyId =null;
         String cityName = (String) params.get("cityName");
-        ProvinceCityDateEntity provinceCity = this.provinceCityDateService.getProvCityByCityName(cityName);
+        YwCommunity condition = new YwCommunity();
+        condition.setName(name);
+
+
+       if (StringUtils.isNotBlank(cityName)){
+           //ProvinceCityDateEntity provinceCity = this.provinceCityDateService.getProvCityByCityName(cityName);
+          // condition.setCityId(provinceCity.getId());
+           condition.setCityName(cityName);
+       }
+
         if(params.get("companyId") != null ){
             companyId = (Long)params.get("companyId");
+            condition.setCompanyId(companyId);
         }
-        Page<YwCommunity> page = selectPage(new Query(params)
+
+        Page<YwCommunity> page = new Query(params).getPage();// 当前页，总条
+        page.setRecords(this.baseMapper.selectPageByCondition(page,condition));
+        /*Page<YwCommunity> page = selectPage(new Query(params)
                 .getPage(), new EntityWrapper()
                 .like(StringUtils.isNotBlank(name), "name", name)
                 .eq(companyId != null, "COMPANY_ID", companyId)
@@ -63,7 +73,7 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
                         Long.valueOf(provinceCity == null ? 0L : provinceCity.getId().longValue()))
                 .addFilterIfNeed(params
                                 .get("sql_filter") != null,
-                        (String) params.get("sql_filter"), new Object[0]));
+                        (String) params.get("sql_filter"), new Object[0]));*/
 
         for (YwCommunity community : page.getRecords()) {
             community.setCityName(this.provinceCityDateService.selectById(community.getCityId()).getCityName());
@@ -79,12 +89,10 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
     }
 
     public List<YwCommunity> findAll(YwCommunity community) {
-        return this.baseMapper.selectList(new EntityWrapper()
-                .like(StringUtils.isNotBlank(community.getName()), "name", community.getName())
-                .eq(community.getCompanyId() != null, "company_id", community.getCompanyId())
-                .eq( community.getCityId() != null, "city_id", community.getCityId()));
+        return this.baseMapper.findAllByCondition(community);
     }
 
+    @Transactional
     public void save(YwCommunity community) {
         Map params = new HashMap();
         params.put("cityCode", community.getCityCode());
@@ -95,8 +103,9 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
         community.setCreateTime(new Date());
         if (community.getId() != null)
             updateById(community);
-        else
+        else{
             this.baseMapper.insert(community);
+        }
     }
 
     public List<Long> getCommunityIdList(String communityName, Long companyId) {
@@ -104,11 +113,13 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
         List<Long> communityId = new ArrayList();
 
         YwCommunity community = new YwCommunity();
-        community.setCompanyId(companyId);
+        if(companyId !=null ){
+            community.setCompanyId(companyId);
+        }
         if (StringUtils.isNotBlank(communityName)) {
             community.setName(communityName);
         }
-        communityList = this.communityService.findAll(community);
+        communityList = this.baseMapper.findAllByCondition(community);
 
         for (YwCommunity communitys : communityList) {
             communityId.add(communitys.getId());
@@ -124,7 +135,7 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
     @Override
     @Transactional
     public String addCommunityMember(String pathId, String phone, Long communityId, String realName, String address, String identityInfo, String sex) {
-        YwCommunity community = this.communityService.queryById(communityId);
+        YwCommunity community = this.baseMapper.queryById(communityId);
 
         SysUserEntity user = userDao.getUserByUserName(phone);
 
@@ -134,12 +145,7 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
         List<UserExtend> userList = userExtendDao.selectCommunityList(userExtend);
         if(userList.size() ==0){
             userExtend.setAddress(AESUtil.encrypt(address));
-            if(StringUtils.isNotBlank(pathId)){
-            //    userExtend.setImgId(Long.valueOf(pathId));
-            }
             userExtend.setRealName(AESUtil.encrypt(realName));
-           // userExtend.setUserIdentity(identityInfo);
-
             if(community.getCompanyId() != null && community.getCompanyId()!=-1l){
                 userExtend.setCompanyId(community.getCompanyId());
             }
@@ -175,7 +181,7 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
             user2.setRealName(AESUtil.decrypt(user2.getRealName()));
             user2.setAddress(AESUtil.decrypt(user2.getAddress()));
             //物业信息
-            user2.setCommunityName(communityService.selectById(user2.getCommunityId()).getName());
+            user2.setCommunityName(this.baseMapper.selectById(user2.getCommunityId()).getName());
             System.out.println("user2 = [" + JSON.toJSONString(user2) );
         }
         return user2;

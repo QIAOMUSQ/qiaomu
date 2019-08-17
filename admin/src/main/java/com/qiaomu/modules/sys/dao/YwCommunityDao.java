@@ -1,7 +1,10 @@
 package com.qiaomu.modules.sys.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.qiaomu.modules.sys.entity.YwCommunity;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,4 +17,7 @@ public interface YwCommunityDao extends BaseMapper<YwCommunity> {
     YwCommunity queryById(Long var1);
 
     List<YwCommunity>findAllByCondition(YwCommunity condition);
+
+
+    List<YwCommunity> selectPageByCondition(Page<YwCommunity> page, YwCommunity condition);
 }

@@ -86,7 +86,6 @@
 <script src="${request.contextPath}/statics/plugins/diyUpload/js/diyUpload.js" type="text/javascript"></script>
 <script src="${request.contextPath}/statics/plugins/diyUpload/js/webuploader.min.js" type="text/javascript"></script>
 <script>
-    var community;
     $(function () {
         var companyId = '${companyId}';
         $.get(baseURL + "communityMessage/getAllCommunity?companyId="+companyId, function(result){
@@ -95,7 +94,7 @@
             $.each(result.data,function (index,item) {
                 array.push({"text":item.name,"value":item.id});
             });
-            community = $("#communityId").kendoDropDownList({
+            $("#communityId").kendoDropDownList({
                 dataTextField: "text",
                 dataValueField: "value",
                 dataSource: array
@@ -107,7 +106,6 @@
                 $("#title").val(result.data.title);
                 $("#communityId").val(result.data.communityId);
                 $("#content").val(result.data.content);
-                community.value(result.data.communityId);
                 var imgHtml="";
                 $.each(result.data.imgJson,function (index,item) {
                     if(parseInt(item)){

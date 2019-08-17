@@ -47,6 +47,7 @@ public class InvitationServiceImpl extends ServiceImpl<InvitationDao,InvitationE
             invitation.setCreateTime(new Date());
             this.baseMapper.insert(invitation);
         }catch (Exception e){
+            e.printStackTrace();
             throw new RRException("异常", "500");
         }
     }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author 李品先
@@ -58,6 +59,10 @@ public class YwWorkflowInfo implements Serializable {
     private String realName; //流程类型id
     @TableField(exist = false)
     private String detailPhone;
+    @TableField(exist = false)
+    private String phoneOneId;
+    @TableField(exist = false)
+    private List<Long> communityIds;
 
     public Long getId() {
         return this.id;
@@ -275,5 +280,21 @@ public class YwWorkflowInfo implements Serializable {
 
     public void setDetailPhone(String detailPhone) {
         this.detailPhone = detailPhone;
+    }
+
+    public String getPhoneOneId() {
+        return phoneOneId;
+    }
+
+    public void setPhoneOneId(String phoneOneId) {
+        this.phoneOneId = phoneOneId;
+    }
+
+    public List<Long> getCommunityIds() {
+        return communityIds;
+    }
+
+    public void setCommunityIds(List<Long> communityIds) {
+        this.communityIds = communityIds;
     }
 }
