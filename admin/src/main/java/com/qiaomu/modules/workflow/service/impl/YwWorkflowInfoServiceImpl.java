@@ -162,7 +162,7 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
             //workflow.setCompanyId(community.getCompanyId());
             workflow.setCommunityId(communityId);
             this.insert(workflow);
-          //  findPushUser(workflow,"0");
+            findPushUser(workflow,"0");
             return "success";
         }catch (Exception e){
             e.printStackTrace();
@@ -197,7 +197,7 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
             }
             workflowInfo.setType(type);
             updateById(workflowInfo);
-           // findPushUser(workflowInfo,type);
+            findPushUser(workflowInfo,type);
             return true;
         }catch (Exception e){
             e.printStackTrace();
@@ -216,16 +216,19 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
         Long workFlow = info.getWorkflowId();
         YwWorkflowMessage workflowMessage = workflowMessageService.getById(workFlow);
 
-        //type  流程状态  0：申请 1：处理人员处理 2: 处理完成
-        PushMessage message = new PushMessage();
+        //type  流程状态  0：申请 1：处理人员完成 2: 处理完成
         if (info.getType().equals("0")){
             //用户建立新流程申请
             String idString =workflowMessage.getPhoneOneId();
-            pushRedisMessageService.pushMessage(info.getUserId(),idString,"报修申请","0","请及时处理新流程");
+            pushRedisMessageService.pushMessage(info.getUserId(),idString,"报修申请","0","请及时处理新流程",null);
         }else if(info.getType().equals("1")){
             //一级处理人接受处理提醒用户
-            pushRedisMessageService.pushMessage(info.getUserId(),info.getUserId()+"","报修申请","0","您的申请工作人员已经受理完成");
+            pushRedisMessageService.pushMessage(info.getUserId(),info.getUserId()+"","报修申请","0","您的申请工作人员已经受理完成",null);
+        }else if(info.getType().equals("2")){
+            String idString =workflowMessage.getPhoneOneId();
+            pushRedisMessageService.pushMessage(info.getUserId(),idString,"报修申请","0","报修申请已完结",null);
         }
+
     }
 
 
@@ -239,14 +242,14 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
         condition.setStatus(status);
         List<YwWorkflowInfo> infoList = this.baseMapper.getAll(condition);
         for (YwWorkflowInfo Info : infoList) {
-            YwWorkflowMessage workflowMessage = this.workflowMessageService.getById(Info.getWorkflowId());
-            if(workflowMessage.getPhoneOneId() !=null){
-                Info.setDetailPhoneOneName(userService.getRealNameByIds(workflowMessage.getPhoneOneId()));
-                Info.setDetailPhoneOne(workflowMessage.getPhoneOneId());
-                Info.setDetailPhone(userService.getUserNameByIds(workflowMessage.getPhoneOneId(),","));
+           // YwWorkflowMessage workflowMessage = this.workflowMessageService.getById(Info.getWorkflowId());
+            if(Info.getPhoneOneId() !=null){
+                Info.setDetailPhoneOneName(userService.getRealNameByIds(Info.getPhoneOneId()));
+                Info.setDetailPhoneOne(Info.getPhoneOneId());
+                Info.setDetailPhone(userService.getUserNameByIds(Info.getPhoneOneId(),","));
             }
 
-            Info.setProcessName(workflowMessage.getProcessName());
+            Info.setProcessName(Info.getProcessName());
         }
         return infoList;
     }

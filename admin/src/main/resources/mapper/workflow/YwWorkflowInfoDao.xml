@@ -3,29 +3,31 @@
 
 <mapper namespace="com.qiaomu.modules.workflow.dao.YwWorkflowInfoDao">
     <select id="getAll" resultType="com.qiaomu.modules.workflow.entity.YwWorkflowInfo">
-        SELECT * FROM  yw_workflow_info
+        SELECT * FROM
+          yw_workflow_info w
+        LEFT JOIN yw_workflow_message m ON m.id = w.workflow_id
         <where>
             1=1
             <if test="userId !=null and userId !=''">
-                AND user_id= #{userId}
+                AND w.user_id= #{userId}
             </if>
             <if test="communityId !=null and communityId !=''">
-                AND community_id= #{communityId}
+                AND w.community_id= #{communityId}
             </if>
             <if test="workflowType !=null and workflowType !=''">
-                AND workflow_type= #{workflowType}
+                AND w.workflow_type= #{workflowType}
             </if>
             <if test="type !=null and type !=''">
-                AND type= #{type}
+                AND w.type= #{type}
             </if>
             <if test="workflowId !=null and workflowId !=''">
-                AND workflow_id= #{workflowId}
+                AND w.workflow_id= #{workflowId}
             </if>
             <if test="workflowIds !=null and workflowIds !=''">
-                AND workflow_id in #{workflowIds}
+                AND w.workflow_id in #{workflowIds}
             </if>
             <if test="status !=null and status !=''">
-                AND status= #{status}
+                AND w.status= #{status}
             </if>
         </where>
         ORDER BY create_time DESC
@@ -36,33 +38,35 @@
         SELECT
           *
         FROM
-            yw_workflow_info w,
-            yw_workflow_message m,
-            yw_community c
-        WHERE
-             m.id = w.workflow_id
+            yw_workflow_info w
+            LEFT JOIN yw_workflow_message m ON m.id = w.workflow_id
+            LEFT JOIN yw_community c ON w.community_id = c.id
+
+        <where>
+            1=1
             <if test="companyId != null and companyId!=''">
                 and c.company_id = #{companyId}
             </if>
             <if test="communityId != null and communityId!=''">
-               and w.community_id = #{communityId}
+                and w.community_id = #{communityId}
             </if>
             <if test="workflowType != null and workflowType!=''">
-               and w.workflow_type = #{workflowType}
+                and w.workflow_type = #{workflowType}
             </if>
             <if test="type != null and type!=''">
-               and w.type = #{type}
+                and w.type = #{type}
             </if>
             <if test="userId != null and userId!=''">
-               and w.user_id = #{userId}
+                and w.user_id = #{userId}
             </if>
             <if test="communityIds != null">
                 and w.community_id in
                 <foreach item="communityIds" collection="array" open="(" separator="," close=")">
                     #{communityIds}
                 </foreach>
-
             </if>
+        </where>
+
     </select>
 
 

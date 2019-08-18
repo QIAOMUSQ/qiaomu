@@ -80,13 +80,14 @@ public class PushMessage implements Serializable {
         this.infoType = infoType;
     }
 
-    public PushMessage(String phone, String type, String infoType, String time, String message, String userPhone) {
+    public PushMessage(String phone, String type, String infoType, String time, String message, String userPhone, Long communityId) {
         this.phone = phone;
         this.type = type;
         this.infoType = infoType;
         this.time = time;
         this.message = message;
         this.userPhone = userPhone;
+        this.communityId = communityId;
     }
 
     public PushMessage() {

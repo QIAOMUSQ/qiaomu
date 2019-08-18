@@ -6,11 +6,12 @@
 
     <select id="getAll" resultType="com.qiaomu.modules.workflow.entity.YwWorkflowMessage">
         SELECT
-          w.*, s.username,
-          s.real_name
+            w.*, s.username,
+            s.real_name,c.name as communityName
         FROM
           yw_workflow_message w
         LEFT JOIN sys_user s ON s.user_id = w.phone_one_id
+        LEFT JOIN yw_community c on c.id = w.community_id
         <where>
             1=1
             <if test="communityId !=null and communityId!=''">

@@ -51,14 +51,15 @@ public class PushRedisMessageServiceImpl implements PushRedisMessageService {
      * @param infoType 推送信息类型（比如：爱心银行推送，车位推送，报修申请推送）
      * @param type 推送类型（0：推送到个人，2：推送到社区）
      * @param message 信息
+     * @param communityId 社区id
      */
     @Override
-    public void pushMessage(Long userId, String idString, String infoType,String type, String message) {
+    public void pushMessage(Long userId, String idString, String infoType,String type, String message,Long communityId) {
         String[] ids = idString.split(",");
         for (String id : ids){
             String phone  = userService.queryById(Long.valueOf(id)).getUsername();
             String userPhone = userService.queryById(userId).getUsername();
-            PushMessage data = new PushMessage(phone,type,infoType, DateTime.now().toString("yyyy-MM-dd HH:mm:ss"),message,userPhone);
+            PushMessage data = new PushMessage(phone,type,infoType, DateTime.now().toString("yyyy-MM-dd HH:mm:ss"),message,userPhone,communityId);
             stringRedisTemplate.convertAndSend("message",JSON.toJSONString(data));
             redisTemplate.boundHashOps("message_history").put("history_"+data.getPhone()+"_"+data.getTime().replace(" ","").replace("-","").replace(":",""),JSON.toJSONString(data));
         }

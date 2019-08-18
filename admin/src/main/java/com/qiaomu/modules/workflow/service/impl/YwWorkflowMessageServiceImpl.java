@@ -108,8 +108,6 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
         YwWorkflowMessage processMessage = selectById(id);
         processMessage.setCommunityName(this.communityService.queryById(processMessage.getCommunityId()).getName());
         processMessage.setDicValueName(this.dictService.getdictCodeByTypeValue(processMessage.getDicValue(), "property_process"));
-
-
         return processMessage;
     }
 
@@ -117,7 +115,6 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
     public List<YwWorkflowMessage> getAll(YwWorkflowMessage workflowMessage) {
         List<YwWorkflowMessage> list = this.baseMapper.getAll(workflowMessage);
         for (YwWorkflowMessage message : list) {
-            message.setCommunityName(this.communityService.queryById(message.getCommunityId()).getName());
             message.setDicValueName(this.dictService.getdictCodeByTypeValue(message.getDicValue(), "property_process"));
         }
         return list;

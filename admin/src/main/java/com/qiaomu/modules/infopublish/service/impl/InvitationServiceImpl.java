@@ -9,7 +9,9 @@ import com.qiaomu.common.utils.Query;
 import com.qiaomu.modules.infopublish.dao.InvitationDao;
 import com.qiaomu.modules.infopublish.entity.InvitationEntity;
 import com.qiaomu.modules.infopublish.service.InvitationService;
+import com.qiaomu.modules.infopublish.service.PushRedisMessageService;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,9 @@ import java.util.Map;
  */
 @Service
 public class InvitationServiceImpl extends ServiceImpl<InvitationDao,InvitationEntity> implements InvitationService{
+
+    @Autowired
+    private PushRedisMessageService pushRedisMessageService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -46,6 +51,7 @@ public class InvitationServiceImpl extends ServiceImpl<InvitationDao,InvitationE
             invitation.setImgJson(invitation.getImgJson().replace("\\",""));
             invitation.setCreateTime(new Date());
             this.baseMapper.insert(invitation);
+            pushRedisMessageService.pushMessage(null,null,"公告信息","2","您有新的社区公告信息",invitation.getCommunityId());
         }catch (Exception e){
             e.printStackTrace();
             throw new RRException("异常", "500");

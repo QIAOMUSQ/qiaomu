@@ -7,8 +7,8 @@ $(function () {
             { label: '', name: 'id', width: 45,hidden:true  },
             { label: '业主', name: 'userName', width: 75 },
             { label: '流程名称', name: 'processName', width: 75 },
+            { label: '處理人', name: 'detailPhoneOneName', width: 75 },
             { label: '处理时间', name: 'detailOneDate', sortable: false, width: 75 },
-            { label: '主管审核时间', name: 'detailTwoDate',  width: 75 },
             { label: '创建时间', name: 'createTime', width: 75},
             { label: '详情', name: 'detail', width: 60},
             { label: '状态', name: 'type', width: 60, formatter: function(value, options, row){
