@@ -17,6 +17,7 @@
 package com.qiaomu.modules.sys.controller;
 
 import com.qiaomu.common.annotation.SysLog;
+import com.qiaomu.common.utils.DicRoleCode;
 import com.qiaomu.common.utils.R;
 import com.qiaomu.common.validator.Assert;
 import com.qiaomu.common.validator.ValidatorUtils;
@@ -116,6 +117,8 @@ public class SysUserController extends AbstractController {
     public R save(@RequestBody SysUserEntity user) {
         String info = ValidatorUtils.validateEntity(user, AddGroup.class);
         if (info.equals("")) {
+            String value = DicRoleCode.role_dept_map.get(String.valueOf(user.getRoleIdList().get(0)));
+            user.setPropertyCompanyRoleType(value);
             sysUserService.save(user);
             return R.ok();
         } else {
@@ -133,9 +136,9 @@ public class SysUserController extends AbstractController {
     @RequiresPermissions("sys:user:update")
     public R update(@RequestBody SysUserEntity user) {
         ValidatorUtils.validateEntity(user, UpdateGroup.class);
-
+        String value = DicRoleCode.role_dept_map.get(String.valueOf(user.getRoleIdList().get(0)));
+        user.setPropertyCompanyRoleType(value);
         sysUserService.update(user);
-
         return R.ok();
     }
 
@@ -154,7 +157,7 @@ public class SysUserController extends AbstractController {
             return R.error("当前用户不能删除");
         }
 
-        sysUserService.deleteBatchIds(Arrays.asList(userIds));
+        sysUserService.deleteByIds(Arrays.asList(userIds));
 
         return R.ok();
     }

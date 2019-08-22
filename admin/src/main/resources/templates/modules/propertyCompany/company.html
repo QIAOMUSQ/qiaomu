@@ -56,11 +56,6 @@
                 <div class="col-sm-2 control-label">登录账户</div>
                 <div class="col-sm-10">
                     <input id="userId"/>
-                    <!--<select class="select"  v-model="loginUser" v-on:change="indexSelect($event)">
-                        <template v-for="item in userList">
-                            <option v-bind:value = "item.value">{{item.text}}</option>
-                        </template>
-                    </select>-->
                     <input type="text" class="form-control" style="display:none;" v-model="company.administratorId"/>
                 </div>
             </div>
@@ -107,12 +102,9 @@
             url:'${request.contextPath}/welfare/sysFile/upload',
             success:function(response,fileBox) {
                 if(response){
-                    //var obj = response;
                     var imgId = $("#imgId").val();
-                    $("#imgId").val( imgId+"_"+response.id);
-                    vm.company.companyImg = imgId+"_"+response.id;
-                    //console.info(obj);
-                    //fileBox.append("<input name='"+fileBox.selector.substring(1,fileBox.selector.length)+"' value='"+response.id+"' style='display:none;'/>");
+                    $("#imgId").val( imgId+response.id+"_");
+                    vm.company.companyImg = imgId+response.id+"_";
                 }else{
                     alert("图片上传失败！");
                 }

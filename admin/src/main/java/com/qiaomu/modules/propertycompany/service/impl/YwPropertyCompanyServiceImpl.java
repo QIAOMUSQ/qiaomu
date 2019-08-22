@@ -10,6 +10,7 @@ import com.qiaomu.modules.propertycompany.entity.YwPropertyCompany;
 import com.qiaomu.modules.propertycompany.service.YwPropertyCompanyService;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.entity.UserExtend;
+import com.qiaomu.modules.sys.service.SysFileService;
 import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.sys.service.UserExtendService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
@@ -35,6 +38,9 @@ public class YwPropertyCompanyServiceImpl extends ServiceImpl<YwPropertyCompanyD
     @Autowired
     private SysUserService userService;
 
+    @Autowired
+    private SysFileService sysFileService;
+
     public PageUtils queryPage(Map<String, Object> params) {
         Page<YwPropertyCompany> page = selectPage(new Query(params)
                 .getPage(), new EntityWrapper()
@@ -48,14 +54,14 @@ public class YwPropertyCompanyServiceImpl extends ServiceImpl<YwPropertyCompanyD
         return new PageUtils(page);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void save(YwPropertyCompany propertyCompany) {
         propertyCompany.setCreateTime(new Date());
         this.baseMapper.insert(propertyCompany);
         updateUserInfo(propertyCompany);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void update(YwPropertyCompany propertyCompany) {
         this.baseMapper.updateById(propertyCompany);
         updateUserInfo(propertyCompany);
@@ -69,15 +75,19 @@ public class YwPropertyCompanyServiceImpl extends ServiceImpl<YwPropertyCompanyD
         SysUserEntity user = userService.selectById(propertyCompany.getAdministratorId());
         user.setCompanyId(propertyCompany.getId());
         userService.updateById(user);
-//        UserExtend userExtend = this.userExtendService.getUserExtend(propertyCompany.getAdminPhone());
-//        if (userExtend != null) {
-//            userExtend.setCompanyId(propertyCompany.getId());
-//            this.userExtendService.updateById(userExtend);
-//        } else {
-//            UserExtend userExtends = new UserExtend();
-//            userExtends.setUserPhone(propertyCompany.getAdminPhone());
-//            userExtends.setCompanyId(propertyCompany.getId());
-//            this.userExtendService.insert(userExtends);
-//        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean deleteBatchIds(Collection<? extends Serializable> idList) {
+        //删除图片
+        for(Serializable id :idList){
+            YwPropertyCompany company = baseMapper.selectById(id);
+            String[] imgIds = company.getCompanyImg().split("_");
+            for(String imgId: imgIds){
+                sysFileService.deleteById(Long.valueOf(imgId));
+            }
+        }
+        return super.deleteBatchIds(idList);
     }
 }

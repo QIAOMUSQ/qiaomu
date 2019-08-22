@@ -22,7 +22,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
+import com.alibaba.fastjson.JSON;
 import com.qiaomu.common.utils.Constant;
 import com.qiaomu.modules.sys.dao.SysMenuDao;
 import com.qiaomu.modules.sys.dao.SysUserDao;
@@ -38,6 +40,9 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 /**
@@ -49,10 +54,16 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class UserRealm extends AuthorizingRealm {
+
+    private static final String SHIRO_LOGIN_COUNT = "shiro_login_count_";
+    private static final String SHIRO_IS_LOCK = "shiro_is_lock_";
+
     @Autowired
     private SysUserDao sysUserDao;
     @Autowired
     private SysMenuDao sysMenuDao;
+    @Autowired
+    private RedisTemplate<String, String> stringRedisTemplate;
 
     /**
      * 授权(验证权限时调用)
@@ -83,7 +94,6 @@ public class UserRealm extends AuthorizingRealm {
             }
             permsSet.addAll(Arrays.asList(perms.trim().split(",")));
         }
-
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.setStringPermissions(permsSet);
         return info;
@@ -96,31 +106,59 @@ public class UserRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
         UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
 
+        String name = token.getUsername();
+        String password = String.valueOf(token.getPassword());
         //查询用户信息
         SysUserEntity user = new SysUserEntity();
-       // user.setUsername(token.getUsername());
-        user = sysUserDao.getUserByUserName(token.getUsername());
+        user = sysUserDao.getUserByUserName(name);
         //账号不存在
         if (user == null) {
             throw new UnknownAccountException("账号或密码不正确");
         }
-
         //账号锁定
         if (user.getStatus() == 0) {
             throw new LockedAccountException("账号已被锁定,请联系管理员");
         }
+
+        ValueOperations<String, String> opsForValue = stringRedisTemplate.opsForValue();
+        if (ShiroUtils.sha256(password, user.getSalt()).equals(user.getPassword())) {
+            //如果正确,从缓存中将用户登录计数 清除
+            if(opsForValue.get(SHIRO_LOGIN_COUNT+name)!=null){
+                opsForValue.set(SHIRO_LOGIN_COUNT+name,"0");
+                opsForValue.set(SHIRO_IS_LOCK+name, "0");
+                stringRedisTemplate.delete(SHIRO_IS_LOCK+name);
+            }
+        }else {
+            opsForValue.increment(SHIRO_LOGIN_COUNT+name, 1);
+            //计数大于5时，设置用户被锁定一小时
+            if(Integer.parseInt(opsForValue.get(SHIRO_LOGIN_COUNT+name))>=5){
+                opsForValue.set(SHIRO_IS_LOCK+name, "LOCK");
+                stringRedisTemplate.expire(SHIRO_IS_LOCK+name, 30, TimeUnit.MINUTES);
+            }
+            if ("LOCK".equals(opsForValue.get(SHIRO_IS_LOCK+name))){
+                throw new DisabledAccountException("密码输入错误大于5次，帐号锁定一小时");
+            }
+        }
+
         //记住用户
         token.setRememberMe(true);
-
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, user.getPassword(), ByteSource.Util.bytes(user.getSalt()), getName());
+        System.out.println("user = [" + JSON.toJSONString(user) + "] getSalt=="+ByteSource.Util.bytes(user.getSalt()));
         return info;
     }
 
-    @Override
+    /**
+     * 凭证匹配器
+     * @param credentialsMatcher
+     */
+     @Override
     public void setCredentialsMatcher(CredentialsMatcher credentialsMatcher) {
-        HashedCredentialsMatcher shaCredentialsMatcher = new HashedCredentialsMatcher();
+         HashedCredentialsMatcher shaCredentialsMatcher = new HashedCredentialsMatcher();
         shaCredentialsMatcher.setHashAlgorithmName(ShiroUtils.hashAlgorithmName);
         shaCredentialsMatcher.setHashIterations(ShiroUtils.hashIterations);
+        shaCredentialsMatcher.setStoredCredentialsHexEncoded(true);
         super.setCredentialsMatcher(shaCredentialsMatcher);
     }
+
+
 }

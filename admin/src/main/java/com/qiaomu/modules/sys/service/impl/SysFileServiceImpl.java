@@ -7,12 +7,14 @@ import com.qiaomu.modules.sys.entity.SysFileEntity;
 import com.qiaomu.modules.sys.service.SysFileService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -64,5 +66,19 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileDao, SysFileEntity> i
             return new HashMap<String, String>();
         }
 
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean deleteById(Serializable id) {
+        SysFileEntity fileEntity = baseMapper.selectById(id);
+        boolean bo = super.deleteById(id);
+        if (fileEntity!=null){
+            File file = new File(fileEntity.getServicePath());
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+        return bo;
     }
 }

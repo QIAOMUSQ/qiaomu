@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.service.IService;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.modules.sys.entity.UserExtend;
 
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -57,4 +59,6 @@ public interface UserExtendService extends IService<UserExtend> {
     String getRealNamesByUserIdsAndCommunityId(String userIds,Long communityId,String type);*/
 
     UserExtend getUserCommunity(Long userId);
+
+    void deleteByUserIds(List<Long> userIds);
 }

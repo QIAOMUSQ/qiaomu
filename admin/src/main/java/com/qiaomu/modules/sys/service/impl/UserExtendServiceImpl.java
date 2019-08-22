@@ -10,6 +10,7 @@ import com.qiaomu.modules.sys.dao.UserExtendDao;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.entity.UserExtend;
+import com.qiaomu.modules.sys.service.SysFileService;
 import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
 import com.qiaomu.modules.sys.service.UserExtendService;
@@ -17,6 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.*;
 
@@ -37,6 +39,8 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
     @Autowired
     private SysUserService sysUserService;
 
+    @Autowired
+    private SysFileService fileService;
 
     @Override
     public List<UserExtend> getUserExtend(String userPhone) {
@@ -136,6 +140,7 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
             }
             //设置头像
             if(imgId != null){
+                fileService.deleteById(user.getHandImgId());
                 user.setHandImgId(imgId);
             }
             if(StringUtils.isNotBlank(newPhone)){
@@ -145,10 +150,11 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
             return "success";
         }catch (Exception e){
             e.printStackTrace();
+            //异常数据回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return "error";
         }
     }
-
 
     /**
      *
@@ -174,32 +180,13 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
         updateById(userExtend);
     }
 
-    /*@Override
-    public String getRealNamesByUserIdsAndCommunityId(String userIds, Long communityId, String type) {
-        String names = "";
-        if(StringUtils.isNotBlank(userIds)){
-            String[] ids = userIds.split(type);
-            for(String id : ids){
-                if(StringUtils.isNotBlank(id)){
-                    UserExtend userExtend =new UserExtend();
-                    userExtend.setUserId(Long.valueOf(id));
-                    userExtend.setCommunityId(communityId);
-                    userExtend = baseMapper.selectAll(userExtend);
-                    if(userExtend !=null ){
-                        names += AESUtil.decrypt(userExtend.getRealName())+",";
-                    }
-
-                }
-            }
-            if (names.length()>0){
-                names = names.substring(0,names.length()-1);
-            }
-        }
-        return names;
-    }*/
-
     @Override
     public UserExtend getUserCommunity(Long userId) {
         return baseMapper.getUserCommunity(userId);
+    }
+
+    @Override
+    public void deleteByUserIds(List<Long> userIds) {
+         baseMapper.deleteByUserIds(userIds);
     }
 }

@@ -10,7 +10,6 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 @SpringBootApplication
-@ServletComponentScan
 @MapperScan(basePackages = {"com.qiaomu.modules.*.dao"})
 @ComponentScan({"com.qiaomu.*"})
 public class AdminApplication extends SpringBootServletInitializer {

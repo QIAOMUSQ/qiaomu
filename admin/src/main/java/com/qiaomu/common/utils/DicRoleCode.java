@@ -8,14 +8,15 @@ import java.util.Map;
  * @description:物业角色-角色-部门对应编码
  * @Date 2019-04-08 21:25
  */
-public interface DicRoleDeptCode {
+public interface DicRoleCode {
     public static final Map<String,String> role_dept_map = new HashMap<String,String>(){
 
-        {   put("0", "1_5");
-            put("1", "2_6");
-            put("2", "3_7");
-            put("3", "4_8");
-            put("4", "5_9");
+        {
+            put("1", "0");//超級管理員
+            put("2", "1");//物业管理员
+            put("3", "2");//社区管理员
+            put("4", "3");//物业业主
+            put("5", "4");//游客
         }
     };
 }

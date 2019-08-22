@@ -13,4 +13,13 @@
 			#{roleId}
 		</foreach>
 	</delete>
+
+	<delete id="deleteByUserIds" parameterType = "java.util.List">
+		delete from sys_user_role where user_id in
+		<foreach collection="list"  item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+
 </mapper>

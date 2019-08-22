@@ -59,20 +59,22 @@
 					<input type="text" class="form-control" v-model="user.describe" placeholder="描述"/>
 				</div>
 			</div>
-			<div class="form-group">
+			<!--<div class="form-group">
 				<div class="col-sm-2 control-label">角色类型</div>
 				<div class="col-sm-12" style="    position: absolute;left: 10%;">
-					<label v-for="type in typeList" class="radio-inline">
+					<input  id="roleType" name="roleType"  v-model="user.propertyCompanyRoleType">
+					&lt;!&ndash;<label v-for="type in typeList" class="radio-inline">
 						<input type="radio" name="roleType" :value="type.value" v-model="user.propertyCompanyRoleType">{{type.name}}
-					</label>
+					</label>&ndash;&gt;
 				</div>
-			</div>
+			</div>-->
 			<div class="form-group">
 				<div class="col-sm-2 control-label">角色</div>
 				<div class="col-sm-12"  style="position: absolute;left: 10%;">
-					<label v-for="role in roleList" class="checkbox-inline">
+					<input  id ="role"  v-model="user.roleIdList">
+					<!--<label v-for="role in roleList" class="checkbox-inline">
 						<input type="checkbox" :value="role.roleId" v-model="user.roleIdList">{{role.roleName}}
-					</label>
+					</label>-->
 				</div>
 			</div>
 

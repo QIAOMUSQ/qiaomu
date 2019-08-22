@@ -35,6 +35,7 @@ public class ShiroUtils {
      * 加密算法
      */
     public final static String hashAlgorithmName = "SHA-256";
+    public final static String MD5AlgorithmName = "MD5";
     /**
      * 循环次数
      */

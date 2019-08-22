@@ -9,7 +9,7 @@ $(function () {
             { label: '法人名称', name: 'legalPerson', width: 75 },
             { label: '联系号码', name: 'telPhone', sortable: false, width: 75 },
             { label: '地址', name: 'address', width: 90 },
-            { label: '时间', name: 'creatTime', width: 100 }
+            { label: '时间', name: 'createTime', width: 100 }
         ],
         viewrecords: true,
         height: 385,
@@ -100,6 +100,8 @@ var vm = new Vue({
         },
         saveOrUpdate: function () {
             var url = vm.company.id == null ? "propertyCompanyManage/save" : "propertyCompanyManage/update";
+            var img = vm.company.companyImg;
+            vm.company.companyImg = img.substring(0,img.length-1);
             $.ajax({
                 type: "POST",
                 url: baseURL + url,

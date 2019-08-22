@@ -85,7 +85,7 @@ public class CommunityCheckServiceImpl extends ServiceImpl<CommunityCheckDao,Com
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     public String save(CommunityCheckEntity community) {
         try {
 
@@ -106,13 +106,13 @@ public class CommunityCheckServiceImpl extends ServiceImpl<CommunityCheckDao,Com
             return "success";
         }catch (Exception e){
             e.printStackTrace();
-            return "error";
+            throw e;
         }
 
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     public String changeCompany(Long checkCommunityId, Long companyId) {
         try {
             CommunityCheckEntity communityCheckEntity = this.selectById(checkCommunityId);
@@ -126,7 +126,7 @@ public class CommunityCheckServiceImpl extends ServiceImpl<CommunityCheckDao,Com
             return "ok";
         }catch (Exception e){
             e.printStackTrace();
-            return "error";
+           throw e;
         }
 
     }

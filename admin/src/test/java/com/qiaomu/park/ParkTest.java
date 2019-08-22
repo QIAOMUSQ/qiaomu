@@ -13,14 +13,4 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class ParkTest {
 
-
-
-   /* ReformerClient client = new DefaultReformerClient("http://121.43.163.169:9090/open-platform/gateway.do",
-            "mchId", "your api key");
-    QueryParkRequest request = new QueryParkRequest();
-    request.putBizParam("parkinglotno", "777770");
-    QueyParkResponse response = client.execute(request);
-    if(response.isSuccess()){
-        System.out.println(response.getResponseBody());
-    }*/
 }

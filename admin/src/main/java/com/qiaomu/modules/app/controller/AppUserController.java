@@ -78,7 +78,10 @@ public class AppUserController extends AbstractController {
         } catch (LockedAccountException e) {
             log.error(DateTime.now().toString("yyyy-MM-dd HH:mm:ss") +"phone:"+phone+"--"+e.getMessage());
             return R.ok("error","账号已被锁定");
-        } catch (Exception e) {
+        }catch(DisabledAccountException e){
+            logger.info(DateTime.now().toString("yyyy-MM-dd HH:mm:ss") +"phone:"+phone+"--"+e.getMessage());
+            return R.ok("error",e.getMessage());
+        }catch (Exception e) {
             log.error(DateTime.now().toString("yyyy-MM-dd HH:mm:ss") +"phone:"+phone+"--"+e.getMessage());
             return R.ok("error","登陆失败");
         }

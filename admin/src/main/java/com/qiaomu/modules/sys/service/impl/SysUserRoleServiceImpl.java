@@ -67,4 +67,9 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleDao, SysUserR
     public int deleteBatch(Long[] roleIds) {
         return baseMapper.deleteBatch(roleIds);
     }
+
+    @Override
+    public void deleteByUserIds(List<Long> userIds) {
+        baseMapper.deleteByUserIds(userIds);
+    }
 }

@@ -218,12 +218,13 @@ public class CommunityMessageController  extends AbstractController {
     @ResponseBody
     @RequestMapping(value = "changeCompany",method = RequestMethod.POST)
     public Object changeCompany(Long checkCommunityId,Long companyId){
-        String info = communityCheckService.changeCompany(checkCommunityId,companyId);
-        if(info.equals("ok")){
+        try {
+            String info = communityCheckService.changeCompany(checkCommunityId,companyId);
             return BuildResponse.success(info);
-        }else {
-            return  BuildResponse.fail(info);
+        }catch (Exception e){
+            return  BuildResponse.fail("error");
         }
+
 
     }
 

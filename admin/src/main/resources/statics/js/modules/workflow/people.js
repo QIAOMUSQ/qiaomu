@@ -7,7 +7,6 @@ $(function () {
             { label: '', name: 'id', width: 45,hidden:true  },
             { label: '用户手机', name: 'userPhone', width: 75 },
             { label: '真实姓名', name: 'realName', width: 75 },
-          /*  { label: '证件号', name: 'userIdentity', sortable: false, width: 75 },*/
             { label: '所属社区', name: 'communityName',  width: 45 },
             { label: '创建时间', name: 'createTime', width: 85},
             { label: '角色人', name: 'companyRoleType', width: 60,formatter:function (value, options, row) {

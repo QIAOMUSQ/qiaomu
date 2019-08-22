@@ -64,8 +64,6 @@ var vm = new Vue({
         },
         showList: true,
         title:null,
-        roleList:{},
-        typeList:[],
         user:{
             status:1,
             deptId:null,
@@ -84,8 +82,8 @@ var vm = new Vue({
             vm.user = {deptName:null, deptId:null, status:1, roleIdList:[]};
 
             //获取角色信息
-            this.getRoleList();
-            this.getTypeList();
+            getRoleList();
+           // getTypeList();
             vm.getDept();
         },
         getDept: function(){
@@ -95,7 +93,6 @@ var vm = new Vue({
                 var node = ztree.getNodeByParam("deptId", vm.user.deptId);
                 if(node != null){
                     ztree.selectNode(node);
-
                     vm.user.deptName = node.name;
                 }
             })
@@ -108,11 +105,8 @@ var vm = new Vue({
 
             vm.showList = false;
             vm.title = "修改";
-
             vm.getUser(userId);
-            vm.getTypeList();
-            //获取角色信息
-            this.getRoleList();
+
         },
         del: function () {
             var userIds = getSelectedRows();
@@ -147,12 +141,13 @@ var vm = new Vue({
                 contentType: "application/json",
                 data: JSON.stringify(vm.user),
                 success: function(r){
+                    console.info(r);
                     if(r.status == "success"){
                         alert('操作成功', function(){
                             vm.reload();
                         });
                     }else{
-                        alert(r.msg);
+                        alert(r.respMsg);
                     }
                 }
             });
@@ -161,24 +156,12 @@ var vm = new Vue({
             $.get(baseURL + "sys/user/info/"+userId, function(r){
                 vm.user = r.user;
                 vm.user.password = null;
-
                 vm.getDept();
+                getRoleList();
+
             });
         },
-        getRoleList: function(){
-            $.get(baseURL + "sys/role/select", function(r){
-                vm.roleList = r.list;
-            });
-        },
-        getTypeList:function () {
-            vm.typeList = [];
-            $.get(baseURL + "sys/dict/getDictByType",{"type":"property_company"}, function(r){
-                $.each(r.dict,function (index,item) {
-                    vm.typeList.push({"value":item.value,"name":item.code});
-                });
-            }); 
-        }
-        ,
+
         deptTree: function(){
             layer.open({
                 type: 1,
@@ -210,3 +193,39 @@ var vm = new Vue({
         }
     }
 });
+//
+// function getTypeList() {
+//
+//     var typeList = new Array();
+//     $.get(baseURL + "sys/dict/getDictByType",{"type":"property_company"}, function(result){
+//         $.each(result.dict,function (index,item) {
+//             typeList.push({"value":item.value,"name":item.code});
+//         });
+//         $("#roleType").kendoDropDownList({
+//             dataTextField: "name",
+//             dataValueField: "value",
+//             dataSource: typeList
+//         });
+//     });
+// }
+
+function getRoleList(){
+    var RoleList = new Array();
+
+    $.get(baseURL + "sys/role/select", function(result){
+        $.each(result.list,function (index,item) {
+            RoleList.push({name:item.roleName,value:item.roleId});
+        });
+        $("#role").kendoDropDownList({
+            optionLabel: "--请选择--",
+            dataTextField: "name",
+            dataValueField: "value",
+            dataSource: RoleList,
+            change:function (e) {
+                vm.user.roleIdList=[this.value()];
+            }
+        });
+
+    });
+
+}

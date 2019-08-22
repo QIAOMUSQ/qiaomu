@@ -42,6 +42,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -107,10 +109,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         user.setSalt(salt);
         user.setPassword(ShiroUtils.sha256(user.getPassword(), user.getSalt()));
         this.insert(user);
-       /* UserExtend userExtend = new UserExtend();
-        userExtend.setPropertyCompanyRoleType(user.getPropertyCompanyRoleType());
-        userExtend.setUserPhone(user.getUsername());
-        userExtendService.insert(userExtend);*/
         //保存用户与角色关系
         sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
     }
@@ -130,17 +128,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         }
         if (user.getPropertyCompanyRoleType() !=null) {
             //5：游客  4：业主  3:物业工作人员 2:物业管理员
-            /*if(user.getPropertyCompanyRoleType().equals("1")){//物业公司管理员
-                userExtend.setCompanyRoleType(user.getPropertyCompanyRoleType());
-            }else  if(user.getPropertyCompanyRoleType().equals("2")){//物业工作人员
-                userExtend.setCompanyRoleType("3");
-            }else if(user.getPropertyCompanyRoleType().equals("3")){//物业业主
-                userExtend.setCompanyRoleType("4");
-            }else if(user.getPropertyCompanyRoleType().equals("4")){//游客
-                userExtend.setCompanyRoleType("2");
-            }*/
             userExtend.setCompanyRoleType(user.getPropertyCompanyRoleType());
-
         }
         userExtend.setCheck("1");
         if(userExtend.getId()==null){
@@ -149,22 +137,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         }else {
             userExtendService.updateById(userExtend);
         }
-        /*if (user.getPropertyCompanyRoleType() !=null && user.getPropertyCompanyRoleType().equals("1")) {
-            userExtend.setCheck("1");
-        }
-        if (userExtend != null) {
-            userExtend.setCompanyRoleType(user.getPropertyCompanyRoleType());
-            userExtendService.updateById(userExtend);
-        } else {
-            userExtend = new UserExtend();
-            userExtend.setCompanyRoleType(user.getPropertyCompanyRoleType());
-            userExtend.setUserPhone(user.getUsername());
-            userExtendService.insert(userExtend);
-        }*/
+
 
         //保存用户与角色关系
         sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
     }
+
 
 
     @Override
@@ -228,6 +206,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     public String getRealNameByIds(String ids) {
         String name = "";
         if(StringUtils.isNotBlank(ids)){
+            System.out.println("ids = [" + ids + "]");
             SysUserEntity user = baseMapper.getuserRealName(ids);
             String realName=user.getRealName();
             if(StringUtils.isNotBlank(realName)){
@@ -241,5 +220,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
             }
         }
         return name;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteByIds(List<Long> userIds) {
+        userExtendService.deleteByUserIds(userIds);
+        deleteBatchIds(userIds);
+        sysUserRoleService.deleteByUserIds(userIds);
     }
 }

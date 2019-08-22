@@ -49,36 +49,20 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
         Long companyId =null;
         String cityName = (String) params.get("cityName");
         YwCommunity condition = new YwCommunity();
-        condition.setName(name);
-
 
        if (StringUtils.isNotBlank(cityName)){
-           //ProvinceCityDateEntity provinceCity = this.provinceCityDateService.getProvCityByCityName(cityName);
-          // condition.setCityId(provinceCity.getId());
            condition.setCityName(cityName);
        }
-
         if(params.get("companyId") != null ){
             companyId = (Long)params.get("companyId");
             condition.setCompanyId(companyId);
         }
-
+        if (StringUtils.isNotBlank(name))condition.setName(name);
         Page<YwCommunity> page = new Query(params).getPage();// 当前页，总条
         page.setRecords(this.baseMapper.selectPageByCondition(page,condition));
-        /*Page<YwCommunity> page = selectPage(new Query(params)
-                .getPage(), new EntityWrapper()
-                .like(StringUtils.isNotBlank(name), "name", name)
-                .eq(companyId != null, "COMPANY_ID", companyId)
-                .eq(provinceCity != null, "CITY_ID",
-                        Long.valueOf(provinceCity == null ? 0L : provinceCity.getId().longValue()))
-                .addFilterIfNeed(params
-                                .get("sql_filter") != null,
-                        (String) params.get("sql_filter"), new Object[0]));*/
-
         for (YwCommunity community : page.getRecords()) {
             community.setCityName(this.provinceCityDateService.selectById(community.getCityId()).getCityName());
         }
-
         return new PageUtils(page);
     }
 

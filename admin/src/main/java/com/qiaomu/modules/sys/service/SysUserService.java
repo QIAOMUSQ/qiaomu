@@ -84,4 +84,6 @@ public interface SysUserService extends IService<SysUserEntity> {
     String queryUserImageUrl(String userId);
 
     String getRealNameByIds(String ids);
+
+    void deleteByIds(List<Long> longs);
 }

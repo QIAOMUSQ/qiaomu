@@ -22,7 +22,7 @@ import java.util.List;
 public class UserWorkflowServiceImpl extends ServiceImpl<UserWorkflowDao,UserWorkflow> implements UserWorkflowService {
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor=Exception.class)
     public void changeInfo(YwWorkflowMessage process) {
         String userId = "";
         if(StringUtils.isNotBlank(process.getPhoneOneId())){
