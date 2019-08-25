@@ -32,7 +32,7 @@
 		update pluto_article set praiseNum = #{praiseNum} where articleId = #{articleId}
 	</update>
 	<update id="updateArticle" parameterType="com.qiaomu.modules.article.entity.ArticleEntity">
-		update pluto_article set content = #{content} ,title= #{title},category= #{category},updatedAt=#{updatedAt} where articleId = #{articleId}
+		update pluto_article set content = #{content} ,title= #{title},category= #{category},imageUrls=#{imageUrls},updatedAt=#{updatedAt} where articleId = #{articleId}
 	</update>
 
 	<insert id="insertArticlePraise" parameterType="com.qiaomu.modules.article.entity.ArticlePraiseEntity">

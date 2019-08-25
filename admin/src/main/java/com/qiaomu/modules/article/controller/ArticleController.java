@@ -51,47 +51,9 @@ public class ArticleController extends AbstractController{
      */
     @RequestMapping(value = "publishMsg",method = RequestMethod.POST)
     public String add(HttpServletRequest request){
-        //得到上传文件的保存目录，将上传的文件存放于WEB-INF目录下，不允许外界直接访问，保证上传文件的安全
-        String savePath =OUT_DIR+"image/";    //需要放到spring容器中，待修改;()
-
-        StandardMultipartHttpServletRequest req = (StandardMultipartHttpServletRequest) request;
-
-        Map<String,String[]> params = req.getParameterMap();
-        String title = CommonUtils.getMapValue("title",params)[0];
-        String content = CommonUtils.getMapValue("content",params)[0];
-        String category = CommonUtils.getMapValue("category",params)[0];
-        String authorId = CommonUtils.getMapValue("authorId",params)[0];
-        String isPrivate = CommonUtils.getMapValue("isPrivate",params)[0];
-        String communityId = CommonUtils.getMapValue("communityId",params)[0];
-
-        Map<String,String> imageUrls = new HashMap<String,String>();
-        Iterator<String> filenames=req.getFileNames();
-
-        while(filenames.hasNext()){
-            String filekey = filenames.next();
-            MultipartFile multipartFile = req.getFile(filekey);
-            String fileName =CommonUtils.mkFileName(multipartFile.getOriginalFilename()) ;
-            File saveFile = new File(savePath+fileName);
-            try {
-                multipartFile.transferTo(saveFile);
-                imageUrls.put(filekey,SERVER_URL+"/outapp/image/"+fileName);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-
-        ArticleEntity articleEntity = new ArticleEntity();
-        articleEntity.setTitle(title);
-        articleEntity.setCategory(category);
-        articleEntity.setCommunityId(communityId);
-        articleEntity.setContent(content);
-        articleEntity.setAuthorId(authorId);
-        articleEntity.setIsPrivate(isPrivate);
-        articleEntity.setImageUrls(JSON.toJSONString(imageUrls));
+        ArticleEntity articleEntity = buildAticle(request);
         articleService.add(articleEntity);
-        return JSON.toJSONString(BuildResponse.success(JSON.toJSONString(imageUrls)));
+        return JSON.toJSONString(BuildResponse.success());
 
     }
 
@@ -262,5 +224,59 @@ public class ArticleController extends AbstractController{
         articleService.updateArticle(articleEntity);
         return JSON.toJSONString(BuildResponse.success());
     }
+
+    @RequestMapping(value = "updateArticleWithImage",method = RequestMethod.POST)
+    public String updateArticleWithImage(HttpServletRequest request){
+        ArticleEntity articleEntity = buildAticle(request);
+        articleService.updateArticle(articleEntity);
+        return JSON.toJSONString(BuildResponse.success());
+
+    }
+
+
+    private ArticleEntity buildAticle(HttpServletRequest request){
+        //得到上传文件的保存目录，将上传的文件存放于WEB-INF目录下，不允许外界直接访问，保证上传文件的安全
+        String savePath =OUT_DIR+"image/";    //需要放到spring容器中，待修改;()
+
+        StandardMultipartHttpServletRequest req = (StandardMultipartHttpServletRequest) request;
+
+        Map<String,String[]> params = req.getParameterMap();
+        String title = CommonUtils.getMapValue("title",params)[0];
+        String content = CommonUtils.getMapValue("content",params)[0];
+        String category = CommonUtils.getMapValue("category",params)[0];
+        String authorId = CommonUtils.getMapValue("authorId",params)[0];
+        String isPrivate = CommonUtils.getMapValue("isPrivate",params)[0];
+        String communityId = CommonUtils.getMapValue("communityId",params)[0];
+
+        Map<String,String> imageUrls = new HashMap<String,String>();
+        Iterator<String> filenames=req.getFileNames();
+
+        while(filenames.hasNext()){
+            String filekey = filenames.next();
+            MultipartFile multipartFile = req.getFile(filekey);
+            String fileName =CommonUtils.mkFileName(multipartFile.getOriginalFilename()) ;
+            File saveFile = new File(savePath+fileName);
+            try {
+                multipartFile.transferTo(saveFile);
+                imageUrls.put(filekey,SERVER_URL+"/outapp/image/"+fileName);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+        ArticleEntity articleEntity = new ArticleEntity();
+        articleEntity.setTitle(title);
+        articleEntity.setCategory(category);
+        articleEntity.setCommunityId(communityId);
+        articleEntity.setContent(content);
+        articleEntity.setAuthorId(authorId);
+        articleEntity.setIsPrivate(isPrivate);
+        articleEntity.setImageUrls(JSON.toJSONString(imageUrls));
+        return articleEntity;
+
+    }
+
 
 }
