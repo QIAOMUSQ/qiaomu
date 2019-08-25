@@ -7,6 +7,7 @@ import com.qiaomu.modules.article.entity.ArticlePraiseEntity;
 import com.qiaomu.modules.article.entity.CommentEntity;
 import com.qiaomu.modules.article.exception.CommentException;
 import com.qiaomu.modules.article.model.ArticleSelectModel;
+import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -53,6 +54,10 @@ public class ArticleServiceImp implements ArticleService{
 
     @Override
     public List<ArticleEntity> query(ArticleSelectModel articleSelectModel) {
+        SysUserEntity sysUserEntity = sysUserService.queryById(Long.valueOf(articleSelectModel.getAuthorId()));
+        if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
+            throw new CommentException("请先实名认证！");
+        }
         return articleDao.query(articleSelectModel);
     }
 
