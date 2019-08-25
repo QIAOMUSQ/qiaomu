@@ -75,11 +75,7 @@ public class CommunityController extends AbstractController {
 
     @ResponseBody
     @RequestMapping(value = "getAllCommunity",method = RequestMethod.GET)
-    public R getAllCommunity(Long companyId){
-        YwCommunity community = new YwCommunity();
-        if (companyId!=null){
-            community.setCompanyId(companyId);
-        }
+    public R getAllCommunity(YwCommunity community){
         return R.ok().put("data", JSON.toJSON(communityService.findAllByCondition(community)));
     }
 

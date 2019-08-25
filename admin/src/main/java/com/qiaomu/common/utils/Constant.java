@@ -33,7 +33,15 @@ public class Constant {
     public static final String OUT_DIR ="/www/app/admin/staticFile/outapp/";//"E:\\QM\\"   //"/www/app/admin/staticFile/outapp/";
 
     public static final String REDIS_KEY_CARPORT="CARPORT_";//redis中車位分享浏览量key
-	/**
+
+    /********** 账户登录次数 ***********/
+    public static final String SHIRO_LOGIN_COUNT = "shiro_login_count_";
+    /********** 被锁住账户 ***********/
+    public static final String SHIRO_IS_LOCK = "shiro_is_lock_";
+
+    /********** 社区统计 ***********/
+    public static final String COMMUNITY_LOGIN_COUNT ="community_login_count";
+    /**
 	 * 菜单类型
 	 */
     public enum MenuType {

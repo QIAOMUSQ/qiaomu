@@ -85,8 +85,6 @@
             btn: ['确定','取消'],
             yes:function(index,layero){//    //点击确定回调
                 var form = layer.getChildFrame('form', index);
-                console.info(form.serialize());
-                debugger;
                 $.ajax({
                     type:"POST",
                     url:baseURL + "mobile/advertise/save",

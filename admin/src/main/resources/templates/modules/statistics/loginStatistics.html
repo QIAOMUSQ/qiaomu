@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>社区登录统计</title>
+    <#include "/header.html">
+        </head>
+<body>
+<div>
+    <div style="padding: 13px 36px;">
+
+        <div class="form-group col-sm-14">
+            <input type="text" id="province" placeholder="省">
+            <input type="text" id="city" placeholder="市">
+            <input id="startTime"/>
+            <input id="endTime"/>
+            <a class="btn btn-primary" onclick="queryData()"><i class="fa fa-plus"></i>&nbsp;查询</a>
+        </div>
+        <input type="text" style="width: 70%;display: none" id="community">
+
+    </div>
+    <div id="chart" style="height: 300px;width: 100%">
+
+    </div>
+    <div id="table" style="height: 50%;width: 100%">
+        <table class="table table-striped">
+            <caption>社区登录次数统计</caption>
+            <thead>
+                <tr>
+                    <th>社区</th>
+                    <th>时间</th>
+                    <th>登录次数</th>
+                </tr>
+            </thead>
+            <tbody id="tableThead">
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<script src="${request.contextPath}/statics/plugins/echarts/echarts.min.js"></script>
+<script>
+    var myChart = echarts.init(document.getElementById('chart'));
+    $(function () {
+        $.get(baseURL + "mobile/provinceCity/getPrivateDate", function (result) {
+            $("#province").kendoDropDownList({
+                optionLabel: "--请选择省份--",
+                dataTextField: "provinceName",
+                dataValueField: "provinceCode",
+                dataSource: result.data,
+                change: onChange
+            });
+        });
+
+        $("#city").kendoDropDownList({
+            optionLabel: "--请选择城市--"
+        });
+        $("#startTime").kendoDatePicker({
+            value: new Date(),
+            culture: "zh-CN",//指定为中文
+            format: "yyyy-MM-dd"
+        });
+        $("#endTime").kendoDatePicker({
+            value: new Date(),
+            culture: "zh-CN",//指定为中文
+            format: "yyyy-MM-dd"
+        });
+
+        myChart.setOption({
+            title: {
+                text: '社区登录统计'
+            },
+            tooltip: {},
+            legend: {
+                data: ['次数']
+            },
+            xAxis: {
+                data: []
+            },
+            yAxis: {},
+            series: [{
+                name: '次数',
+                type: 'bar',
+                data: []
+            }]
+        });
+
+    });
+
+    function onChange() {
+        $.get(baseURL + "mobile/provinceCity/getCityDateByProvinceName", {provinceCode: $("#province").data("kendoDropDownList").value()}, function (result) {
+            $("#city").kendoDropDownList({
+                optionLabel: "--请选择城市--",
+                dataTextField: "cityName",
+                dataValueField: "cityCode",
+                dataSource: result.data/*,
+                 change: queryCommunity*/
+            });
+        });
+
+    }
+
+    function queryCommunity() {
+        $.get(baseURL + "communityMessage/getAllCommunity",
+                {cityCode: $("#city").data("kendoDropDownList").value()},
+                function (result) {
+                    var array = new Array();
+
+                    $.each(result.data, function (index, item) {
+                        array.push({"text": item.name, "value": item.id});
+                    });
+                    var dataSource = new kendo.data.DataSource({
+                        data: array
+                    });
+
+                    $("#community").kendoMultiSelect({
+                        optionLabel: "--请选择社区--",
+                        dataTextField: "text",
+                        dataValueField: "value",
+                        dataSource: dataSource,
+                        change: function (e) {
+                            var value = this.value();
+                            $("#communityId").val(value);
+                        }
+                    });
+                });
+    }
+
+    function queryData() {
+
+        var city = $("#city").data("kendoDropDownList").value();
+        if(city ==''){
+            return alert("请选择城市");
+        }
+        var startTime = $("#startTime").val();
+        var endTime = $("#endTime").val();
+        $.ajax({
+            type: "POST",
+            url: baseURL + "Statistics/login",
+            datType: "JSON",
+            data: {cityCode: city, startTime: startTime, endTime: endTime},
+            success: function (result) {
+                console.info(result);
+                var xDate = new Array();
+                var yDate = new Array();
+                $.each(result, function (index, item) {
+                    xDate.push(item.name);
+                    yDate.push(item.number);
+                });
+                myChart.setOption({
+                    xAxis: {
+                        data: xDate
+                    },
+                    series: [{
+                        data: yDate
+                    }]
+                });
+            }
+        });
+
+         $.ajax({
+         type:"POST",
+         url:baseURL + "Statistics/loginByDate",
+         datType:"JSON",
+         data:{cityCode:city,startTime:startTime,endTime:endTime},
+         success:function (result) {
+             console.info(result);
+             $("#tableThead").html("");
+             var data=""
+             $.each(result,function (index,item) {
+                 data +='<tr><th>'+item.name+'</th><th>'+item.date+'</th><th>'+item.number+'</th></tr>'
+             });
+             $("#tableThead").append(data);
+             }
+         });
+
+
+    }
+
+</script>
+</body>
+</html>

@@ -55,8 +55,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserRealm extends AuthorizingRealm {
 
-    private static final String SHIRO_LOGIN_COUNT = "shiro_login_count_";
-    private static final String SHIRO_IS_LOCK = "shiro_is_lock_";
+
 
     @Autowired
     private SysUserDao sysUserDao;
@@ -121,21 +120,22 @@ public class UserRealm extends AuthorizingRealm {
         }
 
         ValueOperations<String, String> opsForValue = stringRedisTemplate.opsForValue();
+        if ("LOCK".equals(opsForValue.get(Constant.SHIRO_IS_LOCK+name))){
+            throw new DisabledAccountException("密码输入错误大于5次，帐号锁定一小时");
+        }
         if (ShiroUtils.sha256(password, user.getSalt()).equals(user.getPassword())) {
             //如果正确,从缓存中将用户登录计数 清除
-            if(opsForValue.get(SHIRO_LOGIN_COUNT+name)!=null){
-                opsForValue.set(SHIRO_LOGIN_COUNT+name,"0");
-                opsForValue.set(SHIRO_IS_LOCK+name, "0");
-                stringRedisTemplate.delete(SHIRO_IS_LOCK+name);
+            if(opsForValue.get(Constant.SHIRO_LOGIN_COUNT+name)!=null){
+                opsForValue.set(Constant.SHIRO_LOGIN_COUNT+name,"0");
+                opsForValue.set(Constant.SHIRO_IS_LOCK+name, "0");
+                stringRedisTemplate.delete(Constant.SHIRO_IS_LOCK+name);
             }
         }else {
-            opsForValue.increment(SHIRO_LOGIN_COUNT+name, 1);
+            opsForValue.increment(Constant.SHIRO_LOGIN_COUNT+name, 1);
             //计数大于5时，设置用户被锁定一小时
-            if(Integer.parseInt(opsForValue.get(SHIRO_LOGIN_COUNT+name))>=5){
-                opsForValue.set(SHIRO_IS_LOCK+name, "LOCK");
-                stringRedisTemplate.expire(SHIRO_IS_LOCK+name, 30, TimeUnit.MINUTES);
-            }
-            if ("LOCK".equals(opsForValue.get(SHIRO_IS_LOCK+name))){
+            if(Integer.parseInt(opsForValue.get(Constant.SHIRO_LOGIN_COUNT+name))>=5){
+                opsForValue.set(Constant.SHIRO_IS_LOCK+name, "LOCK");
+                stringRedisTemplate.expire(Constant.SHIRO_IS_LOCK+name, 1, TimeUnit.HOURS);
                 throw new DisabledAccountException("密码输入错误大于5次，帐号锁定一小时");
             }
         }

@@ -22,6 +22,9 @@
             <if test="cityName != null and cityName !=''">
                 AND B.city_name = #{cityName}
             </if>
+            <if test="cityCode != null and cityCode !=''">
+                AND B.city_code = #{cityCode}
+            </if>
             <if test="companyId != null and companyId !=''">
                 AND A.company_id = #{companyId}
             </if>

@@ -26,14 +26,14 @@ public class ProvinceCityDateContriller {
     private ProvinceCityDateService provinceCityDateService;
 
     @ResponseBody
-    @RequestMapping(value = "getPrivateDate", method = RequestMethod.POST)
+    @RequestMapping(value = "getPrivateDate")
     public R getProviceDate() {
         List provinceList = this.provinceCityDateService.getProvinceData();
         return R.ok("success", JSON.toJSON(provinceList));
     }
 
     @ResponseBody
-    @RequestMapping(value = "getCityDateByProvinceName", method = RequestMethod.POST)
+    @RequestMapping(value = "getCityDateByProvinceName")
     public R getCityDateByProvinceName(@RequestParam Map<String, Object> params) {
         List cityList = this.provinceCityDateService.getProvinceCityDate(params);
         return R.ok("success", JSON.toJSON(cityList));

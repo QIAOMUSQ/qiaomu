@@ -5,12 +5,13 @@ import com.qiaomu.common.exception.RRException;
 import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
+import com.qiaomu.modules.sys.controller.AbstractController;
+import com.qiaomu.modules.sys.entity.UserExtend;
+import com.qiaomu.modules.sys.service.UserExtendService;
 import com.qiaomu.modules.workflow.entity.YwWorkflowInfo;
 import com.qiaomu.modules.workflow.entity.YwWorkflowMessage;
 import com.qiaomu.modules.workflow.service.YwWorkflowInfoService;
 import com.qiaomu.modules.workflow.service.YwWorkflowMessageService;
-import com.qiaomu.modules.sys.controller.AbstractController;
-import com.qiaomu.modules.sys.entity.SysUserEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +38,9 @@ public class WorkflowInfoController extends AbstractController {
 
     @Autowired
     private YwWorkflowMessageService workflowMessageService;
+
+    @Autowired
+    private UserExtendService userExtendService;
 
     @ResponseBody
     @RequestMapping(value = "process/list", method = RequestMethod.POST)
@@ -67,11 +70,19 @@ public class WorkflowInfoController extends AbstractController {
                               Long communityId,HttpServletRequest request){
         try {
             if(communityId != null){
-               String info = WorkflowCheckService.saveWorkflowInfo(userId,
-                       location,detail,
-                        pictureId,serviceDate,
-                        workflowId,communityId,request);
-                return JSON.toJSONString(BuildResponse.success(info));
+                UserExtend userExtend = new UserExtend();
+                userExtend.setCommunityId(communityId);
+                userExtend.setUserId(userId);
+                UserExtend dbUser =  userExtendService.queryUserExtend(userExtend);
+                if (dbUser!=null) {
+                    String info = WorkflowCheckService.saveWorkflowInfo(userId,
+                            location,detail,
+                            pictureId,serviceDate,
+                            workflowId,communityId,request);
+                    return JSON.toJSONString(BuildResponse.success(info));
+                }else {
+                    return JSON.toJSONString(BuildResponse.fail("请进行个人信息验证"));
+                }
             }else {
                 return JSON.toJSONString(BuildResponse.fail("请进行个人信息验证"));
             }

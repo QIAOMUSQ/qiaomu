@@ -61,4 +61,6 @@ public interface UserExtendService extends IService<UserExtend> {
     UserExtend getUserCommunity(Long userId);
 
     void deleteByUserIds(List<Long> userIds);
+
+    UserExtend queryUserExtend(UserExtend userExtend);
 }

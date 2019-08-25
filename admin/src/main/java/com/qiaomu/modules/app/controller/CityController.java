@@ -48,7 +48,6 @@ public class CityController {
                 Map<String, Object> params = new HashMap<>();
                 params.put("name", name);
                 deptList = sysDeptService.selectList(new EntityWrapper<SysDeptEntity>().like("name", name));
-                // deptList = sysDeptService.queryList(params);
             } else {
                 deptList = sysDeptService.selectList(null);
             }

@@ -54,6 +54,37 @@
          SELECT * FROM yw_user_extend where user_id = #{userId}
     </select>
 
+    <select id="queryUserExtend" resultType="com.qiaomu.modules.sys.entity.UserExtend">
+         SELECT * FROM yw_user_extend where user_id = #{userId} and community_id =#{communityId}
+    </select>
+
+    <select id="selectPageCondition" resultType="com.qiaomu.modules.sys.entity.UserExtend">
+        SELECT
+            *
+        FROM
+            yw_user_extend e
+        LEFT JOIN yw_community c ON e.community_id = c.id
+        <where>
+            1=1
+            <if test="communityId != null">
+                and e.community_id = #{communityId}
+            </if>
+            <if test="companyId != null">
+                and c.company_id = #{companyId}
+            </if>
+            <if test="userId != null">
+                and e.user_id = #{userId}
+            </if>
+            <if test="communityName != null and communityName !=''">
+                and c.name = #{communityName}
+            </if>
+            <if test="companyRoleType != null and companyRoleType !=''">
+                and e.companyRoleType = #{companyRoleType}
+            </if>
+        </where>
+        ORDER BY e.create_time DESC
+    </select>
+
 
     <delete id="deleteByUserIds" parameterType = "java.util.List">
         DELETE FROM yw_user_extend WHERE  user_id in

@@ -1,6 +1,7 @@
 package com.qiaomu.modules.sys.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.qiaomu.modules.sys.entity.UserExtend;
 
 import java.util.List;
@@ -20,4 +21,9 @@ public interface UserExtendDao extends BaseMapper<UserExtend> {
     UserExtend getUserCommunity(Long userId);
 
     void deleteByUserIds(List<Long> userIds);
+
+    UserExtend queryUserExtend(UserExtend userExtend);
+
+
+    List<UserExtend> selectPageCondition(Page<UserExtend> page, UserExtend condition);
 }

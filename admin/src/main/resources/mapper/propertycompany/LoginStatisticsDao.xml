@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qiaomu.modules.propertycompany.dao.LoginStatisticsDao">
+
+    <insert id="insert" parameterType="com.qiaomu.modules.propertycompany.entity.LoginStatistics">
+        INSERT INTO yw_community_login_statistics (
+            date,
+            type,
+            community_id,
+            number
+        )
+        VALUES
+            ( #{date},#{type},#{communityId},#{number}) ON DUPLICATE KEY UPDATE number =
+        VALUES
+            (number)
+
+    </insert>
+    <select id="getStatisticsDate" resultType="com.qiaomu.modules.propertycompany.entity.LoginStatistics">
+      SELECT l.date,sum(l.number) as number,c.name FROM yw_community_login_statistics l LEFT JOIN yw_community c ON c.id=l.community_id
+      where c.city_id = #{cityId} and l.date &gt;= #{startTime} and l.date&lt;=#{endTime} GROUP BY l.community_id
+    </select>
+    <select id="getStatisticsLoginByDate"
+            resultType="com.qiaomu.modules.propertycompany.entity.LoginStatistics">
+
+ SELECT l.date,sum(l.number) as number,c.name FROM yw_community_login_statistics l LEFT JOIN yw_community c ON c.id=l.community_id
+      where c.city_id = #{cityId} and l.date &gt;= #{startTime} and l.date&lt;=#{endTime} GROUP BY l.community_id,l.date order by number desc
+    </select>
+</mapper>

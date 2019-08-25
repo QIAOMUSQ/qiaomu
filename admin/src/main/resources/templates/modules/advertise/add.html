@@ -149,7 +149,6 @@
             $.each(result.data,function (index,item) {
                 array.push({"text":item.name,"value":item.id});
             });
-            console.info(array);
             $("#communityId").kendoMultiSelect({
                 dataTextField: "text",
                 dataValueField: "value",

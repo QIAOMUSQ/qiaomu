@@ -53,29 +53,34 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
         String communityName = (String) params.get("communityName");
         Long companyId = (Long) params.get("companyId");
         String companyRoleType = (String) params.get("companyRoleType");
-        String communityIdS= (String) params.get("communityId");
-        List<Long> communityIds = new ArrayList<>();
-        Long communityId= null;
-        if(StringUtils.isNotBlank(communityIdS)){
-            communityId= Long.valueOf(communityIdS);
+        String communityId= (String) params.get("communityId");
+        UserExtend condition = new UserExtend();
+        Page<UserExtend> page = new Query(params).getPage();// 当前页，总条
+
+        if(StringUtils.isNotBlank(communityId)){
+            condition.setCommunityId(Long.valueOf(communityId));
         }else {
-            communityIds = communityService.getCommunityIdList(communityName, companyId);
-            System.out.println("communityIds = [" + JSON.toJSON(communityIds) + "]");
+            condition.setCompanyId((Long) params.get("companyId"));
+        }
+        if(StringUtils.isNotBlank(userPhone)){
+            SysUserEntity user = userDao.getUserByUserName(userPhone);
+            if(user!=null){
+                condition.setUserId(user.getUserId());
+            }else {
+                condition.setUserId(-1l);
+            }
+
+        }
+        if(StringUtils.isNotBlank(communityName)){
+            condition.setCommunityName(communityName);
+        }
+        if(StringUtils.isNotBlank(companyRoleType)){
+            condition.setCompanyRoleType(companyRoleType);
         }
 
-        Page<UserExtend> page = this.selectPage(
-                new Query<UserExtend>(params).getPage(),
-                new EntityWrapper<UserExtend>()
-                        .eq(StringUtils.isNotBlank(userPhone), "USER_PHONE", userPhone)
-                        .in(communityIds.size() > 0, "COMMUNITY_ID", communityIds)
-                        .eq(communityId != null,"COMMUNITY_ID", communityId)
-                        .eq(StringUtils.isNotBlank(companyRoleType), "COMPANY_ROLE_TYPE", companyRoleType)//过滤物业管理员
-                        .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER))
-        );
+        page.setRecords(this.baseMapper.selectPageCondition(page,condition));
 
         for (UserExtend userExtend : page.getRecords()) {
-            YwCommunity community = communityService.queryById(userExtend.getCommunityId());
-            userExtend.setCommunityName(community == null ? "" : community.getName());
             userExtend.setRealName(AESUtil.decrypt(userExtend.getRealName()));
             userExtend.setAddress(AESUtil.decrypt(userExtend.getAddress()));
             //获取手机号码
@@ -188,5 +193,10 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
     @Override
     public void deleteByUserIds(List<Long> userIds) {
          baseMapper.deleteByUserIds(userIds);
+    }
+
+    @Override
+    public UserExtend queryUserExtend(UserExtend userExtend) {
+        return baseMapper.queryUserExtend(userExtend);
     }
 }
