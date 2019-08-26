@@ -9,6 +9,7 @@ public class ArticleSelectModel {
     private String authorId;
     private String communityId;
     private String isPrivate;
+    private String userId;
 
     public String getCommunityId() {
         return communityId;
@@ -60,5 +61,13 @@ public class ArticleSelectModel {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 }

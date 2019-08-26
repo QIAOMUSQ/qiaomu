@@ -155,10 +155,11 @@ public class ArticleController extends AbstractController{
      * @return
      */
     @RequestMapping(value = "queryAllByCommunityIdAndCategary",method = RequestMethod.POST)
-    public String queryAllByCommunityIdAndCategary(String communityId,String category){
+    public String queryAllByCommunityIdAndCategary(String communityId,String category,String userId){
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setCommunityId(communityId);
         articleSelectModel.setCategory(category);
+        articleSelectModel.setUserId(userId);//用户id并非文章作者
         List<ArticleEntity> articles = articleService.query(articleSelectModel);
         return JSON.toJSONString(BuildResponse.success(articles));
 

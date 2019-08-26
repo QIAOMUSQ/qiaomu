@@ -54,7 +54,7 @@ public class ArticleServiceImp implements ArticleService{
 
     @Override
     public List<ArticleEntity> query(ArticleSelectModel articleSelectModel) {
-        SysUserEntity sysUserEntity = sysUserService.queryById(Long.valueOf(articleSelectModel.getAuthorId()));
+        SysUserEntity sysUserEntity = sysUserService.queryById(Long.valueOf(articleSelectModel.getUserId()));
         if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
             throw new CommentException("请先实名认证！");
         }
