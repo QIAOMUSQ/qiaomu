@@ -19,6 +19,7 @@ package com.qiaomu.common.exception;
 import com.alibaba.fastjson.JSON;
 import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.R;
+import com.qiaomu.modules.article.exception.CommentException;
 import com.qiaomu.modules.welfare.exception.WelfareException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.session.UnknownSessionException;
@@ -60,6 +61,13 @@ public class RRExceptionHandler {
 
 	@ExceptionHandler(WelfareException.class)
 	public String handleWelfareException(WelfareException e){
+		logger.error(e.getMessage(), e);
+		return JSON.toJSONString(BuildResponse.fail(e.getMessage()));
+	}
+
+
+	@ExceptionHandler(CommentException.class)
+	public String handleWelfareException(CommentException e){
 		logger.error(e.getMessage(), e);
 		return JSON.toJSONString(BuildResponse.fail(e.getMessage()));
 	}
