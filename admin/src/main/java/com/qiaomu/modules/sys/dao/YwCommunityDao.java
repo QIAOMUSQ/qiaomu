@@ -7,6 +7,7 @@ import com.qiaomu.modules.sys.entity.YwCommunity;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 李品先
@@ -20,4 +21,6 @@ public interface YwCommunityDao extends BaseMapper<YwCommunity> {
 
 
     List<YwCommunity> selectPageByCondition(Page<YwCommunity> page, YwCommunity condition);
+
+    void setCommunityDisEnable(Map<String,Object> map);
 }

@@ -18,11 +18,13 @@ import com.qiaomu.modules.sys.service.ProvinceCityDateService;
 import com.qiaomu.modules.sys.service.SysFileService;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -88,6 +90,7 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
         if (community.getId() != null)
             updateById(community);
         else{
+            community.setEnable("1");
             this.baseMapper.insert(community);
         }
     }
@@ -136,7 +139,6 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
             userExtend.setStatus(true);
             userExtend.setCheck("0");
             userExtend.setCompanyRoleType("4");
-           // userExtend.setSex(sex);
             userExtend.setCreateTime(new Date());
             userExtendDao.insert(userExtend);
             return "保存成功";
@@ -171,4 +173,13 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
         return user2;
     }
 
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void setCommunityDisEnable(Long[] ids) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("deleteTime", DateTime.now().toString("yyyy-MM-dd HH:mm:ss"));
+        map.put("ids",Arrays.asList(ids));
+        baseMapper.setCommunityDisEnable(map);
+    }
 }

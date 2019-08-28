@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +35,6 @@ public class CommunityController extends AbstractController {
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @RequiresPermissions({"community:list"})
     public R getCommunityList(@RequestParam Map<String, Object> params, ServletRequest request) {
-        //params.put("companyId", getCompanyOrCommunityByType("1"));
         SysUserEntity user = getUser();
         if(user.getCompanyId()!= null ){
             params.put("companyId",user.getCompanyId());
@@ -48,7 +48,6 @@ public class CommunityController extends AbstractController {
     @RequiresPermissions(value = {"community:save", "community:update"},logical = Logical.OR)
     public R save(@RequestBody YwCommunity community) {
         //对社区进行分类
-        //community.setCompanyId(getCompanyOrCommunityByType("1"));
         SysUserEntity user = getUser();
         community.setCompanyId(user.getCompanyId());
         communityService.save(community);
@@ -68,8 +67,8 @@ public class CommunityController extends AbstractController {
 
     @ResponseBody
     @RequestMapping(value = "delete")
-    public R delete(Long id) {
-        communityService.deleteById(id);
+    public R delete(@RequestBody Long[] ids) {
+        communityService.setCommunityDisEnable(ids);
         return R.ok();
     }
 

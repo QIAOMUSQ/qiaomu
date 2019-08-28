@@ -63,6 +63,7 @@ public interface YwCommunityService extends IService<YwCommunity> {
     UserExtend getCommunityUserPermission(Long userId, Long communityId);
 
 
+    void setCommunityDisEnable(Long[] ids);
 }
 
 

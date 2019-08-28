@@ -2,9 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.qiaomu.modules.sys.dao.YwCommunityDao">
-
-
-
     <select id="queryById" resultType="com.qiaomu.modules.sys.entity.YwCommunity">
         SELECT * FROM yw_community WHERE id = #{communityId}
     </select>
@@ -12,7 +9,7 @@
     <select id="findAllByCondition" resultType="com.qiaomu.modules.sys.entity.YwCommunity">
          SELECT A.* FROM yw_community A LEFT JOIN prov_city_data B ON A.city_id = b.id
         <where>
-            1=1
+            enable > 0
             <if test="name != null and name !=''">
                 AND A.name like concat('%',#{name},'%')
             </if>
@@ -35,7 +32,7 @@
     <select id="selectPageByCondition" resultType="com.qiaomu.modules.sys.entity.YwCommunity">
         SELECT A.* FROM yw_community A LEFT JOIN prov_city_data B ON A.city_id = b.id
         <where>
-            1=1
+            enable > 0
             <if test="name != null and name !=''">
                 AND A.name like  concat('%',#{name},'%')
             </if>
@@ -51,4 +48,14 @@
 
         </where>
     </select>
+
+    <update id="setCommunityDisEnable" parameterType="java.util.HashMap">
+        UPDATE yw_community set enable=0, delete_time =#{deleteTime}
+        where id in
+        <foreach item="id"  collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+
+    </update>
+
 </mapper>

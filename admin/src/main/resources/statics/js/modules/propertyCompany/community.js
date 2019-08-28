@@ -86,19 +86,24 @@ var vm = new Vue({
 
         },
         del: function () {
-            confirm('确定要删除选中的记录？', function(){
+            var ids = getSelectedRows();
+            if(ids == null){
+                return ;
+            }
+
+            confirm('当前社区记录将只保存3天记录，3天后将清除有关该社区所有记录，确定要删除该社区？', function(){
                 $.ajax({
                     type: "POST",
                     url: baseURL + "communityMessage/delete",
                     contentType: "application/json",
-                    data: JSON.stringify(userIds),
+                    data: JSON.stringify(ids),
                     success: function(r){
                         if(r.status == "success"){
                             alert('操作成功', function(){
                                 vm.reload();
                             });
                         }else{
-                            alert(r.msg);
+                            alert(r.respMsg);
                         }
                     }
                 });
@@ -117,7 +122,7 @@ var vm = new Vue({
                             vm.reload();
                         });
                     }else{
-                        alert(r.msg);
+                        alert(r.respMsg);
                     }
                 }
             });

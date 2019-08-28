@@ -2,15 +2,14 @@ package com.qiaomu.common.servlet;
 
 import com.qiaomu.common.utils.Constant;
 import com.qiaomu.modules.propertycompany.service.impl.YwCommunityServiceImpl;
-import com.qiaomu.modules.sys.service.UserExtendService;
-import org.apache.shiro.session.Session;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 
-import javax.servlet.*;
+import javax.servlet.ServletRequestEvent;
+import javax.servlet.ServletRequestListener;
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -44,9 +43,12 @@ public class MyServletRequest implements ServletRequestListener {
         String url = request.getRequestURL().toString();//根据url进行判断处理
         if(url.contains("getAdvertiseByCommunity")){
             Map<String,String[]> params =  WebUtils.toHttp(request).getParameterMap();
-            String communityId =params.get("communityId")[0];
-            BoundHashOperations<String, String, Object> boundHashOps = redisTemplate.boundHashOps(Constant.COMMUNITY_LOGIN_COUNT);
-            boundHashOps.increment(communityId,1);
+            if(StringUtils.isNotBlank(params.get("communityId")[0])){
+                String communityId =params.get("communityId")[0];
+                BoundHashOperations<String, String, Object> boundHashOps = redisTemplate.boundHashOps(Constant.COMMUNITY_LOGIN_COUNT);
+                boundHashOps.increment(communityId,1);
+            }
+
         }
     }
 }

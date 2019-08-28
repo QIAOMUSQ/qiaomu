@@ -24,6 +24,6 @@
             resultType="com.qiaomu.modules.propertycompany.entity.LoginStatistics">
 
  SELECT l.date,sum(l.number) as number,c.name FROM yw_community_login_statistics l LEFT JOIN yw_community c ON c.id=l.community_id
-      where c.city_id = #{cityId} and l.date &gt;= #{startTime} and l.date&lt;=#{endTime} GROUP BY l.community_id,l.date order by number desc
+      where c.city_id = #{cityId} and l.date &gt;= #{startTime} and l.date&lt;=#{endTime} GROUP BY l.community_id,l.date order by l.community_id,l.date,number desc
     </select>
 </mapper>

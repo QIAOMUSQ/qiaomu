@@ -26,6 +26,8 @@ public class YwCommunity implements Serializable {
     private Long adminId;
     private Long companyId;
     private Date createTime;
+    private String enable;
+    private String deleteTime;
 
     @TableField(exist = false)
     private String companyName;
@@ -135,5 +137,21 @@ public class YwCommunity implements Serializable {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public String getEnable() {
+        return enable;
+    }
+
+    public void setEnable(String enable) {
+        this.enable = enable;
+    }
+
+    public String getDeleteTime() {
+        return deleteTime;
+    }
+
+    public void setDeleteTime(String deleteTime) {
+        this.deleteTime = deleteTime;
     }
 }
