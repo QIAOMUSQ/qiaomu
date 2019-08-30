@@ -1,8 +1,10 @@
 package com.qiaomu.modules.article.service;
 
+import com.qiaomu.common.utils.AESUtil;
 import com.qiaomu.common.utils.DateUtils;
 import com.qiaomu.modules.article.dao.ArticleDao;
 import com.qiaomu.modules.article.entity.ArticleEntity;
+import com.qiaomu.modules.article.entity.ArticlePoint;
 import com.qiaomu.modules.article.entity.ArticlePraiseEntity;
 import com.qiaomu.modules.article.entity.CommentEntity;
 import com.qiaomu.modules.article.exception.CommentException;
@@ -143,6 +145,27 @@ public class ArticleServiceImp implements ArticleService{
         Date date = new Date();
         articleEntity.setUpdatedAt(DateUtils.formats(date));
         articleDao.updateArticle(articleEntity);
+    }
+
+    @Override
+    public List<ArticlePoint> queryArticlePoints(String communityId) {
+        List<ArticlePoint> articlePoint = articleDao.queryArticlePoints(communityId);
+        for(ArticlePoint ap:articlePoint) {
+            if(ap.getRealName()!=null) {
+                ap.setRealName(AESUtil.decrypt(ap.getRealName()));
+            }
+        }
+        return articlePoint;
+    }
+
+    @Override
+    public ArticlePoint queryArticlePoint(String userId,String communityId) {
+        return articleDao.queryArticlePoint(userId,communityId);
+    }
+
+    @Override
+    public void insertArticlePoint(ArticlePoint articlePoint) {
+        articleDao.insertArticlePoint(articlePoint);
     }
 
 }

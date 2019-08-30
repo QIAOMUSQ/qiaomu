@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.CommonUtils;
 import com.qiaomu.modules.article.entity.ArticleEntity;
+import com.qiaomu.modules.article.entity.ArticlePoint;
 import com.qiaomu.modules.article.entity.CommentEntity;
 import com.qiaomu.modules.article.exception.CommentException;
 import com.qiaomu.modules.article.model.ArticleSelectModel;
@@ -53,6 +54,11 @@ public class ArticleController extends AbstractController{
     public String add(HttpServletRequest request){
         ArticleEntity articleEntity = buildAticle(request);
         articleService.add(articleEntity);
+        ArticlePoint articlePoint = new ArticlePoint();
+        articlePoint.setUserId(articleEntity.getAuthorId());
+        articlePoint.setPoint(3);
+        articlePoint.setCommunityId(articleEntity.getCommunityId());
+        articleService.insertArticlePoint(articlePoint);
         return JSON.toJSONString(BuildResponse.success());
 
     }
@@ -278,6 +284,28 @@ public class ArticleController extends AbstractController{
         articleEntity.setImageUrls(JSON.toJSONString(imageUrls));
         return articleEntity;
 
+    }
+
+    /**
+     * 查询文章积分总数
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "queryArticlePoint",method = RequestMethod.POST)
+    public String queryArticlePoint(String userId,String communityId){
+        ArticlePoint articlePoint = articleService.queryArticlePoint(userId,communityId);
+        return JSON.toJSONString(BuildResponse.success(articlePoint));
+    }
+
+    /**
+     * 查询文章积分排行
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "queryArticlePoints",method = RequestMethod.POST)
+    public String queryArticlePoints(String communityId){
+        List<ArticlePoint> articlePoint = articleService.queryArticlePoints(communityId);
+        return JSON.toJSONString(BuildResponse.success(articlePoint));
     }
 
 

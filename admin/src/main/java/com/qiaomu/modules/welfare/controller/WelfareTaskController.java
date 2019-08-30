@@ -71,7 +71,6 @@ public class WelfareTaskController {
     public String queryAllTask(String communityId,String userId){
         List<TaskEntity>  tasks = welfareBussiness.queryAllTask(communityId,userId);
         return JSON.toJSONString(BuildResponse.success(tasks));
-
     }
     /**
      * 查询所有执行中的任务

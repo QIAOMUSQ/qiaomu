@@ -1,6 +1,7 @@
 package com.qiaomu.modules.article.service;
 
 import com.qiaomu.modules.article.entity.ArticleEntity;
+import com.qiaomu.modules.article.entity.ArticlePoint;
 import com.qiaomu.modules.article.entity.CommentEntity;
 import com.qiaomu.modules.article.model.ArticleSelectModel;
 import org.springframework.stereotype.Service;
@@ -21,4 +22,7 @@ public interface ArticleService {
     void  deleteCommentByArticleId(CommentEntity commentEntity);
     void deleteArticleByArticleId(String articleId);
     void updateArticle(ArticleEntity articleEntity);
+    List<ArticlePoint> queryArticlePoints(String communityId);
+    ArticlePoint queryArticlePoint(String userId,String communityId);
+    void insertArticlePoint(ArticlePoint articlePoint);
 }

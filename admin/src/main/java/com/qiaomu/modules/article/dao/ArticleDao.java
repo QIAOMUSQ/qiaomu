@@ -2,6 +2,7 @@ package com.qiaomu.modules.article.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.qiaomu.modules.article.entity.ArticleEntity;
+import com.qiaomu.modules.article.entity.ArticlePoint;
 import com.qiaomu.modules.article.entity.ArticlePraiseEntity;
 import com.qiaomu.modules.article.entity.CommentEntity;
 import com.qiaomu.modules.article.model.ArticleSelectModel;
@@ -26,5 +27,8 @@ public interface ArticleDao extends BaseMapper<InvitationEntity> {
     void insertArticleComment(CommentEntity commentEntity);
     List<CommentEntity> queryCommentByArticleId(String articleId);
     List<CommentEntity> queryCommentByUserId(String userId);
+    List<ArticlePoint> queryArticlePoints(String communityId);
+    ArticlePoint queryArticlePoint(String userId,String communityId);
+    void insertArticlePoint(ArticlePoint articlePoint);
 
 }

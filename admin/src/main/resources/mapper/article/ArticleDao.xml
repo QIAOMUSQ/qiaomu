@@ -38,6 +38,9 @@
 	<insert id="insertArticlePraise" parameterType="com.qiaomu.modules.article.entity.ArticlePraiseEntity">
 		insert into pluto_article_praise (userId,isPraise,articleId) VALUES (#{userId},#{isPraise},#{articleId})
 	</insert>
+	<insert id="insertArticlePoint" parameterType="com.qiaomu.modules.article.entity.ArticlePoint">
+		insert into article_point (userId,point) VALUES (#{userId},#{point})
+	</insert>
 	<update id="updateArticlePraise" parameterType="com.qiaomu.modules.article.entity.ArticlePraiseEntity">
 		update pluto_article_praise set isPraise = #{isPraise} where userId = #{userId}
 	</update>
@@ -65,5 +68,11 @@
 	</select>
 	<select id="queryCommentByUserId" parameterType="java.lang.String" resultType="com.qiaomu.modules.article.entity.CommentEntity">
 		select * from pluto_article_comment WHERE userId = #{userId}
+	</select>
+	<select id="queryArticlePoints"   parameterType="java.lang.String" resultType="com.qiaomu.modules.article.entity.ArticlePoint">
+		select a.userId,b.real_name as realName,sum(a.point)  as point from article_point as a  JOIN sys_user as b where a.userId=b.user_id and a.communityId = #{communityId}GROUP by userId ORDER by point DESC limit 20
+	</select>
+	<select id="queryArticlePoint" parameterType="java.lang.String" resultType="com.qiaomu.modules.article.entity.ArticlePoint">
+		select userId,sum(point) as point from article_point WHERE userId = #{userId} and communityId = #{communityId} GROUP by userId
 	</select>
 </mapper>
