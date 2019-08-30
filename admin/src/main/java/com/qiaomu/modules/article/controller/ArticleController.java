@@ -200,6 +200,7 @@ public class ArticleController extends AbstractController{
     public String queryByAuthorId(@RequestParam String authorId){
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setUserId(authorId);
+        articleSelectModel.setAuthorId(authorId);
         List<ArticleEntity> articles = articleService.query(articleSelectModel);
         return JSON.toJSONString(BuildResponse.success(articles));
 
