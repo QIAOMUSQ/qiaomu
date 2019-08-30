@@ -398,7 +398,11 @@ public class WelfareBussiness {
 
     }
 
-    public List<TaskEntity> queryAllTask(String communityId){
+    public List<TaskEntity> queryAllTask(String communityId,String userId){
+        SysUserEntity sysUserEntity = sysUserService.queryById(Long.valueOf(userId));
+        if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
+            throw new WelfareException("请先实名认证后再查看！");
+        }
         return publicWelfareTaskService.queryAllTask(communityId);
     }
 

@@ -68,8 +68,8 @@ public class WelfareTaskController {
      * @return
      */
     @RequestMapping(value = "queryAllTask",method = RequestMethod.POST)
-    public String queryAllTask(String communityId){
-        List<TaskEntity>  tasks = welfareBussiness.queryAllTask(communityId);
+    public String queryAllTask(String communityId,String userId){
+        List<TaskEntity>  tasks = welfareBussiness.queryAllTask(communityId,userId);
         return JSON.toJSONString(BuildResponse.success(tasks));
 
     }
