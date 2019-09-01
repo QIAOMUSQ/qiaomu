@@ -37,8 +37,6 @@ public class YwCommunity implements Serializable {
 
     @TableField(exist = false)
     private String admin;
-
-    @TableField(exist = false)
     private String cityCode;
 
     public Long getId() {

@@ -12,8 +12,8 @@ import java.util.concurrent.Executor;
  * @description:启用异步任务
  * @Date 2019-08-27 20:04
  */
-/*@Configuration
-@EnableAsync  // 启用异步任务*/
+@Configuration
+@EnableAsync  // 启用异步任务
 public class AsyncConfiguration {
     // 声明一个线程池(并指定线程池的名字)
     @Bean("taskExecutor")

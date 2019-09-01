@@ -22,7 +22,6 @@ $(function () {
                     return '<span class="label label-success" style="background: #ec971f">超级管理员</span>';
                 }
             }},
-            { label: '审核账户', name: 'checkUser', width: 60},
             { label: '状态', name: 'check', width: 60, formatter: function(value, options, row){
                 if(value == 0){
                     return '<span class="label label-danger">未审核</span>';
@@ -162,16 +161,15 @@ var vm = new Vue({
             $.get(baseURL + "communityUser/info/"+id, function(result){
                 var data = result.userExtendInfo;
                 $("#realName").val(data.realName);
-               // $("#userIdentity").val(data.userIdentity);
                 $("#communityName").val(data.communityName);
                 $("#createTime").val(data.createTime);
                 $("#info").val(data.info);
                 $("#userPhone").val(data.userPhone);
                 $("#address").val(data.address);
-                vm.userExtend.companyRoleType = data.companyRoleType;
+                document.getElementById("roleType").value = data.companyRoleType;
                 $("#companyRoleType").val(data.companyRoleType);
                 $("#communityId").val(data.id);
-              //  $("#imgUrl").attr("src", baseURL+"/mobile/sysFile/showPicForMany?id="+data.imgId);
+                console.info(data);
                 vm.getTypeList();
             });
         },

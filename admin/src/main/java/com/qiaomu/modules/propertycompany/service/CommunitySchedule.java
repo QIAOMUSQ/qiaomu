@@ -2,12 +2,16 @@ package com.qiaomu.modules.propertycompany.service;
 
 import com.qiaomu.common.utils.Constant;
 import com.qiaomu.modules.propertycompany.entity.LoginStatistics;
+import com.qiaomu.modules.propertycompany.service.impl.DeleteCommunityService;
+import com.qiaomu.modules.sys.entity.YwCommunity;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * @author 李品先
@@ -19,8 +23,14 @@ public class CommunitySchedule {
 
     @Autowired
     private LoginStatisticsService loginStatisticsService;
+
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
+    @Autowired
+    private YwCommunityService communityService;
+
+    @Autowired
+    private DeleteCommunityService deleteCommunityService;
 
     @Scheduled(cron = "0 0/5 * * * ? ")
     public void statisticsCommunity(){
@@ -48,21 +58,20 @@ public class CommunitySchedule {
 
     /**
      * 定时清除community中已经删除数据
-     * 和社区关联信息表
-     * yw_advertise
-     * yw_carport
-     * yw_community_advertise
-     * yw_community_login_statistics
-     * yw_invitation
-     * yw_user_extend
-     * yw_user_workflow
-     * yw_workflow_info
-     * yw_workflow_message
-     * pluto_article
-     * pluto_article_comment
-     * push_message_data
      */
+    @Scheduled(cron = "3 3 0 1/1 * ?")
     public void deleteCommunity(){
+        YwCommunity community = new YwCommunity();
+        community.setDeleteTime(DateTime.now().plusDays(-3).toString("yyyy-MM-dd HH:mm:ss"));
+        List<YwCommunity> communities = communityService.getDeleteCommunity(community);
+        try{
+            for (YwCommunity community1: communities){
+                deleteCommunityService.deleteInfo(community1);
+            }
+        }catch (Exception e){
+
+        }
+
 
     }
 }

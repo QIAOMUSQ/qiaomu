@@ -17,7 +17,7 @@ import java.util.Map;
 
 /**
  * @author 李品先
- * @description:
+ * @description: 公告
  * @Date 2019-08-10 16:12
  */
 @Controller

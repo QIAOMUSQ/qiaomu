@@ -53,6 +53,7 @@ public class InvitationManageController extends AbstractController {
     @RequestMapping(value = "save",method = RequestMethod.POST)
     public Object save(InvitationEntity invitation){
         try {
+            invitation.setUserId(getUserId());
             invitationService.save(invitation);
             return BuildResponse.success("保存成功");
         }catch (Exception e){

@@ -205,7 +205,7 @@ public class HandlerServiceImpl extends HandlerService {
                channel.writeAndFlush(new TextWebSocketFrame(gson.toJson(inChatBackMapService.loginSuccess())));
                websocketChannelService.loginWsSuccess(channel,token);
                //查询数据库中该用户是否有离线未发消息，若有，则立即推送
-              List<PushMessage> messageList =  pushMessageRepository.findByPhoneAndStatus(token,false);
+              List<PushMessage> messageList =  pushMessageRepository.findByReceivePhoneAndStatus(token,false);
                if(messageList.size()>0){
                     for (PushMessage message : messageList){
                         channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(message)));

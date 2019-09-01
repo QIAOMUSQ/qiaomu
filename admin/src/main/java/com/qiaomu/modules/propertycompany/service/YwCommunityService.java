@@ -29,9 +29,7 @@ public interface YwCommunityService extends IService<YwCommunity> {
      * @return
      */
     YwCommunity queryById(Long communityId);
-
-
-    List<YwCommunity> findAll(YwCommunity paramYwCommunity);
+    
 
     void save(YwCommunity paramYwCommunity);
 
@@ -64,6 +62,8 @@ public interface YwCommunityService extends IService<YwCommunity> {
 
 
     void setCommunityDisEnable(Long[] ids);
+
+    List<YwCommunity> getDeleteCommunity(YwCommunity community);
 }
 
 

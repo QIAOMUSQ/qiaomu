@@ -48,6 +48,10 @@ public class CommunityCheckEntity implements Serializable {
 
     @TableField(exist = false)
     private String time;
+    @TableField(exist = false)
+    private String startTime;
+    @TableField(exist = false)
+    private String endTime;
     public Long getId() {
         return id;
     }
@@ -166,5 +170,21 @@ public class CommunityCheckEntity implements Serializable {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

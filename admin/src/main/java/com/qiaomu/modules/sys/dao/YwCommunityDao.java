@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.qiaomu.modules.sys.entity.YwCommunity;
 import org.apache.ibatis.annotations.Param;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ import java.util.Map;
  * @Date 2019-04-19 22:56
  */
 public interface YwCommunityDao extends BaseMapper<YwCommunity> {
-    YwCommunity queryById(Long var1);
+    YwCommunity queryById(Long communityId);
 
     List<YwCommunity>findAllByCondition(YwCommunity condition);
 
@@ -23,4 +24,7 @@ public interface YwCommunityDao extends BaseMapper<YwCommunity> {
     List<YwCommunity> selectPageByCondition(Page<YwCommunity> page, YwCommunity condition);
 
     void setCommunityDisEnable(Map<String,Object> map);
+
+    List<YwCommunity> getDeleteCommunity(YwCommunity community);
+
 }

@@ -18,15 +18,23 @@ $(function () {
             { label: '所属物业公司', name: 'companyName', width: 100 },
             { label: '时间', name: 'createTime', width: 100 },
             { label: '状态', name: 'isCheck', width: 100, formatter: function(value, options, row){
-                if(value == "0"){
-                    return   '<span class="label label-danger">未审核</span>';
-                }else if(value =="1"){
-                    return   '<span class="label label-success">通过</span>';
-                }else {
-                    return   '<span class="label label-danger">未通过</span>';
+                    if(value == "0"){
+                        return   '<span class="label label-danger">未审核</span>';
+                    }else if(value =="1"){
+                        return   '<span class="label label-success">通过</span>';
+                    }else {
+                        return   '<span class="label label-danger">未通过</span>';
+                    }
                 }
-            }
-            }
+            },
+            { label: '操作', name: '', width: 100,
+                formatter: function(value, options, row){
+                    if(row.isCheck == "0"){
+                        return   '<button class="btn btn-primary" onclick="check('+row.id+',0)" >审核</button>';
+                    }else if(row.isCheck =="1"){
+                        return   '<button class="btn btn-success" onclick="check('+row.id+',1)">详情</button>';
+                    }
+            } }
         ],
         viewrecords: true,
         height: 385,
@@ -111,16 +119,6 @@ var vm = new Vue({
         query: function () {
             vm.reload();
         },
-        check: function () {
-            var id = getSelectedRows();
-            if(id == null){
-                return ;
-            }
-           /* vm.showList = false;
-            vm.title = "修改";*/
-            vm.getCommunity(id);
-
-        },
         del: function () {
             confirm('确定要删除选中的记录？', function(){
                 $.ajax({
@@ -157,41 +155,6 @@ var vm = new Vue({
                     }
                 }
             });
-        },
-        getCommunity: function(id){
-                layer.open({
-                    type: 2,
-                    skin: 'layui-layer-molv',
-                    title: "社区审核",
-                    area: ['650px', '350px'],
-                    fixed:false,
-                    content: baseURL + "mobile/communityMessage/getInfoDataById?id="+id,
-                    closeBtn:0,
-                    btn: ['确定','取消'],
-                    yes:function(index,layero){//    //点击确定回调
-                        var form = layer.getChildFrame('form', index);
-                        $.ajax({
-                            type:"POST",
-                            url:baseURL + "mobile/communityMessage/addCommunity",
-                            datType:"JSON",
-                            data:form.serialize(),
-                            success:function (data) {
-                                if(data.status== "success"){
-                                    vm.reload();
-                                    layer.msg(data.data);
-                                    layer.close(index); //如果设定了yes回调，需进行手工关闭
-                                }else {
-                                    layer.msg(data.data);
-                                }
-                            }
-                        });
-
-                    },
-                    btn2: function (index) {
-
-                    }
-                });
-            //});
         },
         reload: function () {
             var page = $("#jqGrid").jqGrid('getGridParam','page');
@@ -296,3 +259,52 @@ var vm = new Vue({
 
     }
 });
+
+function check(id,type) {
+    if(id == null){
+        return ;
+    }
+    getCommunity(id,type);
+}
+
+function getCommunity(id,type) {
+    var btn,title;
+    if (type == 0){
+        btn = ['取消','确定'];
+        title = "社区审核";
+    }else {
+        btn =  ['取消'];
+        title = "社区详情";
+    }
+    layer.open({
+        type: 2,
+        skin: 'layui-layer-molv',
+        title: title,
+        area: ['650px', '350px'],
+        fixed:false,
+        content: baseURL + "mobile/communityMessage/getInfoDataById?id="+id,
+        closeBtn:1,
+        btn: btn,
+        yes:function(index,layero){//    //点击确定回调
+            layer.close(index);
+        },
+        btn2: function (index,layero) {
+            var form = layer.getChildFrame('form', index);
+            $.ajax({
+                type:"POST",
+                url:baseURL + "mobile/communityMessage/addCommunity",
+                datType:"JSON",
+                data:form.serialize(),
+                success:function (data) {
+                    if(data.status== "success"){
+                        vm.reload();
+                        layer.msg(data.data);
+                        layer.close(index); //如果设定了yes回调，需进行手工关闭
+                    }else {
+                        layer.msg(data.data);
+                    }
+                }
+            });
+        }
+    });
+}

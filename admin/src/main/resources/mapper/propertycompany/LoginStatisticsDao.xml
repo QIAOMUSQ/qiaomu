@@ -17,13 +17,55 @@
 
     </insert>
     <select id="getStatisticsDate" resultType="com.qiaomu.modules.propertycompany.entity.LoginStatistics">
-      SELECT l.date,sum(l.number) as number,c.name FROM yw_community_login_statistics l LEFT JOIN yw_community c ON c.id=l.community_id
-      where c.city_id = #{cityId} and l.date &gt;= #{startTime} and l.date&lt;=#{endTime} GROUP BY l.community_id
+      SELECT
+            l.date,
+            sum(l.number) AS number,
+            c. NAME
+        FROM
+            yw_community_login_statistics l
+        LEFT JOIN yw_community c ON c.id = l.community_id
+        WHERE c.city_code = #{cityCode}
+                and l.date &gt;= #{startTime}
+                and l.date&lt;=#{endTime}
+                <if test="companyId !=null">
+                    and c.company_id =#{companyId}
+                </if>
+        GROUP BY
+            l.community_id
     </select>
     <select id="getStatisticsLoginByDate"
             resultType="com.qiaomu.modules.propertycompany.entity.LoginStatistics">
 
- SELECT l.date,sum(l.number) as number,c.name FROM yw_community_login_statistics l LEFT JOIN yw_community c ON c.id=l.community_id
-      where c.city_id = #{cityId} and l.date &gt;= #{startTime} and l.date&lt;=#{endTime} GROUP BY l.community_id,l.date order by l.community_id,l.date,number desc
+          SELECT l.date,sum(l.number) as number,c.name FROM yw_community_login_statistics l LEFT JOIN yw_community c ON c.id=l.community_id
+      where c.city_code = #{cityCode} and l.date &gt;= #{startTime} and l.date&lt;=#{endTime} GROUP BY l.community_id order by l.community_id,number desc
+    </select>
+
+    <select id="selectPageByCondition" resultType="com.qiaomu.modules.propertycompany.entity.LoginStatistics">
+      SELECT
+        l.date,
+        sum(l.number) AS number,
+        c. NAME
+    FROM
+        yw_community_login_statistics l
+    LEFT JOIN yw_community c ON c.id = l.community_id
+    <where>
+        1=1
+        <if test="cityCode !=null">
+            and  c.city_code = #{cityCode}
+        </if>
+        <if test="startTime !=null">
+            and l.date &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null">
+            and l.date&lt;=#{endTime}
+        </if>
+        <if test="companyId !=null">
+            and c.company_id =#{companyId}
+        </if>
+    </where>
+    GROUP BY
+        l.community_id
+    ORDER BY
+        number DESC
     </select>
 </mapper>

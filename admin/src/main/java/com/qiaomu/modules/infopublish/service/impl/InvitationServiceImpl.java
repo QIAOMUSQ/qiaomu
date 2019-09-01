@@ -51,7 +51,7 @@ public class InvitationServiceImpl extends ServiceImpl<InvitationDao,InvitationE
             invitation.setImgJson(invitation.getImgJson().replace("\\",""));
             invitation.setCreateTime(new Date());
             this.baseMapper.insert(invitation);
-            pushRedisMessageService.pushMessage(null,null,"公告信息","2","您有新的社区公告信息",invitation.getCommunityId());
+            pushRedisMessageService.pushMessage(invitation.getUserId(),null,"公告信息","2","您有新的社区公告信息",invitation.getCommunityId());
         }catch (Exception e){
             e.printStackTrace();
             throw new RRException("异常", "500");

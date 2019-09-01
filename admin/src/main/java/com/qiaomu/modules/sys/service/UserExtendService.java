@@ -49,18 +49,12 @@ public interface UserExtendService extends IService<UserExtend> {
      */
     void saveCheckInfo(String info, String type, String companyRoleType, Long id,Long userId);
 
-    /**
-     * 获取用户真实姓名
-     * @param userIds
-     * @param communityId
-     * @param type 分割字符串类型
-     * @return
-     *//*
-    String getRealNamesByUserIdsAndCommunityId(String userIds,Long communityId,String type);*/
 
     UserExtend getUserCommunity(Long userId);
 
     void deleteByUserIds(List<Long> userIds);
 
     UserExtend queryUserExtend(UserExtend userExtend);
+
+    void deleteStaff(List<Long> longs);
 }

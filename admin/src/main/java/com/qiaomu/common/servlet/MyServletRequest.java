@@ -1,5 +1,6 @@
 package com.qiaomu.common.servlet;
 
+import com.alibaba.fastjson.JSON;
 import com.qiaomu.common.utils.Constant;
 import com.qiaomu.modules.propertycompany.service.impl.YwCommunityServiceImpl;
 import org.apache.commons.lang.StringUtils;
@@ -43,7 +44,9 @@ public class MyServletRequest implements ServletRequestListener {
         String url = request.getRequestURL().toString();//根据url进行判断处理
         if(url.contains("getAdvertiseByCommunity")){
             Map<String,String[]> params =  WebUtils.toHttp(request).getParameterMap();
-            if(StringUtils.isNotBlank(params.get("communityId")[0])){
+            System.out.println("params======= = [" + JSON.toJSON(params) + "]");
+
+            if (params.get("communityId") != null && StringUtils.isNotBlank(params.get("communityId")[0])) {
                 String communityId =params.get("communityId")[0];
                 BoundHashOperations<String, String, Object> boundHashOps = redisTemplate.boundHashOps(Constant.COMMUNITY_LOGIN_COUNT);
                 boundHashOps.increment(communityId,1);
