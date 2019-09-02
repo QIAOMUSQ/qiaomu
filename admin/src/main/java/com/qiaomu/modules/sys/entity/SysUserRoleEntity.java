@@ -32,8 +32,7 @@ import java.io.Serializable;
 @TableName("sys_user_role")
 public class SysUserRoleEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-    @TableId
-    private Long id;
+
 
     /**
      * 用户ID
@@ -44,25 +43,6 @@ public class SysUserRoleEntity implements Serializable {
      * 角色ID
      */
     private Long roleId;
-
-    /**
-     * 设置：
-     *
-     * @param id
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    /**
-     * 获取：
-     *
-     * @return Long
-     */
-    public Long getId() {
-        return id;
-    }
-
     /**
      * 设置：用户ID
      *

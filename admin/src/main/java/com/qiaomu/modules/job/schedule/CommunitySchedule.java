@@ -1,7 +1,9 @@
-package com.qiaomu.modules.propertycompany.service;
+package com.qiaomu.modules.job.schedule;
 
 import com.qiaomu.common.utils.Constant;
 import com.qiaomu.modules.propertycompany.entity.LoginStatistics;
+import com.qiaomu.modules.propertycompany.service.LoginStatisticsService;
+import com.qiaomu.modules.propertycompany.service.YwCommunityService;
 import com.qiaomu.modules.propertycompany.service.impl.DeleteCommunityService;
 import com.qiaomu.modules.sys.entity.YwCommunity;
 import org.joda.time.DateTime;
@@ -71,7 +73,5 @@ public class CommunitySchedule {
         }catch (Exception e){
 
         }
-
-
     }
 }
