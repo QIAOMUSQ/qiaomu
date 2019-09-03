@@ -38,7 +38,7 @@ public class Advertise implements Serializable {
     private String httpsUrl;//外链httls跳转地址
 
     private String https;//是否支持外链
-
+    @TableField(exist = false)
     private String communityIds;//社区Id
 
     private String showLocation;//显示位置 1：主页头，2：公告位置 3：霸屏3秒

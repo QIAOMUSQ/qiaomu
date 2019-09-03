@@ -22,4 +22,6 @@ public interface LoginStatisticsDao extends BaseMapper<LoginStatistics> {
     List<LoginStatistics> getStatisticsLoginByDate(LoginStatistics condition);
 
     List<LoginStatistics> selectPageByCondition(Page<LoginStatistics> page, LoginStatistics condition);
+
+    void deleteByCommunityId(Long communityId);
 }

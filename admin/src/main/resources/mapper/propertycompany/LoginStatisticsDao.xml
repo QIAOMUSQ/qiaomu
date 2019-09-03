@@ -16,6 +16,9 @@
             (number)
 
     </insert>
+    <delete id="deleteByCommunityId" parameterType="long">
+        DELETE FROM yw_community_login_statistics WHERE community_id = #{communityId}
+    </delete>
     <select id="getStatisticsDate" resultType="com.qiaomu.modules.propertycompany.entity.LoginStatistics">
       SELECT
             l.date,

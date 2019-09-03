@@ -85,4 +85,14 @@ public class CarportServiceImpl extends ServiceImpl<CarportDao,CarportEntity> im
         }
         return carport;
     }
+
+    @Override
+    public List<CarportEntity> selectByCommunityId(Long communityId) {
+        return baseMapper.selectByCommunityId(communityId);
+    }
+
+    @Override
+    public void deleteByCommunityId(Long communityId) {
+         baseMapper.deleteByCommunityId(communityId);
+    }
 }

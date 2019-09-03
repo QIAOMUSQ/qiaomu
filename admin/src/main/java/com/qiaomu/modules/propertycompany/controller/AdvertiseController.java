@@ -48,8 +48,14 @@ public class AdvertiseController {
     @ResponseBody
     @RequestMapping(value = "save",method = RequestMethod.POST)
     public R save(Advertise advertise, HttpServletRequest request){
-        boolean ok = advertiseService.save(advertise,request);
-        return R.ok().put("data",ok);
+       try {
+           boolean ok = advertiseService.save(advertise,request);
+           return R.ok().put("data",ok);
+       }catch (Exception e){
+           e.printStackTrace();
+           return R.ok().put("data",false);
+       }
+
     }
 
     @ResponseBody

@@ -61,7 +61,7 @@ public class CommunitySchedule {
     /**
      * 定时清除community中已经删除数据
      */
-    @Scheduled(cron = "3 3 0 1/1 * ?")
+    //@Scheduled(cron = "3 3 0 1/1 * ?")
     public void deleteCommunity(){
         YwCommunity community = new YwCommunity();
         community.setDeleteTime(DateTime.now().plusDays(-3).toString("yyyy-MM-dd HH:mm:ss"));
@@ -71,7 +71,7 @@ public class CommunitySchedule {
                 deleteCommunityService.deleteInfo(community1);
             }
         }catch (Exception e){
-
+            e.printStackTrace();
         }
     }
 }

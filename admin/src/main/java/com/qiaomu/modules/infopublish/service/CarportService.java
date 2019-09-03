@@ -18,4 +18,8 @@ public interface CarportService extends IService<CarportEntity> {
     Boolean save(CarportEntity carport, HttpServletRequest request);
 
     CarportEntity getCarportById(Long id);
+
+    List<CarportEntity> selectByCommunityId(Long communityId);
+
+    void deleteByCommunityId(Long id);
 }

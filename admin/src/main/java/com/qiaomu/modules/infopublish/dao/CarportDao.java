@@ -13,4 +13,8 @@ import java.util.List;
 
 public interface CarportDao  extends BaseMapper<CarportEntity> {
     List<CarportEntity> selectAll(CarportEntity carport);
+
+    List<CarportEntity> selectByCommunityId(Long communityId);
+
+    void deleteByCommunityId(Long communityId);
 }

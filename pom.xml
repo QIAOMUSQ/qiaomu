@@ -168,6 +168,10 @@
                 <enabled>true</enabled>
             </releases>
         </repository>
+        <repository>
+            <id>getui-nexus</id>
+            <url>http://mvn.gt.igexin.com/nexus/content/repositories/releases/</url>
+        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>

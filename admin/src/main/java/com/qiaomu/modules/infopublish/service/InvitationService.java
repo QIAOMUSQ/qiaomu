@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.service.IService;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.modules.infopublish.entity.InvitationEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,4 +18,5 @@ public interface InvitationService extends IService<InvitationEntity> {
 
     void save(InvitationEntity invitation);
 
+    List<InvitationEntity> selectByCommunityId(Long communityId);
 }

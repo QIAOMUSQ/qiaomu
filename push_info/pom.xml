@@ -87,6 +87,13 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.3</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.gexin.platform/gexin-rp-sdk-http -->
+        <!--<dependency>
+            <groupId>com.gexin.platform</groupId>
+            <artifactId>gexin-rp-sdk-http</artifactId>
+            <version>4.0.1.7</version>
+        </dependency>-->
     </dependencies>
     <build>
         <plugins>
@@ -96,5 +103,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>

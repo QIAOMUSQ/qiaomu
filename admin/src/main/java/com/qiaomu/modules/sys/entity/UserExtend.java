@@ -23,7 +23,6 @@ public class UserExtend implements Serializable {
     //private Long imgId;
    // private String nickName;
     private String realName;
-    @TableField(exist = false)
     private Long communityId;
     private Long companyId;
     private Date createTime;
