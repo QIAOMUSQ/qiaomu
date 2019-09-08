@@ -3,9 +3,11 @@ package com.qiaomu.modules.infopublish.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.qiaomu.common.utils.Constant;
+import com.qiaomu.modules.article.exception.CommentException;
 import com.qiaomu.modules.infopublish.dao.CarportDao;
 import com.qiaomu.modules.infopublish.entity.CarportEntity;
 import com.qiaomu.modules.infopublish.service.CarportService;
+import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.service.SysFileService;
 import com.qiaomu.modules.sys.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +40,8 @@ public class CarportServiceImpl extends ServiceImpl<CarportDao,CarportEntity> im
     public List<CarportEntity> selectAll(CarportEntity carport) {
         List<CarportEntity> carportList = this.baseMapper.selectAll(carport);
         for (CarportEntity entity : carportList){
-            Long handImgId = userService.queryById(entity.getUserId()).getHandImgId();
+            SysUserEntity sysUserEntity = userService.queryById(Long.valueOf(entity.getUserId()));
+            Long handImgId = sysUserEntity.getHandImgId();
             if(handImgId!=null){
                 entity.setHandImg(fileService.selectById(handImgId).getPath());
             }

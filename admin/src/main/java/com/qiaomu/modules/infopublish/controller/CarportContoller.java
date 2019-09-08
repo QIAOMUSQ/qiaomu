@@ -2,8 +2,11 @@ package com.qiaomu.modules.infopublish.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.qiaomu.common.utils.BuildResponse;
+import com.qiaomu.modules.article.exception.CommentException;
 import com.qiaomu.modules.infopublish.entity.CarportEntity;
 import com.qiaomu.modules.infopublish.service.CarportService;
+import com.qiaomu.modules.sys.controller.AbstractController;
+import com.qiaomu.modules.sys.entity.SysUserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,7 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("mobile/carport")
-public class CarportContoller {
+public class CarportContoller extends AbstractController{
     @Autowired
     private CarportService carportService;
 
@@ -31,6 +34,10 @@ public class CarportContoller {
      */
     @RequestMapping(value = "getAll",method = RequestMethod.POST)
     public Object getPage(CarportEntity carport){
+        SysUserEntity sysUserEntity = getUser();
+        if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
+            throw new CommentException("请先实名认证！");
+        }
          List<CarportEntity> data =  carportService.selectAll(carport);
         return BuildResponse.success(JSON.toJSON(data));
     }

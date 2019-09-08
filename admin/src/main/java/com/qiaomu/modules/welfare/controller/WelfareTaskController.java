@@ -6,6 +6,9 @@ import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.CommonUtils;
 import com.qiaomu.common.utils.DateUtils;
 import com.qiaomu.common.validator.Assert;
+import com.qiaomu.modules.article.exception.CommentException;
+import com.qiaomu.modules.sys.controller.AbstractController;
+import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.welfare.bussiness.WelfareBussiness;
 import com.qiaomu.modules.welfare.entity.PointEntity;
 import com.qiaomu.modules.welfare.entity.TaskEntity;
@@ -34,7 +37,7 @@ import static com.qiaomu.common.utils.Constant.SERVER_URL;
  */
 @RestController
 @RequestMapping(value = "mobile/welfare")
-public class WelfareTaskController {
+public class WelfareTaskController extends AbstractController{
     @Autowired
     private WelfareBussiness welfareBussiness;
 
@@ -221,6 +224,11 @@ public class WelfareTaskController {
      */
     @RequestMapping(value = "rankByGold",method = RequestMethod.POST)
     public String rankByGold(String communityId){
+        SysUserEntity sysUserEntity = getUser();
+        logger.info(""+sysUserEntity.getRealName()+sysUserEntity.getUserId());
+        if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
+            throw new CommentException("请先实名认证！");
+        }
         List<PointRankForm> result = welfareBussiness.rankByGold(communityId);
         return JSON.toJSONString(BuildResponse.success(result));
     }

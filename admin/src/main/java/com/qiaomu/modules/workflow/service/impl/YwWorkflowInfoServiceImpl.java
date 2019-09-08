@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.qiaomu.common.exception.RRException;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
+import com.qiaomu.modules.article.exception.CommentException;
+import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.service.SysFileService;
 import com.qiaomu.modules.workflow.dao.YwWorkflowInfoDao;
 import com.qiaomu.modules.workflow.entity.UserWorkflow;
@@ -234,6 +236,10 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
 
     @Override
     public List<YwWorkflowInfo> getAll(Long userId, Long communityId, String workflowType, String type,String status) {
+        SysUserEntity sysUserEntity = userService.queryById(userId);
+        if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
+            throw new CommentException("请先实名认证！");
+        }
         YwWorkflowInfo condition = new YwWorkflowInfo();
         condition.setUserId(userId);
         condition.setCommunityId(communityId);
