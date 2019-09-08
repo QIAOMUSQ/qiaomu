@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 /**
  * @author 李品先
- * @description:
+ * @description: 社区广告关联表
  * @Date 2019-08-10 15:53
  */
 @TableName("yw_community_advertise")

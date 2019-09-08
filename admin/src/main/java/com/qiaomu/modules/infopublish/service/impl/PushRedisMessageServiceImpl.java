@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.qiaomu.modules.infopublish.service.PushRedisMessageService;
 import com.qiaomu.modules.infopublish.entity.PushMessage;
 import com.qiaomu.modules.sys.service.SysUserService;
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -41,7 +42,7 @@ public class PushRedisMessageServiceImpl implements PushRedisMessageService {
     public void pushMessageToRedis(PushMessage message) {
        // byte[] msg =jackson2JsonRedisSerializer.serialize(message);
         stringRedisTemplate.convertAndSend("message",JSON.toJSONString(message));
-        redisTemplate.boundHashOps("message_history").put("history_"+message.getPhone()+"_"+message.getTime().replace(" ","").replace("-","").replace(":",""),JSON.toJSONString(message));
+        redisTemplate.boundHashOps("message_history").put("history_"+message.getReceivePhone()+"_"+message.getTime().replace(" ","").replace("-","").replace(":",""),JSON.toJSONString(message));
     }
 
     /**
@@ -55,13 +56,21 @@ public class PushRedisMessageServiceImpl implements PushRedisMessageService {
      */
     @Override
     public void pushMessage(Long userId, String idString, String infoType,String type, String message,Long communityId) {
-        String[] ids = idString.split(",");
-        for (String id : ids){
-            String phone  = userService.queryById(Long.valueOf(id)).getUsername();
-            String userPhone = userService.queryById(userId).getUsername();
-            PushMessage data = new PushMessage(phone,type,infoType, DateTime.now().toString("yyyy-MM-dd HH:mm:ss"),message,userPhone,communityId);
+        String userPhone = userService.queryById(userId).getUsername();
+        if(!type.equals("2")&& StringUtils.isNotBlank(idString)){
+
+            String[] ids = idString.split(",");
+            for (String id : ids){
+                String phone  = userService.queryById(Long.valueOf(id)).getUsername();
+                PushMessage data = new PushMessage(phone,type,infoType, DateTime.now().toString("yyyy-MM-dd HH:mm:ss"),message,userPhone,communityId);
+                stringRedisTemplate.convertAndSend("message",JSON.toJSONString(data));
+                redisTemplate.boundHashOps("message_history").put("history_"+data.getReceivePhone()+"_"+data.getTime().replace(" ","").replace("-","").replace(":",""),JSON.toJSONString(data));
+            }
+        }else if (type.equals("2")){
+            PushMessage data = new PushMessage(type,infoType, DateTime.now().toString("yyyy-MM-dd HH:mm:ss"),communityId,message,userPhone);
             stringRedisTemplate.convertAndSend("message",JSON.toJSONString(data));
-            redisTemplate.boundHashOps("message_history").put("history_"+data.getPhone()+"_"+data.getTime().replace(" ","").replace("-","").replace(":",""),JSON.toJSONString(data));
+            redisTemplate.boundHashOps("message_history").put("history_"+data.getReceivePhone()+"_"+data.getTime().replace(" ","").replace("-","").replace(":",""),JSON.toJSONString(data));
         }
+
     }
 }

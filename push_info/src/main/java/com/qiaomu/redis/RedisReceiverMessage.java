@@ -54,9 +54,9 @@ public class RedisReceiverMessage{
         PushMessage messages = JSONArray.parseObject(message,PushMessage.class);
         BoundHashOperations<String, String, Object> boundHashOps = redisTemplate.boundHashOps("message_history");
         //预防消息丢失，从redis中获取信息
-        Object object = boundHashOps.get("history_"+messages.getPhone()+"_"+messages.getTime().replace(" ","").replace("-","").replace(":",""));
+        Object object = boundHashOps.get("history_"+messages.getReceivePhone()+"_"+messages.getTime().replace(" ","").replace("-","").replace(":",""));
         if(object != null){
-            redisTemplate.boundHashOps("message_history").delete("history_"+messages.getPhone()+"_"+messages.getTime().replace(" ","").replace("-","").replace(":",""));
+            redisTemplate.boundHashOps("message_history").delete("history_"+messages.getReceivePhone()+"_"+messages.getTime().replace(" ","").replace("-","").replace(":",""));
         }
         detailMessage(messages);
 
@@ -84,9 +84,9 @@ public class RedisReceiverMessage{
               //  messages.setPhone(user.get);
                 SysUserEntity userEntity = userEntityRepository.findByUserId(user.getUserId());
                 PushMessage mes = new PushMessage();
-                mes.setPhone(userEntity.getUsername());
+                mes.setReceivePhone(userEntity.getUsername());
                 mes.setCreateTime(new Date());
-                mes.setUserPhone(messages.getUserPhone());
+                mes.setPushPhone(messages.getPushPhone());
                 mes.setTime(mes.getTime());
                 mes.setInfoType(messages.getInfoType());
                 mes.setCommunityId(messages.getCommunityId());
@@ -103,14 +103,14 @@ public class RedisReceiverMessage{
         /*** 6、推送信息存库，方便返回数据校验 */
         messageRepository.save(messages);
         /*** 2、若用户登陆*/
-        if(wsCacheMap.hasToken(messages.getPhone())){
+        if(wsCacheMap.hasToken(messages.getReceivePhone())){
             /*** 3、获取用户通道*/
-            Channel channel = wsCacheMap.getByToken(messages.getPhone());
+            Channel channel = wsCacheMap.getByToken(messages.getReceivePhone());
             /** 4、组装数据 */
             Map<String, Object> maps = new HashMap<>();
-            maps.put(Constans.ONE,messages.getPhone());
+            maps.put(Constans.ONE,messages.getReceivePhone());
             maps.put(Constans.VALUE,messages);
-            maps.put(Constans.TOKEN,messages.getUserPhone());
+            maps.put(Constans.TOKEN,messages.getPushPhone());
             /*** 5、推送出去 */
             handlerService.sendToText(channel,maps);
         }

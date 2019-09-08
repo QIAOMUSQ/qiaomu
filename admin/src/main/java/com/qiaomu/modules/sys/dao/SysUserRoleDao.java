@@ -41,4 +41,6 @@ public interface SysUserRoleDao extends BaseMapper<SysUserRoleEntity> {
     int deleteBatch(Long[] roleIds);
 
     void deleteByUserIds(List<Long> userIds);
+
+    void deleteByUserId(Long userId);
 }

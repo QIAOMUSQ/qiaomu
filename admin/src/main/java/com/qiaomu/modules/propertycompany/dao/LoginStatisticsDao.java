@@ -1,6 +1,7 @@
 package com.qiaomu.modules.propertycompany.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.qiaomu.modules.propertycompany.entity.LoginStatistics;
 
 import java.util.List;
@@ -19,4 +20,8 @@ public interface LoginStatisticsDao extends BaseMapper<LoginStatistics> {
     List<LoginStatistics> getStatisticsDate(LoginStatistics condition);
 
     List<LoginStatistics> getStatisticsLoginByDate(LoginStatistics condition);
+
+    List<LoginStatistics> selectPageByCondition(Page<LoginStatistics> page, LoginStatistics condition);
+
+    void deleteByCommunityId(Long communityId);
 }

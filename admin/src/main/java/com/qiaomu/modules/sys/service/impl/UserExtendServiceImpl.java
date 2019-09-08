@@ -59,7 +59,8 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
 
         if(StringUtils.isNotBlank(communityId)){
             condition.setCommunityId(Long.valueOf(communityId));
-        }else {
+        }
+        if (companyId !=null){
             condition.setCompanyId((Long) params.get("companyId"));
         }
         if(StringUtils.isNotBlank(userPhone)){
@@ -93,8 +94,8 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
     @Override
     public UserExtend getUserExtendInfo(Long id) {
         UserExtend  user = this.selectById(id);
-        YwCommunity community = communityService.queryById(user.getCommunityId());
-        user.setCommunityName(community == null ? "" : community.getName());
+        /*YwCommunity community = communityService.queryById(user.getCommunityId());
+        user.setCommunityName(community == null ? "" : community.getName());*/
         user.setRealName(AESUtil.decrypt(user.getRealName()));
         user.setAddress(AESUtil.decrypt(user.getAddress()));
         user.setUserPhone(sysUserService.queryById(user.getUserId()).getUsername());
@@ -177,7 +178,7 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
         userExtend.setCheck(type);
         userExtend.setCheckTime(new Date());
         userExtend.setCheckUserId(userId);
-        if(type.equals(1)){
+        if(type.equals("1")){
            SysUserEntity user =  sysUserService.queryById(userExtend.getUserId());
             user.setRealName(userExtend.getRealName());
             sysUserService.updateById(user);
@@ -198,5 +199,11 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
     @Override
     public UserExtend queryUserExtend(UserExtend userExtend) {
         return baseMapper.queryUserExtend(userExtend);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteStaff(List<Long> ids) {
+         baseMapper.deleteStaff(ids);
     }
 }

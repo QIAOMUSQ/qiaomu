@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.qiaomu.modules.sys.entity.UserExtend;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -26,4 +27,9 @@ public interface UserExtendDao extends BaseMapper<UserExtend> {
 
 
     List<UserExtend> selectPageCondition(Page<UserExtend> page, UserExtend condition);
+
+    void deleteStaff(List<Long> ids);
+
+    @Override
+    UserExtend selectById(Serializable serializable);
 }

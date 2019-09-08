@@ -2,6 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.qiaomu.modules.app.dao.CommunityCheckDao">
-
-
+    <select id="selectPageByCondition" resultType="com.qiaomu.modules.app.entity.CommunityCheckEntity">
+        SELECT
+            *
+        FROM
+            yw_community_check c
+        LEFT JOIN prov_city_data p ON c.city_code = p.CITY_CODE
+        <where>
+            1=1
+            <if test="startTime!=null">
+                AND c.create_time >= STR_TO_DATE(#{startTime},'%y-%i-%d %H:%m:%s')
+            </if>
+            <if test="endTime!=null">
+                AND c.create_time %lt;= STR_TO_DATE(#{endTime},'%y-%i-%d %H:%m:%s')
+            </if>
+            <if test="isCheck !=null">
+                add c.is_check =#{isCheck}
+            </if>
+        </where>
+    </select>
 </mapper>

@@ -1,5 +1,6 @@
 package com.qiaomu.modules.sys.controller;
 
+import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -73,5 +76,17 @@ public class UserExtendController extends AbstractController {
     @RequestMapping(value = "getUserCompanyId", method = RequestMethod.GET)
     public R getUserCompanyId() {
         return R.ok().put("id", getCompanyOrCommunityByType("1"));
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "deleteStaff", method = RequestMethod.POST)
+    public Object deleteStaff(@RequestBody Long[] ids, HttpServletRequest request){
+        try {
+            userExtendService.deleteStaff(Arrays.asList(ids));
+            return BuildResponse.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return BuildResponse.fail();
+        }
     }
 }

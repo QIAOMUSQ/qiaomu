@@ -3,7 +3,11 @@
 <head>
     <title>社区登录统计</title>
     <#include "/header.html">
+        <style>
+            ::-webkit-scrollbar{width:0px;height:0px;}
+        </style>
         </head>
+
 <body>
 <div>
     <div style="padding: 13px 36px;">
@@ -22,7 +26,7 @@
 
     </div>
     <div id="table" style="height: 50%;width: 100%">
-        <table class="table table-striped">
+       <!-- <table class="table table-striped">
             <caption>社区登录次数统计</caption>
             <thead>
                 <tr>
@@ -34,7 +38,9 @@
             <tbody id="tableThead">
 
             </tbody>
-        </table>
+        </table>-->
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
     </div>
 
 </div>
@@ -67,6 +73,7 @@
         });
 
         myChart.setOption({
+            color:['#43c563'],
             title: {
                 text: '社区登录统计'
             },
@@ -84,6 +91,39 @@
                 type: 'bar',
                 data: []
             }]
+        });
+        $("#jqGrid").jqGrid({
+            url: baseURL + 'Statistics/loginByDate',
+            datatype: "json",
+            postData:{startTime: $("#startTime").val(), endTime: $("#endTime").val()},
+            mtype:"POST",
+            colModel: [
+                { label: '社区', name: 'name'},
+                { label: '值(次)', name: 'number'}
+            ],
+            viewrecords: true,
+            heigth:300,
+            rowNum: 15,
+            rowList : [15,30,45],
+            rownumbers: false,
+            autowidth:true,
+            multiselect: true,
+            pager: "#jqGridPager",
+            jsonReader : {
+                root: "page.list",
+                page: "page.currPage",
+                total: "page.totalPage",
+                records: "page.totalCount"
+            },
+            prmNames : {
+                page:"page",
+                rows:"limit",
+                order: "order"
+            },
+            gridComplete:function(){
+                //隐藏grid底部滚动条
+                $("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+            }
         });
 
     });
@@ -130,9 +170,9 @@
     function queryData() {
 
         var city = $("#city").data("kendoDropDownList").value();
-        if(city ==''){
+       /* if(city ==''){
             return alert("请选择城市");
-        }
+        }*/
         var startTime = $("#startTime").val();
         var endTime = $("#endTime").val();
         $.ajax({
@@ -144,9 +184,12 @@
                 console.info(result);
                 var xDate = new Array();
                 var yDate = new Array();
+                var i=0
                 $.each(result, function (index, item) {
+                    if (i>30) return false;
                     xDate.push(item.name);
                     yDate.push(item.number);
+                    i++;
                 });
                 myChart.setOption({
                     xAxis: {
@@ -159,7 +202,14 @@
             }
         });
 
-         $.ajax({
+        var page = $("#jqGrid").jqGrid('getGridParam','page');
+        $("#jqGrid").jqGrid('setGridParam',{
+            postData:{"cityCode": city,
+                "startTime":startTime,
+            "endTime":endTime},
+            page:page
+        }).trigger("reloadGrid");
+         /*$.ajax({
          type:"POST",
          url:baseURL + "Statistics/loginByDate",
          datType:"JSON",
@@ -173,7 +223,8 @@
              });
              $("#tableThead").append(data);
              }
-         });
+         });*/
+
 
 
     }

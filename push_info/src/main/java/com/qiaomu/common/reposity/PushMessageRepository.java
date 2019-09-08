@@ -12,5 +12,5 @@ import java.util.List;
  */
 public interface PushMessageRepository extends JpaRepository<PushMessage,Long> {
 
-    List<PushMessage> findByPhoneAndStatus(String phone, boolean status);
+    List<PushMessage> findByReceivePhoneAndStatus(String receivePhone, boolean status);
 }

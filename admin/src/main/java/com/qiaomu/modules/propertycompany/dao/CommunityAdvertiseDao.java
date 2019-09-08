@@ -14,4 +14,6 @@ public interface CommunityAdvertiseDao extends BaseMapper<CommunityAdvertise>{
     List<CommunityAdvertise> selectListByCondition(CommunityAdvertise advertise1);
 
     void deleteByAdvertiseId(String deleteIds);
+
+    void deleteByCommunityId(Long communityId);
 }

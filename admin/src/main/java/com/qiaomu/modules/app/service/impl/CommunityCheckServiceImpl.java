@@ -38,38 +38,29 @@ public class CommunityCheckServiceImpl extends ServiceImpl<CommunityCheckDao,Com
     @Autowired
     private YwCommunityService communityService;
 
-    @Autowired
-    private YwPropertyCompanyService companyService;
-
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
-
+        CommunityCheckEntity condition = new CommunityCheckEntity();
         String startTime = (String) params.get("startTime");
         String endTime = (String) params.get("endTime");
         String isCheck = (String) params.get("isCheck");
-        if(startTime ==null){
-            startTime = DateTime.now().toString("YYYY-MM-dd 00:00:00");
+        if(StringUtils.isNotBlank(startTime)){
+            condition.setStartTime(startTime);
         }
-        if(endTime == null ){
-            endTime = DateTime.now().toString("YYYY-MM-dd 23:59:59");
+        if(StringUtils.isNotBlank(endTime)){
+            condition.setEndTime(endTime);
         }
+        if (StringUtils.isNotBlank(isCheck)){
+            condition.setIsCheck(isCheck);
+        }
+        Page<CommunityCheckEntity> page = new Query(params).getPage();// 当前页，总条
+        page.setRecords(baseMapper.selectPageByCondition(condition));
 
-        Page<CommunityCheckEntity> page = selectPage(new Query(params)
-                .getPage(), new EntityWrapper()
-                .between((StringUtils.isNotBlank(startTime)&&StringUtils.isNotBlank(endTime)),"CREATE_TIME",startTime,endTime)
-                .eq(StringUtils.isNotBlank(isCheck),"is_check",isCheck)
-                .addFilterIfNeed(params.get("sql_filter") != null,
-                        (String) params.get("sql_filter"), new Object[0]));
         for (CommunityCheckEntity community : page.getRecords()){
-            community.setCityName(provinceCityDateService.getProCityByCityCode(community.getCityCode()).getCityName());
             if(community.getCommunityId() != null){
-                YwCommunity community1 = communityService.selectById(community.getCommunityId());
-                if(community1.getCompanyId()!=null){
-                    community.setCompanyName(companyService.selectById(community1.getCompanyId()).getName());
-                }
+                YwCommunity community1 = communityService.queryById(community.getCommunityId());
+                community.setCompanyName(community1.getCompanyName());
             }
-
         }
         return new PageUtils(page);
     }
@@ -96,7 +87,7 @@ public class CommunityCheckServiceImpl extends ServiceImpl<CommunityCheckDao,Com
             if(community.getIsCheck().equals("1")){
                 YwCommunity community1 = new YwCommunity();
                 community1.setName(community.getCommunityName());
-                community1.setCityId(provinceCityDateService.getProCityByCityCode(community.getCityCode()).getId());
+                community1.setCityCode(community.getCityCode());
                 community1.setAddress(community.getAddress());
                 community1.setCreateTime(new Date());
                 communityService.save(community1);

@@ -32,6 +32,8 @@ public class LoginStatistics implements Serializable {
     private Long cityId;
     @TableField(exist = false)
     private String name;
+    @TableField(exist = false)
+    private Long companyId;
     public String getDate() {
         return date;
     }
@@ -102,5 +104,13 @@ public class LoginStatistics implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 }

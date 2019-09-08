@@ -74,13 +74,15 @@ public class WorkflowInfoController extends AbstractController {
                 userExtend.setCommunityId(communityId);
                 userExtend.setUserId(userId);
                 UserExtend dbUser =  userExtendService.queryUserExtend(userExtend);
-                if (dbUser!=null) {
+                if (dbUser!=null && dbUser.getCompanyRoleType()!="4") {
                     String info = WorkflowCheckService.saveWorkflowInfo(userId,
                             location,detail,
                             pictureId,serviceDate,
                             workflowId,communityId,request);
                     return JSON.toJSONString(BuildResponse.success(info));
-                }else {
+                }else if(dbUser.getCompanyRoleType()=="4"){
+                    return JSON.toJSONString(BuildResponse.fail("请等待个人信息验证"));
+                }else  {
                     return JSON.toJSONString(BuildResponse.fail("请进行个人信息验证"));
                 }
             }else {

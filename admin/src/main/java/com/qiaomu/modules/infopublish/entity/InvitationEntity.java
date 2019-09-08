@@ -9,7 +9,7 @@ import java.util.Date;
 
 /**
  * @author 李品先
- * @description:发帖信息
+ * @description；公告表
  * @Date 2019-04-22 21:47
  */
 @TableName("yw_invitation")
@@ -28,6 +28,8 @@ public class InvitationEntity implements Serializable {
     private String communityName;
     @TableField(exist = false)
     private Long companyId;
+    @TableField(exist = false)
+    private Long userId;
 
     public Long getId() {
         return id;
@@ -92,5 +94,13 @@ public class InvitationEntity implements Serializable {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

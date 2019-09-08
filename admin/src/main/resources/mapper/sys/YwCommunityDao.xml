@@ -3,7 +3,7 @@
 
 <mapper namespace="com.qiaomu.modules.sys.dao.YwCommunityDao">
     <select id="queryById" resultType="com.qiaomu.modules.sys.entity.YwCommunity">
-        SELECT * FROM yw_community WHERE id = #{communityId}
+        SELECT c.*,p.name as companyName FROM yw_community c LEFT JOIN yw_property_company p on c.company_id = p.id  WHERE c.id = #{communityId}
     </select>
 
     <select id="findAllByCondition" resultType="com.qiaomu.modules.sys.entity.YwCommunity">
@@ -36,8 +36,8 @@
             <if test="name != null and name !=''">
                 AND A.name like  concat('%',#{name},'%')
             </if>
-            <if test="cityId != null and cityId !=''">
-                AND A.city_id = #{cityId}
+            <if test="cityCode != null and cityCode !=''">
+                AND A.city_code = #{cityCode}
             </if>
             <if test="companyId != null and companyId !=''">
                 AND A.company_id = #{companyId}

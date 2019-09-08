@@ -2,8 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.qiaomu.modules.infopublish.dao.CarportDao">
-
-
+    <delete id="deleteByCommunityId" parameterType="long">
+        DELETE  FROM  yw_carport WHERE community_id = #{communityId}
+    </delete>
     <select id="selectAll" resultType="com.qiaomu.modules.infopublish.entity.CarportEntity">
         SELECT * from yw_carport
         <where>
@@ -19,4 +20,9 @@
             </if>
         </where>
     </select>
+    <select id="selectByCommunityId" parameterType="long" resultType="com.qiaomu.modules.infopublish.entity.CarportEntity">
+        SELECT * from yw_carport where community_id = #{communityId}
+    </select>
+
+
 </mapper>

@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 public class PushMessage implements Serializable {
     private static final long serialVersionUID = 1L;
-    private String phone;   //被推送人号码
+    private String receivePhone;   //接受号码
     /**
      * 推送类型
      *  0:推送到个人
@@ -22,15 +22,9 @@ public class PushMessage implements Serializable {
     private String time;    //推送时间
     private Long communityId;   //被推送人社区id
     private String message; //推送信息
-    private String userPhone;//推送人号码
+    private String pushPhone;//推送人号码
 
-    public String getPhone() {
-        return phone;
-    }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
 
     public String getType() {
         return type;
@@ -64,12 +58,20 @@ public class PushMessage implements Serializable {
         this.message = message;
     }
 
-    public String getUserPhone() {
-        return userPhone;
+    public String getReceivePhone() {
+        return receivePhone;
     }
 
-    public void setUserPhone(String userPhone) {
-        this.userPhone = userPhone;
+    public void setReceivePhone(String receivePhone) {
+        this.receivePhone = receivePhone;
+    }
+
+    public String getPushPhone() {
+        return pushPhone;
+    }
+
+    public void setPushPhone(String pushPhone) {
+        this.pushPhone = pushPhone;
     }
 
     public String getInfoType() {
@@ -80,14 +82,23 @@ public class PushMessage implements Serializable {
         this.infoType = infoType;
     }
 
-    public PushMessage(String phone, String type, String infoType, String time, String message, String userPhone, Long communityId) {
-        this.phone = phone;
+    public PushMessage(String receivePhone, String type, String infoType, String time, String message, String pushPhone, Long communityId) {
+        this.receivePhone = receivePhone;
         this.type = type;
         this.infoType = infoType;
         this.time = time;
         this.message = message;
-        this.userPhone = userPhone;
+        this.pushPhone = pushPhone;
         this.communityId = communityId;
+    }
+
+    public PushMessage(String type, String infoType, String time, Long communityId, String message,String pushPhone) {
+        this.type = type;
+        this.infoType = infoType;
+        this.time = time;
+        this.communityId = communityId;
+        this.message = message;
+        this.pushPhone = pushPhone;
     }
 
     public PushMessage() {

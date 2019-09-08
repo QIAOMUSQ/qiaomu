@@ -46,59 +46,54 @@ public class AdvertiseServiceImpl extends ServiceImpl<AdvertiseDao,Advertise> im
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public boolean save(Advertise advertise, HttpServletRequest request) {
-        try {
-            if (advertise.getId()== null){
-                advertise.setCreateTime(new Date());
-                advertise.setImgs(advertise.getImgs().replace("\\",""));
-                this.baseMapper.insert(advertise);
-                String[] ids = advertise.getCommunityIds().split(",");
-                for (String id:ids){
-                    CommunityAdvertise communityAdvertise = new CommunityAdvertise();
-                    communityAdvertise.setCommunityId(Long.valueOf(id));
-                    communityAdvertise.setAdvertiseId(advertise.getId());
-                    communityAdvertiseDao.insert(communityAdvertise);
-                }
-            }else {
-                Advertise old =  this.baseMapper.selectById(advertise.getId());
-                String[] oldIds = old.getCommunityIds().split(",");
-                String[] newIds = advertise.getCommunityIds().split(",");
-                List<String> insetIds = new ArrayList<>();
-                String deleteIds = "";
-
-                for (String oldId : oldIds){
-                    if(!advertise.getCommunityIds().contains(oldId)){
-                        deleteIds += oldId+",";
-                    }
-                }
-                for (String newId : newIds){
-                    if(!old.getCommunityIds().contains(newId)){
-                        insetIds.add(newId);
-                    }
-                }
-                if(deleteIds.length()>0){
-                    deleteIds = deleteIds.substring(0,deleteIds.length()-1);
-                }
-                communityAdvertiseDao.deleteByAdvertiseId(deleteIds);
-                for (String id : insetIds){
-                    CommunityAdvertise communityAdvertise = new CommunityAdvertise();
-                    communityAdvertise.setCommunityId(Long.valueOf(id));
-                    communityAdvertise.setAdvertiseId(advertise.getId());
-                    communityAdvertiseDao.insert(communityAdvertise);
-                }
-                this.baseMapper.updateById(advertise);
+        if (advertise.getId()== null){
+            advertise.setCreateTime(new Date());
+            advertise.setImgs(advertise.getImgs().replace("\\",""));
+            this.baseMapper.insert(advertise);
+            String[] ids = advertise.getCommunityIds().split(",");
+            //插入社区广告关联表
+            for (String id:ids){
+                CommunityAdvertise communityAdvertise = new CommunityAdvertise();
+                communityAdvertise.setCommunityId(Long.valueOf(id));
+                communityAdvertise.setAdvertiseId(advertise.getId());
+                communityAdvertiseDao.insert(communityAdvertise);
             }
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
+        }else {
+            Advertise old =  this.baseMapper.selectById(advertise.getId());
+            String[] oldIds = old.getCommunityIds().split(",");
+            String[] newIds = advertise.getCommunityIds().split(",");
+            List<String> insetIds = new ArrayList<>();
+            String deleteIds = "";
+
+            for (String oldId : oldIds){
+                if(!advertise.getCommunityIds().contains(oldId)){
+                    deleteIds += oldId+",";
+                }
+            }
+            for (String newId : newIds){
+                if(!old.getCommunityIds().contains(newId)){
+                    insetIds.add(newId);
+                }
+            }
+            if(deleteIds.length()>0){
+                deleteIds = deleteIds.substring(0,deleteIds.length()-1);
+            }
+            communityAdvertiseDao.deleteByAdvertiseId(deleteIds);
+            for (String id : insetIds){
+                CommunityAdvertise communityAdvertise = new CommunityAdvertise();
+                communityAdvertise.setCommunityId(Long.valueOf(id));
+                communityAdvertise.setAdvertiseId(advertise.getId());
+                communityAdvertiseDao.insert(communityAdvertise);
+            }
+            this.baseMapper.updateById(advertise);
         }
+        return true;
     }
 
     @Override
     public List<Advertise> getAdvertiseByCommunity(Long communityId) {
-
         return this.baseMapper.getAdvertiseByCommunity(communityId);
     }
 }

@@ -17,7 +17,7 @@ import java.util.Map;
 
 /**
  * @author 李品先
- * @description:
+ * @description: 公告
  * @Date 2019-08-10 16:12
  */
 @Controller
@@ -48,8 +48,14 @@ public class AdvertiseController {
     @ResponseBody
     @RequestMapping(value = "save",method = RequestMethod.POST)
     public R save(Advertise advertise, HttpServletRequest request){
-        boolean ok = advertiseService.save(advertise,request);
-        return R.ok().put("data",ok);
+       try {
+           boolean ok = advertiseService.save(advertise,request);
+           return R.ok().put("data",ok);
+       }catch (Exception e){
+           e.printStackTrace();
+           return R.ok().put("data",false);
+       }
+
     }
 
     @ResponseBody

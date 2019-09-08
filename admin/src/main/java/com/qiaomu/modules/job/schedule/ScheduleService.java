@@ -1,4 +1,4 @@
-package com.qiaomu.modules.infopublish.service;
+package com.qiaomu.modules.job.schedule;
 
 import com.qiaomu.modules.infopublish.dao.CarportDao;
 import com.qiaomu.modules.infopublish.entity.CarportEntity;
@@ -17,7 +17,6 @@ import javax.annotation.Resource;
  * @Date 2019-07-29 23:26
  */
 @Component
-@EnableScheduling
 public class ScheduleService {
 
     @Resource
@@ -26,7 +25,7 @@ public class ScheduleService {
     @Autowired
     private RedisTemplate redisTemplate;
 
-   @Scheduled(cron="0 0/30 * * * ? ")
+    @Scheduled(cron="0 0/10 * * * ? ")
     public void getBrowsePerson(){
         BoundHashOperations<String, String, Object> browsePersons =redisTemplate.boundHashOps("browse_person");
         browsePersons.entries().forEach((m,n) ->

@@ -74,17 +74,13 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
         return community;
     }
 
-    public List<YwCommunity> findAll(YwCommunity community) {
-        return this.baseMapper.findAllByCondition(community);
-    }
-
     @Transactional
     public void save(YwCommunity community) {
-        Map params = new HashMap();
-        params.put("cityCode", community.getCityCode());
+       // Map params = new HashMap();
+        //params.put("cityCode", community.getCityCode());
 
-        List cityDate = this.provinceCityDateService.getProvinceCityDate(params);
-        if (cityDate.size() == 1) community.setCityId(((ProvinceCityDateEntity) cityDate.get(0)).getId());
+        //List cityDate = this.provinceCityDateService.getProvinceCityDate(params);
+       // if (cityDate.size() == 1) community.setCityId(((ProvinceCityDateEntity) cityDate.get(0)).getId());
 
         community.setCreateTime(new Date());
         if (community.getId() != null)
@@ -107,7 +103,6 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
             community.setName(communityName);
         }
         communityList = this.baseMapper.findAllByCondition(community);
-
         for (YwCommunity communitys : communityList) {
             communityId.add(communitys.getId());
         }
@@ -160,7 +155,6 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
         if(user2 != null){
             //用户信息
             SysUserEntity userEntity = userDao.queryById(userId);
-
             if(userEntity !=null && userEntity.getUsername() != null){
                 user2.setUserPhone(userEntity.getUsername());
             }
@@ -181,5 +175,10 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
         map.put("deleteTime", DateTime.now().toString("yyyy-MM-dd HH:mm:ss"));
         map.put("ids",Arrays.asList(ids));
         baseMapper.setCommunityDisEnable(map);
+    }
+
+    @Override
+    public List<YwCommunity> getDeleteCommunity(YwCommunity community) {
+        return baseMapper.getDeleteCommunity(community);
     }
 }

@@ -17,7 +17,7 @@ public class PushMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String phone;   //收件人号码
+    private String receivePhone;   //收件人号码
     private Date createTime;    //创建时间
     private String time;    //推送时间
     /**
@@ -36,14 +36,7 @@ public class PushMessage {
     private String message; //推送信息
     private Long communityId;   //被推送人的社区id
     private boolean status; //状态，是否已经推送 true:已推送 false:未推送
-    private String userPhone;//推送人号码
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+    private String pushPhone;//推送人号码
 
     public Date getCreateTime() {
         return createTime;
@@ -101,13 +94,7 @@ public class PushMessage {
         this.status = status;
     }
 
-    public String getUserPhone() {
-        return userPhone;
-    }
 
-    public void setUserPhone(String userPhone) {
-        this.userPhone = userPhone;
-    }
 
     public String getInfoType() {
         return infoType;
@@ -115,5 +102,21 @@ public class PushMessage {
 
     public void setInfoType(String infoType) {
         this.infoType = infoType;
+    }
+
+    public String getReceivePhone() {
+        return receivePhone;
+    }
+
+    public void setReceivePhone(String receivePhone) {
+        this.receivePhone = receivePhone;
+    }
+
+    public String getPushPhone() {
+        return pushPhone;
+    }
+
+    public void setPushPhone(String pushPhone) {
+        this.pushPhone = pushPhone;
     }
 }

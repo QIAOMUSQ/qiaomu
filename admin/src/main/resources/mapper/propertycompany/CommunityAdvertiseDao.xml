@@ -19,4 +19,7 @@
     <delete id="deleteByAdvertiseId">
         DELETE from yw_community_advertise WHERE advertise_id in (#{deleteIds})
     </delete>
+    <delete id="deleteByCommunityId" parameterType="long">
+        DELETE from yw_community_advertise WHERE community_id =#{communityId}
+    </delete>
 </mapper>

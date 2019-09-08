@@ -40,9 +40,9 @@
                </select>
             </div>
             <a class="btn btn-default" @click="query">查询</a>
-            <#if shiro.hasPermission("community:check")>
+           <!-- <#if shiro.hasPermission("community:check")>
                 <a class="btn btn-primary" @click="check"><i class="fa fa-pencil-square-o"></i>&nbsp;审核</a>
-            </#if>
+            </#if>-->
             <a class="btn btn-default" @click="setCompany">设置物业公司</a>
         </div>
         <table id="jqGrid"></table>
@@ -51,54 +51,7 @@
 
     <div v-show="!showList" id="panelId"  class="panel panel-default">
         <div class="panel-heading">{{title}}</div>
-        <!--<form class="form-horizontal">
-            <div class="form-group">
-                <div class="col-sm-2 control-label">社区名称</div>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="community.name" placeholder="社区名称"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-2 control-label">城市</div>
-                <div class="col-sm-4">
-                    <select class="select"   v-model="province"  v-on:change="indexSelect($event)" >
-                        <template v-for="item in provinceList">
-                            <option v-bind:value = "item.value">{{item.text}}</option>
-                        </template>
-                    </select>
-                </div>
-                <div class="col-sm-4">
-                    <select class="select"  v-model="city" v-on:change="selectCity($event)">
-                        <template v-for="item in cityList">
-                            <option v-bind:value = "item.value">{{item.text}}</option>
-                        </template>
-                    </select>
-                </div>
-                <input style="display: none;"v-model="community.cityCode"/>
 
-            </div>
-            <div class="form-group">
-                <div class="col-sm-2 control-label">地址</div>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="community.address" placeholder="地址"/>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-sm-2 control-label">描述</div>
-                <div class="col-sm-10">
-                    <div class="form-group">
-                        <input type="text" class="form-control" v-model="community.describe" placeholder="描述"/>
-                    </div>
-                    <input type="text" id="communityId" style="display: none"  v-model="community.id"/>
-                    <input type="text" id="adminId" style="display: none" v-model="community.adminId" />
-                </div>
-            </div>
-        </form>
-        <div class="form-group" style="width: 20%;position: absolute;right: 0px;top: 60%;">
-            <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>&nbsp;&nbsp;
-            <input type="button" class="btn btn-warning" @click="reload" value="返回"/>
-        </div>-->
     </div>
 
 </div>

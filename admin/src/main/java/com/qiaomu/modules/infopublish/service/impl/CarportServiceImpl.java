@@ -34,7 +34,7 @@ public class CarportServiceImpl extends ServiceImpl<CarportDao,CarportEntity> im
     private SysUserService userService;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String,Object> redisTemplate;
 
     @Override
     public List<CarportEntity> selectAll(CarportEntity carport) {
@@ -68,21 +68,34 @@ public class CarportServiceImpl extends ServiceImpl<CarportDao,CarportEntity> im
     @Transactional
     public CarportEntity getCarportById(Long id) {
         CarportEntity carport = this.selectById(id);
-        if(carport.getBrowsePerson()==null || carport.getBrowsePerson()==-1l){
-            carport.setBrowsePerson(1l);
-            redisTemplate.boundHashOps("browse_person").put(Constant.REDIS_KEY_CARPORT+carport.getId(),1);
-        }else {
-           // carport.setBrowsePerson(carport.getBrowsePerson()+1);
-            Long browsePerson =0L;
-            if(redisTemplate.boundHashOps("browse_person").hasKey(Constant.REDIS_KEY_CARPORT+carport.getId())){
-                browsePerson = Long.valueOf((String) redisTemplate.boundHashOps("browse_person").get(Constant.REDIS_KEY_CARPORT+carport.getId()));
+        try{
+            if(carport.getBrowsePerson()==null || carport.getBrowsePerson()==-1l){
+                carport.setBrowsePerson(1l);
+                redisTemplate.boundHashOps("browse_person").put(Constant.REDIS_KEY_CARPORT+carport.getId(),"1");
+                baseMapper.updateById(carport);
             }else {
-                browsePerson = carport.getBrowsePerson();
+                Long browsePerson =0L;
+                if(redisTemplate.boundHashOps("browse_person").hasKey(Constant.REDIS_KEY_CARPORT+carport.getId())){
+                    browsePerson = Long.valueOf((String) redisTemplate.boundHashOps("browse_person").get(Constant.REDIS_KEY_CARPORT+carport.getId()));
+                }else {
+                    browsePerson = carport.getBrowsePerson();
+                }
+                carport.setBrowsePerson(browsePerson+1);
+                redisTemplate.boundHashOps("browse_person").put(Constant.REDIS_KEY_CARPORT+carport.getId(),String.valueOf(browsePerson+1));
             }
-            carport.setBrowsePerson(browsePerson+1);
-            redisTemplate.boundHashOps("browse_person").put(Constant.REDIS_KEY_CARPORT+carport.getId(),String.valueOf(browsePerson+1));
+        }catch (Exception e){
+            e.printStackTrace();
         }
-      //  baseMapper.updateById(carport);
         return carport;
+    }
+
+    @Override
+    public List<CarportEntity> selectByCommunityId(Long communityId) {
+        return baseMapper.selectByCommunityId(communityId);
+    }
+
+    @Override
+    public void deleteByCommunityId(Long communityId) {
+         baseMapper.deleteByCommunityId(communityId);
     }
 }

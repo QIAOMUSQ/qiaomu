@@ -13,5 +13,13 @@ import java.util.Map;
  */
 public interface SysFileService extends IService<SysFileEntity> {
     void insertInfo(SysFileEntity fileEntity);
+
     Map<String,String> imageUrls(HttpServletRequest request);
+
+    /**
+     * 根据url删除文件
+     * @param url
+     * @return
+     */
+    boolean deleteFileByHttpUrl(String url);
 }

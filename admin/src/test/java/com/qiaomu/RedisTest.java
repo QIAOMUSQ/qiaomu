@@ -42,7 +42,7 @@ public class RedisTest {
       for (int i=0;i<10;i++){
           PushMessage message = new PushMessage();
           message.setMessage("测试"+i+"");
-          message.setPhone("15157150200");
+          message.setReceivePhone("15157150200");
           message.setType(i+"");
           message.setTime(DateTime.now().toString("YYYY-MM-dd HH:mm:ss"));
           message.setCommunityId(1l);
@@ -58,13 +58,13 @@ public class RedisTest {
     public void testPushMessage(){
         PushMessage message = new PushMessage();
         message.setMessage("测试222");
-        message.setPhone("15157150200");
+        message.setReceivePhone("15157150200");
         message.setType("0");
         message.setTime(DateTime.now().toString("YYYY-MM-dd HH:mm:ss"));
         message.setCommunityId(1l);
-        message.setUserPhone("15157150201");
+        message.setPushPhone("15157150201");
         redisMessageService.pushMessageToRedis(message);
-        Object object = redisTemplate.boundHashOps("message_history").get("history_"+message.getPhone()+"_"+message.getTime().replace(" ","").replace("-","").replace(":",""));
+        Object object = redisTemplate.boundHashOps("message_history").get("history_"+message.getReceivePhone()+"_"+message.getTime().replace(" ","").replace("-","").replace(":",""));
         System.out.println(message);
     }
 

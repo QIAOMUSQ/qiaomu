@@ -34,6 +34,9 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileDao, SysFileEntity> i
     @Value("${file.save}")
     private String savePath;
 
+    @Value("${file.img-path}")
+    private String imgPath;
+
     @Override
     public void insertInfo(SysFileEntity fileEntity) {
          this.baseMapper.insertInfo(fileEntity);
@@ -55,7 +58,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileDao, SysFileEntity> i
                 File saveFile = new File(savePath+fileName);
                 try {
                     multipartFile.transferTo(saveFile);
-                    imageUrls.put(filekey,SERVER_URL+"/outapp/image/"+fileName);
+                    imageUrls.put(filekey,imgPath+fileName);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -64,6 +67,24 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileDao, SysFileEntity> i
             return imageUrls;
         }catch (Exception e){
             return new HashMap<String, String>();
+        }
+
+    }
+
+    @Override
+    public boolean deleteFileByHttpUrl(String url) {
+        try {
+            String fileName = url.substring(url.lastIndexOf("/"),url.length());
+            File file = new File(savePath+fileName);
+            if (file.exists()) {
+                file.delete();
+                return true;
+            }else {
+                return false;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
         }
 
     }
