@@ -225,7 +225,7 @@ public class WelfareTaskController extends AbstractController{
     @RequestMapping(value = "rankByGold",method = RequestMethod.POST)
     public String rankByGold(String communityId){
         SysUserEntity sysUserEntity = getUser();
-        logger.info(""+sysUserEntity.getRealName()+sysUserEntity.getUserId());
+
         if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
             throw new CommentException("请先实名认证！");
         }
