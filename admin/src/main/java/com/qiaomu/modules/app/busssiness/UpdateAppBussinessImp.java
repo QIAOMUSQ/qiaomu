@@ -93,6 +93,7 @@ public class UpdateAppBussinessImp {
             Map<String,Object> returnMap = BuildResponse.success();
             returnMap.put("isNeedUpdate","0");
             returnMap.put("appUrl","");
+            returnMap.put("appVersion",version);
             return returnMap;
         }
         String maxVersion = appUpdateEntity.getAppVersion();
@@ -110,6 +111,7 @@ public class UpdateAppBussinessImp {
             Map<String, Object> returnMap = BuildResponse.success();
             returnMap.put("isNeedUpdate", "0");
             returnMap.put("appUrl", "");
+            returnMap.put("appVersion",version);
             return returnMap;
         }
     }
