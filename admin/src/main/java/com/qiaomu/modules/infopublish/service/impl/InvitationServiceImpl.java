@@ -63,4 +63,9 @@ public class InvitationServiceImpl extends ServiceImpl<InvitationDao,InvitationE
     public List<InvitationEntity> selectByCommunityId(Long communityId) {
         return null;
     }
+
+    @Override
+    public void deleteByCommunity(Long communityId) {
+        baseMapper.deleteByCommunity(communityId);
+    }
 }

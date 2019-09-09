@@ -20,4 +20,6 @@ public interface YwWorkflowMessageService extends IService<YwWorkflowMessage> {
     YwWorkflowMessage getById(Long paramLong);
 
     List<YwWorkflowMessage> getAll(YwWorkflowMessage workflowMessage);
+
+    void deleteByCommunity(Long communityId);
 }

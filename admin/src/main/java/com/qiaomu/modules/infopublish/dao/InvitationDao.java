@@ -18,4 +18,6 @@ public interface InvitationDao extends BaseMapper<InvitationEntity> {
 
     @Override
     InvitationEntity selectById(Serializable id);
+
+    void deleteByCommunity(Long communityId);
 }

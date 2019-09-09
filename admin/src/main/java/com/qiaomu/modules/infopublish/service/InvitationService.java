@@ -19,4 +19,6 @@ public interface InvitationService extends IService<InvitationEntity> {
     void save(InvitationEntity invitation);
 
     List<InvitationEntity> selectByCommunityId(Long communityId);
+
+    void deleteByCommunity(Long communityId);
 }

@@ -206,4 +206,9 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
     public void deleteStaff(List<Long> ids) {
          baseMapper.deleteStaff(ids);
     }
+
+    @Override
+    public void deleteByCommunity(Long communityId) {
+        baseMapper.deleteByCommunity(communityId);
+    }
 }

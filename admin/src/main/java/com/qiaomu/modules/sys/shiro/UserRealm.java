@@ -135,7 +135,10 @@ public class UserRealm extends AuthorizingRealm {
             //计数大于5时，设置用户被锁定一小时
             if(Integer.parseInt(opsForValue.get(Constant.SHIRO_LOGIN_COUNT+name))>=5){
                 opsForValue.set(Constant.SHIRO_IS_LOCK+name, "LOCK");
-                stringRedisTemplate.expire(Constant.SHIRO_IS_LOCK+name, 1, TimeUnit.HOURS);
+                //当输入次数为第五次锁定
+                if(Integer.parseInt(opsForValue.get(Constant.SHIRO_LOGIN_COUNT+name))==5){
+                    stringRedisTemplate.expire(Constant.SHIRO_IS_LOCK+name, 1, TimeUnit.HOURS);
+                }
                 throw new DisabledAccountException("密码输入错误大于5次，帐号锁定一小时");
             }
         }
@@ -143,7 +146,6 @@ public class UserRealm extends AuthorizingRealm {
         //记住用户
         token.setRememberMe(true);
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, user.getPassword(), ByteSource.Util.bytes(user.getSalt()), getName());
-        System.out.println("user = [" + JSON.toJSONString(user) + "] getSalt=="+ByteSource.Util.bytes(user.getSalt()));
         return info;
     }
 

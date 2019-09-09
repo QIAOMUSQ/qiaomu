@@ -32,4 +32,6 @@ public interface UserExtendDao extends BaseMapper<UserExtend> {
 
     @Override
     UserExtend selectById(Serializable serializable);
+
+    void deleteByCommunity(Long communityId);
 }

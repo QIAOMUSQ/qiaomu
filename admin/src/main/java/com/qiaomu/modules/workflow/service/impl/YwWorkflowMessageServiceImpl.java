@@ -120,6 +120,10 @@ public class YwWorkflowMessageServiceImpl extends ServiceImpl<YwWorkflowMessageD
         return list;
     }
 
+    @Override
+    public void deleteByCommunity(Long communityId) {
+        baseMapper.deleteByCommunity(communityId);
+    }
 
 
 }

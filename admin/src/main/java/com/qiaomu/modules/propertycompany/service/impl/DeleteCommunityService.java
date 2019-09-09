@@ -11,6 +11,11 @@ import com.qiaomu.modules.propertycompany.dao.LoginStatisticsDao;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
 import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.service.SysFileService;
+import com.qiaomu.modules.sys.service.UserExtendService;
+import com.qiaomu.modules.workflow.entity.YwWorkflowInfo;
+import com.qiaomu.modules.workflow.service.UserWorkflowService;
+import com.qiaomu.modules.workflow.service.YwWorkflowInfoService;
+import com.qiaomu.modules.workflow.service.YwWorkflowMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -46,6 +51,12 @@ public class DeleteCommunityService {
     @Autowired
     private InvitationService invitationService;
 
+    @Autowired
+    private UserExtendService userExtendService;
+
+    @Autowired
+    private YwWorkflowInfoService workflowInfoService;
+
     /**
      *  和社区关联信息表
      * yw_advertise
@@ -57,9 +68,9 @@ public class DeleteCommunityService {
      * yw_user_workflow 工作人员社区流程关联表
      * yw_workflow_info 社区流程表
      * yw_workflow_message  社区流程管理
-     * pluto_article  发帖表
-     * pluto_article_comment
-     * push_message_data 推送信息表
+     * --pluto_article  发帖表
+     * --pluto_article_comment
+     * --push_message_data 推送信息表
      */
     @Async("taskExecutor")
     @Transactional(rollbackFor = Exception.class)
@@ -76,6 +87,17 @@ public class DeleteCommunityService {
         loginStatisticsDao.deleteByCommunityId(community.getId());
         //删除公告表
         List<InvitationEntity> invitationList = invitationService.selectByCommunityId(community.getId());
+        invitationList.forEach((n)->deleteFile(n.getImgJson()));
+        invitationService.deleteByCommunity(community.getId());
+        //删除用户扩展信息表
+        userExtendService.deleteByCommunity(community.getId());
+        //工作人员社区流程关联表
+        List<YwWorkflowInfo> infoList = workflowInfoService.selectByCommunity(community.getId());
+        infoList.forEach(m-> {
+            Map<String,String> map  = JSONObject.parseObject(m.getPictureId(), Map.class);
+           if (map.size()>0)deleteFile(m.getPictureId());
+        });
+        workflowInfoService.deleteByCommunity(community.getId());
     }
 
     private void deleteFile(String urlJson){

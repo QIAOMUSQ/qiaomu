@@ -15,4 +15,6 @@ public interface UserWorkflowDao extends BaseMapper<UserWorkflow> {
     List<UserWorkflow> selectByworkflowId(Long workflowId);
 
     List<UserWorkflow> getUserWorkflows(UserWorkflow workflow);
+
+    void deleteByCommunity(Long communityId);
 }

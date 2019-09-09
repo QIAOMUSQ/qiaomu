@@ -1,40 +1,31 @@
 package com.qiaomu.modules.workflow.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.qiaomu.common.exception.RRException;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
-import com.qiaomu.modules.article.exception.CommentException;
-import com.qiaomu.modules.sys.entity.SysUserEntity;
+import com.qiaomu.modules.infopublish.service.PushRedisMessageService;
+import com.qiaomu.modules.propertycompany.service.YwCommunityService;
+import com.qiaomu.modules.sys.entity.YwCommunity;
+import com.qiaomu.modules.sys.service.SysDictService;
 import com.qiaomu.modules.sys.service.SysFileService;
+import com.qiaomu.modules.sys.service.SysUserService;
+import com.qiaomu.modules.sys.service.UserExtendService;
 import com.qiaomu.modules.workflow.dao.YwWorkflowInfoDao;
-import com.qiaomu.modules.workflow.entity.UserWorkflow;
 import com.qiaomu.modules.workflow.entity.YwWorkflowInfo;
 import com.qiaomu.modules.workflow.entity.YwWorkflowMessage;
 import com.qiaomu.modules.workflow.service.UserWorkflowService;
 import com.qiaomu.modules.workflow.service.YwWorkflowInfoService;
 import com.qiaomu.modules.workflow.service.YwWorkflowMessageService;
-import com.qiaomu.modules.infopublish.entity.PushMessage;
-import com.qiaomu.modules.infopublish.service.PushRedisMessageService;
-import com.qiaomu.modules.sys.entity.YwCommunity;
-import com.qiaomu.modules.sys.service.SysDictService;
-import com.qiaomu.modules.propertycompany.service.YwCommunityService;
-import com.qiaomu.modules.sys.service.SysUserService;
-import com.qiaomu.modules.sys.service.UserExtendService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -108,13 +99,13 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
         Page<YwWorkflowInfo> page = new Query(params).getPage();// 当前页，总条
         page.setRecords(this.baseMapper.selectPageAll(page,info));
         for (YwWorkflowInfo workflowInfo : page.getRecords()) {
-           // YwWorkflowMessage workflowMessage = this.workflowMessageService.getById(workflowInfo.getWorkflowId());
+            // YwWorkflowMessage workflowMessage = this.workflowMessageService.getById(workflowInfo.getWorkflowId());
             if(workflowInfo.getPhoneOneId() !=null){
                 workflowInfo.setDetailPhoneOneName(userService.getRealNameByIds(workflowInfo.getPhoneOneId()));
-               // workflowInfo.setDetailPhoneOne(workflowMessage.getPhoneOneId());
+                // workflowInfo.setDetailPhoneOne(workflowMessage.getPhoneOneId());
             }
 
-           // workflowInfo.setProcessName(workflowMessage.getProcessName());
+            // workflowInfo.setProcessName(workflowMessage.getProcessName());
             String user = userService.getRealNameByIds(workflowInfo.getUserId().toString());
             if(user!=null){
                 workflowInfo.setUserName(user);
@@ -139,8 +130,8 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
     @Override
     @Transactional
     public String saveWorkflowInfo(Long userId, String location,
-                                         String detail, String pictureId,
-                                         String serviceDate, Long workflowId, Long communityId,HttpServletRequest request) {
+                                   String detail, String pictureId,
+                                   String serviceDate, Long workflowId, Long communityId,HttpServletRequest request) {
         YwWorkflowMessage workflowMessage = workflowMessageService.getById(workflowId);
         YwCommunity community =  communityService.queryById(communityId);
         //当社区未进行物业公司或者街道分配
@@ -236,10 +227,6 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
 
     @Override
     public List<YwWorkflowInfo> getAll(Long userId, Long communityId, String workflowType, String type,String status) {
-        SysUserEntity sysUserEntity = userService.queryById(userId);
-        if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
-            throw new CommentException("请先实名认证！");
-        }
         YwWorkflowInfo condition = new YwWorkflowInfo();
         condition.setUserId(userId);
         condition.setCommunityId(communityId);
@@ -248,7 +235,7 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
         condition.setStatus(status);
         List<YwWorkflowInfo> infoList = this.baseMapper.getAll(condition);
         for (YwWorkflowInfo Info : infoList) {
-           // YwWorkflowMessage workflowMessage = this.workflowMessageService.getById(Info.getWorkflowId());
+            // YwWorkflowMessage workflowMessage = this.workflowMessageService.getById(Info.getWorkflowId());
             if(Info.getPhoneOneId() !=null){
                 Info.setDetailPhoneOneName(userService.getRealNameByIds(Info.getPhoneOneId()));
                 Info.setDetailPhoneOne(Info.getPhoneOneId());
@@ -280,5 +267,18 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
         workflowInfo.setCommunityId(communityId);
         workflowInfo.setUserId(userId);
         return this.baseMapper.getAllWorker(workflowInfo);
+    }
+
+    @Override
+    public List<YwWorkflowInfo> selectByCommunity(Long communityId) {
+        return baseMapper.selectByCommunity(communityId);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteByCommunity(Long communityId) {
+        baseMapper.deleteByCommunity(communityId);
+        userWorkflowService.deleteByCommunity(communityId);
+        workflowMessageService.deleteByCommunity(communityId);
     }
 }

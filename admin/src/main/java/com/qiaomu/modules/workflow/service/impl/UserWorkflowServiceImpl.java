@@ -73,4 +73,10 @@ public class UserWorkflowServiceImpl extends ServiceImpl<UserWorkflowDao,UserWor
         workflow.setUserId(userId);
         return this.baseMapper.getUserWorkflows(workflow);
     }
+
+    @Override
+    public void deleteByCommunity(Long communityId) {
+        baseMapper.deleteByCommunity(communityId);
+    }
+
 }

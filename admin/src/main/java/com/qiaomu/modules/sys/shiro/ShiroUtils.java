@@ -22,6 +22,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.springframework.util.DigestUtils;
 
 /**
  * Shiro工具类
@@ -43,6 +44,10 @@ public class ShiroUtils {
 
     public static String sha256(String password, String salt) {
         return new SimpleHash(hashAlgorithmName, password, salt, hashIterations).toString();
+    }
+
+    public static String getMd5(String password, String salt) {
+        return DigestUtils.md5DigestAsHex((password+"/"+salt).getBytes());
     }
 
     public static String sha256(String password) {

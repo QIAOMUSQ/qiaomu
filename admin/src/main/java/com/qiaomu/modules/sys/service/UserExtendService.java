@@ -57,4 +57,6 @@ public interface UserExtendService extends IService<UserExtend> {
     UserExtend queryUserExtend(UserExtend userExtend);
 
     void deleteStaff(List<Long> longs);
+
+    void deleteByCommunity(Long communityId);
 }
