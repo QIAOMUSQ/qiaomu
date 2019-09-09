@@ -107,12 +107,12 @@
         </foreach>
     </update>
 
-    <select id="selectById" resultType="com.qiaomu.modules.sys.entity.UserExtend">
+    <select id="selectById" resultType="com.qiaomu.modules.sys.entity.UserExtend" parameterType="java.lang.Long">
          SELECT
           e.*,c.name as communityName
         FROM
             yw_user_extend e
         LEFT JOIN yw_community c ON e.community_id = c.id
-        WHERE e.id=#{serializable}
+        WHERE e.id=#{id}
     </select>
 </mapper>

@@ -126,9 +126,10 @@ public class UserRealm extends AuthorizingRealm {
         if (ShiroUtils.sha256(password, user.getSalt()).equals(user.getPassword())) {
             //如果正确,从缓存中将用户登录计数 清除
             if(opsForValue.get(Constant.SHIRO_LOGIN_COUNT+name)!=null){
-                opsForValue.set(Constant.SHIRO_LOGIN_COUNT+name,"0");
+               // opsForValue.set(Constant.SHIRO_LOGIN_COUNT+name,"0");
                 opsForValue.set(Constant.SHIRO_IS_LOCK+name, "0");
                 stringRedisTemplate.delete(Constant.SHIRO_IS_LOCK+name);
+                stringRedisTemplate.delete(Constant.SHIRO_LOGIN_COUNT+name);
             }
         }else {
             opsForValue.increment(Constant.SHIRO_LOGIN_COUNT+name, 1);

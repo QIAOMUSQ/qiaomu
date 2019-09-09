@@ -93,9 +93,7 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
 
     @Override
     public UserExtend getUserExtendInfo(Long id) {
-        UserExtend  user = this.selectById(id);
-        /*YwCommunity community = communityService.queryById(user.getCommunityId());
-        user.setCommunityName(community == null ? "" : community.getName());*/
+        UserExtend  user = baseMapper.selectById(id);
         user.setRealName(AESUtil.decrypt(user.getRealName()));
         user.setAddress(AESUtil.decrypt(user.getAddress()));
         user.setUserPhone(sysUserService.queryById(user.getUserId()).getUsername());

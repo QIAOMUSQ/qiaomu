@@ -26,7 +26,7 @@
         </where>
     </select>
 
-    <select id="selectById" resultType="com.qiaomu.modules.workflow.entity.YwWorkflowMessage" parameterType="long">
+    <select id="selectById" resultType="com.qiaomu.modules.workflow.entity.YwWorkflowMessage" parameterType="java.lang.Long">
         SELECT
           w.*, s.username,
           s.real_name
@@ -34,6 +34,5 @@
           yw_workflow_message w
         LEFT JOIN sys_user s ON s.user_id = w.phone_one_id
         WHERE w.id = #{id}
-
     </select>
 </mapper>
