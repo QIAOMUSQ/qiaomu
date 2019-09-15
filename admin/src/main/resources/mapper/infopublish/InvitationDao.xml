@@ -25,5 +25,8 @@
          SELECT i.*,c.name as communityName FROM yw_invitation i LEFT JOIN yw_community c ON i.community_id = c.id
          where i.id = #{id}
     </select>
+    <select id="selectByCommunityId" resultType="com.qiaomu.modules.infopublish.entity.InvitationEntity">
+        SELECT * FROM yw_invitation WHERE community_id=#{communityId}
+    </select>
 
 </mapper>

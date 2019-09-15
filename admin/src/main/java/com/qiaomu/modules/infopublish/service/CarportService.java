@@ -22,4 +22,9 @@ public interface CarportService extends IService<CarportEntity> {
     List<CarportEntity> selectByCommunityId(Long communityId);
 
     void deleteByCommunityId(Long id);
+
+
+    boolean deleteCarportById(Long id);
+
+    void updateCarport(CarportEntity carportEntity, HttpServletRequest request);
 }

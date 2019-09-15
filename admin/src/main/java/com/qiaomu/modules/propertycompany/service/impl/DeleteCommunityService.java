@@ -1,6 +1,7 @@
 package com.qiaomu.modules.propertycompany.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.qiaomu.modules.infopublish.entity.CarportEntity;
 import com.qiaomu.modules.infopublish.entity.InvitationEntity;
@@ -79,15 +80,27 @@ public class DeleteCommunityService {
         communityService.deleteById(community.getId());
         //删除车辆表信息
         List<CarportEntity> carportList = carportService.selectByCommunityId(community.getId());
-        carportList.forEach((m)->deleteFile(m.getImgPath()));
+        if(carportList.size()>0){
+            carportList.forEach((m)->deleteFile(m.getImgPath()));
+        }
         carportService.deleteByCommunityId(community.getId());
         //删除社区商户关联表
         communityAdvertiseDao.deleteByCommunityId(community.getId());
         //删除社区统计表
         loginStatisticsDao.deleteByCommunityId(community.getId());
-        //删除公告表
+        //删除公告表*****[{},{}]
         List<InvitationEntity> invitationList = invitationService.selectByCommunityId(community.getId());
-        invitationList.forEach((n)->deleteFile(n.getImgJson()));
+        if(invitationList.size()>0){
+            invitationList.forEach(n-> {
+                String imgJson = n.getImgJson();
+                System.out.println("community = [" + imgJson + "]");
+                //deleteFile()
+                List<Map<String,String>> map  = (List<Map<String,String>>)JSON.parse(imgJson);
+                map.forEach(m->{
+                    deleteFile(JSON.toJSONString(m));
+                });
+            });
+        }
         invitationService.deleteByCommunity(community.getId());
         //删除用户扩展信息表
         userExtendService.deleteByCommunity(community.getId());

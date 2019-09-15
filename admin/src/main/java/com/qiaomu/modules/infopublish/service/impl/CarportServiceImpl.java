@@ -1,6 +1,7 @@
 package com.qiaomu.modules.infopublish.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.qiaomu.common.utils.Constant;
 import com.qiaomu.modules.article.exception.CommentException;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 李品先
@@ -98,4 +100,31 @@ public class CarportServiceImpl extends ServiceImpl<CarportDao,CarportEntity> im
     public void deleteByCommunityId(Long communityId) {
          baseMapper.deleteByCommunityId(communityId);
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean deleteCarportById(Long id) {
+        CarportEntity carport =baseMapper.selectById(id);
+        if (carport != null){
+            Map<String,String> map = JSONObject.parseObject(carport.getImgPath(), Map.class);//jsonmap转map
+            map.forEach((m,n) -> fileService.deleteFileByHttpUrl(n));
+        }
+        if (baseMapper.deleteById(id)>0){
+            return true;
+        }else {
+            return false;
+        }
+
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateCarport(CarportEntity carportEntity, HttpServletRequest request) {
+        CarportEntity carport =baseMapper.selectById(carportEntity.getId());
+        Map<String,String> map = JSONObject.parseObject(carport.getImgPath(), Map.class);
+        map.forEach((m,n) -> fileService.deleteFileByHttpUrl(n));
+        carportEntity.setImgPath(JSON.toJSONString(fileService.imageUrls(request)));
+        baseMapper.updateById(carportEntity);
+    }
+
 }

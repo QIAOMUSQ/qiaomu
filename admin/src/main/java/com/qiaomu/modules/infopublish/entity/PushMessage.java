@@ -23,9 +23,6 @@ public class PushMessage implements Serializable {
     private Long communityId;   //被推送人社区id
     private String message; //推送信息
     private String pushPhone;//推送人号码
-
-
-
     public String getType() {
         return type;
     }

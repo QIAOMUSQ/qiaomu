@@ -20,4 +20,6 @@ public interface InvitationDao extends BaseMapper<InvitationEntity> {
     InvitationEntity selectById(Serializable id);
 
     void deleteByCommunity(Long communityId);
+
+    List<InvitationEntity> selectByCommunityId(Long communityId);
 }

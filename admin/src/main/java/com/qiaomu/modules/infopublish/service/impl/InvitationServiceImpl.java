@@ -61,7 +61,7 @@ public class InvitationServiceImpl extends ServiceImpl<InvitationDao,InvitationE
 
     @Override
     public List<InvitationEntity> selectByCommunityId(Long communityId) {
-        return null;
+        return baseMapper.selectByCommunityId(communityId);
     }
 
     @Override
