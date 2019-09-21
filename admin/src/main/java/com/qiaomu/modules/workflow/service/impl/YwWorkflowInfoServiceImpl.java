@@ -9,6 +9,7 @@ import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
 import com.qiaomu.modules.article.exception.CommentException;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
+import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.service.SysFileService;
 import com.qiaomu.modules.workflow.dao.YwWorkflowInfoDao;
 import com.qiaomu.modules.workflow.entity.UserWorkflow;
@@ -239,6 +240,14 @@ public class YwWorkflowInfoServiceImpl extends ServiceImpl<YwWorkflowInfoDao, Yw
         SysUserEntity sysUserEntity = userService.queryById(userId);
         if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
             throw new CommentException("请先实名认证！");
+        }
+
+        UserExtend userExtendQ = new UserExtend();
+        userExtendQ.setUserId(Long.valueOf(sysUserEntity.getUserId()));
+        userExtendQ.setCommunityId(Long.valueOf(communityId));
+        UserExtend userExtend = userExtendService.queryUserExtend(userExtendQ);
+        if(userExtend==null||userExtend.getCommunityId()==null){
+            throw new CommentException("请认证该小区！");
         }
         YwWorkflowInfo condition = new YwWorkflowInfo();
         condition.setUserId(userId);

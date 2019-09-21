@@ -9,6 +9,8 @@ import com.qiaomu.common.validator.Assert;
 import com.qiaomu.modules.article.exception.CommentException;
 import com.qiaomu.modules.sys.controller.AbstractController;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
+import com.qiaomu.modules.sys.entity.UserExtend;
+import com.qiaomu.modules.sys.service.UserExtendService;
 import com.qiaomu.modules.welfare.bussiness.WelfareBussiness;
 import com.qiaomu.modules.welfare.entity.PointEntity;
 import com.qiaomu.modules.welfare.entity.TaskEntity;
@@ -40,7 +42,8 @@ import static com.qiaomu.common.utils.Constant.SERVER_URL;
 public class WelfareTaskController extends AbstractController{
     @Autowired
     private WelfareBussiness welfareBussiness;
-
+    @Autowired
+    private UserExtendService userExtendService;
     /**
      * 发布任务
      * @param
@@ -116,8 +119,8 @@ public class WelfareTaskController extends AbstractController{
      * @return
      */
     @RequestMapping(value = "queryAllCreatedTask",method = RequestMethod.POST)
-    public String queryAllCreatedTask(String publishUserId){
-        List<TaskEntity>  tasks = welfareBussiness.queryAllCreatedTask(publishUserId);
+    public String queryAllCreatedTask(String communityId,String publishUserId){
+        List<TaskEntity>  tasks = welfareBussiness.queryAllCreatedTask(communityId,publishUserId);
         return JSON.toJSONString(BuildResponse.success(tasks));
 
     }
@@ -228,6 +231,14 @@ public class WelfareTaskController extends AbstractController{
 
         if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
             throw new CommentException("请先实名认证！");
+        }
+
+        UserExtend userExtendQ = new UserExtend();
+        userExtendQ.setUserId(Long.valueOf(sysUserEntity.getUserId()));
+        userExtendQ.setCommunityId(Long.valueOf(communityId));
+        UserExtend userExtend = userExtendService.queryUserExtend(userExtendQ);
+        if(userExtend==null||userExtend.getCommunityId()==null){
+            throw new CommentException("请认证该小区！");
         }
         List<PointRankForm> result = welfareBussiness.rankByGold(communityId);
         return JSON.toJSONString(BuildResponse.success(result));

@@ -40,7 +40,7 @@
 		select * from welfare_task_publish_user WHERE serviceId = #{serviceId} Limit 1
 	</select>
 	<select id="queryPublishUserServices" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskEntity">
-		select * from welfare_task where serviceId in (select serviceId from welfare_task_publish_user where publishUserId=#{publishUserId} GROUP BY serviceId)
+		select * from welfare_task where communityId=#{communityId} and serviceId in (select serviceId from welfare_task_publish_user where publishUserId=#{publishUserId} GROUP BY serviceId)
 	</select>
 	<select id="queryRecevieUserServices" parameterType="String" resultType="com.qiaomu.modules.welfare.entity.TaskEntity">
 		select * from welfare_task where serviceId in (select serviceId from welfare_task_recevie_user where receiveUserId=#{receiveUserId} GROUP BY serviceId)

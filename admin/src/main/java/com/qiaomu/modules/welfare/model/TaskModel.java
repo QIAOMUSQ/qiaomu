@@ -7,6 +7,7 @@ public class TaskModel {
     private String serviceId;
     private String serviceName;
     private String seviceDetail;
+    private String communityId;
 
     public String getServiceId() {
         return serviceId;
@@ -68,4 +69,12 @@ public class TaskModel {
     private String points;
     private String publishUserId;//发布任务的人
     private String receiveUserId;//领取任务的人
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
 }

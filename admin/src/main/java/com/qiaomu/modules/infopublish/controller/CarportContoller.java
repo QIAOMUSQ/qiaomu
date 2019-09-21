@@ -7,6 +7,8 @@ import com.qiaomu.modules.infopublish.entity.CarportEntity;
 import com.qiaomu.modules.infopublish.service.CarportService;
 import com.qiaomu.modules.sys.controller.AbstractController;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
+import com.qiaomu.modules.sys.entity.UserExtend;
+import com.qiaomu.modules.sys.service.UserExtendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,7 +28,8 @@ import java.util.List;
 public class CarportContoller extends AbstractController{
     @Autowired
     private CarportService carportService;
-
+    @Autowired
+    private UserExtendService userExtendService;
     /**
      * 获取车辆出租信息
      * @param carport
@@ -37,6 +40,14 @@ public class CarportContoller extends AbstractController{
         SysUserEntity sysUserEntity = getUser();
         if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
             throw new CommentException("请先实名认证！");
+        }
+
+        UserExtend userExtendQ = new UserExtend();
+        userExtendQ.setUserId(Long.valueOf(sysUserEntity.getUserId()));
+        userExtendQ.setCommunityId(carport.getCommunityId());
+        UserExtend userExtend = userExtendService.queryUserExtend(userExtendQ);
+        if(userExtend==null||userExtend.getCommunityId()==null){
+            throw new CommentException("请认证该小区！");
         }
          List<CarportEntity> data =  carportService.selectAll(carport);
         return BuildResponse.success(JSON.toJSON(data));

@@ -7,10 +7,12 @@ import com.qiaomu.common.utils.CommonUtils;
 import com.qiaomu.common.utils.DateUtils;
 import com.qiaomu.common.validator.Assert;
 
+import com.qiaomu.modules.article.exception.CommentException;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.service.SysUserService;
 
+import com.qiaomu.modules.sys.service.UserExtendService;
 import com.qiaomu.modules.welfare.entity.PointEntity;
 import com.qiaomu.modules.welfare.entity.TaskEntity;
 import com.qiaomu.modules.welfare.entity.TaskPublishUserEntity;
@@ -45,7 +47,8 @@ public class WelfareBussiness {
 
     @Autowired
     private PublicWelfareTaskService publicWelfareTaskService;
-
+    @Autowired
+    private UserExtendService userExtendService;
 
 
     public void publishTask(StandardMultipartHttpServletRequest req){
@@ -134,7 +137,6 @@ public class WelfareBussiness {
         if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
             throw new WelfareException("请先实名认证后再领取！");
         }
-
 
         TaskRecevieUserEntity taskRecevieUserEntity = new TaskRecevieUserEntity();
         taskEntity.setStatus(RUN.value);
@@ -377,8 +379,8 @@ public class WelfareBussiness {
         return tasks;
     }
 
-    public List<TaskEntity> queryAllCreatedTask(String publishUserId){
-        List<TaskEntity>  tasks = publicWelfareTaskService.queryPublishUserServices(publishUserId);
+    public List<TaskEntity> queryAllCreatedTask(String communityId,String publishUserId){
+        List<TaskEntity>  tasks = publicWelfareTaskService.queryPublishUserServices(communityId,publishUserId);
         return tasks;
     }
 
@@ -402,6 +404,13 @@ public class WelfareBussiness {
         SysUserEntity sysUserEntity = sysUserService.queryById(Long.valueOf(userId));
         if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
             throw new WelfareException("请先实名认证后再查看！");
+        }
+        UserExtend userExtendQ = new UserExtend();
+        userExtendQ.setUserId(Long.valueOf(sysUserEntity.getUserId()));
+        userExtendQ.setCommunityId(Long.valueOf(communityId));
+        UserExtend userExtend = userExtendService.queryUserExtend(userExtendQ);
+        if(userExtend==null||userExtend.getCommunityId()==null){
+            throw new CommentException("请认证该小区！");
         }
         return publicWelfareTaskService.queryAllTask(communityId);
     }

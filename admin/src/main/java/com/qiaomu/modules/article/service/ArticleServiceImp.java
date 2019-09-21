@@ -10,7 +10,9 @@ import com.qiaomu.modules.article.entity.CommentEntity;
 import com.qiaomu.modules.article.exception.CommentException;
 import com.qiaomu.modules.article.model.ArticleSelectModel;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
+import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.service.SysUserService;
+import com.qiaomu.modules.sys.service.UserExtendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,9 @@ public class ArticleServiceImp implements ArticleService{
 
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private UserExtendService userExtendService;
 
     @Override
     public void add(ArticleEntity articleEntity) {
@@ -57,8 +62,16 @@ public class ArticleServiceImp implements ArticleService{
     @Override
     public List<ArticleEntity> query(ArticleSelectModel articleSelectModel) {
         SysUserEntity sysUserEntity = sysUserService.queryById(Long.valueOf(articleSelectModel.getUserId()));
+
         if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
             throw new CommentException("请先实名认证！");
+        }
+        UserExtend userExtendQ = new UserExtend();
+        userExtendQ.setUserId(Long.valueOf(articleSelectModel.getUserId()));
+        userExtendQ.setCommunityId(Long.valueOf(articleSelectModel.getCommunityId()));
+        UserExtend userExtend = userExtendService.queryUserExtend(userExtendQ);
+        if(userExtend==null||userExtend.getCommunityId()==null){
+            throw new CommentException("请认证该小区！");
         }
         return articleDao.query(articleSelectModel);
     }

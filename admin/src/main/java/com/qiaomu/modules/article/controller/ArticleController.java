@@ -203,10 +203,12 @@ public class ArticleController extends AbstractController{
      * @return
      */
     @RequestMapping(value = "queryByAuthorId",method = RequestMethod.POST)
-    public String queryByAuthorId(@RequestParam String authorId){
+    public String queryByAuthorId(String communityId,String category,String authorId){
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setUserId(authorId);
         articleSelectModel.setAuthorId(authorId);
+        articleSelectModel.setCommunityId(communityId);
+        articleSelectModel.setCategory(category);
         List<ArticleEntity> articles = articleService.query(articleSelectModel);
         return JSON.toJSONString(BuildResponse.success(articles));
 
