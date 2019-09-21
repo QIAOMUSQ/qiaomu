@@ -17,4 +17,5 @@ public interface CarportDao  extends BaseMapper<CarportEntity> {
     List<CarportEntity> selectByCommunityId(Long communityId);
 
     void deleteByCommunityId(Long communityId);
+
 }

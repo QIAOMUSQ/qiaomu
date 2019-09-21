@@ -49,4 +49,8 @@ public interface YwWorkflowInfoService extends IService<YwWorkflowInfo> {
      * @return
      */
     List<YwWorkflowInfo> getUserDetailWorkflow(Long userId, Long communityId);
+
+    List<YwWorkflowInfo> selectByCommunity(Long communityId);
+
+    void deleteByCommunity(Long communityId);
 }

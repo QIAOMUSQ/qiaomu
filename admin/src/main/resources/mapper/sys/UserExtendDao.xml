@@ -95,6 +95,11 @@
             #{item}
         </foreach>
     </delete>
+
+    <delete id="deleteByCommunity" parameterType="long">
+        DELETE FROM yw_user_extend WHERE  community_id = #{communityId}
+    </delete>
+
     <update id="deleteStaff" parameterType="java.util.List">
         UPDATE yw_user_extend SET company_role_type=4 WHERE id IN
         <foreach collection="list" item="id" open="(" close=")" separator=",">
@@ -102,12 +107,12 @@
         </foreach>
     </update>
 
-    <select id="selectById" resultType="com.qiaomu.modules.sys.entity.UserExtend">
+    <select id="selectById" resultType="com.qiaomu.modules.sys.entity.UserExtend" parameterType="java.lang.Long">
          SELECT
           e.*,c.name as communityName
         FROM
             yw_user_extend e
         LEFT JOIN yw_community c ON e.community_id = c.id
-        WHERE e.id=#{serializable}
+        WHERE e.id=#{id}
     </select>
 </mapper>

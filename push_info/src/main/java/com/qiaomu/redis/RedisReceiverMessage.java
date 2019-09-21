@@ -11,6 +11,7 @@ import com.qiaomu.websocket.bootstrap.channel.cache.WsCacheMapService;
 import com.qiaomu.websocket.common.base.HandlerServiceImpl;
 import com.qiaomu.websocket.common.constant.Constans;
 import io.netty.channel.Channel;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -56,7 +57,12 @@ public class RedisReceiverMessage{
         //预防消息丢失，从redis中获取信息
         Object object = boundHashOps.get("history_"+messages.getReceivePhone()+"_"+messages.getTime().replace(" ","").replace("-","").replace(":",""));
         if(object != null){
-            redisTemplate.boundHashOps("message_history").delete("history_"+messages.getReceivePhone()+"_"+messages.getTime().replace(" ","").replace("-","").replace(":",""));
+            if (StringUtils.isNotBlank(messages.getReceivePhone())){
+                redisTemplate.boundHashOps("message_history").delete("history_"+messages.getReceivePhone()+"_"+messages.getTime().replace(" ","").replace("-","").replace(":",""));
+            }else {
+                redisTemplate.boundHashOps("message_history").delete("history_"+messages.getPushPhone()+"_"+messages.getTime().replace(" ","").replace("-","").replace(":",""));
+
+            }
         }
         detailMessage(messages);
 
@@ -81,7 +87,6 @@ public class RedisReceiverMessage{
             //获取该社区下人员认证信息
             List<UserExtend> userList =  userExtendRepository.findByCommunityId(messages.getCommunityId());
             for(UserExtend user:userList){
-              //  messages.setPhone(user.get);
                 SysUserEntity userEntity = userEntityRepository.findByUserId(user.getUserId());
                 PushMessage mes = new PushMessage();
                 mes.setReceivePhone(userEntity.getUsername());

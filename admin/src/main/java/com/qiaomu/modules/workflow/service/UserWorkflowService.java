@@ -15,4 +15,6 @@ public interface UserWorkflowService extends IService<UserWorkflow> {
     void changeInfo(YwWorkflowMessage process);
 
     List<UserWorkflow> getUserWorkflows(Long userId, Long communityId);
+
+    void deleteByCommunity(Long communityId);
 }

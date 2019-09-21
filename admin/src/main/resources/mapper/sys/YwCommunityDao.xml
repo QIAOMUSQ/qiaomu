@@ -30,7 +30,7 @@
     </select>
 
     <select id="selectPageByCondition" resultType="com.qiaomu.modules.sys.entity.YwCommunity">
-        SELECT A.* FROM yw_community A LEFT JOIN prov_city_data B ON A.city_id = b.id
+        SELECT A.*,B.CITY_NAME AS cityName FROM yw_community A LEFT JOIN prov_city_data B ON A.city_id = b.id
         <where>
             enable > 0
             <if test="name != null and name !=''">
@@ -47,6 +47,20 @@
             </if>
 
         </where>
+    </select>
+    <select id="getDeleteCommunity" resultType="com.qiaomu.modules.sys.entity.YwCommunity">
+        SELECT
+            *
+        FROM
+            yw_community
+        WHERE
+            STR_TO_DATE(
+              delete_time,
+              '%Y-%m-%d %H:%i:%s') &lt;
+              str_to_date(
+                #{deleteTime},
+                '%Y-%m-%d %H:%i:%s'
+            )
     </select>
 
     <update id="setCommunityDisEnable" parameterType="java.util.HashMap">

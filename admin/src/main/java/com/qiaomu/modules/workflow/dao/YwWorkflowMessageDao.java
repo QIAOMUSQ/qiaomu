@@ -16,4 +16,6 @@ public interface YwWorkflowMessageDao extends BaseMapper<YwWorkflowMessage> {
 
     @Override
     YwWorkflowMessage selectById(Serializable serializable);
+
+    void deleteByCommunity(Long communityId);
 }

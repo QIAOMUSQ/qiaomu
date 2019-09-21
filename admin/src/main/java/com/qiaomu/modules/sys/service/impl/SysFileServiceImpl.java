@@ -74,7 +74,7 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileDao, SysFileEntity> i
     @Override
     public boolean deleteFileByHttpUrl(String url) {
         try {
-            String fileName = url.substring(url.lastIndexOf("/"),url.length());
+            String fileName = url.substring(url.lastIndexOf("/")+1,url.length());
             File file = new File(savePath+fileName);
             if (file.exists()) {
                 file.delete();

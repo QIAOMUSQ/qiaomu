@@ -31,5 +31,7 @@ public interface UserExtendDao extends BaseMapper<UserExtend> {
     void deleteStaff(List<Long> ids);
 
     @Override
-    UserExtend selectById(Serializable serializable);
+    UserExtend selectById(Serializable id);
+
+    void deleteByCommunity(Long communityId);
 }

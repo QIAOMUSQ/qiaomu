@@ -75,5 +75,36 @@ public class CarportContoller extends AbstractController{
         return BuildResponse.success(carportService.getCarportById(id));
     }
 
+    @RequestMapping(value = "deleteCarportById",method = RequestMethod.POST)
+    public Object deleteCarportById(Long id){
+        try {
+            if (carportService.deleteCarportById(id)){
+                return BuildResponse.success();
+            }else {
+                return BuildResponse.fail();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return BuildResponse.fail();
+        }
+
+    }
+
+    /**
+     * 更新车辆位信息
+     * @param carportEntity
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "updateCarport",method = RequestMethod.POST)
+    public Object updateCarport(CarportEntity carportEntity,HttpServletRequest request){
+        try {
+            carportService.updateCarport(carportEntity,request);
+            return BuildResponse.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return BuildResponse.fail();
+        }
+    }
 
 }

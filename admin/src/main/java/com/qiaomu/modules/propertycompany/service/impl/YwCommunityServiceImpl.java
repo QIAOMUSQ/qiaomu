@@ -62,9 +62,6 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
         if (StringUtils.isNotBlank(name))condition.setName(name);
         Page<YwCommunity> page = new Query(params).getPage();// 当前页，总条
         page.setRecords(this.baseMapper.selectPageByCondition(page,condition));
-        for (YwCommunity community : page.getRecords()) {
-            community.setCityName(this.provinceCityDateService.selectById(community.getCityId()).getCityName());
-        }
         return new PageUtils(page);
     }
 

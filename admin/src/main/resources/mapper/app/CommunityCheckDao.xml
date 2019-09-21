@@ -11,10 +11,10 @@
         <where>
             1=1
             <if test="startTime!=null">
-                AND c.create_time >= STR_TO_DATE(#{startTime},'%y-%i-%d %H:%m:%s')
+                AND c.create_time >= STR_TO_DATE(#{startTime},'%Y-%m-%d %H:%i:%s')
             </if>
             <if test="endTime!=null">
-                AND c.create_time %lt;= STR_TO_DATE(#{endTime},'%y-%i-%d %H:%m:%s')
+                AND c.create_time %lt;= STR_TO_DATE(#{endTime},'%Y-%m-%d %H:%i:%s')
             </if>
             <if test="isCheck !=null">
                 add c.is_check =#{isCheck}

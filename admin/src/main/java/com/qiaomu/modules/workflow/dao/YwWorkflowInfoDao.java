@@ -22,4 +22,8 @@ public interface YwWorkflowInfoDao extends BaseMapper<YwWorkflowInfo> {
     List<YwWorkflowInfo> selectPageAll(Pagination page , YwWorkflowInfo info);
 
     List<YwWorkflowInfo> getAllWorker(YwWorkflowInfo workflowInfo);
+
+    List<YwWorkflowInfo> selectByCommunity(Long communityId);
+
+    void deleteByCommunity(Long communityId);
 }
