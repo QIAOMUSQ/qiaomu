@@ -5,6 +5,7 @@ import com.qiaomu.modules.article.entity.ArticleEntity;
 import com.qiaomu.modules.article.entity.ArticlePoint;
 import com.qiaomu.modules.article.entity.ArticlePraiseEntity;
 import com.qiaomu.modules.article.entity.CommentEntity;
+import com.qiaomu.modules.article.model.ArticleModel;
 import com.qiaomu.modules.article.model.ArticleSelectModel;
 import com.qiaomu.modules.infopublish.entity.InvitationEntity;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * Created by wenglei on 2019/5/25.
  */
 public interface ArticleDao extends BaseMapper<InvitationEntity> {
-    List<ArticleEntity> query(ArticleSelectModel articleSelectModel);
+    List<ArticleModel> query(ArticleSelectModel articleSelectModel);
     String queryPraise(ArticlePraiseEntity articlePraiseEntity);
     void deleteArticleByArticleId(ArticleEntity articleEntity);
     void updateArticle(ArticleEntity articleEntity);

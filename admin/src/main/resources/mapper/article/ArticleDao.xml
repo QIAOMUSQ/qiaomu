@@ -3,10 +3,10 @@
 <mapper namespace="com.qiaomu.modules.article.dao.ArticleDao">
 
 	<!-- 根据key，更新value -->
-	<select id="query" parameterType="com.qiaomu.modules.article.model.ArticleSelectModel" resultType="com.qiaomu.modules.article.entity.ArticleEntity">
-		select * from pluto_article
+	<select id="query" parameterType="com.qiaomu.modules.article.model.ArticleSelectModel" resultType="com.qiaomu.modules.article.model.ArticleModel">
+		select a.*,b.nick_name as nickName,b.real_name as realName from pluto_article as a JOIN sys_user as b
 		<where>
-			1=1
+			a.authorId=b.user_id
 			<if test="category != null and category !=''">
 				AND category = #{category}
 			</if>

@@ -1,5 +1,6 @@
 package com.qiaomu.modules.article.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.qiaomu.common.utils.AESUtil;
 import com.qiaomu.common.utils.DateUtils;
 import com.qiaomu.modules.article.dao.ArticleDao;
@@ -8,6 +9,7 @@ import com.qiaomu.modules.article.entity.ArticlePoint;
 import com.qiaomu.modules.article.entity.ArticlePraiseEntity;
 import com.qiaomu.modules.article.entity.CommentEntity;
 import com.qiaomu.modules.article.exception.CommentException;
+import com.qiaomu.modules.article.model.ArticleModel;
 import com.qiaomu.modules.article.model.ArticleSelectModel;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.entity.UserExtend;
@@ -40,7 +42,7 @@ public class ArticleServiceImp implements ArticleService{
     public void add(ArticleEntity articleEntity) {
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setTitle(articleEntity.getTitle());
-        List<ArticleEntity> articles =  articleDao.query(articleSelectModel);
+        List<ArticleModel> articles =  articleDao.query(articleSelectModel);
         if(articles!=null&&articles.size()>0){
             throw new DuplicateKeyException("文章标题重名");
         }
@@ -60,7 +62,7 @@ public class ArticleServiceImp implements ArticleService{
     }
 
     @Override
-    public List<ArticleEntity> query(ArticleSelectModel articleSelectModel) {
+    public List<ArticleModel> query(ArticleSelectModel articleSelectModel) {
         SysUserEntity sysUserEntity = sysUserService.queryById(Long.valueOf(articleSelectModel.getUserId()));
 
         if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
@@ -73,14 +75,18 @@ public class ArticleServiceImp implements ArticleService{
         if(userExtend==null||userExtend.getCommunityId()==null){
             throw new CommentException("请认证该小区！");
         }
-        return articleDao.query(articleSelectModel);
+        List<ArticleModel> articleModels = articleDao.query(articleSelectModel);
+        for(ArticleModel articleModel:articleModels){
+            articleModel.setRealName(AESUtil.decrypt(articleModel.getRealName()));
+        }
+        return articleModels;
     }
 
     @Override
     public synchronized Map<String,Object> addPraiseNum(String userId, String articleId ) {
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setArticleId(articleId);
-        List<ArticleEntity> articles =  articleDao.query(articleSelectModel);
+        List<ArticleModel> articles =  articleDao.query(articleSelectModel);
         ArticlePraiseEntity articlePraiseEntity = new ArticlePraiseEntity();
         articlePraiseEntity.setUserId(userId);
         articlePraiseEntity.setArticleId(articleId);
@@ -92,7 +98,8 @@ public class ArticleServiceImp implements ArticleService{
         if(null == isPraise||"0".equals(isPraise)) {
             praiseNum = praiseNum + 1;
             articles.get(0).setPraiseNum(praiseNum);
-            articleDao.updateArticlePraiseNum(articles.get(0));
+
+            articleDao.updateArticlePraiseNum(JSONObject.parseObject(JSONObject.toJSONString(articles.get(0)),ArticleEntity.class));
             articlePraiseEntity.setIsPraise("1");
             if(null == isPraise){
                 articleDao.insertArticlePraise(articlePraiseEntity);
@@ -102,7 +109,7 @@ public class ArticleServiceImp implements ArticleService{
         }else if("1".equals(isPraise)&&praiseNum>=1){
             praiseNum = praiseNum - 1;
             articles.get(0).setPraiseNum(praiseNum);
-            articleDao.updateArticlePraiseNum(articles.get(0));
+            articleDao.updateArticlePraiseNum(JSONObject.parseObject(JSONObject.toJSONString(articles.get(0)),ArticleEntity.class));
             articlePraiseEntity.setIsPraise("0");
             articleDao.updateArticlePraise(articlePraiseEntity);
         }

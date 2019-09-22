@@ -8,6 +8,7 @@ import com.qiaomu.modules.article.entity.ArticleEntity;
 import com.qiaomu.modules.article.entity.ArticlePoint;
 import com.qiaomu.modules.article.entity.CommentEntity;
 import com.qiaomu.modules.article.exception.CommentException;
+import com.qiaomu.modules.article.model.ArticleModel;
 import com.qiaomu.modules.article.model.ArticleSelectModel;
 import com.qiaomu.modules.article.service.ArticleService;
 import com.qiaomu.modules.sys.controller.AbstractController;
@@ -150,7 +151,7 @@ public class ArticleController extends AbstractController{
     public String queryAll(String communityId){
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setCommunityId(communityId);
-        List<ArticleEntity> articles = articleService.query(articleSelectModel);
+        List<ArticleModel> articles = articleService.query(articleSelectModel);
         return JSON.toJSONString(BuildResponse.success(articles));
 
     }
@@ -166,7 +167,7 @@ public class ArticleController extends AbstractController{
         articleSelectModel.setCommunityId(communityId);
         articleSelectModel.setCategory(category);
         articleSelectModel.setUserId(userId);//用户id并非文章作者
-        List<ArticleEntity> articles = articleService.query(articleSelectModel);
+        List<ArticleModel> articles = articleService.query(articleSelectModel);
         return JSON.toJSONString(BuildResponse.success(articles));
 
     }
@@ -180,7 +181,7 @@ public class ArticleController extends AbstractController{
     public String queryByCategory(@RequestParam String category){
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setCategory(category);
-        List<ArticleEntity> articles = articleService.query(articleSelectModel);
+        List<ArticleModel> articles = articleService.query(articleSelectModel);
         return JSON.toJSONString(BuildResponse.success(articles));
 
     }
@@ -193,7 +194,7 @@ public class ArticleController extends AbstractController{
     public String queryByArticleId(@RequestParam String articleId){
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setTitle(articleId);
-        List<ArticleEntity> articles = articleService.query(articleSelectModel);
+        List<ArticleModel> articles = articleService.query(articleSelectModel);
         return JSON.toJSONString(BuildResponse.success(articles));
 
     }
@@ -209,7 +210,7 @@ public class ArticleController extends AbstractController{
         articleSelectModel.setAuthorId(authorId);
         articleSelectModel.setCommunityId(communityId);
         articleSelectModel.setCategory(category);
-        List<ArticleEntity> articles = articleService.query(articleSelectModel);
+        List<ArticleModel> articles = articleService.query(articleSelectModel);
         return JSON.toJSONString(BuildResponse.success(articles));
 
     }

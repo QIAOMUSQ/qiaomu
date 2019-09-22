@@ -3,6 +3,7 @@ package com.qiaomu.modules.article.service;
 import com.qiaomu.modules.article.entity.ArticleEntity;
 import com.qiaomu.modules.article.entity.ArticlePoint;
 import com.qiaomu.modules.article.entity.CommentEntity;
+import com.qiaomu.modules.article.model.ArticleModel;
 import com.qiaomu.modules.article.model.ArticleSelectModel;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import java.util.Map;
  */
 public interface ArticleService {
     void add(ArticleEntity articleEntity);
-    List<ArticleEntity> query(ArticleSelectModel articleSelectModel);
+    List<ArticleModel> query(ArticleSelectModel articleSelectModel);
     Map<String,Object> addPraiseNum(String userId, String articleId);
     void addComment(CommentEntity commentEntity)throws Exception;
     List<CommentEntity> queryComment(CommentEntity commentEntity);
