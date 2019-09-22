@@ -54,6 +54,7 @@ public class ArticleController extends AbstractController{
     @RequestMapping(value = "publishMsg",method = RequestMethod.POST)
     public String add(HttpServletRequest request){
         ArticleEntity articleEntity = buildAticle(request);
+        articleEntity.setViewNum(0);
         articleService.add(articleEntity);
         ArticlePoint articlePoint = new ArticlePoint();
         articlePoint.setUserId(articleEntity.getAuthorId());
@@ -195,6 +196,28 @@ public class ArticleController extends AbstractController{
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setTitle(articleId);
         List<ArticleModel> articles = articleService.query(articleSelectModel);
+        return JSON.toJSONString(BuildResponse.success(articles));
+
+    }
+
+    /**
+     * 增加浏览量
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "addViewByArticleId",method = RequestMethod.POST)
+    public String addViewByArticleId(@RequestParam String articleId){
+        ArticleSelectModel articleSelectModel = new ArticleSelectModel();
+        articleSelectModel.setTitle(articleId);
+        List<ArticleModel> articles = articleService.query(articleSelectModel);
+        if(articles.size()>0){
+            ArticleModel articleModel = articles.get(0);
+            ArticleEntity articleEntity = JSONObject.parseObject(JSONObject.toJSONString(articleModel),ArticleEntity.class);
+            int viewNum = articleEntity.getViewNum()+1;
+            articleEntity.setViewNum(viewNum);
+            articleService.updateArticlePraiseNum(articleEntity);
+        }
+
         return JSON.toJSONString(BuildResponse.success(articles));
 
     }

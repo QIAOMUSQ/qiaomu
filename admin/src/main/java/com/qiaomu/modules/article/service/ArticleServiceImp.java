@@ -188,4 +188,9 @@ public class ArticleServiceImp implements ArticleService{
         articleDao.insertArticlePoint(articlePoint);
     }
 
+    @Override
+    public synchronized void updateArticlePraiseNum(ArticleEntity articleEntity) {
+         articleDao.updateArticleViewNum(articleEntity);
+    }
+
 }

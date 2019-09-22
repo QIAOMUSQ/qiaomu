@@ -31,6 +31,9 @@
 	<update id="updateArticlePraiseNum" parameterType="com.qiaomu.modules.article.entity.ArticleEntity">
 		update pluto_article set praiseNum = #{praiseNum} where articleId = #{articleId}
 	</update>
+	<update id="updateArticleViewNum" parameterType="com.qiaomu.modules.article.entity.ArticleEntity">
+		update pluto_article set viewNum = #{viewNum} where articleId = #{articleId}
+	</update>
 	<update id="updateArticle" parameterType="com.qiaomu.modules.article.entity.ArticleEntity">
 		update pluto_article set content = #{content} ,title= #{title},category= #{category},imageUrls=#{imageUrls},updatedAt=#{updatedAt} where articleId = #{articleId}
 	</update>
@@ -46,8 +49,8 @@
 	</update>
 
 	<insert id="insertArticle" parameterType="com.qiaomu.modules.article.entity.ArticleEntity">
-		insert into pluto_article (articleId ,content,title,category,commentId,praiseNum,authorId,isPrivate,communityId,imageUrls,headUrl,createdAt,updatedAt) VALUES
-		 (#{articleId},#{content},#{title},#{category},#{commentId},#{praiseNum},#{authorId},#{isPrivate},#{communityId},#{imageUrls},#{headUrl},#{createdAt},#{updatedAt})
+		insert into pluto_article (articleId ,content,title,category,commentId,praiseNum,viewNum,authorId,isPrivate,communityId,imageUrls,headUrl,createdAt,updatedAt) VALUES
+		 (#{articleId},#{content},#{title},#{category},#{commentId},#{praiseNum},#{viewNum},#{authorId},#{isPrivate},#{communityId},#{imageUrls},#{headUrl},#{createdAt},#{updatedAt})
 	</insert>
 
 	<insert id="insertArticleComment" parameterType="com.qiaomu.modules.article.entity.CommentEntity">

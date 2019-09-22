@@ -20,6 +20,7 @@ public interface ArticleDao extends BaseMapper<InvitationEntity> {
     void deleteArticleByArticleId(ArticleEntity articleEntity);
     void updateArticle(ArticleEntity articleEntity);
     void updateArticlePraiseNum(ArticleEntity articleEntity);
+    void updateArticleViewNum(ArticleEntity articleEntity);
     void insertArticlePraise(ArticlePraiseEntity articlePraiseEntity);
     void updateArticlePraise(ArticlePraiseEntity articlePraiseEntity);
     void insertArticle(ArticleEntity articleEntity);

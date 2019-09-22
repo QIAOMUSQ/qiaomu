@@ -10,6 +10,7 @@ public class ArticleModel {
     private String category;
     private String nickName;
     private String realName;
+    private Integer viewNum;
     private String commentId;
     private Integer praiseNum;
     private String authorId;
@@ -138,5 +139,13 @@ public class ArticleModel {
 
     public void setRealName(String realName) {
         this.realName = realName;
+    }
+
+    public Integer getViewNum() {
+        return viewNum;
+    }
+
+    public void setViewNum(Integer viewNum) {
+        this.viewNum = viewNum;
     }
 }

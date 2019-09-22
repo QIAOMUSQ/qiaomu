@@ -16,6 +16,7 @@ public class ArticleEntity {
     private String authorId;
     private String communityId;
     private String headUrl;
+    private Integer viewNum;
     private String isPrivate;
     private String imageUrls;
     private String createdAt;
@@ -123,5 +124,13 @@ public class ArticleEntity {
 
     public void setHeadUrl(String headUrl) {
         this.headUrl = headUrl;
+    }
+
+    public Integer getViewNum() {
+        return viewNum;
+    }
+
+    public void setViewNum(Integer viewNum) {
+        this.viewNum = viewNum;
     }
 }
