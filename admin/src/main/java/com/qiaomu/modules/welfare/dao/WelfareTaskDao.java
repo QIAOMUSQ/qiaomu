@@ -24,7 +24,7 @@ public interface WelfareTaskDao extends BaseMapper<InvitationEntity> {
     TaskPublishUserEntity queryPublishUserTask(String serviceId);
     TaskRecevieUserEntity queryRecevieUserTask(String serviceId);
     TaskPublishUserEntity queryPublishUserTaskLast(String serviceId);
-    List<TaskEntity> queryPublishUserServices(String publishUserId);
+    List<TaskEntity> queryPublishUserServices(String communityId,String publishUserId);
     List<TaskEntity> queryRecevieUserServices(String receiveUserId);
     List<TaskEntity> queryAllunReviewTask(String publishUserId);
     PointEntity selectPonitByUserId(String userId);

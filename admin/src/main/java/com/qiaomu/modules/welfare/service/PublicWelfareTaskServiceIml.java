@@ -76,8 +76,8 @@ public class PublicWelfareTaskServiceIml implements PublicWelfareTaskService {
     }
 
     @Override
-    public List<TaskEntity> queryPublishUserServices(String publishUserId) {
-        return welfareTaskDao.queryPublishUserServices(publishUserId);
+    public List<TaskEntity> queryPublishUserServices(String communityId,String publishUserId) {
+        return welfareTaskDao.queryPublishUserServices(communityId,publishUserId);
     }
 
     @Override
