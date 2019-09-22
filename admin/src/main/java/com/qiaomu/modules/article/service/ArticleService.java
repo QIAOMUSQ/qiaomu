@@ -27,4 +27,5 @@ public interface ArticleService {
     ArticlePoint queryArticlePoint(String userId,String communityId);
     void insertArticlePoint(ArticlePoint articlePoint);
     void updateArticlePraiseNum(ArticleEntity articleEntity);
+    List<ArticleModel> queryOnly(ArticleSelectModel articleSelectModel);
 }

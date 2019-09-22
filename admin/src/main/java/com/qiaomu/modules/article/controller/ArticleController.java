@@ -209,7 +209,7 @@ public class ArticleController extends AbstractController{
     public String addViewByArticleId(@RequestParam String articleId){
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setTitle(articleId);
-        List<ArticleModel> articles = articleService.query(articleSelectModel);
+        List<ArticleModel> articles = articleService.queryOnly(articleSelectModel);
         if(articles.size()>0){
             ArticleModel articleModel = articles.get(0);
             ArticleEntity articleEntity = JSONObject.parseObject(JSONObject.toJSONString(articleModel),ArticleEntity.class);

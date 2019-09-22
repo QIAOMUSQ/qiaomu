@@ -83,6 +83,12 @@ public class ArticleServiceImp implements ArticleService{
     }
 
     @Override
+    public List<ArticleModel> queryOnly(ArticleSelectModel articleSelectModel) {
+        List<ArticleModel> articleModels = articleDao.query(articleSelectModel);
+        return articleModels;
+    }
+
+    @Override
     public synchronized Map<String,Object> addPraiseNum(String userId, String articleId ) {
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setArticleId(articleId);
