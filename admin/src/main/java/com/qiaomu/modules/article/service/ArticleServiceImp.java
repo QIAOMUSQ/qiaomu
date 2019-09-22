@@ -195,7 +195,7 @@ public class ArticleServiceImp implements ArticleService{
     }
 
     @Override
-    public synchronized void updateArticlePraiseNum(ArticleEntity articleEntity) {
+    public synchronized void updateArticleViewNum(ArticleEntity articleEntity) {
          articleDao.updateArticleViewNum(articleEntity);
     }
 

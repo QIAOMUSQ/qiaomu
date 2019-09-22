@@ -187,14 +187,14 @@ public class ArticleController extends AbstractController{
 
     }
     /**
-     * 查询指定标题的文章
+     * 查询指定id的文章
      * @param
      * @return
      */
     @RequestMapping(value = "queryByArticleId",method = RequestMethod.POST)
     public String queryByArticleId(@RequestParam String articleId){
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
-        articleSelectModel.setTitle(articleId);
+        articleSelectModel.setArticleId(articleId);
         List<ArticleModel> articles = articleService.query(articleSelectModel);
         return JSON.toJSONString(BuildResponse.success(articles));
 
@@ -206,19 +206,20 @@ public class ArticleController extends AbstractController{
      * @return
      */
     @RequestMapping(value = "addViewByArticleId",method = RequestMethod.POST)
-    public String addViewByArticleId(@RequestParam String articleId){
+    public String addViewByArticleId(String articleId){
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
-        articleSelectModel.setTitle(articleId);
+        articleSelectModel.setArticleId(articleId);
         List<ArticleModel> articles = articleService.queryOnly(articleSelectModel);
+        ArticleEntity articleEntity = new ArticleEntity();
         if(articles.size()>0){
             ArticleModel articleModel = articles.get(0);
-            ArticleEntity articleEntity = JSONObject.parseObject(JSONObject.toJSONString(articleModel),ArticleEntity.class);
+            articleEntity = JSONObject.parseObject(JSONObject.toJSONString(articleModel),ArticleEntity.class);
             int viewNum = articleEntity.getViewNum()+1;
             articleEntity.setViewNum(viewNum);
-            articleService.updateArticlePraiseNum(articleEntity);
+            articleService.updateArticleViewNum(articleEntity);
         }
 
-        return JSON.toJSONString(BuildResponse.success(articles));
+        return JSON.toJSONString(BuildResponse.success(articleEntity));
 
     }
     /**
@@ -238,7 +239,7 @@ public class ArticleController extends AbstractController{
 
     }
     /**
-     * 查询指定作者的文章
+     * 点赞
      * @param
      * @return
      */
