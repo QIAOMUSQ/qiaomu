@@ -50,7 +50,7 @@
             webUploader.on('uploadSuccess', function (file, response) {
                 var $fileBox = $('#fileBox_' + file.id);
                 var $diyBar = $fileBox.find('.diyBar');
-                $fileBox.removeClass('diyUploadHover');
+                //$fileBox.removeClass('diyUploadHover');
                 $diyBar.fadeOut(1000, function () {
                     $fileBox.children('.diySuccess').show();
                 });
@@ -66,6 +66,30 @@
                 if (errorCallBack) {
                     errorCallBack(err);
                 }
+            });
+            webUploader.on('uploadBeforeSend', function (object) {
+                if(opt.pixel){
+                    if(object.file._info){
+                        var height = opt.pixel.height;
+                        var width = opt.pixel.width;
+                        if (height != 0 && object.file._info.height>height){
+                            webUploader.trigger( 'error', 'Q_TYPE_PIXEL_HEIGHT');
+                            $('#fileBox_' + object.file.id).remove();
+                            webUploader.stop(object.file.id);
+                            webUploader.removeFile(object.file.id);
+                        }
+                        if (width==0 && object.file._info.width>width){
+                            webUploader.trigger( 'error', 'Q_TYPE_PIXEL_WIDTH');
+                            $('#fileBox_' + object.file.id).remove();
+                            webUploader.stop(object.file.id);
+                            webUploader.removeFile(object.file.id);
+                        }
+
+                        return false;
+                    }
+                }
+                return true;
+
             });
             webUploader.on('error', function (code) {
                 var text = '';
@@ -85,12 +109,19 @@
                     case 'Q_TYPE_DENIED':
                         text = '文件类型不正确或者是空文件!';
                         break;
+                    case 'Q_TYPE_PIXEL_HEIGHT':
+                        text = '该像素高度超过规定高度!';
+                        break;
+                    case 'Q_TYPE_PIXEL_WIDTH':
+                        text = '该像素宽度超过规定宽度!';
+                        break;
                     default:
                         text = '未知错误!';
                         break;
                 }
                 alert(text);
             });
+
             return webUploader;
         }
     });
@@ -106,7 +137,7 @@
             chunkSize: 512 * 1024,
             fileNumLimit: 50,
             fileSizeLimit: 500000 * 1024,
-            fileSingleSizeLimit: 50000 * 1024,
+            fileSingleSizeLimit: 50000 * 1024
         };
     }
 
@@ -128,7 +159,8 @@
 
     function removeLi($li, file_id, webUploader) {
         webUploader.removeFile(file_id);
-        $li.remove();
+        removeServiceFile($li,file_id);
+
     }
 
     function leftLi($leftli, $li) {
@@ -138,23 +170,32 @@
     function rightLi($rightli, $li) {
         $li.insertAfter($rightli);
     }
+    function removeServiceFile(li,file_id) {
+        var path = li.find(".fileJson").val();
+        $.get(baseURL + "welfare/sysFile/removeFile?url="+path, function(result){
+            li.remove();
+        });
+    }
 
     function createBox($fileInput, file, webUploader) {
         var file_id = file.id;
         var $parentFileBox = $fileInput.parents(".upload-ul");
         var file_len = $parentFileBox.children(".diyUploadHover").length;
-        var li = '<li id="fileBox_' + file_id + '" class="diyUploadHover"> \
+        var li = '<li id="fileBox_' + file_id + '" class="diyUploadHover">\
 					<div class="viewThumb">\
 					    <input type="hidden">\
 					    <div class="diyBar"> \
 							<div class="diyProgress">0%</div> \
 					    </div> \
-					    <p class="diyControl"><span class="diyLeft"><i></i></span><span class="diyCancel"><i></i></span><span class="diyRight"><i></i></span></p>\
+					    <p class="diyControl">\
+					        <span class="diyLeft"><i></i></span>\
+					        <span class="diyCancel"><i></i></span>\
+					        <span class="diyRight"><i></i></span></p>\
 					</div> \
 				</li>';
         $parentFileBox.prepend(li);
         var $fileBox = $parentFileBox.find('#fileBox_' + file_id);
-        var $diyCancel = $fileBox.find('.diyCancel').one('click', function () {
+        $fileBox.find('.diyCancel').one('click', function () {
             removeLi($(this).parents('.diyUploadHover'), file_id, webUploader);
         });
         $fileBox.find('.diyLeft').on('click', function () {
@@ -169,7 +210,6 @@
             return;
         }
         webUploader.makeThumb(file, function (error, dataSrc) {
-            debugger;
             if (!error) {
                 $fileBox.find('.viewThumb').append('<img src="' + dataSrc + '" >');
             }

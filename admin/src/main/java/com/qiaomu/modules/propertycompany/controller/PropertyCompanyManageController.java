@@ -32,7 +32,6 @@ public class PropertyCompanyManageController {
     @RequiresPermissions({"company:list"})
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = this.propertyCompanyService.queryPage(params);
-
         return R.ok().put("page", page);
     }
 

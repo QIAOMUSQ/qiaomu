@@ -247,7 +247,7 @@ function _init() {
       var _this = this;
       _this.fix();
       _this.fixSidebar();
-      $('body, html, .wrapper').css('height', 'auto');
+      $('body, html, .wrapper').css('height', '100%');
       $(window, ".wrapper").resize(function () {
         _this.fix();
         _this.fixSidebar();
@@ -520,8 +520,7 @@ function _init() {
         _this.hasBindedResize = true;
       } else {
         sidebar.css({
-          'position': 'fixed',
-          'height': 'auto'
+          'position': 'fixed'
         });
       }
     },

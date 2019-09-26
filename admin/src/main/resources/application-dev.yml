@@ -4,12 +4,12 @@ spring:
     driverClassName: com.mysql.jdbc.Driver
     druid:
       first:  #数据源1
-        url: jdbc:mysql://103.26.76.116:6300/qiaomu_service?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
-        username: qiaomu_service
+        url: jdbc:mysql://103.26.76.116:6300/qiaomu_dev?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+        username: qiaomu_dev
         password: qiaomu
       second:  #数据源2
-        url: jdbc:mysql://103.26.76.116:6300/qiaomu_service?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
-        username: qiaomu_service
+        url: jdbc:mysql://103.26.76.116:6300/qiaomu_dev?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+        username: qiaomu_dev
         password: qiaomu
       initial-size: 10
       max-active: 100

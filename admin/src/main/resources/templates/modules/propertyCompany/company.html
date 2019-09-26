@@ -104,6 +104,7 @@
                 if(response){
                     var imgId = $("#imgId").val();
                     $("#imgId").val( imgId+response.id+"_");
+                    fileBox.append('<input style="display:none;" class="fileJson" name="'+fileBox[0].id+'_imgs" value="'+response.path+'"/>');
                     vm.company.companyImg = imgId+response.id+"_";
                 }else{
                     alert("图片上传失败！");

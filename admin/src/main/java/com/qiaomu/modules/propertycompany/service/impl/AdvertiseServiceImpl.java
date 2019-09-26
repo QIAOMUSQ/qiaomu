@@ -10,6 +10,8 @@ import com.qiaomu.modules.propertycompany.entity.Advertise;
 import com.qiaomu.modules.propertycompany.entity.CommunityAdvertise;
 import com.qiaomu.modules.propertycompany.entity.Merchant;
 import com.qiaomu.modules.propertycompany.service.AdvertiseService;
+import com.qiaomu.modules.sys.dao.YwCommunityDao;
+import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.service.SysFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Conditional;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author 李品先
@@ -37,10 +40,19 @@ public class AdvertiseServiceImpl extends ServiceImpl<AdvertiseDao,Advertise> im
     @Resource
     private CommunityAdvertiseDao communityAdvertiseDao;
 
+    @Resource
+    private YwCommunityDao communityDao;
+
     @Override
     public PageUtils pageList(Map<String, Object> params,Advertise advertise) {
         Page<Advertise> page = new Query(params).getPage();// 当前页，总条
         page.setRecords(this.baseMapper.selectPageAll(page,advertise));
+        for (Advertise a :page.getRecords()){
+            List<YwCommunity> communities= communityDao.getCommunityByAdvertise(a.getId());
+            if(communities.size()>0){
+                a.setCommunityName(communities.stream().map(p -> p.getName()).collect(Collectors.toList()).toString());
+            }
+        }
         return new PageUtils(page);
     }
 

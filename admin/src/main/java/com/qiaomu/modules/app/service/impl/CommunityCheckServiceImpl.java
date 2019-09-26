@@ -59,7 +59,12 @@ public class CommunityCheckServiceImpl extends ServiceImpl<CommunityCheckDao,Com
         for (CommunityCheckEntity community : page.getRecords()){
             if(community.getCommunityId() != null){
                 YwCommunity community1 = communityService.queryById(community.getCommunityId());
-                community.setCompanyName(community1.getCompanyName());
+                if(community1 !=null ){
+                    community.setCompanyName(community1.getCompanyName());
+                }else {
+                    community.setCommunityId(null);
+                    baseMapper.updateAllColumnById(community);
+                }
             }
         }
         return new PageUtils(page);

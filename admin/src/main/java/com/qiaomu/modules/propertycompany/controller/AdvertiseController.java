@@ -17,7 +17,7 @@ import java.util.Map;
 
 /**
  * @author 李品先
- * @description: 公告
+ * @description: 广告
  * @Date 2019-08-10 16:12
  */
 @Controller
@@ -36,6 +36,7 @@ public class AdvertiseController {
             advertise.setName((String) params.get("merchantName"));
         }
         PageUtils page = advertiseService.pageList(params,advertise);
+
         return R.ok().put("page",page);
 
     }
