@@ -67,6 +67,12 @@ public class YwPropertyCompanyServiceImpl extends ServiceImpl<YwPropertyCompanyD
         updateUserInfo(propertyCompany);
     }
 
+    @Override
+    public YwPropertyCompany findCompanyByUserName(String userName) {
+
+        return baseMapper.findCompanyByUserName(userName);
+    }
+
     /**
      * 将管理员信息保存到人员信息表中
      * @param propertyCompany
@@ -77,17 +83,17 @@ public class YwPropertyCompanyServiceImpl extends ServiceImpl<YwPropertyCompanyD
         userService.updateById(user);
     }
 
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean deleteBatchIds(Collection<? extends Serializable> idList) {
-        //删除图片
-        for(Serializable id :idList){
-            YwPropertyCompany company = baseMapper.selectById(id);
-            String[] imgIds = company.getCompanyImg().split("_");
-            for(String imgId: imgIds){
-                sysFileService.deleteById(Long.valueOf(imgId));
-            }
-        }
-        return super.deleteBatchIds(idList);
-    }
+//    @Override
+//    @Transactional(rollbackFor = Exception.class)
+//    public boolean deleteBatchIds(Collection<? extends Serializable> idList) {
+//        //删除图片
+//        for(Serializable id :idList){
+//            YwPropertyCompany company = baseMapper.selectById(id);
+//            String[] imgIds = company.getCompanyImg().split("_");
+//            for(String imgId: imgIds){
+//                sysFileService.deleteById(Long.valueOf(imgId));
+//            }
+//        }
+//        return super.deleteBatchIds(idList);
+//    }
 }

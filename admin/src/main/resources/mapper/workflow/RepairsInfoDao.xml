@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qiaomu.modules.workflow.dao.RepairsInfoDao">
+
+    <select id="findRepairs" resultType="com.qiaomu.modules.workflow.entity.RepairsInfo">
+        SELECT
+            r.id,
+            r.user_id,
+            r.create_time,
+            r.detail,
+            r.repairs_id,
+            r.repairs_type,
+            r.`status`,
+            u.hand_img_id AS imgId
+        FROM
+            yw_repairs_info r
+        LEFT JOIN sys_user u ON r.user_id = u.user_id
+        <where>
+            1=1
+            <if test="userId !=null">
+                and user_id =#{userId}
+            </if>
+            <if test="communityId !=null">
+                and community_id =#{communityId}
+            </if>
+            <if test="repairsType !=null and repairsType !='' ">
+                and repairs_type =#{repairsType}
+            </if>
+            <if test="status !=null and status != '' ">
+                and status =#{status}
+            </if>
+            <if test="repairsId !=null">
+                and repairs_id =#{repairsId}
+            </if>
+        </where>
+        ORDER BY r.create_time DESC
+    </select>
+
+    <select id="selectPages" resultType="com.qiaomu.modules.workflow.entity.RepairsInfo" >
+        SELECT
+            r.id,
+            r.user_id,
+            r.community_id,
+            r.create_time,
+            r.detail,
+            r.repairs_id,
+            r.repairs_type,
+            r.`status`,
+            u.hand_img_id AS imgId,
+            u.real_name as userRealName,
+            u.username as userPhone
+        FROM
+            yw_repairs_info r
+            LEFT JOIN sys_user u ON r.user_id = u.user_id
+        <where>
+            1=1
+            <if test="userId !=null">
+                and r.user_id =#{userId}
+            </if>
+            <if test="communityId !=null">
+                and r.community_id =#{communityId}
+            </if>
+            <if test="repairsType !=null and repairsType !='' ">
+                and r.repairs_type =#{repairsType}
+            </if>
+            <if test="status !=null and status != '' ">
+                and r.status =#{status}
+            </if>
+            <if test="communityIds !=null">
+                and r.community_id in
+                <foreach item="communityId" collection="communityIds" open="(" separator="," close=")">
+                    #{communityId}
+                </foreach>
+            </if>
+            <if test="repairsId !=null">
+                and r.repairs_id =#{repairsId}
+            </if>
+        </where>
+        ORDER BY r.create_time DESC
+    </select>
+    <select id="findRepairsById" parameterType="long" resultType="com.qiaomu.modules.workflow.entity.RepairsInfo">
+       SELECT
+            r.id,
+            r.user_id,
+            r.community_id,
+            r.user_opinion,
+            r.detail,
+            r.create_time,
+            r.rapair_time,
+            r.location,
+            r.picture,
+            r.service_date,
+            r.repairs_type,
+            r.star_type,
+            r.repairs_id,
+            r.repairs_type,
+            r.apportion_time,
+            r.`status`,
+            u.hand_img_id AS imgId,
+            u.real_name as userRealName,
+            u.username as userPhone
+        FROM
+            yw_repairs_info r
+        LEFT JOIN sys_user u ON r.user_id = u.user_id
+        where r.id = #{id}
+    </select>
+
+</mapper>

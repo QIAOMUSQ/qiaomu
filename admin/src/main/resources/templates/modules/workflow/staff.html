@@ -3,10 +3,10 @@
 <head>
     <title>审批人员管理</title>
     <#include "/header.html">
-
+        <link rel="stylesheet" href="${request.contextPath}/statics/plugins/layui/css/layui.css">
         </head>
 <body>
-    <div>
+<div id="grid">
         <div class="grid-btn">
             <div class="form-group col-sm-2">
                 <input type="text" class="form-control" id="communityName"placeholder="社区名称">
@@ -20,6 +20,9 @@
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
     </div>
+<div id="repairsType" style="display:none;">
+    <input id="repairs" class="layui-input" placeholder="维修类型"/>
+</div>
 <input style="display: none;" id="_application_static_url"/>
 </body>
 <script>
@@ -35,7 +38,14 @@
                 { label: '用户手机', name: 'userPhone'},
                 { label: '真实姓名', name: 'realName' },
                 { label: '所属社区', name: 'communityName'},
-                { label: '创建时间', name: 'createTime'}
+                {label: '创建时间', name: 'createTime'},
+                {label: '维修工作类型', name: 'repairsType'},
+                {
+                    label: '操作', name: '', formatter: function (cellvalue, options, rowObject) {
+                    return ' <a class="btn btn-default" onclick="queryInfo(' + rowObject.id + ')">分配维修类型</a>';
+                }
+                }
+
             ],
             viewrecords: true,
             height: 385,
@@ -74,6 +84,8 @@
             page:page
         }).trigger("reloadGrid");
     }
+
+
     function deletes() {
         var ids = $("#jqGrid").getGridParam("selarrrow");
         if(ids.length == 0){
@@ -95,6 +107,45 @@
                 }
             }
         });
+    }
+
+    function queryInfo(id) {
+        var data = [
+            {name:"电力报修",value:0},
+            {name:"供水报修",value:1},
+            {name:"煤气报修",value:2},
+            {name:"房屋维修",value:3}
+        ];
+        $("#repairs").kendoDropDownList({
+            dataTextField: "name",
+            dataValueField: "value",
+            dataSource: data
+        });
+        layer.open({
+            type: 1,
+            skin: 'layui-layer-molv',
+            title: "分配维修类型",
+            area: ['300px', '250px'],
+            fixed: false,
+            content: $('#repairsType'),
+            closeBtn: 1,
+            btn: ['确定', '取消'],
+            yes: function (index, layero) {//    //点击确定回调
+                var repairs = $("#repairs").val();
+                $.ajax({
+                    type: "POST",
+                    url: baseURL + "communityUser/setRepairsType",
+                    datType: "JSON",
+                    data: {repairsType:repairs,id:id},
+                    success: function (data) {
+                        query();
+                        layer.close(index);
+                    }
+                });
+
+            }
+        });
+
     }
 </script>
 </html>

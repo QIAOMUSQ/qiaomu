@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>维修信息</title>
+    <#include "/header.html">
+
+        <link rel="stylesheet" href="${request.contextPath}/statics/plugins/layui/css/layui.css">
+        <style>
+            ::-webkit-scrollbar {
+                display: none;
+            }
+            .layui-form-label{
+                width: auto;
+            }
+        </style>
+</head>
+<body>
+<div id="rrapp">
+    <div class="grid-btn">
+        <div class="form-group col-sm-2">
+            <input type="text" class="form-control" id= "communityName" placeholder="社区">
+        </div>
+        <div class="form-group col-sm-2">
+            <input type="text" class="form-control" id="repairs"  placeholder="维修类型">
+        </div>
+        <a class="btn btn-default" onclick="query()" >查询</a>
+    </div>
+    <table id="jqGrid"></table>
+    <div id="jqGridPager"></div>
+</div>
+<!--详情页开始-->
+<div id="repairsInfo" style="display: none;">
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <table>
+                            <tr>
+                                <td style="width: 37%;">
+                                    <blockquote class="layui-elem-quote" id="userRealName"></blockquote>
+                                    <img id="handImg" style="height: 40px;width: 40px;position: absolute;top: 15px;left: 249px;"/>
+                                </td>
+                                <td  style="width: 37%;">
+                                    <blockquote class="layui-elem-quote" id="userPhone"></blockquote>
+                                </td>
+                                <td  style="width: 37%;">
+                                    <blockquote class="layui-elem-quote " id="community"></blockquote>
+                                </td>
+                            </tr>
+                        </table>
+                        <button class="layui-btn" onclick="rollback()" style="position: absolute;right: 36px;top: 14px;">返回</button>
+
+                    </div>
+                </div>
+                <div class="layui-card">
+                    <div class="layui-card-body">
+
+                        <fieldset class="layui-elem-field">
+                            <legend>详情</legend>
+                            <div class="layui-field-box">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">提交时间</label>
+                                    <div class="layui-input-inline">
+                                        <input class="layui-input" id="createTime"/>
+                                    </div>
+                                    <label class="layui-form-label">维修类型</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="repairsType" class="layui-input">
+                                    </div>
+                                    <label class="layui-form-label">状态</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="status" class="layui-input">
+                                    </div>
+                                    <label class="layui-form-label">服务时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="serviceDate" class="layui-input">
+                                    </div>
+                                </div>
+                                <fieldset class="layui-elem-field layui-field-title">
+                                    <legend id="location"></legend>
+                                </fieldset>
+                                <div class="layui-form-item layui-form-text">
+                                    <label class="layui-form-label">事故详情</label>
+                                    <div class="layui-input-block">
+                                        <textarea id="detail" class="layui-textarea"></textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="layui-card">
+                                <div class="layui-card-header">图片详情</div>
+                                <div class="layui-card-body">
+                                    <div class="layui-inline" id="picture"></div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <hr class="layui-bg-orange">
+                <div class="layui-card">
+                    <div class="layui-card-header">维修详情</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">维修人员</label>
+                            <div class="layui-input-inline">
+                                <input class="layui-input" id="repairsName"/>
+                            </div>
+                            <label class="layui-form-label">维修人员号码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="repairsPhone" class="layui-input">
+                            </div>
+                            <label class="layui-form-label">维修完成时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="repairsTime" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户评价星级</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" id="starType"/>
+                            </div>
+                            <label class="layui-form-label">分配时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" id="apportionTime"/>
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">用户评价</label>
+                            <div class="layui-input-block">
+                                <textarea id="userOpinion" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--详情页结束-->
+<div id="userRepairs" style="display: none;">
+    <div style="top: 70px; position: absolute;width:100%;">
+        <table id="repairsGrid" ></table>
+        <div id="repairsPager"></div>
+    </div>
+    <button class="layui-btn" onclick="rollback()" style="position: absolute;right: 127px;top: 14px;">返回</button>
+    <button class="layui-btn" id="selectAll" style="position: absolute;right: 36px;top: 14px;">确定</button>
+</div>
+<input id="companyId" style="display:none;"/>
+</body>
+<script src="${request.contextPath}/statics/plugins/layui/layui.js"></script>
+<script>
+    var rate = layui.rate;
+    $(function () {
+        postAjax(baseURL + 'communityUser/getUserExtend',"",getCompany);
+    });
+    var getCompany = function (result) {
+        $("#companyId").val(result.data.companyId);
+        page();
+        var data = [
+            {name:"电力报修",value:0},
+            {name:"供水报修",value:1},
+            {name:"煤气报修",value:2},
+            {name:"房屋维修",value:3}
+        ];
+        $("#repairs").kendoDropDownList({
+            optionLabel: "--请选择--",
+            dataTextField: "name",
+            dataValueField: "value",
+            dataSource: data
+        });
+    }
+
+    function page() {
+        $("#jqGrid").jqGrid({
+            url: baseURL + 'mobile/repairs/findRepairs',
+            datatype: "json",
+            mtype:"POST",
+            postData:{'companyId': $("#companyId").val()},
+            colModel: [
+                { label: 'id', name: 'id', index: "id", width: 45, key: true,hidden:true },
+                { label: '社区名称', name: 'communityName', align:'center', width: 85 },
+                { label: '业主', name: 'userRealName',align:'center', width: 55 },
+                { label: '业主手机', name: 'userPhone',align:'center', width: 90 },
+                { label: '描述', name: 'detail',align:'center', width: 150 },
+                { label: '状态', name: 'status',align:'center', width: 100 },
+                { label: '提交时间', name: 'createTime',align:'center', width: 100 },
+                { label: '维修类型', name: 'repairsType',align:'center', width: 100 },
+                { label: '操作', name: '',align:'center', width: 130,
+                    formatter:function(cellvalue, options, rowObject){
+                        console.info(rowObject);
+                        return ' <a class="btn btn-default" onclick="queryInfo('+rowObject.id+')">查看详情</a>' +
+                                '<a class="btn btn-primary" onclick="apportionRepairsPerson('+rowObject.id+','+rowObject.communityId+')">分配人员</a>';
+                    }
+                }
+            ],
+            viewrecords: true,
+            height: 385,
+            rowNum: 10,
+            rowList : [10,30,50],
+            rownumbers: true,
+            rownumWidth: 25,
+            autowidth:true,
+            multiselect: true,
+            pager: "#jqGridPager",
+            jsonReader : {
+                root: "page.list",
+                page: "page.currPage",
+                total: "page.totalPage",
+                records: "page.totalCount"
+            },
+            prmNames : {
+                page:"page",
+                rows:"limit",
+                order: "order"
+            },
+            gridComplete:function(){
+                //隐藏grid底部滚动条
+                $("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+            }
+        });
+    }
+
+    function query() {
+        var page = $("#jqGrid").jqGrid('getGridParam','page');
+        $("#jqGrid").jqGrid('setGridParam',{
+            postData:{'companyId': $("#companyId").val(),
+                        "repairsType":$("#repairs").val(),
+                        communityName:$("#communityName").val()},
+            page:page
+        }).trigger("reloadGrid");
+    }
+
+
+    function queryInfo(id) {
+        var getInfo = function (result) {
+            $("#repairsInfo").css("display","block");
+            $("#rrapp").css("display","none");
+
+            $("#userRealName").text("业主:"+result.data.userRealName);
+            $("#userPhone").text("业主手机:"+result.data.userPhone);
+            $("#community").text("所在社区:"+result.data.communityName);
+            $("#handImg").attr("src",baseURL+ 'welfare/sysFile/showPicForMany?id='+result.data.imgId);
+            $("#createTime").val(result.data.createTime);
+            $("#serviceDate").val(result.data.serviceDate);
+            $("#repairsType").val(result.data.repairsType);
+            $("#status").val(result.data.status);
+            $("#location").text("详细地址:"+result.data.location);
+            $("#detail").text(result.data.detail);
+            var picture = JSON.parse(result.data.picture);
+            $.each(picture,function (index,item) {
+                $("#picture").append('<img style="height: 120px;width: 120px;" src="'+item+'" class="layui-circle">');
+            })
+            $("#repairsName").val(result.data.repairsName);
+            $("#repairsPhone").val(result.data.repairsPhone);
+            $("#repairsTime").val(result.data.repairsTime);
+            $("#repairsName").val(result.data.repairsName);
+            $("#userOpinion").text(result.data.userOpinion);
+            $("#starType").val(result.data.starType);
+            $("#apportionTime").val(result.data.apportionTime);
+        };
+
+        postAjax(baseURL + "mobile/repairs/findRepairsById",{"id":id},getInfo);
+    }
+
+    function postAjax(url,data,fun) {
+        $.ajax({
+            url:url,
+            type: "POST",
+            dataType:"json",
+            data:data,
+            success:function (result) {
+                fun(result);
+            }
+        });
+    }
+
+    //分配维修人员
+    function apportionRepairsPerson(id,communityId) {
+        $("#repairsInfo").css("display","none");
+        $("#rrapp").css("display","none");
+        $("#userRepairs").css("display","block");
+
+        $("#repairsGrid").jqGrid({
+            url: baseURL + 'communityUser/people/list',
+            datatype: "json",
+            mtype:"POST",
+            postData:{'communityId': communityId,companyRoleType:2},
+            colModel: [
+                { label: '', name: 'id',hidden:true  },
+                { label: '', name: 'userId',hidden:true  },
+                { label: '用户手机', name: 'userPhone'},
+                { label: '真实姓名', name: 'realName' },
+                {label: '创建时间', name: 'createTime'},
+                {label: '维修工作类型', name: 'repairsType'}
+            ],
+            viewrecords: true,
+            height: 385,
+            rowNum: 10,
+            rowList : [10,30,50],
+            rownumbers: true,
+            rownumWidth: 25,
+            autowidth:true,
+            multiselect: true,
+            pager: "#repairsPager",
+            jsonReader : {
+                root: "page.list",
+                page: "page.currPage",
+                total: "page.totalPage",
+                records: "page.totalCount"
+            },
+            prmNames : {
+                page:"page",
+                rows:"limit",
+                order: "order"
+            },
+            gridComplete:function(){
+                //隐藏grid底部滚动条
+                $("#repairsGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+            }
+        });
+        //postAjax(baseURL + "mobile/repairs/findRepairsById",{"id":id},getInfo);
+        $("#selectAll").click(function() {
+            var grid = $("#repairsGrid");
+            var rowKey = grid.getGridParam("selrow");
+            if(!rowKey){
+                alert("请选择一条记录");
+                return ;
+            }
+            var rows =  grid.getGridParam("selarrrow");
+            if(rows.length > 1){
+                alert("只能选择一条记录");
+                return ;
+            }
+            var userId = $("#repairsGrid").jqGrid('getRowData', rows[0]).userId;
+            var apportionRepairs = function (result) {
+                console.info(result);
+                if(result.respCode=='1001'){
+                    alert(result.errorMsg);
+                }else {
+                    alert(result.respMsg);
+                    $("#rrapp").css("display","block");
+                    $("#repairsInfo").css("display","none");
+                    $("#userRepairs").css("display","none");
+                }
+
+            };
+            postAjax(baseURL + "mobile/repairs/apportionRepairsPerson",{"id":id,userId:userId},apportionRepairs);
+        });
+    }
+
+    function rollback() {
+        $("#rrapp").css("display","block");
+        $("#repairsInfo").css("display","none");
+        $("#userRepairs").css("display","none");
+        $("#userRealName").text("");
+        $("#userPhone").text("");
+        $("#community").text("");
+        $("#handImg").attr("");
+        $("#createTime").val("");
+        $("#serviceDate").val("");
+        $("#repairsType").val("");
+        $("#status").val("");
+        $("#location").text("");
+        $("#detail").text("");
+        $("#picture").html("");
+        $("#repairsName").val("");
+        $("#repairsPhone").val("");
+        $("#repairsTime").val("");
+        $("#repairsName").val("");
+        $("#userOpinion").text("");
+        $("#starType").val("");
+        $("#apportionTime").val();
+    }
+</script>
+
+</html>

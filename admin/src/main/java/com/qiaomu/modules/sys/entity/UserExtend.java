@@ -34,6 +34,7 @@ public class UserExtend implements Serializable {
     private String info;
 
     private boolean status;//状态
+    private String repairsType;//维修类型
 
     @TableField(exist = false)
     private String communityName;
@@ -161,5 +162,13 @@ public class UserExtend implements Serializable {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public String getRepairsType() {
+        return repairsType;
+    }
+
+    public void setRepairsType(String repairsType) {
+        this.repairsType = repairsType;
     }
 }

@@ -30,6 +30,7 @@ $(window).on('resize', function() {
 	$content.find('iframe').each(function() {
 		$(this).height($content.height());
 	});
+	getCompany();
 }).resize();
 
 //注册菜单组件
@@ -107,6 +108,7 @@ var vm = new Vue({
 		routerList(router, vm.menuList);
 		router.start();
 	}
+
 });
 
 
@@ -130,5 +132,25 @@ function routerList(router, menuList){
 			    vm.navTitle = $("a[href='"+url+"']").text();
 			});
 		}
+	}
+}
+
+function getCompany() {
+	var userName = $("#userName").text();
+	if(userName =='admin'){
+		$("#logo-lg").text("100分社区管理");
+	}else {
+		$.ajax({
+			type:"POST",
+			url:"propertyCompanyManage/findCompanyByUserName",
+			data:{userName:userName},
+			contentType: "application/json",
+			success:function (data) {
+				if(data.result){
+					$("#logo-lg").text(data.result.name+"管理系统");
+				}
+
+			}
+		});
 	}
 }

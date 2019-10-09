@@ -127,6 +127,8 @@ public class SysUserEntity implements Serializable {
     @TableField(exist = false)
     private String sessionId;
 
+    private Long loginCommunityId;
+
     /**
      * 设置：
      *
@@ -330,5 +332,13 @@ public class SysUserEntity implements Serializable {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public Long getLoginCommunityId() {
+        return loginCommunityId;
+    }
+
+    public void setLoginCommunityId(Long loginCommunityId) {
+        this.loginCommunityId = loginCommunityId;
     }
 }
