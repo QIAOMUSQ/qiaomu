@@ -32,7 +32,6 @@ public class PropertyCompanyManageController {
     @RequiresPermissions({"company:list"})
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = this.propertyCompanyService.queryPage(params);
-
         return R.ok().put("page", page);
     }
 
@@ -51,7 +50,7 @@ public class PropertyCompanyManageController {
     @RequestMapping({"/info/{id}"})
     @RequiresPermissions({"company:info"})
     public R info(@PathVariable("id") Long id) {
-        YwPropertyCompany company = (YwPropertyCompany) this.propertyCompanyService.selectById(id);
+        YwPropertyCompany company =  this.propertyCompanyService.selectById(id);
 
         return R.ok().put("company", company);
     }
@@ -70,5 +69,11 @@ public class PropertyCompanyManageController {
     public R delete(@RequestBody Long[] ids) {
         propertyCompanyService.deleteBatchIds(Arrays.asList(ids));
         return R.ok();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "findCompanyByUserName", method = {RequestMethod.POST})
+    public R findCompanyByUserName(String userName){
+        return R.ok().put("result",JSON.toJSON(propertyCompanyService.findCompanyByUserName(userName)));
     }
 }

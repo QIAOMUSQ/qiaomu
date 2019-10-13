@@ -14,6 +14,7 @@ import com.qiaomu.modules.sys.service.SysFileService;
 import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
 import com.qiaomu.modules.sys.service.UserExtendService;
+import com.qiaomu.modules.workflow.enums.RepairsTypeEnum;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,6 +87,8 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
             userExtend.setAddress(AESUtil.decrypt(userExtend.getAddress()));
             //获取手机号码
             userExtend.setUserPhone(sysUserService.queryById(userExtend.getUserId()).getUsername());
+            if (userExtend.getRepairsType() !=null)
+            userExtend.setRepairsType(RepairsTypeEnum.repairs(userExtend.getRepairsType()).getRepairsInfo());
         }
 
         return new PageUtils(page);
@@ -94,8 +97,8 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
     @Override
     public UserExtend getUserExtendInfo(Long id) {
         UserExtend  user = baseMapper.selectById(id);
-        user.setRealName(AESUtil.decrypt(user.getRealName()));
-        user.setAddress(AESUtil.decrypt(user.getAddress()));
+        if (StringUtils.isNotBlank(user.getRealName()))user.setRealName(AESUtil.decrypt(user.getRealName()));
+        if (StringUtils.isNotBlank(user.getAddress()))user.setAddress(AESUtil.decrypt(user.getAddress()));
         user.setUserPhone(sysUserService.queryById(user.getUserId()).getUsername());
         return user;
     }
@@ -144,7 +147,10 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
             }
             //设置头像
             if(imgId != null){
-                fileService.deleteById(user.getHandImgId());
+                //排除默认图像
+                if (user.getHandImgId() != 167l){
+                    fileService.deleteById(user.getHandImgId());
+                }
                 user.setHandImgId(imgId);
             }
             if(StringUtils.isNotBlank(newPhone)){
@@ -208,5 +214,13 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
     @Override
     public void deleteByCommunity(Long communityId) {
         baseMapper.deleteByCommunity(communityId);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void setRepairsType(Long id, String repairsType) {
+        UserExtend userExtend = this.baseMapper.selectById(id);
+        userExtend.setRepairsType(repairsType);
+        baseMapper.updateById(userExtend);
     }
 }

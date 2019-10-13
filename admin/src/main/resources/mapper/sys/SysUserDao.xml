@@ -2,7 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.qiaomu.modules.sys.dao.SysUserDao">
-	
+	<update id="setUserLoginCommunity" parameterType="com.qiaomu.modules.sys.entity.SysUserEntity">
+		UPDATE sys_user SET login_community_id = #{loginCommunityId} where user_id = #{userId}
+	</update>
+
 	<!-- 查询用户的所有权限 -->
 	<select id="queryAllPerms" resultType="string">
 		select m.perms from sys_user_role ur 

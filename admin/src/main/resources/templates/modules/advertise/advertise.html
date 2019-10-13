@@ -17,9 +17,9 @@
             <#if shiro.hasPermission("advertise:add")>
                 <a class="btn btn-primary" onclick="add()" ><i class="fa fa-plus"></i>&nbsp;新增</a>
             </#if>
-            <#if shiro.hasPermission("advertise:update")>
+           <!-- <#if shiro.hasPermission("advertise:update")>
                 <a class="btn btn-primary" onclick="update()"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-            </#if>
+            </#if>-->
             <#if shiro.hasPermission("advertise:delete")>
                 <a class="btn btn-primary" onclick="deleteById()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
             </#if>
@@ -38,6 +38,7 @@
             { label: 'id', name: 'id', index: "id", width: 45, key: true,hidden:true },
             { label: '题目', name: 'title',  width: 45 },
             { label: '简介', name: 'brief', width: 75 },
+            { label: '投放社区', name: 'communityName', width: 100 },
             { label: '商户', name: 'name', width: 90 },
             { label: '时间', name: 'createTime', width: 100 }
         ],
@@ -85,11 +86,25 @@
             btn: ['确定','取消'],
             yes:function(index,layero){//    //点击确定回调
                 var form = layer.getChildFrame('form', index);
+                debugger;
+                console.info(form);
+                var nameJson = form.serialize().split("&");
+                var mainImg ='';
+                var imgs = new Array();
+                $.each(nameJson,function (index,item) {
+                    if(item.indexOf("mainImg")>=0){
+                        mainImg = item.split("=")[1];
+                    }
+                    if(item.indexOf("imgs")>=0){
+                        imgs.push(item.split("=")[1]);
+                    }
+                });
+                console.info(form.serialize()+"&mainImg="+mainImg+"&imgs="+JSON.stringify(imgs));
                 $.ajax({
                     type:"POST",
                     url:baseURL + "mobile/advertise/save",
                     datType:"JSON",
-                    data:form.serialize(),
+                    data:form.serialize()+"&mainImg="+mainImg+"&imgs="+JSON.stringify(imgs),
                     success:function (data) {
                         console.info(data)
                         layer.close(index);
@@ -101,7 +116,44 @@
         });
     }
     function update() {
+        layer.open({
+            type: 2,
+            skin: 'layui-layer-molv',
+            title: "社区审核",
+            area: ['1000px', '573px'],
+            fixed:false,
+            content: baseURL + "mobile/advertise/add",
+            closeBtn:1,
+            btn: ['确定','取消'],
+            yes:function(index,layero){//    //点击确定回调
+                var form = layer.getChildFrame('form', index);
 
+                var nameJson = form.serialize().split("&");
+                var mainImg ='';
+                var imgs = new Array();
+                $.each(nameJson,function (index,item) {
+                    if(item.indexOf("mainImg")>=0){
+                        mainImg = item.split("=")[1];
+                    }
+                    if(item.indexOf("imgs")>=0){
+                        imgs.push(item.split("=")[1]);
+                    }
+                });
+                console.info(form.serialize()+"&mainImg="+mainImg+"&imgs="+JSON.stringify(imgs));
+                $.ajax({
+                    type:"POST",
+                    url:baseURL + "mobile/advertise/save",
+                    datType:"JSON",
+                    data:form.serialize()+"&mainImg="+mainImg+"&imgs="+JSON.stringify(imgs),
+                    success:function (data) {
+                        console.info(data)
+                        layer.close(index);
+                        reload();
+                    }
+                });
+
+            }
+        });
     }
 
 </script>

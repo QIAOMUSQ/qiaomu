@@ -26,19 +26,6 @@
 
     </div>
     <div id="table" style="height: 50%;width: 100%">
-       <!-- <table class="table table-striped">
-            <caption>社区登录次数统计</caption>
-            <thead>
-                <tr>
-                    <th>社区</th>
-                    <th>时间</th>
-                    <th>登录次数</th>
-                </tr>
-            </thead>
-            <tbody id="tableThead">
-
-            </tbody>
-        </table>-->
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
     </div>
@@ -170,9 +157,9 @@
     function queryData() {
 
         var city = $("#city").data("kendoDropDownList").value();
-       /* if(city ==''){
+        if(city ==''){
             return alert("请选择城市");
-        }*/
+        }
         var startTime = $("#startTime").val();
         var endTime = $("#endTime").val();
         $.ajax({

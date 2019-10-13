@@ -206,7 +206,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     public String getRealNameByIds(String ids) {
         String name = "";
         if(StringUtils.isNotBlank(ids)){
-            System.out.println("ids = [" + ids + "]");
             SysUserEntity user = baseMapper.getuserRealName(ids);
             String realName=user.getRealName();
             if(StringUtils.isNotBlank(realName)){
@@ -228,5 +227,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         userExtendService.deleteByUserIds(userIds);
         deleteBatchIds(userIds);
         sysUserRoleService.deleteByUserIds(userIds);
+    }
+
+    @Override
+    public void setUserLoginCommunity(Long userId, Long communityId) {
+        SysUserEntity user= new SysUserEntity();
+        user.setUserId(userId);
+        user.setLoginCommunityId(communityId);
+         baseMapper.setUserLoginCommunity(user);
     }
 }

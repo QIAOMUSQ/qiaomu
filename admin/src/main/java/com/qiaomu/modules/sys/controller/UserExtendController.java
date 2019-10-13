@@ -1,5 +1,6 @@
 package com.qiaomu.modules.sys.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
@@ -89,4 +90,23 @@ public class UserExtendController extends AbstractController {
             return BuildResponse.fail();
         }
     }
+    @ResponseBody
+    @RequestMapping(value = "getUserExtend", method = RequestMethod.POST)
+    public Object getUserExtend(){
+        return BuildResponse.success(JSON.toJSON(getUser()));
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "setRepairsType",method = RequestMethod.POST)
+    public Object setRepairsType(Long id,String repairsType){
+        try {
+            userExtendService.setRepairsType(id,repairsType);
+            return BuildResponse.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return BuildResponse.fail();
+        }
+
+    }
+
 }

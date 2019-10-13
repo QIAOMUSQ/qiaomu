@@ -38,6 +38,7 @@ public class Advertise implements Serializable {
     private String httpsUrl;//外链httls跳转地址
 
     private String https;//是否支持外链
+    private String mainImg;//主图片
     @TableField(exist = false)
     private String communityIds;//社区Id
 
@@ -47,6 +48,9 @@ public class Advertise implements Serializable {
 
     @TableField(exist = false)
     private String name;
+
+    @TableField(exist = false)
+    private String communityName;
 
     public Long getId() {
         return id;
@@ -166,5 +170,21 @@ public class Advertise implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getMainImg() {
+        return mainImg;
+    }
+
+    public void setMainImg(String mainImg) {
+        this.mainImg = mainImg;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
     }
 }

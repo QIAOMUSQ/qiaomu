@@ -27,4 +27,6 @@ public interface YwCommunityDao extends BaseMapper<YwCommunity> {
 
     List<YwCommunity> getDeleteCommunity(YwCommunity community);
 
+    List<YwCommunity> getCommunityByAdvertise(Long advertiseId);
+
 }

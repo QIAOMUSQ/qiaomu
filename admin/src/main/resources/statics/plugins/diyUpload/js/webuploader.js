@@ -4076,11 +4076,9 @@
                     chunks: block.chunks,
                     chunk: block.chunk
                 });
-    
                 // 在发送之间可以添加字段什么的。。。
                 // 如果默认的字段不够使用，可以通过监听此事件来扩展
                 owner.trigger( 'uploadBeforeSend', block, data, headers );
-    
                 // 开始发送。
                 tr.appendBlob( opts.fileVal, block.blob, file.name );
                 tr.append( data );

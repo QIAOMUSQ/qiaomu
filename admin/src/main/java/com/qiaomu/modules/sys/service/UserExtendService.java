@@ -54,9 +54,21 @@ public interface UserExtendService extends IService<UserExtend> {
 
     void deleteByUserIds(List<Long> userIds);
 
+    /**
+     * 查询社区是否存在该人员
+     * @param userExtend
+     * @return
+     */
     UserExtend queryUserExtend(UserExtend userExtend);
 
     void deleteStaff(List<Long> longs);
 
     void deleteByCommunity(Long communityId);
+
+    /**
+     * 设置工作人员的工作类型
+     * @param id
+     * @param repairsType
+     */
+    void setRepairsType(Long id, String repairsType);
 }

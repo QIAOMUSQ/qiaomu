@@ -109,6 +109,7 @@ public class AppUserController extends AbstractController {
         user.setDeptId(9l);
         user.setStatus(Integer.valueOf(1));
         user.setNickName(RandomName.randomName(true,4));
+        user.setHandImgId(167l);
         this.sysUserService.save(user);
         return R.ok();
     }
@@ -171,4 +172,9 @@ public class AppUserController extends AbstractController {
         return BuildResponse.success(JSON.toJSON(sysUserService.selectById(userId)));
     }
 
+    @RequestMapping(value = "setUserLoginCommunity")
+    public Object setUserLoginCommunity(Long userId,Long communityId){
+        sysUserService.setUserLoginCommunity(userId,communityId);
+        return BuildResponse.success();
+    }
 }

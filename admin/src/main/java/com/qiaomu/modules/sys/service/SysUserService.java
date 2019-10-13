@@ -19,6 +19,7 @@ package com.qiaomu.modules.sys.service;
 import com.baomidou.mybatisplus.service.IService;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -86,4 +87,7 @@ public interface SysUserService extends IService<SysUserEntity> {
     String getRealNameByIds(String ids);
 
     void deleteByIds(List<Long> longs);
+
+    void setUserLoginCommunity(Long userId,Long communityId);
+
 }

@@ -137,19 +137,19 @@ var vm = new Vue({
                 $.each(imgs,function (index,item) {
                     if(parseInt(item)){
                         imgHtml += '<li id="fileBox_WU_FILE_'+index+'" class="">'+
-                            '<div class="viewThumb">'+
-                            '<input type="hidden">'+
-                            '<div class="diyBar" style="display: none;">'+
-                            '<div class="diyProgress" style="width: 100%;">上传完成</div>'+
-                            '</div>'+
-                            '<p class="diyControl">'+
-                            '<span class="diyLeft"><i></i></span>'+
-                            '<span class="diyCancel"><i></i></span>'+
-                            '<span class="diyRight"><i></i></span>'+
-                            '</p>'+
-                            '<img src="'+baseURL+ 'welfare/sysFile/showPicForMany?id='+item+'"/>'+
-                            '</div>'+
-                            '</li>';
+                                        '<div class="viewThumb">'+
+                                            '<input type="hidden">'+
+                                            '<div class="diyBar" style="display: none;">'+
+                                                '<div class="diyProgress" style="width: 100%;">上传完成</div>'+
+                                            '</div>'+
+                                            '<p class="diyControl">'+
+                                                '<span class="diyLeft"><i></i></span>'+
+                                                '<span class="diyCancel"><i></i></span>'+
+                                                '<span class="diyRight"><i></i></span>'+
+                                            '</p>'+
+                                            '<img src="'+baseURL+ 'welfare/sysFile/showPicForMany?id='+item+'"/>'+
+                                        '</div>'+
+                                    '</li>';
                     }
 
                 });

@@ -63,6 +63,16 @@
             )
     </select>
 
+    <select id="getCommunityByAdvertise" resultType="com.qiaomu.modules.sys.entity.YwCommunity">
+        SELECT
+            c.*
+        FROM
+            yw_community c
+        LEFT JOIN yw_community_advertise a ON c.id = a.community_id
+        WHERE
+            a.advertise_id = #{advertiseId}
+    </select>
+
     <update id="setCommunityDisEnable" parameterType="java.util.HashMap">
         UPDATE yw_community set enable=0, delete_time =#{deleteTime}
         where id in
@@ -71,5 +81,7 @@
         </foreach>
 
     </update>
+
+
 
 </mapper>

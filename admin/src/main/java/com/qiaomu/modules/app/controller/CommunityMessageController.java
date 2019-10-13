@@ -57,6 +57,12 @@ public class CommunityMessageController  extends AbstractController {
     private ProvinceCityDateService provinceCityDateService;
 
 
+    /**
+     * 获取社区列表
+     * @param params
+     * @param request
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "list", method = RequestMethod.POST)
     public R getCommunityList(@RequestParam Map<String, Object> params, ServletRequest request) {
