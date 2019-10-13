@@ -10,6 +10,7 @@ public class ArticleSelectModel {
     private String communityId;
     private String isPrivate;
     private String userId;
+    private String queryType;
 
     public String getCommunityId() {
         return communityId;
@@ -69,5 +70,13 @@ public class ArticleSelectModel {
 
     public String getUserId() {
         return userId;
+    }
+
+    public String getQueryType() {
+        return queryType;
+    }
+
+    public void setQueryType(String queryType) {
+        this.queryType = queryType;
     }
 }

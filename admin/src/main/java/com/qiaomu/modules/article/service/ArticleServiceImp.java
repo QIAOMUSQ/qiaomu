@@ -75,7 +75,15 @@ public class ArticleServiceImp implements ArticleService{
         if(userExtend==null||userExtend.getCommunityId()==null){
             throw new CommentException("请认证该小区！");
         }
-        List<ArticleModel> articleModels = articleDao.query(articleSelectModel);
+        List<ArticleModel> articleModels =null;
+        if(articleSelectModel.getQueryType()==null||"1".equals(articleSelectModel.getQueryType())||"3".equals(articleSelectModel.getQueryType())){
+            articleModels = articleDao.query(articleSelectModel);
+        }else if("2".equals(articleSelectModel.getQueryType())){
+            articleModels = articleDao.queryArticleByCommentTime(articleSelectModel);
+        }else if("4".equals(articleSelectModel.getQueryType())){
+            articleModels = articleDao.queryArticleByCommentNum(articleSelectModel);
+        }
+
         for(ArticleModel articleModel:articleModels){
             articleModel.setRealName(AESUtil.decrypt(articleModel.getRealName()));
         }

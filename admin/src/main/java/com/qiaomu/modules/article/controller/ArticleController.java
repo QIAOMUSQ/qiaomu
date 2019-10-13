@@ -35,7 +35,7 @@ import static com.qiaomu.common.utils.Constant.SERVER_URL;
  * @Date 2019-05-25 0:02
  */
 @RestController
-@RequestMapping(value = "mobile/article")
+@RequestMapping(value = "/article")
 public class ArticleController extends AbstractController{
 
     @Autowired
@@ -163,11 +163,12 @@ public class ArticleController extends AbstractController{
      * @return
      */
     @RequestMapping(value = "queryAllByCommunityIdAndCategary",method = RequestMethod.POST)
-    public String queryAllByCommunityIdAndCategary(String communityId,String category,String userId){
+    public String queryAllByCommunityIdAndCategary(String communityId,String category,String userId,String queryType){
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setCommunityId(communityId);
         articleSelectModel.setCategory(category);
         articleSelectModel.setUserId(userId);//用户id并非文章作者
+        articleSelectModel.setQueryType(queryType);
         List<ArticleModel> articles = articleService.query(articleSelectModel);
         return JSON.toJSONString(BuildResponse.success(articles));
 

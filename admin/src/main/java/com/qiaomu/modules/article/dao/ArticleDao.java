@@ -16,6 +16,8 @@ import java.util.List;
  */
 public interface ArticleDao extends BaseMapper<InvitationEntity> {
     List<ArticleModel> query(ArticleSelectModel articleSelectModel);
+    List<ArticleModel> queryArticleByCommentNum(ArticleSelectModel articleSelectModel);
+    List<ArticleModel> queryArticleByCommentTime(ArticleSelectModel articleSelectModel);
     String queryPraise(ArticlePraiseEntity articlePraiseEntity);
     void deleteArticleByArticleId(ArticleEntity articleEntity);
     void updateArticle(ArticleEntity articleEntity);
