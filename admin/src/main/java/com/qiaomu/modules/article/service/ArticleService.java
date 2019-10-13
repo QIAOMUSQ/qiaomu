@@ -28,4 +28,5 @@ public interface ArticleService {
     void insertArticlePoint(ArticlePoint articlePoint);
     void updateArticleViewNum(ArticleEntity articleEntity);
     List<ArticleModel> queryOnly(ArticleSelectModel articleSelectModel);
+    void updateArticleCategory(ArticleEntity  articleEntity );
 }

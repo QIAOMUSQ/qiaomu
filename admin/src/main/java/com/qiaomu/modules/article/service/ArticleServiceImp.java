@@ -99,6 +99,11 @@ public class ArticleServiceImp implements ArticleService{
     }
 
     @Override
+    public void updateArticleCategory(ArticleEntity  articleEntity ) {
+        articleDao.updateArticleCategory(articleEntity );
+    }
+
+    @Override
     public synchronized Map<String,Object> addPraiseNum(String userId, String articleId ) {
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setArticleId(articleId);

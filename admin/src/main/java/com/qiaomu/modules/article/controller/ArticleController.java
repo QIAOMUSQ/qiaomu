@@ -35,7 +35,7 @@ import static com.qiaomu.common.utils.Constant.SERVER_URL;
  * @Date 2019-05-25 0:02
  */
 @RestController
-@RequestMapping(value = "/article")
+@RequestMapping(value = "mobile/article")
 public class ArticleController extends AbstractController{
 
     @Autowired
@@ -285,6 +285,15 @@ public class ArticleController extends AbstractController{
         articleService.updateArticle(articleEntity);
         return JSON.toJSONString(BuildResponse.success());
 
+    }
+
+    @RequestMapping(value = "complaint",method = RequestMethod.POST)
+    public String complaint(String  articleId,String  content){
+        ArticleEntity  articleEntity = new ArticleEntity();
+        articleEntity.setArticleId(articleId);
+        articleEntity.setCommunityId(content);
+        articleService.updateArticleCategory(articleEntity);
+        return JSON.toJSONString(BuildResponse.success());
     }
 
 

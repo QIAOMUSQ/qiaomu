@@ -88,6 +88,9 @@
 	<update id="updateArticle" parameterType="com.qiaomu.modules.article.entity.ArticleEntity">
 		update pluto_article set content = #{content} ,title= #{title},category= #{category},imageUrls=#{imageUrls},updatedAt=#{updatedAt} where articleId = #{articleId}
 	</update>
+    <update id="updateArticleCategory" parameterType="com.qiaomu.modules.article.entity.ArticleEntity">
+        update pluto_article set category= '99' ,commentId=#{commentId} where articleId = #{articleId}
+    </update>
 
 	<insert id="insertArticlePraise" parameterType="com.qiaomu.modules.article.entity.ArticlePraiseEntity">
 		insert into pluto_article_praise (userId,isPraise,articleId) VALUES (#{userId},#{isPraise},#{articleId})
