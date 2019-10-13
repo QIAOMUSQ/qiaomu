@@ -55,11 +55,11 @@ public class RepairsInfoController {
             condition.setUserId(repairs.getUserId());
             condition.setCommunityId(repairs.getCommunityId());
             UserExtend user = userExtendService.queryUserExtend(condition);
-            if (user!=null && user.getCompanyRoleType().equals("4")){
+            if (user!=null && !user.getCompanyRoleType().equals("4")){
                 repairs.setPicture(JSON.toJSONString(fileService.imageUrls(request)));
                 repairsInfoService.insert(repairs);
                 return BuildResponse.success();
-            }else if(user!=null && user.getCompanyRoleType().equals("5")){
+            }else if(user!=null && user.getCompanyRoleType().equals("0")){
                 return BuildResponse.fail("请等待个人信息验证");
             }else {
                 return BuildResponse.fail("请先进行信息认证");

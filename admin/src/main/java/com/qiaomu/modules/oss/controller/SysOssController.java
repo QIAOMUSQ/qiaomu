@@ -16,10 +16,10 @@
 
 package com.qiaomu.modules.oss.controller;
 
-import com.google.gson.Gson;
+import com.alibaba.fastjson.JSON;
 import com.qiaomu.common.exception.RRException;
-import com.qiaomu.common.utils.Constant;
 import com.qiaomu.common.utils.ConfigConstant;
+import com.qiaomu.common.utils.Constant;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
 import com.qiaomu.common.validator.ValidatorUtils;
@@ -104,7 +104,7 @@ public class SysOssController {
             ValidatorUtils.validateEntity(config, QcloudGroup.class);
         }
 
-        sysConfigService.updateValueByKey(KEY, new Gson().toJson(config));
+        sysConfigService.updateValueByKey(KEY, JSON.toJSONString(config));
 
         return R.ok();
     }

@@ -16,10 +16,10 @@
 
 package com.qiaomu.modules.sys.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.google.gson.Gson;
 import com.qiaomu.common.exception.RRException;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
@@ -100,7 +100,9 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigDao, SysConfigEnt
     public <T> T getConfigObject(String key, Class<T> clazz) {
         String value = getValue(key);
         if (StringUtils.isNotBlank(value)) {
-            return new Gson().fromJson(value, clazz);
+            return JSONObject.parseObject(value,clazz);
+            //return new Gson().fromJson(value, clazz);
+           // return new Gson().fromJson(value, clazz);
         }
 
         try {
