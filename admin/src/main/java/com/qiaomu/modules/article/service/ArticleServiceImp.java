@@ -82,6 +82,8 @@ public class ArticleServiceImp implements ArticleService{
             articleModels = articleDao.queryArticleByCommentTime(articleSelectModel);
         }else if("4".equals(articleSelectModel.getQueryType())){
             articleModels = articleDao.queryArticleByCommentNum(articleSelectModel);
+        }else if("5".equals(articleSelectModel.getQueryType())){
+            articleModels = articleDao.queryHotArticle(articleSelectModel);
         }
 
         for(ArticleModel articleModel:articleModels){
@@ -94,6 +96,11 @@ public class ArticleServiceImp implements ArticleService{
     public List<ArticleModel> queryOnly(ArticleSelectModel articleSelectModel) {
         List<ArticleModel> articleModels = articleDao.query(articleSelectModel);
         return articleModels;
+    }
+
+    @Override
+    public void updateArticleCategory(ArticleEntity  articleEntity ) {
+        articleDao.updateArticleCategory(articleEntity );
     }
 
     @Override

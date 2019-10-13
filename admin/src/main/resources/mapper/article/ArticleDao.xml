@@ -47,6 +47,20 @@
 		GROUP BY articleId order by number desc
     </select>
 
+    <select id="queryHotArticle" parameterType="com.qiaomu.modules.article.model.ArticleSelectModel" resultType="com.qiaomu.modules.article.model.ArticleModel">
+        SELECT * ,count(*) as number from (SELECT a.* ,b.createdAt as tt,c.nick_name as nickName,c.real_name as realName from (pluto_article as a
+        inner join  pluto_article_comment  as b on a.articleId=b.articleId) left join sys_user as c  on a.authorId=c.user_id ) as t
+        <where>
+            <if test="category != null and category !=''">
+                AND category = #{category}
+            </if>
+            <if test="communityId != null and communityId !=''">
+                AND (isPrivate = "0" OR communityId = #{communityId})
+            </if>
+        </where>
+        GROUP BY articleId order by number desc,viewNum desc limit 10
+    </select>
+
 	<select id="queryArticleByCommentTime" parameterType="com.qiaomu.modules.article.model.ArticleSelectModel" resultType="com.qiaomu.modules.article.model.ArticleModel">
 		SELECT * from (SELECT a.* ,b.createdAt as tt,c.nick_name as nickName,c.real_name as realName from (pluto_article as a inner join  pluto_article_comment
 		as b on a.articleId=b.articleId) left join sys_user as c  on a.authorId=c.user_id order by b.createdAt desc limit 1000)
@@ -74,6 +88,9 @@
 	<update id="updateArticle" parameterType="com.qiaomu.modules.article.entity.ArticleEntity">
 		update pluto_article set content = #{content} ,title= #{title},category= #{category},imageUrls=#{imageUrls},updatedAt=#{updatedAt} where articleId = #{articleId}
 	</update>
+    <update id="updateArticleCategory" parameterType="com.qiaomu.modules.article.entity.ArticleEntity">
+        update pluto_article set category= '99' ,commentId=#{commentId} where articleId = #{articleId}
+    </update>
 
 	<insert id="insertArticlePraise" parameterType="com.qiaomu.modules.article.entity.ArticlePraiseEntity">
 		insert into pluto_article_praise (userId,isPraise,articleId) VALUES (#{userId},#{isPraise},#{articleId})

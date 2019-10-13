@@ -35,7 +35,7 @@ import static com.qiaomu.common.utils.Constant.SERVER_URL;
  * @Date 2019-05-25 0:02
  */
 @RestController
-@RequestMapping(value = "/article")
+@RequestMapping(value = "mobile/article")
 public class ArticleController extends AbstractController{
 
     @Autowired
@@ -174,6 +174,24 @@ public class ArticleController extends AbstractController{
 
     }
 
+
+    /**
+     * 查询所有热点文章
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "queryHotArticle",method = RequestMethod.POST)
+    public String queryHotArticle(String communityId,String category,String userId){
+        ArticleSelectModel articleSelectModel = new ArticleSelectModel();
+        articleSelectModel.setCommunityId(communityId);
+        articleSelectModel.setCategory(category);
+        articleSelectModel.setUserId(userId);//用户id并非文章作者
+        articleSelectModel.setQueryType("5");
+        List<ArticleModel> articles = articleService.query(articleSelectModel);
+        return JSON.toJSONString(BuildResponse.success(articles));
+
+    }
+
     /**
      * 查询指定类型的文章
      * @param
@@ -267,6 +285,15 @@ public class ArticleController extends AbstractController{
         articleService.updateArticle(articleEntity);
         return JSON.toJSONString(BuildResponse.success());
 
+    }
+
+    @RequestMapping(value = "complaint",method = RequestMethod.POST)
+    public String complaint(String  articleId,String  content){
+        ArticleEntity  articleEntity = new ArticleEntity();
+        articleEntity.setArticleId(articleId);
+        articleEntity.setCommunityId(content);
+        articleService.updateArticleCategory(articleEntity);
+        return JSON.toJSONString(BuildResponse.success());
     }
 
 
