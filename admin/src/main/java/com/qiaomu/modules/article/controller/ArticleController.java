@@ -174,6 +174,24 @@ public class ArticleController extends AbstractController{
 
     }
 
+
+    /**
+     * 查询所有热点文章
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "queryHotArticle",method = RequestMethod.POST)
+    public String queryHotArticle(String communityId,String category,String userId){
+        ArticleSelectModel articleSelectModel = new ArticleSelectModel();
+        articleSelectModel.setCommunityId(communityId);
+        articleSelectModel.setCategory(category);
+        articleSelectModel.setUserId(userId);//用户id并非文章作者
+        articleSelectModel.setQueryType("5");
+        List<ArticleModel> articles = articleService.query(articleSelectModel);
+        return JSON.toJSONString(BuildResponse.success(articles));
+
+    }
+
     /**
      * 查询指定类型的文章
      * @param
