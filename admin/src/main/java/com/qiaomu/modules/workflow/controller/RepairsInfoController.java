@@ -81,7 +81,6 @@ public class RepairsInfoController {
     @RequestMapping(value = "findRepairs",method = RequestMethod.POST)
     public Object findRepairs(@RequestParam Map<String, Object> params){
         PageUtils repairsInfo = repairsInfoService.findRepairsPage(params);
-
         if(StringUtils.isBlank((String) params.get("companyId"))){
             return BuildResponse.success(JSON.toJSON(repairsInfo));
         }else {

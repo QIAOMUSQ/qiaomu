@@ -5,10 +5,11 @@
     <title>Title</title>
     <#include "/header.html">
         <link rel="stylesheet" href="${request.contextPath}/statics/plugins/diyUpload/globle.css">
+        <link rel="stylesheet" href="${request.contextPath}/statics/plugins/layui/css/layui.css">
 </head>
 <body>
 <div >
-    <div v-show="showList">
+    <div id="main">
         <div class="grid-btn">
             <div class="form-group col-sm-2">
                 <input type="text" class="form-control" id="name"  placeholder="名称">
@@ -17,19 +18,30 @@
             <#if shiro.hasPermission("advertise:add")>
                 <a class="btn btn-primary" onclick="add()" ><i class="fa fa-plus"></i>&nbsp;新增</a>
             </#if>
-           <!-- <#if shiro.hasPermission("advertise:update")>
-                <a class="btn btn-primary" onclick="update()"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-            </#if>-->
             <#if shiro.hasPermission("advertise:delete")>
                 <a class="btn btn-primary" onclick="deleteById()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
             </#if>
+            <a class="btn btn-primary" onclick="getStatistics()"><i class="fa fa-trash-o"></i>&nbsp;查看统计</a>
         </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
     </div>
+    <div id="getStatistics" style="display:none;">
+        <div style="position: absolute;top: 14px; left: 50px;">
+            <input id="startTime" width="100px"/>
+            <input id="endTime" width="100px"/>
+            <button class="layui-btn" onclick="queryDate()">查询</button>
+            <button class="layui-btn" onclick="rollback()">返回</button>
+        </div>
+        <div id="chart" style="height: 300px;width: 900px;position: absolute;left: 150px;top: 85px;"></div>
+        <div id="chartDetail" style="height: 250px;width: 900px;position: absolute;left: 150px;top: 385px;display: none;"></div>
+    </div>
 </div>
 </body>
+<script src="${request.contextPath}/statics/plugins/echarts/echarts.min.js"></script>
 <script>
+    var myChart = echarts.init(document.getElementById('chart'));
+    var chartDetail = echarts.init(document.getElementById('chartDetail'));
     $("#jqGrid").jqGrid({
         url: baseURL + 'mobile/advertise/pageList',
         datatype: "json",
@@ -154,6 +166,206 @@
 
             }
         });
+    }
+    function getStatistics() {
+        $("#main").css("display", "none");
+        $("#getStatistics").css("display", "block");
+
+        $("#startTime").kendoDatePicker({
+            value: new Date(),
+            culture: "zh-CN",
+            format: "yyyy-MM-dd",
+            change: function () {
+                queryDate();
+            }
+        }).data("kendoDatePicker");
+
+        $("#endTime").kendoDatePicker({
+            value: new Date(),
+            culture: "zh-CN",
+            format: "yyyy-MM-dd",
+            change: function () {
+                queryDate();
+            }
+        }).data("kendoDatePicker");
+
+        myChart.setOption({
+            color: ['#43c563'],
+            title: {
+                text: '广告浏览统计'
+            },
+            tooltip: {},
+            legend: {
+                data: ['浏览量']
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    dataView: {show: true, readOnly: false},
+                    magicType: {show: true, type: ['line', 'bar']},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    data: []
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [{
+                name: '浏览量',
+                type: 'bar',
+                data: [],
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            }]
+        });
+
+        chartDetail.setOption({
+            title: {
+                text: "浏览量"
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['浏览量']
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    dataView: {readOnly: false},
+                    magicType: {type: ['line', 'bar']},
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: []
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value} 次'
+                }
+            },
+            series: [
+                {
+                    name: '浏览量',
+                    type: 'line',
+                    data: [],
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                }
+            ]
+        });
+
+        myChart.on('click', function (params) {
+            console.log("单击了" + params.value + "x轴标签");
+            getDetail(params.name);
+        });
+    }
+
+    function getDetail(name) {
+        $("#chartDetail").css("display", "block");
+        $.ajax({
+            type: "POST",
+            url: baseURL + "mobile/advertise/getStatisticsDetail",
+            datType: "JSON",
+            data: {
+                startTime: $("#startTime").val(),
+                endTime: $("#endTime").val(),
+                advertiseName:name
+            },
+            success: function (data) {
+                console.info(data)
+                var xDate = new Array();
+                var yDate = new Array();
+                $.each(data, function (index, item) {
+                    if (index > 30) return false;
+
+                    xDate.push(item.date.substring(0,10));
+                    yDate.push(item.browsePerson);
+                });
+                chartDetail.setOption({
+                    title: {
+                        text: name +"当前时间浏览量"
+                    },
+                    xAxis: {
+                        data: xDate
+                    },
+                    series: [{
+                        data: yDate
+                    }]
+                });
+            }
+        });
+
+    }
+    function queryDate() {
+        $("#chartDetail").css("display", "none");
+        $.ajax({
+            type: "POST",
+            url: baseURL + "mobile/advertise/getStatistics",
+            datType: "JSON",
+            data: {
+                startTime: $("#startTime").val(),
+                endTime: $("#endTime").val()
+            },
+            success: function (data) {
+                console.info(data)
+                var xDate = new Array();
+                var yDate = new Array();
+                $.each(data, function (index, item) {
+                    if (index > 30) return false;
+                    xDate.push(item.advertiseName);
+                    yDate.push(item.browsePerson);
+                });
+                myChart.setOption({
+                    xAxis: {
+                        data: xDate
+                    },
+                    series: [{
+                        data: yDate
+                    }]
+                });
+            }
+        });
+    }
+
+    function rollback() {
+        $("#main").css("display", "block");
+        $("#getStatistics").css("display", "none");
     }
 
 </script>

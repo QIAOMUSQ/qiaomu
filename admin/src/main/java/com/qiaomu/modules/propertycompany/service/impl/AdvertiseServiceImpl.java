@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
+import com.qiaomu.modules.propertycompany.dao.AdvertiseBrowseDao;
 import com.qiaomu.modules.propertycompany.dao.AdvertiseDao;
 import com.qiaomu.modules.propertycompany.dao.CommunityAdvertiseDao;
 import com.qiaomu.modules.propertycompany.entity.Advertise;
+import com.qiaomu.modules.propertycompany.entity.AdvertiseBrowse;
 import com.qiaomu.modules.propertycompany.entity.CommunityAdvertise;
 import com.qiaomu.modules.propertycompany.entity.Merchant;
 import com.qiaomu.modules.propertycompany.service.AdvertiseService;
@@ -42,6 +44,9 @@ public class AdvertiseServiceImpl extends ServiceImpl<AdvertiseDao,Advertise> im
 
     @Resource
     private YwCommunityDao communityDao;
+
+    @Resource
+    private AdvertiseBrowseDao advertiseBrowseDao;
 
     @Override
     public PageUtils pageList(Map<String, Object> params,Advertise advertise) {
@@ -107,5 +112,15 @@ public class AdvertiseServiceImpl extends ServiceImpl<AdvertiseDao,Advertise> im
     @Override
     public List<Advertise> getAdvertiseByCommunity(Long communityId) {
         return this.baseMapper.getAdvertiseByCommunity(communityId);
+    }
+
+    @Override
+    public List<AdvertiseBrowse> getStatistics(AdvertiseBrowse advertise) {
+        return advertiseBrowseDao.getStatistics(advertise);
+    }
+
+    @Override
+    public List<AdvertiseBrowse> getStatisticsDetail(AdvertiseBrowse advertise) {
+        return advertiseBrowseDao.getStatisticsDetail(advertise);
     }
 }
