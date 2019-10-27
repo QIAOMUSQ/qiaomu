@@ -70,6 +70,7 @@
             webUploader.on('uploadBeforeSend', function (object) {
                 if(opt.pixel){
                     if(object.file._info){
+                        debugger;
                         var height = opt.pixel.height;
                         var width = opt.pixel.width;
                         if (height != 0 && object.file._info.height>height){

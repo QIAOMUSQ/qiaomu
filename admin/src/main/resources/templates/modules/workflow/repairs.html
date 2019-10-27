@@ -192,7 +192,7 @@
                     formatter:function(cellvalue, options, rowObject){
                         console.info(rowObject);
                         return ' <a class="btn btn-default" onclick="queryInfo('+rowObject.id+')">查看详情</a>' +
-                                '<a class="btn btn-primary" onclick="apportionRepairsPerson('+rowObject.id+','+rowObject.communityId+')">分配人员</a>';
+                                '<a class="btn btn-primary" onclick="apportionRepairsPerson('+rowObject.id+','+rowObject.communityId+',\''+rowObject.status+'\')">分配人员</a>';
                     }
                 }
             ],
@@ -278,7 +278,10 @@
     }
 
     //分配维修人员
-    function apportionRepairsPerson(id,communityId) {
+    function apportionRepairsPerson(id,communityId,status) {
+        if(status=="维修结束" || status=="维修作废"){
+           return alert("该条记录不可再次分配");
+        }
         $("#repairsInfo").css("display","none");
         $("#rrapp").css("display","none");
         $("#userRepairs").css("display","block");
@@ -344,6 +347,7 @@
                     $("#rrapp").css("display","block");
                     $("#repairsInfo").css("display","none");
                     $("#userRepairs").css("display","none");
+                    query();
                 }
 
             };

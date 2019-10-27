@@ -89,4 +89,20 @@ public class AdvertiseController {
         return advertiseService.getStatisticsDetail(advertise);
     }
 
+    @ResponseBody
+    @RequestMapping(value = "delete",method = RequestMethod.POST)
+    public Object delete(Long id){
+        try {
+            if (advertiseService.deleteById(id)){
+                return BuildResponse.success();
+            }else {
+                return BuildResponse.fail();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return BuildResponse.fail();
+        }
+
+    }
+
 }

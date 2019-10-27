@@ -1,8 +1,6 @@
 package com.qiaomu.websocket.users;
 
 
-import org.springframework.stereotype.Service;
-
 /**
  * Created by MySelf on 2019/1/3.
  */

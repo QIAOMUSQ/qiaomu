@@ -34,4 +34,7 @@ public interface UserExtendDao extends BaseMapper<UserExtend> {
     UserExtend selectById(Serializable id);
 
     void deleteByCommunity(Long communityId);
+
+    List<UserExtend> findAll(UserExtend userExtend);
+
 }

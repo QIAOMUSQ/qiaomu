@@ -101,22 +101,19 @@
                 debugger;
                 console.info(form);
                 var nameJson = form.serialize().split("&");
-                var mainImg ='';
                 var imgs = new Array();
                 $.each(nameJson,function (index,item) {
-                    if(item.indexOf("mainImg")>=0){
-                        mainImg = item.split("=")[1];
-                    }
                     if(item.indexOf("imgs")>=0){
-                        imgs.push(item.split("=")[1]);
+                        imgs.push({name:item.split("=")[0],
+                            path:item.split("=")[1]});
                     }
                 });
-                console.info(form.serialize()+"&mainImg="+mainImg+"&imgs="+JSON.stringify(imgs));
+                console.info(form.serialize()+"&imgs="+JSON.stringify(imgs));
                 $.ajax({
                     type:"POST",
                     url:baseURL + "mobile/advertise/save",
                     datType:"JSON",
-                    data:form.serialize()+"&mainImg="+mainImg+"&imgs="+JSON.stringify(imgs),
+                    data:form.serialize()+"&imgs="+JSON.stringify(imgs),
                     success:function (data) {
                         console.info(data)
                         layer.close(index);
@@ -332,6 +329,7 @@
         });
 
     }
+
     function queryDate() {
         $("#chartDetail").css("display", "none");
         $.ajax({
@@ -366,6 +364,30 @@
     function rollback() {
         $("#main").css("display", "block");
         $("#getStatistics").css("display", "none");
+    }
+    function deleteById() {
+        var rowKey = $("#jqGrid").getGridParam("selrow");
+        if(!rowKey){
+            alert("请选择一条记录");
+            return ;
+        }
+        confirm('确定要删除选中的记录？', function(){
+            $.ajax({
+                type: "POST",
+                url: baseURL + "mobile/advertise/delete",
+                data: {id:rowKey},
+                datType:"JSON",
+                success: function(result){
+                    if(result.respCode == "1000"){
+                        alert('操作成功', function(){
+                            reload();
+                        });
+                    }else{
+                        alert(result.respMsg);
+                    }
+                }
+            });
+        });
     }
 
 </script>

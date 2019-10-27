@@ -1984,7 +1984,7 @@
             preserveHeaders: false,
     
             // 是否允许放大。
-            allowMagnify: false
+            allowMagnify: true
         };
     
         // 继承RuntimeClient.

@@ -34,7 +34,7 @@ public interface RepairsInfoService extends IService<RepairsInfo> {
      * @param id
      * @return
      */
-    void apportionRepairsPerson(Long userId, Long id);
+    Object apportionRepairsPerson(Long userId, Long id) throws Exception;
 
     /**
      *

@@ -71,4 +71,6 @@ public interface UserExtendService extends IService<UserExtend> {
      * @param repairsType
      */
     void setRepairsType(Long id, String repairsType);
+
+    List<UserExtend> findAll(UserExtend userExtend);
 }

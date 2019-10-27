@@ -7,12 +7,17 @@ import com.qiaomu.common.utils.R;
 import com.qiaomu.modules.infopublish.entity.InvitationEntity;
 import com.qiaomu.modules.infopublish.service.InvitationService;
 import com.qiaomu.modules.sys.controller.AbstractController;
+import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Map;
 
 /**
@@ -40,6 +45,7 @@ public class InvitationManageController extends AbstractController {
         return R.ok().put("page", page);
 
     }
+
     @RequestMapping("getSavePage")
     public String getSavePage(String type, ModelMap map,Long id){
         //
@@ -51,8 +57,9 @@ public class InvitationManageController extends AbstractController {
 
     @ResponseBody
     @RequestMapping(value = "save",method = RequestMethod.POST)
-    public Object save(InvitationEntity invitation){
+    public Object save(InvitationEntity invitation, ServletRequest request){
         try {
+            invitation.setContent((String) WebUtils.toHttp(request).getAttribute("content"));
             invitation.setUserId(getUserId());
             invitationService.save(invitation);
             return BuildResponse.success("保存成功");

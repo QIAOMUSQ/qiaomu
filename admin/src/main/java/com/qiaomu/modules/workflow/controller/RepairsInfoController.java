@@ -150,11 +150,11 @@ public class RepairsInfoController {
     @RequestMapping(value = "apportionRepairsPerson",method = RequestMethod.POST)
     public Object apportionRepairsPerson(Long userId,Long id){
         try {
-            repairsInfoService.apportionRepairsPerson(userId,id);
+           repairsInfoService.apportionRepairsPerson(userId,id);
             return BuildResponse.success();
         }catch (Exception e){
             e.printStackTrace();
-            return BuildResponse.fail("分配人员失败");
+            return BuildResponse.fail(e.getMessage());
         }
 
     }

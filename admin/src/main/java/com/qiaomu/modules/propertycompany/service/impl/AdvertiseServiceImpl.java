@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -122,5 +123,16 @@ public class AdvertiseServiceImpl extends ServiceImpl<AdvertiseDao,Advertise> im
     @Override
     public List<AdvertiseBrowse> getStatisticsDetail(AdvertiseBrowse advertise) {
         return advertiseBrowseDao.getStatisticsDetail(advertise);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean deleteById(Serializable id) {
+        Advertise advertise = baseMapper.selectById(id);
+        if (advertise.getMainImg()!=null){
+            sysFileService.deleteFileByHttpUrl(advertise.getMainImg());
+        }
+        //sysFileService.deleteByMap(advertise.get)
+        return super.deleteById(id);
     }
 }
