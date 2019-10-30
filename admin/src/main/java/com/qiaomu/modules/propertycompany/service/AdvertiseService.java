@@ -3,6 +3,7 @@ package com.qiaomu.modules.propertycompany.service;
 import com.baomidou.mybatisplus.service.IService;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.modules.propertycompany.entity.Advertise;
+import com.qiaomu.modules.propertycompany.entity.AdvertiseBrowse;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -19,4 +20,8 @@ public interface AdvertiseService extends IService<Advertise> {
     boolean save(Advertise advertise, HttpServletRequest request);
 
     List<Advertise> getAdvertiseByCommunity(Long communityId);
+
+    List<AdvertiseBrowse> getStatistics(AdvertiseBrowse advertise);
+
+    List<AdvertiseBrowse>  getStatisticsDetail(AdvertiseBrowse advertise);
 }

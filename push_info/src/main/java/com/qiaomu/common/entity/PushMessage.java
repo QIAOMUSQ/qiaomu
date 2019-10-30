@@ -1,49 +1,39 @@
 package com.qiaomu.common.entity;
 
-
-import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author 李品先
- * @description:推送消息实体
- * @Date 2019-07-10 14:50
+ * @description:推送实体类
+ * @Date 2019-07-14 22:11
  */
-
-@Entity
-@Table(name = "push_message_data")
-public class PushMessage {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String receivePhone;   //收件人号码
-    private Date createTime;    //创建时间
-    private String time;    //推送时间
+public class PushMessage implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private String receivePhone;   //接受号码
     /**
      * 推送类型
      *  0:推送到个人
      *  1：推送到群组
      *  2：推送到社区
-     *  3：推送到全部用户
+     *  4：推送到全部用户
      */
-    private String type;
-    /**
-     * 消息类型
-     * 1.
-     */
-    private String infoType;
+    private String type;    //推送类型
+    private String infoType;//消息类型
+    private String time;    //推送时间
+    private Long communityId;   //被推送人社区id
     private String message; //推送信息
-    private Long communityId;   //被推送人的社区id
-    private boolean status; //状态，是否已经推送 true:已推送 false:未推送
     private String pushPhone;//推送人号码
 
-    public Date getCreateTime() {
-        return createTime;
+    private Date createTime;
+    private boolean status;
+
+    public String getType() {
+        return type;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getTime() {
@@ -54,22 +44,6 @@ public class PushMessage {
         this.time = time;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     public Long getCommunityId() {
         return communityId;
     }
@@ -78,30 +52,12 @@ public class PushMessage {
         this.communityId = communityId;
     }
 
-    public Long getId() {
-        return id;
+    public String getMessage() {
+        return message;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-
-
-    public String getInfoType() {
-        return infoType;
-    }
-
-    public void setInfoType(String infoType) {
-        this.infoType = infoType;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getReceivePhone() {
@@ -118,5 +74,51 @@ public class PushMessage {
 
     public void setPushPhone(String pushPhone) {
         this.pushPhone = pushPhone;
+    }
+
+    public String getInfoType() {
+        return infoType;
+    }
+
+    public void setInfoType(String infoType) {
+        this.infoType = infoType;
+    }
+
+    public PushMessage(String receivePhone, String type, String infoType, String time, String message, String pushPhone, Long communityId) {
+        this.receivePhone = receivePhone;
+        this.type = type;
+        this.infoType = infoType;
+        this.time = time;
+        this.message = message;
+        this.pushPhone = pushPhone;
+        this.communityId = communityId;
+    }
+
+    public PushMessage(String type, String infoType, String time, Long communityId, String message, String pushPhone) {
+        this.type = type;
+        this.infoType = infoType;
+        this.time = time;
+        this.communityId = communityId;
+        this.message = message;
+        this.pushPhone = pushPhone;
+    }
+
+    public PushMessage() {
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public boolean isStatus() {
+        return status;
     }
 }

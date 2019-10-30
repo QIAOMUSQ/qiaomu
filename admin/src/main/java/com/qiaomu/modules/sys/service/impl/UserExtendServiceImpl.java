@@ -223,4 +223,11 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
         userExtend.setRepairsType(repairsType);
         baseMapper.updateById(userExtend);
     }
+
+    @Override
+    public List<UserExtend> findAll(UserExtend userExtend) {
+        return baseMapper.findAll(userExtend);
+    }
+
+
 }

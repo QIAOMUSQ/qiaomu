@@ -21,4 +21,5 @@ public interface RepairsInfoDao extends BaseMapper<RepairsInfo> {
 
     RepairsInfo findRepairsById(Long id);
 
+    List<RepairsInfo> selectPagesByRepairs(Page<RepairsInfo> page, RepairsInfo repairs);
 }

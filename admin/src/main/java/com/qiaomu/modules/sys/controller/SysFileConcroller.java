@@ -56,8 +56,6 @@ public class SysFileConcroller {
         response.setContentType("application/json");//application/html
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
-
-       // FileInfo fileInfo = new FileInfo();
         SysFileEntity fileEntity = new SysFileEntity();
         if (!file.isEmpty()) {
             try {
@@ -189,5 +187,12 @@ public class SysFileConcroller {
         return BuildResponse.success();
     }
 
-
+    @ResponseBody
+    @RequestMapping(value = "removeFileById")
+    public Object removeFile(Long id){
+        SysFileEntity file = sysFileService.selectById(id);
+        sysFileService.deleteFileByHttpUrl(file.getPath());
+        sysFileService.deleteById(id);
+        return BuildResponse.success();
+    }
 }

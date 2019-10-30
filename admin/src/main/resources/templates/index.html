@@ -23,6 +23,15 @@
         ::-webkit-scrollbar {
             display: none;
         }
+        .layadmin-iframe{
+
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+        }
     </style>
 </head>
 <!-- ADD THE CLASS layout-boxed TO GET A BOXED LAYOUT -->
@@ -86,18 +95,15 @@
 
     <!-- Main content -->
     <section class="content" style="background:#fff;">
-      <iframe scrolling="yes" frameborder="0" style="width:100%;min-height:200px;overflow:visible;background:#fff;" :src="main"></iframe>
+      <iframe scrolling="yes" frameborder="0" class="layadmin-iframe"  :src="main"></iframe>
     </section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
 
-  <footer class="main-footer">
-    <div class="pull-right hidden-xs">
-      Version 3.2.0
-    </div>
-    Copyright &copy; 2018 <a href="http://www.renren.io" target="_blank">renren.io</a> All Rights Reserved
-  </footer>
+  <!--<footer class="main-footer">-->
+    <!---->
+  <!--</footer>-->
 
   <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->

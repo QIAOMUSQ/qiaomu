@@ -1,10 +1,12 @@
 package com.qiaomu.modules.app.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.qiaomu.common.Enum.CommunityRoleType;
 import com.qiaomu.common.utils.*;
 import com.qiaomu.common.validator.Assert;
 import com.qiaomu.modules.sys.controller.AbstractController;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
+import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.sys.service.UserExtendService;
 import com.qiaomu.modules.sys.shiro.ShiroUtils;
@@ -63,6 +65,13 @@ public class AppUserController extends AbstractController {
                SysUserEntity userEntity = getUser();
                userEntity.setPassword("");
                userEntity.setSalt("");
+               List<UserExtend> userExtends = userExtendService.findAll(new UserExtend(userEntity.getUserId()));
+               for (UserExtend user: userExtends){
+                   if (user.getCompanyRoleType().equals(CommunityRoleType.WORKER.getValue())){
+                       userEntity.setCommunityRoleType(CommunityRoleType.WORKER.getName());
+                       break;
+                   }
+               }
                String session  = response.getHeader(AUTHORIZATION);
                userEntity.setSessionId(session);
                return R.ok("success",JSON.toJSON(userEntity));

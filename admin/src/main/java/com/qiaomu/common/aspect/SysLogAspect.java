@@ -16,16 +16,13 @@
 
 package com.qiaomu.common.aspect;
 
-import com.google.gson.Gson;
-
-
+import com.alibaba.fastjson.JSON;
 import com.qiaomu.common.annotation.SysLog;
-import com.qiaomu.modules.sys.service.SysLogService;
-import com.qiaomu.modules.sys.entity.SysLogEntity;
-import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.common.utils.HttpContextUtils;
 import com.qiaomu.common.utils.IPUtils;
-
+import com.qiaomu.modules.sys.entity.SysLogEntity;
+import com.qiaomu.modules.sys.entity.SysUserEntity;
+import com.qiaomu.modules.sys.service.SysLogService;
 import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -89,7 +86,7 @@ public class SysLogAspect {
 		//请求的参数
 		Object[] args = joinPoint.getArgs();
 		try{
-			String params = new Gson().toJson(args[0]);
+			String params = JSON.toJSONString(args[0]);
 			sysLog.setParams(params);
 		}catch (Exception e){
 

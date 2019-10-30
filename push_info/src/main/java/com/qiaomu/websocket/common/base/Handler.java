@@ -7,6 +7,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
+import io.netty.handler.timeout.IdleStateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,11 @@ public abstract class Handler extends SimpleChannelInboundHandler<Object> {
     @Autowired
     private HandlerApi handlerApi;
 
+/*
+
+    @Autowired
+    private Websockethandler webSocketHandlerApi;
+*/
 
     //private Handler handler;
 
@@ -67,9 +73,9 @@ public abstract class Handler extends SimpleChannelInboundHandler<Object> {
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-//        if(evt instanceof IdleStateEvent){
-//            webSocketHandlerApi.doTimeOut(ctx.channel(),(IdleStateEvent)evt);
-//        }
+        if(evt instanceof IdleStateEvent){
+          //  webSocketHandlerApi.doTimeOut(ctx.channel(),(IdleStateEvent)evt);
+        }
         super.userEventTriggered(ctx, evt);
     }
 }

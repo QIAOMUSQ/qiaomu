@@ -1,8 +1,6 @@
 package com.qiaomu.common.servlet;
 
-import com.alibaba.fastjson.JSON;
 import com.qiaomu.common.utils.Constant;
-import com.qiaomu.modules.propertycompany.service.impl.YwCommunityServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +23,6 @@ public class MyServletRequest implements ServletRequestListener {
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
 
-    @Autowired
-    private YwCommunityServiceImpl communityService;
-
-
     @Override
     public void requestDestroyed(ServletRequestEvent servletRequestEvent) {
 
@@ -44,14 +38,29 @@ public class MyServletRequest implements ServletRequestListener {
         String url = request.getRequestURL().toString();//根据url进行判断处理
         if(url.contains("getAdvertiseByCommunity")){
             Map<String,String[]> params =  WebUtils.toHttp(request).getParameterMap();
-            System.out.println("params======= = [" + JSON.toJSON(params) + "]");
-
             if (params.get("communityId") != null && StringUtils.isNotBlank(params.get("communityId")[0])) {
                 String communityId =params.get("communityId")[0];
-                BoundHashOperations<String, String, Object> boundHashOps = redisTemplate.boundHashOps(Constant.COMMUNITY_LOGIN_COUNT);
-                boundHashOps.increment(communityId,1);
+                String number = (String) redisTemplate.boundHashOps("browse_person").get(Constant.COMMUNITY_LOGIN_COUNT+communityId);
+                if (StringUtils.isNotBlank(number)){
+                    redisTemplate.boundHashOps("browse_person").put(Constant.COMMUNITY_LOGIN_COUNT+communityId,String.valueOf(Integer.valueOf(number)+1));
+                }else {
+                    redisTemplate.boundHashOps("browse_person").put(Constant.COMMUNITY_LOGIN_COUNT+communityId,String.valueOf(1));
+                }
             }
 
+        }else if(url.contains("getAdvertiseById")){
+            //监听广告浏览人数
+            Map<String,String[]> params =  WebUtils.toHttp(request).getParameterMap();
+            if (params.get("id") != null && StringUtils.isNotBlank(params.get("id")[0])) {
+                String id = params.get("id")[0];
+                String number = (String) redisTemplate.boundHashOps("browse_person").get(Constant.REDIS_KEY_ADVERTISE+id);
+                if (StringUtils.isNotBlank(number)){
+                    redisTemplate.boundHashOps("browse_person").put(Constant.REDIS_KEY_ADVERTISE+id,String.valueOf(Integer.valueOf(number)+1));
+                }else {
+                    redisTemplate.boundHashOps("browse_person").put(Constant.REDIS_KEY_ADVERTISE+id,String.valueOf(1));
+                }
+
+            }
         }
     }
 }

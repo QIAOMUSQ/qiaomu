@@ -35,29 +35,7 @@ public class CommunitySchedule {
     @Autowired
     private DeleteCommunityService deleteCommunityService;
 
-    @Scheduled(cron = "0 0/5 * * * ? ")
-    public void statisticsCommunity(){
-        BoundHashOperations<String, String, Object> boundHashOps = redisTemplate.boundHashOps(Constant.COMMUNITY_LOGIN_COUNT);
-        boundHashOps.entries().forEach((m,n) -> insertTable((String) m,(String)n));
-    }
 
-    public void insertTable(String community,String value){
-        LoginStatistics statistics = new LoginStatistics();
-        statistics.setCommunityId(Long.valueOf(community));
-        statistics.setDate(DateTime.now().toString("yyyy-MM-dd"));
-        statistics.setNumber(Integer.valueOf(value));
-        statistics.setType("1");
-        loginStatisticsService.insert(statistics);
-    }
-
-    /**
-     * 每天凌晨清除redis数据
-     */
-    @Scheduled(cron = "3 0 0 1/1 * ?")
-    public void initCommunity(){
-        BoundHashOperations<String, String, Object> boundHashOps = redisTemplate.boundHashOps(Constant.COMMUNITY_LOGIN_COUNT);
-        boundHashOps.entries().forEach((m,n) -> boundHashOps.delete(m));
-    }
 
     /**
      * 定时清除community中已经删除数据

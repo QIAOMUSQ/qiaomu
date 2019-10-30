@@ -129,6 +129,9 @@ public class SysUserEntity implements Serializable {
 
     private Long loginCommunityId;
 
+    @TableField(exist = false)
+    private String communityRoleType;
+
     /**
      * 设置：
      *
@@ -340,5 +343,13 @@ public class SysUserEntity implements Serializable {
 
     public void setLoginCommunityId(Long loginCommunityId) {
         this.loginCommunityId = loginCommunityId;
+    }
+
+    public String getCommunityRoleType() {
+        return communityRoleType;
+    }
+
+    public void setCommunityRoleType(String communityRoleType) {
+        this.communityRoleType = communityRoleType;
     }
 }

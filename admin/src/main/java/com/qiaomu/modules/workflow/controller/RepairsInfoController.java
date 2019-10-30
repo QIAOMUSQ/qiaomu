@@ -1,6 +1,7 @@
 package com.qiaomu.modules.workflow.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.qiaomu.common.Enum.CommunityRoleType;
 import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
@@ -55,11 +56,11 @@ public class RepairsInfoController {
             condition.setUserId(repairs.getUserId());
             condition.setCommunityId(repairs.getCommunityId());
             UserExtend user = userExtendService.queryUserExtend(condition);
-            if (user!=null && user.getCompanyRoleType().equals("4")){
+            if (user!=null && !user.getCompanyRoleType().equals(CommunityRoleType.TOURIST.getValue())){
                 repairs.setPicture(JSON.toJSONString(fileService.imageUrls(request)));
                 repairsInfoService.insert(repairs);
                 return BuildResponse.success();
-            }else if(user!=null && user.getCompanyRoleType().equals("5")){
+            }else if(user!=null && user.getCompanyRoleType().equals("0")){
                 return BuildResponse.fail("请等待个人信息验证");
             }else {
                 return BuildResponse.fail("请先进行信息认证");
@@ -81,7 +82,6 @@ public class RepairsInfoController {
     @RequestMapping(value = "findRepairs",method = RequestMethod.POST)
     public Object findRepairs(@RequestParam Map<String, Object> params){
         PageUtils repairsInfo = repairsInfoService.findRepairsPage(params);
-
         if(StringUtils.isBlank((String) params.get("companyId"))){
             return BuildResponse.success(JSON.toJSON(repairsInfo));
         }else {
@@ -151,11 +151,11 @@ public class RepairsInfoController {
     @RequestMapping(value = "apportionRepairsPerson",method = RequestMethod.POST)
     public Object apportionRepairsPerson(Long userId,Long id){
         try {
-            repairsInfoService.apportionRepairsPerson(userId,id);
+           repairsInfoService.apportionRepairsPerson(userId,id);
             return BuildResponse.success();
         }catch (Exception e){
             e.printStackTrace();
-            return BuildResponse.fail("分配人员失败");
+            return BuildResponse.fail(e.getMessage());
         }
 
     }

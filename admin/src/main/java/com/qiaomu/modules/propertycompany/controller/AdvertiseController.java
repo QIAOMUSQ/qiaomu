@@ -5,13 +5,18 @@ import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
 import com.qiaomu.modules.propertycompany.entity.Advertise;
+import com.qiaomu.modules.propertycompany.entity.AdvertiseBrowse;
 import com.qiaomu.modules.propertycompany.service.AdvertiseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -63,6 +68,41 @@ public class AdvertiseController {
     @RequestMapping(value = "getAdvertiseByCommunity",method = RequestMethod.POST)
     public Object getAdvertiseByCommunity(Long communityId){
        return BuildResponse.success(JSON.toJSON(advertiseService.getAdvertiseByCommunity(communityId)));
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "getAdvertiseById", method = RequestMethod.POST)
+    public Object getAdvertiseById(Long id) {
+        Advertise advertise = advertiseService.selectById(id);
+        return BuildResponse.success(JSON.toJSON(advertise));
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "getStatistics", method = RequestMethod.POST)
+    public Object getStatistics(AdvertiseBrowse advertise) {
+        return advertiseService.getStatistics(advertise);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "getStatisticsDetail", method = RequestMethod.POST)
+    public Object getStatisticsDetail(AdvertiseBrowse advertise) {
+        return advertiseService.getStatisticsDetail(advertise);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "delete",method = RequestMethod.POST)
+    public Object delete(Long id){
+        try {
+            if (advertiseService.deleteById(id)){
+                return BuildResponse.success();
+            }else {
+                return BuildResponse.fail();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return BuildResponse.fail();
+        }
+
     }
 
 }

@@ -52,8 +52,14 @@ public class ShiroSessionManager extends DefaultWebSessionManager {
             }
         }
         String url = ((ShiroHttpServletRequest) request).getRequestURI().toString();
-        System.out.println( WebUtils.toHttp(request).getRemoteAddr()+":"+WebUtils.toHttp(request).getRemoteHost()+"=====url:" +url+" ========= 参数："
-                +JSON.toJSONString(WebUtils.toHttp(request).getParameterMap()));
+        System.out.println( WebUtils.toHttp(request).getRemoteAddr()+":"
+                +WebUtils.toHttp(request).getRemoteHost()+"=====url:" +url+
+                " ========= 参数：" +JSON.toJSONString(WebUtils.toHttp(request).getParameterMap()));
+        if (StringUtils.isNotBlank(WebUtils.toHttp(request).getParameter("contentHtml"))){
+            WebUtils.toHttp(request).setAttribute("content",WebUtils.toHttp(request).getParameter("contentHtml"));
+        }
+
+
         try{
 
           //  System.out.println(DateTime.now().toString("YYYY-MM-dd HH:mm:ss") +"___id："+id);

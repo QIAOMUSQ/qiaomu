@@ -48,6 +48,8 @@ public class RepairsInfo implements Serializable {
 
     private Date apportionTime;//分配时间
 
+    private String lingerTime;
+
     @TableField(exist = false)
     private String repairsPhone;  //  处理人号码
 
@@ -68,6 +70,9 @@ public class RepairsInfo implements Serializable {
 
     @TableField(exist = false)
     private String communityName;
+
+    @TableField(exist = false)
+    private List<Long> ids;
 
     public Long getId() {
         return id;
@@ -243,5 +248,21 @@ public class RepairsInfo implements Serializable {
 
     public void setCommunityName(String communityName) {
         this.communityName = communityName;
+    }
+
+    public String getLingerTime() {
+        return lingerTime;
+    }
+
+    public void setLingerTime(String lingerTime) {
+        this.lingerTime = lingerTime;
+    }
+
+    public List<Long> getIds() {
+        return ids;
+    }
+
+    public void setIds(List<Long> ids) {
+        this.ids = ids;
     }
 }
