@@ -91,7 +91,11 @@ public class ArticleServiceImp implements ArticleService{
             articleModel.setRealName(AESUtil.decrypt(articleModel.getRealName()));
             articlePraiseEntity.setArticleId(articleModel.getArticleId());
             String isPraise = articleDao.queryPraise(articlePraiseEntity);
-            articleModel.setIsPraise(isPraise);
+            if(null!=isPraise&&!isPraise.isEmpty()) {
+                articleModel.setIsPraise(isPraise);
+            }else{
+                articleModel.setIsPraise("0");
+            }
         }
         return articleModels;
     }
