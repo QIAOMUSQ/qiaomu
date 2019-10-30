@@ -18,10 +18,7 @@ public class UserExtend implements Serializable {
     @TableId
     private Long id;
     private Long userId;
-   // private String userIdentity;
     private String address;
-    //private Long imgId;
-   // private String nickName;
     private String realName;
     private Long communityId;
     private Long companyId;
@@ -29,10 +26,8 @@ public class UserExtend implements Serializable {
     private Date checkTime;
     private Long checkUserId;
     private String check;   //是否审核 0:待审核 1：通过 2：不通过 3：禁用
-    private String companyRoleType; //用户权限：5：游客  4：业主  3:物业工作人员 2:物业管理员
-   // private String sex;
+    private String companyRoleType; //用户权限：4：游客 3：业主 2：工作人员 1：物业管理员  0：超级管理员
     private String info;
-
     private boolean status;//状态
     private String repairsType;//维修类型
 
@@ -40,6 +35,13 @@ public class UserExtend implements Serializable {
     private String communityName;
     @TableField(exist = false)
     private String userPhone;
+
+    public UserExtend() {
+    }
+
+    public UserExtend(Long userId) {
+        this.userId = userId;
+    }
 
     public Long getId() {
         return id;

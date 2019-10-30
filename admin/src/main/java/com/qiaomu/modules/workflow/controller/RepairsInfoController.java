@@ -1,6 +1,7 @@
 package com.qiaomu.modules.workflow.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.qiaomu.common.Enum.CommunityRoleType;
 import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
@@ -55,7 +56,7 @@ public class RepairsInfoController {
             condition.setUserId(repairs.getUserId());
             condition.setCommunityId(repairs.getCommunityId());
             UserExtend user = userExtendService.queryUserExtend(condition);
-            if (user!=null && !user.getCompanyRoleType().equals("4")){
+            if (user!=null && !user.getCompanyRoleType().equals(CommunityRoleType.TOURIST.getValue())){
                 repairs.setPicture(JSON.toJSONString(fileService.imageUrls(request)));
                 repairsInfoService.insert(repairs);
                 return BuildResponse.success();
