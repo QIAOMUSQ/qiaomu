@@ -20,6 +20,7 @@ public class ArticleModel {
     private String imageUrls;
     private String createdAt;
     private String updatedAt;
+    private String isPraise;
     public String getCommunityId() {
         return communityId;
     }
@@ -147,5 +148,13 @@ public class ArticleModel {
 
     public void setViewNum(Integer viewNum) {
         this.viewNum = viewNum;
+    }
+
+    public String getIsPraise() {
+        return isPraise;
+    }
+
+    public void setIsPraise(String isPraise) {
+        this.isPraise = isPraise;
     }
 }

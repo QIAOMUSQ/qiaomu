@@ -85,9 +85,13 @@ public class ArticleServiceImp implements ArticleService{
         }else if("5".equals(articleSelectModel.getQueryType())){
             articleModels = articleDao.queryHotArticle(articleSelectModel);
         }
-
+        ArticlePraiseEntity articlePraiseEntity = new ArticlePraiseEntity();
+        articlePraiseEntity.setUserId(articleSelectModel.getUserId());
         for(ArticleModel articleModel:articleModels){
             articleModel.setRealName(AESUtil.decrypt(articleModel.getRealName()));
+            articlePraiseEntity.setArticleId(articleModel.getArticleId());
+            String isPraise = articleDao.queryPraise(articlePraiseEntity);
+            articleModel.setIsPraise(isPraise);
         }
         return articleModels;
     }
