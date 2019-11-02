@@ -192,28 +192,14 @@ var vm = new Vue({
         }
     }
 });
-//
-// function getTypeList() {
-//
-//     var typeList = new Array();
-//     $.get(baseURL + "sys/dict/getDictByType",{"type":"property_company"}, function(result){
-//         $.each(result.dict,function (index,item) {
-//             typeList.push({"value":item.value,"name":item.code});
-//         });
-//         $("#roleType").kendoDropDownList({
-//             dataTextField: "name",
-//             dataValueField: "value",
-//             dataSource: typeList
-//         });
-//     });
-// }
+
 
 function getRoleList(){
     var RoleList = new Array();
 
-    $.get(baseURL + "sys/role/select", function(result){
-        $.each(result.list,function (index,item) {
-            RoleList.push({name:item.roleName,value:item.roleId});
+    $.get(baseURL + "sys/role/select", function(result) {
+        $.each(result.list, function (index, item) {
+            RoleList.push({name: item.roleName, value: item.roleId});
         });
         $("#role").kendoDropDownList({
             optionLabel: "--请选择--",
@@ -224,7 +210,6 @@ function getRoleList(){
                 vm.user.roleIdList=[this.value()];
             }
         });
-
+        $("#role").val(vm.user.roleIdList[0]);
     });
-
 }

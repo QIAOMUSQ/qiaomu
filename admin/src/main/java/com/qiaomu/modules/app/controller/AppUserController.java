@@ -104,7 +104,7 @@ public class AppUserController extends AbstractController {
      * @return
      */
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public R registerUser(String phone, String password) {
+    public R registerUser(String phone, String password,String securityCode) {
         SysUserEntity user = new SysUserEntity();
         user.setUsername(phone);
         user.setPassword(password);
@@ -113,14 +113,19 @@ public class AppUserController extends AbstractController {
             return R.ok("error", "手机号码已存在");
         }
         List roleList = new ArrayList();
-        roleList.add(5l);
-        user.setRoleIdList(roleList);
-        user.setDeptId(9l);
-        user.setStatus(Integer.valueOf(1));
-        user.setNickName(RandomName.randomName(true,4));
-        user.setHandImgId(167l);
-        this.sysUserService.save(user);
-        return R.ok();
+        if(securityCode.equals("666666")){
+            roleList.add(5l);
+            user.setRoleIdList(roleList);
+            user.setDeptId(9l);
+            user.setStatus(Integer.valueOf(1));
+            user.setNickName(RandomName.randomName(true,4));
+            user.setHandImgId(167l);
+            this.sysUserService.save(user);
+            return R.ok();
+        }else {
+            return R.ok("error", "验证码错误");
+        }
+
     }
 
 
@@ -135,9 +140,7 @@ public class AppUserController extends AbstractController {
         Assert.isBlank(newPassword, "新密码不为能空");
         SysUserEntity user = sysUserService.selectById(userId);
         password = ShiroUtils.sha256(password, user.getSalt());
-
         newPassword = ShiroUtils.sha256(newPassword, user.getSalt());
-
         boolean flag = this.sysUserService.updatePassword(getUserId(), password, newPassword);
         if (!flag) {
             return BuildResponse.fail("原密码不正确");
@@ -185,5 +188,35 @@ public class AppUserController extends AbstractController {
     public Object setUserLoginCommunity(Long userId,Long communityId){
         sysUserService.setUserLoginCommunity(userId,communityId);
         return BuildResponse.success();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "findBackPassword",method = RequestMethod.POST)
+    public Object findBackPassword(String phone,String securityCode){
+        try {
+            if(securityCode.equals("666666")){
+                return BuildResponse.success(JSON.toJSONString(sysUserService.findBackPassword(phone,securityCode)));
+            }else {
+                return BuildResponse.fail("验证码错误");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return BuildResponse.fail();
+        }
+
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "reSettingPassword",method = RequestMethod.POST)
+    public Object reSettingPassword(String password,Long userId){
+      try {
+          SysUserEntity user = sysUserService.queryById(userId);
+          user.setPassword(ShiroUtils.sha256(password, user.getSalt()));
+          sysUserService.update(user);
+          return BuildResponse.success();
+      }catch (Exception e){
+          e.printStackTrace();
+          return BuildResponse.fail();
+      }
     }
 }

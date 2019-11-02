@@ -19,7 +19,7 @@ public interface UserExtendDao extends BaseMapper<UserExtend> {
 
     List<UserExtend> selectCommunityList(UserExtend userExtend);
 
-    UserExtend getUserCommunity(Long userId);
+    List<UserExtend> getUserExtendInfoByUserId(Long userId);
 
     void deleteByUserIds(List<Long> userIds);
 

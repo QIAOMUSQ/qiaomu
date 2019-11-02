@@ -84,7 +84,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         Page<SysUserEntity> page = this.selectPage(
                 new Query<SysUserEntity>(params).getPage(),
                 new EntityWrapper<SysUserEntity>()
-                        .like(StringUtils.isNotBlank(username), "username", username)
+                        .like(StringUtils.isNotBlank(username), "username", StringUtils.trimToEmpty(username))
                         .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER))
         );
 
@@ -122,25 +122,23 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
             user.setPassword(ShiroUtils.sha256(user.getPassword(), user.getSalt()));
         }
         this.updateById(user);
-        UserExtend userExtend  =  userExtendService.getUserCommunity(user.getUserId());
-        if(userExtend ==null){
-            userExtend = new UserExtend();
-        }
-        if (user.getPropertyCompanyRoleType() !=null) {
-            //5：游客  4：业主  3:物业工作人员 2:物业管理员
-            userExtend.setCompanyRoleType(user.getPropertyCompanyRoleType());
-        }
-        userExtend.setCheck("1");
-        if(userExtend.getId()==null){
-            userExtend.setUserId(user.getUserId());
-            userExtendService.insert(userExtend);
-        }else {
-            userExtendService.updateById(userExtend);
-        }
-
-
-        //保存用户与角色关系
         sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
+       /* List<UserExtend> userExtendInfo  =  userExtendService.getUserExtendInfoByUserId(user.getUserId());
+           for (UserExtend userExtend : userExtendInfo){
+               if (user.getPropertyCompanyRoleType() !=null) {
+                   //4：游客  3：业主  2:物业工作人员 1:物业管理员
+                   userExtend.setCompanyRoleType(user.getPropertyCompanyRoleType());
+               }
+               userExtend.setCheck("1");
+               if(userExtend.getId()==null){
+                   userExtend.setUserId(user.getUserId());
+                   userExtendService.insert(userExtend);
+               }else {
+                   userExtendService.updateById(userExtend);
+               }
+               //保存用户与角色关系
+               sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
+           }*/
     }
 
 
@@ -234,6 +232,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         SysUserEntity user= new SysUserEntity();
         user.setUserId(userId);
         user.setLoginCommunityId(communityId);
-         baseMapper.setUserLoginCommunity(user);
+        baseMapper.setUserLoginCommunity(user);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public SysUserEntity findBackPassword(String phone, String securityCode) {
+        return baseMapper.getUserByUserName(phone);
     }
 }

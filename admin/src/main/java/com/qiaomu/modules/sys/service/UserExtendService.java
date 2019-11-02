@@ -50,7 +50,7 @@ public interface UserExtendService extends IService<UserExtend> {
     void saveCheckInfo(String info, String type, String companyRoleType, Long id,Long userId);
 
 
-    UserExtend getUserCommunity(Long userId);
+    List<UserExtend> getUserExtendInfoByUserId(Long userId);
 
     void deleteByUserIds(List<Long> userIds);
 

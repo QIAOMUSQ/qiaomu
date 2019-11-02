@@ -50,7 +50,7 @@
         </where>
 
     </select>
-    <select id="getUserCommunity" resultType="com.qiaomu.modules.sys.entity.UserExtend" parameterType="Long">
+    <select id="getUserExtendInfoByUserId" resultType="com.qiaomu.modules.sys.entity.UserExtend" parameterType="Long">
         SELECT
           *
         FROM

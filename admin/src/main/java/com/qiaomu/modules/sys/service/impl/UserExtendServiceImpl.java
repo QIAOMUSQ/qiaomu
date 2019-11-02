@@ -191,8 +191,8 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
     }
 
     @Override
-    public UserExtend getUserCommunity(Long userId) {
-        return baseMapper.getUserCommunity(userId);
+    public List<UserExtend> getUserExtendInfoByUserId(Long userId) {
+        return baseMapper.getUserExtendInfoByUserId(userId);
     }
 
     @Override

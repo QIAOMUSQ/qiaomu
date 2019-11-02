@@ -90,4 +90,5 @@ public interface SysUserService extends IService<SysUserEntity> {
 
     void setUserLoginCommunity(Long userId,Long communityId);
 
+    SysUserEntity findBackPassword(String phone, String securityCode);
 }
