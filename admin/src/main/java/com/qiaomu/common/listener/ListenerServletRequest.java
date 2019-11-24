@@ -1,12 +1,12 @@
-package com.qiaomu.common.servlet;
+package com.qiaomu.common.listener;
 
 import com.qiaomu.common.utils.Constant;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
 import javax.servlet.annotation.WebListener;
@@ -19,12 +19,12 @@ import java.util.Map;
  * @Date 2019-05-05 22:19
  */
 @WebListener
-public class MyServletRequest implements ServletRequestListener {
+public class ListenerServletRequest implements ServletRequestListener {
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
 
     @Override
-    public void requestDestroyed(ServletRequestEvent servletRequestEvent) {
+    public void requestDestroyed(ServletRequestEvent requestEvent) {
 
     }
 
@@ -36,6 +36,7 @@ public class MyServletRequest implements ServletRequestListener {
     public void requestInitialized(ServletRequestEvent servletRequestEvent) {
         HttpServletRequest request = (HttpServletRequest)servletRequestEvent.getServletRequest();
         String url = request.getRequestURL().toString();//根据url进行判断处理
+        //获取社区广告
         if(url.contains("getAdvertiseByCommunity")){
             Map<String,String[]> params =  WebUtils.toHttp(request).getParameterMap();
             if (params.get("communityId") != null && StringUtils.isNotBlank(params.get("communityId")[0])) {

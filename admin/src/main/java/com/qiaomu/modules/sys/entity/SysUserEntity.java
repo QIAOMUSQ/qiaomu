@@ -109,6 +109,8 @@ public class SysUserEntity implements Serializable {
 
     private Long handImgId;
 
+    private String clientId;
+
     /**
      * 部门ID
      */
@@ -351,5 +353,13 @@ public class SysUserEntity implements Serializable {
 
     public void setCommunityRoleType(String communityRoleType) {
         this.communityRoleType = communityRoleType;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 }

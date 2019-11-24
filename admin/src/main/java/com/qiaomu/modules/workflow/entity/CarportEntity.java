@@ -1,4 +1,4 @@
-package com.qiaomu.modules.infopublish.entity;
+package com.qiaomu.modules.workflow.entity;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;

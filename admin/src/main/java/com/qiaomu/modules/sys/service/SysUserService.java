@@ -82,13 +82,46 @@ public interface SysUserService extends IService<SysUserEntity> {
 
     String getUserIdsByPhones(String phones,String type);
 
+    /**
+     * 根据用户id查询用户头像信息
+     * @param userId
+     * @return
+     */
     String queryUserImageUrl(String userId);
 
     String getRealNameByIds(String ids);
 
+    /**
+     * 通过IDlist集合删除用户
+     * @param longs
+     */
     void deleteByIds(List<Long> longs);
 
+    /**
+     * 设置用户最后一次登录的社区Id
+     * @param userId
+     * @param communityId
+     */
     void setUserLoginCommunity(Long userId,Long communityId);
 
+    /**
+     * 通过手机号码和安全码查询用户信息
+     * @param phone
+     * @param securityCode
+     * @return
+     */
     SysUserEntity findBackPassword(String phone, String securityCode);
+
+    /**
+     * 更新用户登录的设备clientID
+     * @param userEntity
+     */
+    void updateClientId(SysUserEntity userEntity);
+
+    /**
+     * 重设密码
+     * @param user
+     */
+    void reSetPassword(SysUserEntity user);
+
 }

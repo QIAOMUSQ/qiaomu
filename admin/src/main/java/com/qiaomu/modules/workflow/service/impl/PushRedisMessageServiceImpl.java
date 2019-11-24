@@ -1,17 +1,12 @@
-package com.qiaomu.modules.infopublish.service.impl;
+package com.qiaomu.modules.workflow.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.qiaomu.modules.infopublish.service.PushRedisMessageService;
-import com.qiaomu.modules.infopublish.entity.PushMessage;
+import com.qiaomu.modules.workflow.service.PushRedisMessageService;
+import com.qiaomu.modules.workflow.VO.PushMessageVO;
 import com.qiaomu.modules.sys.service.SysUserService;
-import org.apache.commons.lang.StringUtils;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 
 /**
  * @author 李品先
@@ -39,7 +34,7 @@ public class PushRedisMessageServiceImpl implements PushRedisMessageService {
      * @param message
      */
     @Override
-    public void pushMessageToRedis(PushMessage message) {
+    public void pushMessageToRedis(PushMessageVO message) {
        // byte[] msg =jackson2JsonRedisSerializer.serialize(message);
         stringRedisTemplate.convertAndSend("message",JSON.toJSONString(message));
         redisTemplate.boundHashOps("message_history").put("history_"+message.getReceivePhone()+"_"+message.getTime().replace(" ","").replace("-","").replace(":",""),JSON.toJSONString(message));
@@ -57,7 +52,7 @@ public class PushRedisMessageServiceImpl implements PushRedisMessageService {
      */
     @Override
     public void pushMessage(Long pushUserId, String receiveIdS, String infoType, String type, String message, Long communityId) {
-        String pushPhone = userService.queryById(pushUserId).getUsername();
+        /*String pushPhone = userService.queryById(pushUserId).getUsername();
         if(!type.equals("2")&& StringUtils.isNotBlank(receiveIdS)){
             String[] ids = receiveIdS.split(",");
             for (String id : ids){
@@ -70,6 +65,6 @@ public class PushRedisMessageServiceImpl implements PushRedisMessageService {
             PushMessage data = new PushMessage(type,infoType, DateTime.now().toString("yyyy-MM-dd HH:mm:ss"),communityId,message,pushPhone);
             stringRedisTemplate.convertAndSend("message",JSON.toJSONString(data));
             redisTemplate.boundHashOps("message_history").put("history_"+pushPhone+"_"+data.getTime().replace(" ","").replace("-","").replace(":",""),JSON.toJSONString(data));
-        }
+        }*/
     }
 }

@@ -1,10 +1,10 @@
 package com.qiaomu.controller;
 
 
-import com.qiaomu.form.LoginForm;
 import com.qiaomu.annotation.Login;
 import com.qiaomu.common.utils.R;
 import com.qiaomu.common.validator.ValidatorUtils;
+import com.qiaomu.form.LoginForm;
 import com.qiaomu.service.TokenService;
 import com.qiaomu.service.UserService;
 import io.swagger.annotations.Api;

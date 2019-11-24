@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.qiaomu.modules.infopublish.dao.InvitationDao">
+<mapper namespace="com.qiaomu.modules.workflow.dao.InvitationDao">
     <delete id="deleteByCommunity" parameterType="long">
         DELETE FROM yw_invitation WHERE community_id=#{communityId}
     </delete>
-    <select id="selectPageAll" resultType="com.qiaomu.modules.infopublish.entity.InvitationEntity">
+    <select id="selectPageAll" resultType="com.qiaomu.modules.workflow.entity.InvitationEntity">
         SELECT i.*,c.name as communityName FROM yw_invitation i LEFT JOIN yw_community c ON i.community_id = c.id
         <where>
             1=1
@@ -21,11 +21,11 @@
         </where>
 
     </select>
-    <select id="selectById" resultType="com.qiaomu.modules.infopublish.entity.InvitationEntity">
+    <select id="selectById" resultType="com.qiaomu.modules.workflow.entity.InvitationEntity">
          SELECT i.*,c.name as communityName FROM yw_invitation i LEFT JOIN yw_community c ON i.community_id = c.id
          where i.id = #{id}
     </select>
-    <select id="selectByCommunityId" resultType="com.qiaomu.modules.infopublish.entity.InvitationEntity">
+    <select id="selectByCommunityId" resultType="com.qiaomu.modules.workflow.entity.InvitationEntity">
         SELECT * FROM yw_invitation WHERE community_id=#{communityId}
     </select>
 

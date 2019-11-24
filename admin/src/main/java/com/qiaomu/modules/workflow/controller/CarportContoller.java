@@ -1,10 +1,10 @@
-package com.qiaomu.modules.infopublish.controller;
+package com.qiaomu.modules.workflow.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.modules.article.exception.CommentException;
-import com.qiaomu.modules.infopublish.entity.CarportEntity;
-import com.qiaomu.modules.infopublish.service.CarportService;
+import com.qiaomu.modules.workflow.entity.CarportEntity;
+import com.qiaomu.modules.workflow.service.CarportService;
 import com.qiaomu.modules.sys.controller.AbstractController;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.entity.UserExtend;

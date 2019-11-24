@@ -36,8 +36,6 @@ public class CustomAccessControlFilter extends AccessControlFilter {
      */
    @Override
     protected boolean isAccessAllowed(ServletRequest servletRequest, ServletResponse servletResponse, Object o) throws Exception {
-
-       //System.out.println("servletRequest = [" + servletRequest + "], servletResponse = [" + servletResponse + "], o = [" + o + "]");
         Subject subject = getSubject(servletRequest, servletResponse);
         String url = ((ShiroHttpServletResponse) servletResponse).getRequest().getRequestURI().toString();
         if(url.contains("/mobile/")){

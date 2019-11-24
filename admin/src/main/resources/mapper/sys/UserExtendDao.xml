@@ -118,21 +118,27 @@
 
     <select id="findAll" resultType="com.qiaomu.modules.sys.entity.UserExtend">
         SELECT
-          *
-        FROM
-        yw_user_extend e
-        <where>
-            1=1
-            <if test="communityId != null">
-                and e.community_id = #{communityId}
-            </if>
-            <if test="userId != null">
-                and e.user_id = #{userId}
-            </if>
-            <if test="repairsType != null and repairsType !=''">
-                and e.repairs_type = #{repairsType}
-            </if>
-        </where>
+            e.*,u.username as userPhone
+            FROM
+        (
+            SELECT
+            *
+            FROM
+            yw_user_extend
+            <where>
+                1=1
+                <if test="communityId != null">
+                    and community_id = #{communityId}
+                </if>
+                <if test="userId != null">
+                    and user_id = #{userId}
+                </if>
+                <if test="repairsType != null and repairsType !=''">
+                    and repairs_type = #{repairsType}
+                </if>
+            </where>
+        ) e
+        LEFT JOIN sys_user u ON e.user_id = u.user_id
         ORDER BY e.create_time DESC
     </select>
 </mapper>

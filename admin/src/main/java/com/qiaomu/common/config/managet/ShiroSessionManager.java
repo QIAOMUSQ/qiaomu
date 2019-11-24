@@ -1,6 +1,7 @@
 package com.qiaomu.common.config.managet;
 
 import com.alibaba.fastjson.JSON;
+import com.qiaomu.modules.auth.service.AuthLoginService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.SessionContext;
@@ -56,13 +57,10 @@ public class ShiroSessionManager extends DefaultWebSessionManager {
                 +WebUtils.toHttp(request).getRemoteHost()+"=====url:" +url+
                 " ========= 参数：" +JSON.toJSONString(WebUtils.toHttp(request).getParameterMap()));
         if (StringUtils.isNotBlank(WebUtils.toHttp(request).getParameter("contentHtml"))){
+            //公告html代码
             WebUtils.toHttp(request).setAttribute("content",WebUtils.toHttp(request).getParameter("contentHtml"));
         }
-
-
         try{
-
-          //  System.out.println(DateTime.now().toString("YYYY-MM-dd HH:mm:ss") +"___id："+id);
             if(StringUtils.isEmpty(id) && url.contains("login") ){
                 //如果没有携带id参数则按照父类的方式在cookie进行获取
                 Serializable sessionid = super.getSessionId(request, response);
@@ -74,7 +72,6 @@ public class ShiroSessionManager extends DefaultWebSessionManager {
                 request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_SOURCE,REFERENCED_SESSION_ID_SOURCE);
                 request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID,id);
                 request.setAttribute(ShiroHttpServletRequest.REFERENCED_SESSION_ID_IS_VALID,Boolean.TRUE);
-
                 // 每次读取之后 都把当前的 sessionId 放入 response 中
                 httpResponse.setHeader(AUTHORIZATION, id);
                 return id;

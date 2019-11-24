@@ -39,8 +39,10 @@ import com.qiaomu.modules.sys.shiro.ShiroUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -104,13 +106,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     @Transactional(rollbackFor = Exception.class)
     public void save(SysUserEntity user) {
         user.setCreateTime(new Date());
-        //sha256加密
-        String salt = RandomStringUtils.randomAlphanumeric(20);
-        user.setSalt(salt);
-        user.setPassword(ShiroUtils.sha256(user.getPassword(), user.getSalt()));
-        this.insert(user);
-        //保存用户与角色关系
-        sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
+        try {
+            //sha256加密
+            String salt = RandomStringUtils.randomAlphanumeric(20);
+            user.setSalt(salt);
+            user.setPassword(ShiroUtils.sha256(user.getPassword(), user.getSalt()));
+            this.insert(user);
+            //保存用户与角色关系
+            sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
+        }catch (Exception e){
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
     }
 
     @Override
@@ -123,22 +130,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
         }
         this.updateById(user);
         sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
-       /* List<UserExtend> userExtendInfo  =  userExtendService.getUserExtendInfoByUserId(user.getUserId());
-           for (UserExtend userExtend : userExtendInfo){
-               if (user.getPropertyCompanyRoleType() !=null) {
-                   //4：游客  3：业主  2:物业工作人员 1:物业管理员
-                   userExtend.setCompanyRoleType(user.getPropertyCompanyRoleType());
-               }
-               userExtend.setCheck("1");
-               if(userExtend.getId()==null){
-                   userExtend.setUserId(user.getUserId());
-                   userExtendService.insert(userExtend);
-               }else {
-                   userExtendService.updateById(userExtend);
-               }
-               //保存用户与角色关系
-               sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
-           }*/
     }
 
 
@@ -239,5 +230,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     @Transactional(rollbackFor = Exception.class)
     public SysUserEntity findBackPassword(String phone, String securityCode) {
         return baseMapper.getUserByUserName(phone);
+    }
+
+    @Override
+    public void updateClientId(SysUserEntity userEntity) {
+        baseMapper.updateClientId(userEntity);
+    }
+
+    @Override
+    public void reSetPassword(SysUserEntity user) {
+        baseMapper.reSetPassword(user);
     }
 }

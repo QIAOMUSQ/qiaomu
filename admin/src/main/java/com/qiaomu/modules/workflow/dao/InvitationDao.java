@@ -1,8 +1,8 @@
-package com.qiaomu.modules.infopublish.dao;
+package com.qiaomu.modules.workflow.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.qiaomu.modules.infopublish.entity.InvitationEntity;
+import com.qiaomu.modules.workflow.entity.InvitationEntity;
 
 import java.io.Serializable;
 import java.util.List;

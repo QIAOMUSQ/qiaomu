@@ -1,12 +1,11 @@
 package com.qiaomu.modules.propertycompany.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.qiaomu.modules.infopublish.entity.CarportEntity;
-import com.qiaomu.modules.infopublish.entity.InvitationEntity;
-import com.qiaomu.modules.infopublish.service.CarportService;
-import com.qiaomu.modules.infopublish.service.InvitationService;
+import com.qiaomu.modules.workflow.entity.CarportEntity;
+import com.qiaomu.modules.workflow.entity.InvitationEntity;
+import com.qiaomu.modules.workflow.service.CarportService;
+import com.qiaomu.modules.workflow.service.InvitationService;
 import com.qiaomu.modules.propertycompany.dao.CommunityAdvertiseDao;
 import com.qiaomu.modules.propertycompany.dao.LoginStatisticsDao;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
@@ -14,9 +13,7 @@ import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.service.SysFileService;
 import com.qiaomu.modules.sys.service.UserExtendService;
 import com.qiaomu.modules.workflow.entity.YwWorkflowInfo;
-import com.qiaomu.modules.workflow.service.UserWorkflowService;
 import com.qiaomu.modules.workflow.service.YwWorkflowInfoService;
-import com.qiaomu.modules.workflow.service.YwWorkflowMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;

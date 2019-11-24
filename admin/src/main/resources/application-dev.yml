@@ -4,12 +4,12 @@ spring:
     driverClassName: com.mysql.jdbc.Driver
     druid:
       first:  #数据源1
-        url: jdbc:mysql://103.26.76.116:6300/qiaomu_service?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
-        username: qiaomu_service
+        url: jdbc:mysql://103.26.76.116:6300/qiaomu_dev?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+        username: qiaomu_dev
         password: qiaomu
       second:  #数据源2
-        url: jdbc:mysql://103.26.76.116:6300/qiaomu_service?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
-        username: qiaomu_service
+        url: jdbc:mysql://103.26.76.116:6300/qiaomu_dev?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+        username: qiaomu_dev
         password: qiaomu
       initial-size: 10
       max-active: 100
@@ -49,6 +49,13 @@ spring:
         max-wait: -1ms      # 连接池最大阻塞等待时间（使用负值表示没有限制）
         max-idle: 10      # 连接池中的最大空闲连接
         min-idle: 5       # 连接池中的最小空闲连接
+  kafka:
+    bootstrap-servers: 103.26.76.116:9092
+    producer:
+      retries: 10
+      acks: 1
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
 #### 上传文件保存的路径
 file:

@@ -1,6 +1,6 @@
-package com.qiaomu.modules.infopublish.service;
+package com.qiaomu.modules.workflow.service;
 
-import com.qiaomu.modules.infopublish.entity.PushMessage;
+import com.qiaomu.modules.workflow.VO.PushMessageVO;
 
 /**
  * @author 李品先
@@ -18,7 +18,7 @@ public interface PushRedisMessageService {
      *  3：推送到全部用户
      * @param messages
      */
-    void pushMessageToRedis(PushMessage messages);
+    void pushMessageToRedis(PushMessageVO messages);
 
     /**
      * 推送信息服务

@@ -1,4 +1,4 @@
-package com.qiaomu.modules.infopublish.entity;
+package com.qiaomu.modules.workflow.entity;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
@@ -30,7 +30,8 @@ public class InvitationEntity implements Serializable {
     private Long companyId;
     @TableField(exist = false)
     private Long userId;
-
+    @TableField(exist = false)
+    private String contentHtml;
     public Long getId() {
         return id;
     }
@@ -102,5 +103,13 @@ public class InvitationEntity implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getContentHtml() {
+        return contentHtml;
+    }
+
+    public void setContentHtml(String contentHtml) {
+        this.contentHtml = contentHtml;
     }
 }

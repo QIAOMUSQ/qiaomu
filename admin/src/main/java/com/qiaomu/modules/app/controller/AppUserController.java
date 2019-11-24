@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.qiaomu.common.Enum.CommunityRoleType;
 import com.qiaomu.common.utils.*;
 import com.qiaomu.common.validator.Assert;
+import com.qiaomu.modules.auth.service.AuthLoginService;
 import com.qiaomu.modules.sys.controller.AbstractController;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.entity.UserExtend;
@@ -47,6 +48,9 @@ public class AppUserController extends AbstractController {
     @Autowired
     private UserExtendService userExtendService;
 
+    @Autowired
+    private AuthLoginService authLoginService;
+
     /**
      * 用户登陆
      * @param phone
@@ -56,7 +60,7 @@ public class AppUserController extends AbstractController {
      */
     @ResponseBody
     @RequestMapping(value ="login")
-    public R login(String phone, String password, ServletRequest request, boolean isAgree,HttpServletResponse response) {
+    public R login(String phone, String password,String clientId, ServletRequest request, boolean isAgree,HttpServletResponse response) {
         try {
            if(!"".equals(phone) && phone != null){
                Subject subject = ShiroUtils.getSubject();
@@ -74,6 +78,13 @@ public class AppUserController extends AbstractController {
                }
                String session  = response.getHeader(AUTHORIZATION);
                userEntity.setSessionId(session);
+               if (null != clientId && !"".equals(clientId) && !"null".equals(clientId)){
+                   if (!clientId.equals(userEntity.getClientId())){
+                       userEntity.setClientId(clientId);
+                       sysUserService.updateClientId(userEntity);
+                   }
+               }
+               authLoginService.saveUserInfoToRedis(userEntity,session);
                return R.ok("success",JSON.toJSON(userEntity));
            }else {
                return R.ok("error","客户端出现问题");
@@ -104,7 +115,7 @@ public class AppUserController extends AbstractController {
      * @return
      */
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public R registerUser(String phone, String password,String securityCode) {
+    public R registerUser(String phone, String password,String securityCode,String clientId) {
         SysUserEntity user = new SysUserEntity();
         user.setUsername(phone);
         user.setPassword(password);
@@ -120,6 +131,9 @@ public class AppUserController extends AbstractController {
             user.setStatus(Integer.valueOf(1));
             user.setNickName(RandomName.randomName(true,4));
             user.setHandImgId(167l);
+            if (!"null".equals(clientId)){
+                user.setClientId(clientId);
+            }
             this.sysUserService.save(user);
             return R.ok();
         }else {
@@ -190,33 +204,5 @@ public class AppUserController extends AbstractController {
         return BuildResponse.success();
     }
 
-    @ResponseBody
-    @RequestMapping(value = "findBackPassword",method = RequestMethod.POST)
-    public Object findBackPassword(String phone,String securityCode){
-        try {
-            if(securityCode.equals("666666")){
-                return BuildResponse.success(JSON.toJSONString(sysUserService.findBackPassword(phone,securityCode)));
-            }else {
-                return BuildResponse.fail("验证码错误");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            return BuildResponse.fail();
-        }
 
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "reSettingPassword",method = RequestMethod.POST)
-    public Object reSettingPassword(String password,Long userId){
-      try {
-          SysUserEntity user = sysUserService.queryById(userId);
-          user.setPassword(ShiroUtils.sha256(password, user.getSalt()));
-          sysUserService.update(user);
-          return BuildResponse.success();
-      }catch (Exception e){
-          e.printStackTrace();
-          return BuildResponse.fail();
-      }
-    }
 }

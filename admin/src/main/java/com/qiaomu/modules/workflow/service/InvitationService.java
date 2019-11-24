@@ -1,8 +1,8 @@
-package com.qiaomu.modules.infopublish.service;
+package com.qiaomu.modules.workflow.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.qiaomu.common.utils.PageUtils;
-import com.qiaomu.modules.infopublish.entity.InvitationEntity;
+import com.qiaomu.modules.workflow.entity.InvitationEntity;
 
 import java.util.List;
 import java.util.Map;

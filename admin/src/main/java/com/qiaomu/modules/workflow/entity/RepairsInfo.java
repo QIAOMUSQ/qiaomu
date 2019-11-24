@@ -48,7 +48,7 @@ public class RepairsInfo implements Serializable {
 
     private Date apportionTime;//分配时间
 
-    private String lingerTime;
+    private String lingerTime;//逗留时间
 
     @TableField(exist = false)
     private String repairsPhone;  //  处理人号码

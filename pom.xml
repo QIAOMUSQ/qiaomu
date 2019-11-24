@@ -19,8 +19,9 @@
         <module>common</module>
         <module>admin</module>
         <module>push_info</module>
-        <!-- <module>api</module>
-        <module>generator</module>-->
+        <module>push_information</module>
+        <module>api</module>
+        <!--  <module>generator</module>-->
     </modules>
 
     <properties>
@@ -186,4 +187,5 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
+
 </project>

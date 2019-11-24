@@ -10,7 +10,6 @@ server:
   basedir:
       staticFile
 
-
 spring:
   profiles:
     active: prod

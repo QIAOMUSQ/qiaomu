@@ -188,12 +188,14 @@
         $("#main").css("display","block");
         $("#add").css("display","none");
         editor2.txt.html('<p></p>');
-        $("#picContents").html("")
+        $("#picContents").html("");
+        $("#title").val("");
         reload();
     }
     function add() {
         $("#main").css("display","none");
         $("#add").css("display","block");
+        $("#submitData").css("display","block");
         upload('#upImg_names','#picContents','imgJson',setPics);
         // 单选
         selectPlus = layui.selectPlus;

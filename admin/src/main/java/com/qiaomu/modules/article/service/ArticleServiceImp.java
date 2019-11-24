@@ -76,7 +76,9 @@ public class ArticleServiceImp implements ArticleService{
             throw new CommentException("请认证该小区！");
         }
         List<ArticleModel> articleModels =null;
-        if(articleSelectModel.getQueryType()==null||"1".equals(articleSelectModel.getQueryType())||"3".equals(articleSelectModel.getQueryType())){
+        if(articleSelectModel.getQueryType()==null
+                ||"1".equals(articleSelectModel.getQueryType())
+                ||"3".equals(articleSelectModel.getQueryType())){
             articleModels = articleDao.query(articleSelectModel);
         }else if("2".equals(articleSelectModel.getQueryType())){
             articleModels = articleDao.queryArticleByCommentTime(articleSelectModel);
@@ -91,6 +93,7 @@ public class ArticleServiceImp implements ArticleService{
             articleModel.setRealName(AESUtil.decrypt(articleModel.getRealName()));
             articlePraiseEntity.setArticleId(articleModel.getArticleId());
             String isPraise = articleDao.queryPraise(articlePraiseEntity);
+            articleModel.setHeadUrl(sysUserService.queryUserImageUrl(articleModel.getAuthorId()));
             if(null!=isPraise&&!isPraise.isEmpty()) {
                 articleModel.setIsPraise(isPraise);
             }else{

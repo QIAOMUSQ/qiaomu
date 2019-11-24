@@ -1,12 +1,9 @@
 package com.qiaomu;
 
-import com.alibaba.fastjson.JSON;
 import com.qiaomu.common.utils.RedisUtils;
-import com.qiaomu.modules.infopublish.entity.PushMessage;
-import com.qiaomu.modules.infopublish.service.PushRedisMessageService;
+import com.qiaomu.modules.workflow.service.PushRedisMessageService;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +37,14 @@ public class RedisTest {
     public void testPushRedis(){
 
       for (int i=0;i<10;i++){
-          PushMessage message = new PushMessage();
+          /*PushMessage message = new PushMessage();
           message.setMessage("测试"+i+"");
           message.setReceivePhone("15157150200");
           message.setType(i+"");
           message.setTime(DateTime.now().toString("YYYY-MM-dd HH:mm:ss"));
-          message.setCommunityId(1l);
+          message.setCommunityId(1l);*/
           //redisTemplate.convertAndSend("message", JSON.toJSONString(message));
-          redisTemplate.boundHashOps("message_history").put("history_"+1515715020+i,JSON.toJSONString(message));
+        //  redisTemplate.boundHashOps("message_history").put("history_"+1515715020+i,JSON.toJSONString(message));
          /*Object obj =  redisTemplate.opsForList().leftPop("message_history");
           System.out.println(obj);*/
       }
@@ -56,7 +53,7 @@ public class RedisTest {
 
     @Test
     public void testPushMessage(){
-        PushMessage message = new PushMessage();
+       /* PushMessage message = new PushMessage();
         message.setMessage("测试222");
         message.setReceivePhone("15157150200");
         message.setType("0");
@@ -65,7 +62,7 @@ public class RedisTest {
         message.setPushPhone("15157150201");
         redisMessageService.pushMessageToRedis(message);
         Object object = redisTemplate.boundHashOps("message_history").get("history_"+message.getReceivePhone()+"_"+message.getTime().replace(" ","").replace("-","").replace(":",""));
-        System.out.println(message);
+        System.out.println(message);*/
     }
 
 

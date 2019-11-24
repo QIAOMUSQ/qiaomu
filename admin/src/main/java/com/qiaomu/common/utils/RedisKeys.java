@@ -31,4 +31,11 @@ public class RedisKeys {
     public static String getShiroSessionKey(String key){
         return "sessionid:" + key;
     }
+
+    public static String getUserInfoBySessionIdKey(String key){
+        return "session:user:"+key;
+    }
+    public static String getUserInfoByUserNameKey(String key){
+        return "session:userName:"+key;
+    }
 }

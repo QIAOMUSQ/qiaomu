@@ -1,17 +1,21 @@
 package com.qiaomu.modules.workflow.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.qiaomu.common.utils.AESUtil;
 import com.qiaomu.common.utils.DateUtils;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
+import com.qiaomu.modules.auth.service.KafkaTemplateService;
+import com.qiaomu.modules.workflow.VO.PushMessageVO;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.sys.service.UserExtendService;
+import com.qiaomu.modules.workflow.VO.TransmissionContentVO;
 import com.qiaomu.modules.workflow.dao.RepairsInfoDao;
 import com.qiaomu.modules.workflow.dao.UserRepairsDao;
 import com.qiaomu.modules.workflow.entity.RepairsInfo;
@@ -20,8 +24,6 @@ import com.qiaomu.modules.workflow.enums.RepairsStar;
 import com.qiaomu.modules.workflow.enums.RepairsStatus;
 import com.qiaomu.modules.workflow.enums.RepairsTypeEnum;
 import com.qiaomu.modules.workflow.service.RepairsInfoService;
-import jodd.util.ArraysUtil;
-import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +51,9 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
     @Resource
     private UserRepairsDao userRepairsDao;
 
+    @Autowired
+    private KafkaTemplateService kafkaTemplateService;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean insert(RepairsInfo entity) {
@@ -67,15 +72,20 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
             //如果没有分配人员
             entity.setStatus(RepairsStatus.commit.getStatus());
         }
-       // entity.setApportionTime(new Date());
-        Integer repairsId = baseMapper.insert(entity);
-        //查询该社区工作人员
-
+        baseMapper.insert(entity);
         //插入关系表
         for(UserExtend workers : workersList){
             UserRepairs userRepairs = new UserRepairs(workers.getUserId(),entity.getId());
             userRepairsDao.insert(userRepairs);
             //消息推动到工作人员app
+            kafkaTemplateService.pushRepairsInfo(
+                    new PushMessageVO(
+                            workers.getUserPhone(),
+                            "社区新的维修信息",
+                            entity.getCommunityId(),
+                            entity.getDetail(),
+                            JSON.toJSONString(new TransmissionContentVO("社区维修",entity.getCommunityId(),entity.getId()))
+                     ));
         }
 
 
@@ -186,6 +196,16 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
         info.setApportionTime(new Date());
         info.setStatus(RepairsStatus.assign.getStatus());
         baseMapper.updateById(info);
+        SysUserEntity repairUser = sysUserService.queryById(userId);
+        //推送信息
+        kafkaTemplateService.pushRepairsInfo(
+                new PushMessageVO(
+                        repairUser.getUsername(),
+                        "社区分配维修信息",
+                        info.getCommunityId(),
+                        info.getDetail(),
+                        JSON.toJSONString(new TransmissionContentVO("社区维修",info.getCommunityId(),info.getId()))
+                ));
         return "分配成功";
     }
 
@@ -203,6 +223,21 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
         info.setLingerTime(String.valueOf(new Date().getTime()- info.getCreateTime().getTime()));
         info.setStatus(RepairsStatus.finish.getStatus());
         baseMapper.updateById(info);
+        //查询以前是否存在维修信息
+        List<UserRepairs> userRepairsList =  userRepairsDao.selectByRepairsId(info.getRepairsId());
+        for (UserRepairs repairs : userRepairsList){
+            SysUserEntity repairUser = sysUserService.queryById(repairs.getUserId());
+            kafkaTemplateService.pushRepairsInfo(
+                    new PushMessageVO(
+                            repairUser.getUsername(),
+                            "社区维修结束信息",
+                            info.getCommunityId(),
+                            "物业客户已经评价您的维修任务，请及时查看",
+                            JSON.toJSONString(new TransmissionContentVO("社区维修",info.getCommunityId(),info.getId()))
+                    ));
+        }
+
+
     }
 
     @Override

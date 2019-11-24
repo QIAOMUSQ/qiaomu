@@ -6,6 +6,13 @@
 		UPDATE sys_user SET login_community_id = #{loginCommunityId} where user_id = #{userId}
 	</update>
 
+	<update id="updateClientId" parameterType="com.qiaomu.modules.sys.entity.SysUserEntity">
+		UPDATE sys_user SET client_id = #{clientId} where user_id = #{userId}
+	</update>
+	<update id="reSetPassword">
+		UPDATE sys_user SET password = #{password}  where user_id = #{userId}
+	</update>
+
 	<!-- 查询用户的所有权限 -->
 	<select id="queryAllPerms" resultType="string">
 		select m.perms from sys_user_role ur 

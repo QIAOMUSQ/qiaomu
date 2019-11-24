@@ -62,5 +62,9 @@ public interface SysUserDao extends BaseMapper<SysUserEntity> {
     SysUserEntity getuserRealName(String ids);
 
 
-     void setUserLoginCommunity(SysUserEntity userEntity);
+    void setUserLoginCommunity(SysUserEntity userEntity);
+
+    void updateClientId(SysUserEntity userEntity);
+
+    void reSetPassword(SysUserEntity user);
 }

@@ -45,6 +45,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+
 /**
  * 认证
  *
@@ -57,9 +59,9 @@ public class UserRealm extends AuthorizingRealm {
 
 
 
-    @Autowired
+    @Resource
     private SysUserDao sysUserDao;
-    @Autowired
+    @Resource
     private SysMenuDao sysMenuDao;
     @Autowired
     private RedisTemplate<String, String> stringRedisTemplate;

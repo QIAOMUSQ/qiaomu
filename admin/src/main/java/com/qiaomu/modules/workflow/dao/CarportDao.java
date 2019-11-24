@@ -1,7 +1,7 @@
-package com.qiaomu.modules.infopublish.dao;
+package com.qiaomu.modules.workflow.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.qiaomu.modules.infopublish.entity.CarportEntity;
+import com.qiaomu.modules.workflow.entity.CarportEntity;
 
 import java.util.List;
 

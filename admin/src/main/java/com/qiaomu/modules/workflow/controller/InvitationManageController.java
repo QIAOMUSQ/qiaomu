@@ -1,11 +1,11 @@
-package com.qiaomu.modules.infopublish.controller;
+package com.qiaomu.modules.workflow.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
-import com.qiaomu.modules.infopublish.entity.InvitationEntity;
-import com.qiaomu.modules.infopublish.service.InvitationService;
+import com.qiaomu.modules.workflow.entity.InvitationEntity;
+import com.qiaomu.modules.workflow.service.InvitationService;
 import com.qiaomu.modules.sys.controller.AbstractController;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.Map;
 
 /**
