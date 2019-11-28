@@ -64,8 +64,11 @@
             <if test="repairsType !=null and repairsType !='' ">
                 and r.repairs_type =#{repairsType}
             </if>
-            <if test="status !=null and status != '' ">
-                and r.status =#{status}
+            <if test="status !=null and status == 3 ">
+                and r.status &lt; 2
+            </if>
+            <if test="status !=null and status != 3 ">
+                and r.status = #{status}
             </if>
             <if test="communityIds !=null">
                 and r.community_id in

@@ -99,6 +99,7 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
      *      communityId 社区id
      *      repairsType 维修类型 0：电力 1：供水 2：煤气 3房屋
      *      status  状态  0：已提交 1：物业已分派人员 2：处理完成
+     *      注：当前申请为3
      *      repairsId 维修人员ID
      * @return
      */
@@ -106,8 +107,13 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
     public PageUtils findRepairsPage(Map<String, Object> params) {
         RepairsInfo repairs = new RepairsInfo();
         if (StringUtils.isBlank((String) params.get("companyId"))){
-            if (StringUtils.isNotBlank((String) params.get("userId")))repairs.setUserId(Long.valueOf((String) params.get("userId")));
-            if (StringUtils.isNotBlank((String) params.get("communityId")))repairs.setCommunityId(Long.valueOf((String) params.get("communityId")));
+            if (StringUtils.isNotBlank((String) params.get("userId"))){
+                repairs.setUserId(Long.valueOf((String) params.get("userId")));
+            }
+            if (StringUtils.isNotBlank((String) params.get("communityId"))){
+                repairs.setCommunityId(Long.valueOf((String) params.get("communityId")));
+            }
+
         }else {
             YwCommunity community = new YwCommunity();
             String companyId = (String) params.get("companyId");
@@ -128,6 +134,7 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
         }
         Page<RepairsInfo> page = new Query(params).getPage();
         if (params.get("repairsId")!=null){
+            //根据维修人员id查询数据
             repairs.setRepairsId(Long.valueOf((String)params.get("repairsId")));
            /* //查询关系表
             UserRepairs userRepairs = new UserRepairs(Long.valueOf((String)params.get("repairsId")));
