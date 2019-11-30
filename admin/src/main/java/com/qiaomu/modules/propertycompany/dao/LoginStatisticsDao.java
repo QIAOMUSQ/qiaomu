@@ -24,4 +24,7 @@ public interface LoginStatisticsDao extends BaseMapper<LoginStatistics> {
     List<LoginStatistics> selectPageByCondition(Page<LoginStatistics> page, LoginStatistics condition);
 
     void deleteByCommunityId(Long communityId);
+
+    int statisticsLoginByCommunityId(String communityId);
+    int loginTimesTodayByCommunityId(String communityId);
 }

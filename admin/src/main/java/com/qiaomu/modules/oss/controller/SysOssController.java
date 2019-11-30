@@ -60,7 +60,7 @@ public class SysOssController {
 
     private final static String KEY = ConfigConstant.CLOUD_STORAGE_CONFIG_KEY;
 
-    /**
+    /**-
      * 列表
      */
     @RequestMapping("/list")

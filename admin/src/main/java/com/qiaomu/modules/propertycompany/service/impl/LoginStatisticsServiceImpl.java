@@ -59,4 +59,13 @@ public class LoginStatisticsServiceImpl extends ServiceImpl<LoginStatisticsDao,L
         page.setRecords(this.baseMapper.selectPageByCondition(page,condition));
         return new PageUtils(page);
     }
+    @Override
+    public int statisticsLoginByCommunityId(String communityId){
+        return  this.baseMapper.statisticsLoginByCommunityId(communityId);
+    }
+
+    @Override
+    public int loginTimesTodayByCommunityId(String communityId) {
+        return  this.baseMapper.loginTimesTodayByCommunityId(communityId);
+    }
 }

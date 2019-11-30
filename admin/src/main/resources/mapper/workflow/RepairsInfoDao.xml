@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.qiaomu.modules.workflow.dao.RepairsInfoDao">
+    <resultMap id="statusNumber" type="java.util.HashMap">
+        <result property="status" column="status"/>
+        <result property="number" column="number"/>
+    </resultMap>
+    <resultMap id="repairsTypeNumber" type="java.util.HashMap">
+        <result property="repairs_type" column="repairs_type"/>
+        <result property="number" column="number"/>
+    </resultMap>
 
     <select id="findRepairs" resultType="com.qiaomu.modules.workflow.entity.RepairsInfo">
         SELECT
@@ -145,6 +153,18 @@
             </if>
         </where>
         ORDER BY i.create_time DESC
+    </select>
+
+    <select id="staticRepairsByStatus" resultMap="statusNumber"  parameterType="String">
+        SELECT count(*) as number,status from yw_user_repairs where community_id = {#community_id} GROUP by status ASC
+    </select>
+
+    <select id="staticRepairsByrepairsType" resultMap="repairsTypeNumber"  parameterType="String">
+        SELECT count(*) as number,repairs_type from yw_user_repairs where community_id = {#community_id} GROUP by repairs_type ASC
+    </select>
+
+    <select id="staticRepairsByAssign"  resultType="com.qiaomu.modules.workflow.entity.RepairsInfo"  parameterType="String">
+        SELECT * from yw_user_repairs where community_id = {#community_id} AND status=1 ORDER by apportion_time ASC
     </select>
 
 </mapper>

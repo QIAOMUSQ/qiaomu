@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.qiaomu.modules.workflow.entity.RepairsInfo;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -22,4 +23,10 @@ public interface RepairsInfoDao extends BaseMapper<RepairsInfo> {
     RepairsInfo findRepairsById(Long id);
 
     List<RepairsInfo> selectPagesByRepairs(Page<RepairsInfo> page, RepairsInfo repairs);
+
+    List<HashMap<String,String>> staticRepairsByStatus(String communityId);
+
+    List<HashMap<String,String>> staticRepairsByrepairsType(String communityId);
+
+    List<RepairsInfo> staticRepairsByAssign(String communityId);
 }
