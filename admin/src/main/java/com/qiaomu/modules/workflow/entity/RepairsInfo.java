@@ -74,6 +74,9 @@ public class RepairsInfo implements Serializable {
     @TableField(exist = false)
     private List<Long> ids;
 
+    @TableField(exist = false)
+    private String queryType;
+
     public Long getId() {
         return id;
     }
@@ -264,5 +267,13 @@ public class RepairsInfo implements Serializable {
 
     public void setIds(List<Long> ids) {
         this.ids = ids;
+    }
+
+    public String getQueryType() {
+        return queryType;
+    }
+
+    public void setQueryType(String queryType) {
+        this.queryType = queryType;
     }
 }

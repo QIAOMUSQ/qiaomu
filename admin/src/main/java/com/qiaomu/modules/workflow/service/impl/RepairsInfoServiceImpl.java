@@ -130,7 +130,13 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
             repairs.setRepairsType((String)params.get("repairsType"));
         }
         if (params.get("status")!=null){
-            repairs.setStatus((String)params.get("status"));
+            if (params.get("status").equals("3")){
+                repairs.setQueryType("3");
+                repairs.setStatus(null);
+            }else {
+                repairs.setStatus((String)params.get("status"));
+            }
+
         }
         Page<RepairsInfo> page = new Query(params).getPage();
         if (params.get("repairsId")!=null){

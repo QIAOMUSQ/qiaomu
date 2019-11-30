@@ -20,7 +20,7 @@
         <module>admin</module>
         <module>push_info</module>
         <module>push_information</module>
-        <module>api</module>
+       <!-- <module>api</module>-->
         <!--  <module>generator</module>-->
     </modules>
 
