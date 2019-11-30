@@ -18,4 +18,7 @@ public interface LoginStatisticsService extends IService<LoginStatistics> {
     List<LoginStatistics> getStatisticsloginByDate(LoginStatistics condition);
 
     PageUtils pageList(Map<String, Object> params);
+
+    int statisticsLoginByCommunityId(String communityId);
+    int loginTimesTodayByCommunityId(String communityId);
 }

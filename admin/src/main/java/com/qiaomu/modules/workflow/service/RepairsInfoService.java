@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.service.IService;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.modules.workflow.entity.RepairsInfo;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -49,4 +51,10 @@ public interface RepairsInfoService extends IService<RepairsInfo> {
      * @param id
      */
     void invalidRepairs(Long id);
+
+    List<HashMap<String,String>> staticRepairsByStatus(String communityId);
+
+    List<HashMap<String,String>> staticRepairsByrepairsType(String communityId);
+
+    List<RepairsInfo> staticRepairsByAssign(String communityId);
 }

@@ -260,5 +260,20 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
         baseMapper.updateById(info);
     }
 
+    @Override
+    public List<HashMap<String,String>> staticRepairsByStatus(String communityId){
+        List<HashMap<String,String>> statusData = baseMapper.staticRepairsByStatus(communityId);
+        return statusData;
+    }
 
+    @Override
+    public List<HashMap<String,String>> staticRepairsByrepairsType(String communityId){
+        List<HashMap<String,String>> repairData = baseMapper.staticRepairsByrepairsType(communityId);
+        return repairData;
+    }
+    @Override
+    public List<RepairsInfo> staticRepairsByAssign(String communityId){
+        List<RepairsInfo> repairsInfos = baseMapper.staticRepairsByAssign(communityId);
+        return repairsInfos;
+    }
 }

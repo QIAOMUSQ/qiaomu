@@ -36,6 +36,16 @@
         GROUP BY
             l.community_id
     </select>
+    <select id="statisticsLoginByCommunityId" resultType="int"  parameterType="String">
+        SELECT sum(number) as number  FROM yw_community_login_statistics WHERE community_id = {#community_id}
+
+    </select>
+    <select id="loginTimesTodayByCommunityId" resultType="int"  parameterType="String">
+        SELECT sum(number) as number  FROM yw_community_login_statistics WHERE community_id = {#community_id} AND date>=CURRENT_DATE()
+
+    </select>
+
+
     <select id="getStatisticsLoginByDate"
             resultType="com.qiaomu.modules.propertycompany.entity.LoginStatistics">
 
