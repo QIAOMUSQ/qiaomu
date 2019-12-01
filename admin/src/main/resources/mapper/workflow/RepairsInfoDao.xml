@@ -159,15 +159,15 @@
     </select>
 
     <select id="staticRepairsByStatus" resultMap="statusNumber"  parameterType="String">
-        SELECT count(*) as number,status from yw_user_repairs where community_id = {#community_id} GROUP by status ASC
+        SELECT count(*) as number,status from yw_user_repairs where community_id = #{community_id} GROUP by status ASC
     </select>
 
     <select id="staticRepairsByrepairsType" resultMap="repairsTypeNumber"  parameterType="String">
-        SELECT count(*) as number,repairs_type from yw_user_repairs where community_id = {#community_id} GROUP by repairs_type ASC
+        SELECT count(*) as number,repairs_type from yw_user_repairs where community_id = #{community_id} GROUP by repairs_type ASC
     </select>
 
     <select id="staticRepairsByAssign"  resultType="com.qiaomu.modules.workflow.entity.RepairsInfo"  parameterType="String">
-        SELECT * from yw_user_repairs where community_id = {#community_id} AND status=1 ORDER by apportion_time ASC
+        SELECT * from yw_user_repairs where community_id = #{community_id} AND status=1 ORDER by apportion_time ASC
     </select>
 
 </mapper>
