@@ -4,15 +4,16 @@ server:
     uri-encoding: UTF-8
     max-threads: 1000
     min-spare-threads: 30
-  port: 8080
+  port: 8081
   servlet:
-    context-path: /admin
+    context-path: /PushInfo
   basedir:
       staticFile
 
+
 spring:
   profiles:
-    active: dev
+    active: prod
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -21,24 +22,13 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
       enabled: true
-  freemarker:
-    suffix: .html
-    request-context-attribute: request
-    template-loader-path: classpath:/templates/*,classpath:/statics/
-    charset: UTF-8
-    check-template-location: true
-    settings:
-      classic_compatible: true
-      default_encoding: UTF-8
 
-shiro:
-    redis: true # true表示shiro session存到redis里，需要开启redis，才会生效【分布式场景】
 
 #mybatis
 mybatis-plus:
-  mapper-locations: classpath*:mapper/**/*.xml
+  mapper-locations: classpath*:com/qiaomu/**/mappers/*.xml
   #实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: com.qiaomu.**.entity
+  typeAliasesPackage: com.qiaomu.push.**.entity
   global-config:
     #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
     id-type: 0
@@ -63,4 +53,4 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     cache-enabled: false
     call-setters-on-nulls: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

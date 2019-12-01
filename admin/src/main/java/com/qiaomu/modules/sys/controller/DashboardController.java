@@ -52,7 +52,7 @@ public class DashboardController  extends AbstractController{
 
     }
 
-    @RequestMapping(value = "loginTimesByCommunityId",method = RequestMethod.POST)
+    @RequestMapping(value = "loginTimesTodayByCommunityId",method = RequestMethod.POST)
     public String loginTimesTodayByCommunityId(String communityId){
         int times = loginStatisticsService.loginTimesTodayByCommunityId(communityId);
         Map<String,Object> result = new HashMap<String,Object>();
