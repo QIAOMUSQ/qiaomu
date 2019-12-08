@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-
     <springProperty scope="context" name="logPath" source="logging.path"/>
     <springProperty scope="context" name="logFile" source="logging.file"/>
     <springProperty scope="context" name="logLevel" source="logging.level"/>

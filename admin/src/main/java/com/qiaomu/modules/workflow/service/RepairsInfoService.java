@@ -57,4 +57,6 @@ public interface RepairsInfoService extends IService<RepairsInfo> {
     List<HashMap<String,String>> staticRepairsByrepairsType(String communityId);
 
     List<RepairsInfo> staticRepairsByAssign(String communityId);
+
+    void revocationRepairs(Long id);
 }

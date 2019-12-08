@@ -8,6 +8,8 @@ import com.qiaomu.common.utils.DateUtils;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
 import com.qiaomu.modules.auth.service.KafkaTemplateService;
+import com.qiaomu.modules.sys.entity.SysFileEntity;
+import com.qiaomu.modules.sys.service.SysFileService;
 import com.qiaomu.modules.workflow.VO.PushMessageVO;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
@@ -50,6 +52,9 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
     private UserExtendService userExtendService;
     @Resource
     private UserRepairsDao userRepairsDao;
+
+    @Autowired
+    private SysFileService sysFileService;
 
     @Autowired
     private KafkaTemplateService kafkaTemplateService;
@@ -159,6 +164,13 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
             info.setRepairsType(RepairsTypeEnum.repairs(info.getRepairsType()).getRepairsInfo());
             if (StringUtils.isNotBlank((String) params.get("companyId"))){
                 info.setCommunityName(communityService.selectById(info.getCommunityId()).getName());
+            }
+            if(info.getImgId() !=null ){
+                SysFileEntity file = sysFileService.selectById(info.getImgId());
+                if (file !=  null){
+                    info.setUserHeadImg(file.getPath());
+                }
+
             }
         }
         return new PageUtils(page);
@@ -275,5 +287,34 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
     public List<RepairsInfo> staticRepairsByAssign(String communityId){
         List<RepairsInfo> repairsInfos = baseMapper.staticRepairsByAssign(communityId);
         return repairsInfos;
+    }
+
+    @Override
+    public void revocationRepairs(Long id) {
+        RepairsInfo info = baseMapper.selectById(id);
+        if (info.getStatus().equals(RepairsStatus.finish.getStatus())){
+            try {
+                throw new Exception("该处理已经结束，不能撤销");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else {
+            info.setStatus(RepairsStatus.invalid.getStatus());
+            info.setLingerTime(String.valueOf(new Date().getTime()- info.getCreateTime().getTime()));
+            baseMapper.updateById(info);
+            //查询以前是否存在维修信息
+            List<UserRepairs> userRepairsList =  userRepairsDao.selectByRepairsId(info.getRepairsId());
+            for (UserRepairs repairs : userRepairsList){
+                SysUserEntity repairUser = sysUserService.queryById(repairs.getUserId());
+                kafkaTemplateService.pushRepairsInfo(
+                        new PushMessageVO(
+                                repairUser.getUsername(),
+                                "社区维修撤销信息",
+                                info.getCommunityId(),
+                                "物业客户已经撤销您的维修任务，请及时查看",
+                                JSON.toJSONString(new TransmissionContentVO("社区维修",info.getCommunityId(),info.getId()))
+                        ));
+            }
+        }
     }
 }

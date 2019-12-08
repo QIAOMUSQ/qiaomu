@@ -77,6 +77,9 @@ public class RepairsInfo implements Serializable {
     @TableField(exist = false)
     private String queryType;
 
+    @TableField(exist = false)
+    private String userHeadImg;
+
     public Long getId() {
         return id;
     }
@@ -275,5 +278,13 @@ public class RepairsInfo implements Serializable {
 
     public void setQueryType(String queryType) {
         this.queryType = queryType;
+    }
+
+    public String getUserHeadImg() {
+        return userHeadImg;
+    }
+
+    public void setUserHeadImg(String userHeadImg) {
+        this.userHeadImg = userHeadImg;
     }
 }

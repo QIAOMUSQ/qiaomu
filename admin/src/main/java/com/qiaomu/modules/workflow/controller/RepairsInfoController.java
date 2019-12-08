@@ -155,9 +155,24 @@ public class RepairsInfoController {
             e.printStackTrace();
             return BuildResponse.fail(e.getMessage());
         }
-
     }
 
+    /**
+     * 撤销报修
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "revocationRepairs",method = RequestMethod.POST)
+    public Object revocationRepairs(Long id){
+        try {
+            repairsInfoService.revocationRepairs(id);
+            return BuildResponse.success("该条信息已经撤销");
+        }catch (Exception e){
+            e.printStackTrace();
+            return BuildResponse.fail(e.getMessage());
+        }
+    }
 
 
 }

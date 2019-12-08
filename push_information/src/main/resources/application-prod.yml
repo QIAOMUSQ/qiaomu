@@ -63,6 +63,6 @@ logging:
   level: debug
   level.com.qiaomu: info
   path: logs/
-  file: admin.log
+  file: push.log
 
 web-socket-url: 127.0.0.1:8081
