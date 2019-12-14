@@ -174,5 +174,22 @@ public class RepairsInfoController {
         }
     }
 
-
+    /**
+     * 更新维修人员维修反馈信息
+     * @param id
+     * @param workerOpinion
+     * @param type
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "updateWorkerOpinion",method = RequestMethod.POST)
+    public Object updateWorkerOpinion(Long id,String workerOpinion,String type){
+        try {
+            repairsInfoService.updateWorkerOpinion(id,workerOpinion,type);
+            return BuildResponse.success("信息已提交");
+        }catch (Exception e){
+            e.printStackTrace();
+            return BuildResponse.fail(e.getMessage());
+        }
+    }
 }

@@ -9,7 +9,8 @@ public enum RepairsStatus {
     commit("0","已提交"),
     assign("1","已分派"),
     finish("2","维修结束"),
-    invalid("4","维修撤销");
+    invalid("4","维修撤销"),
+    finishAndClose("5","解决并关闭");
     private String status;
 
     private String statusInfo;

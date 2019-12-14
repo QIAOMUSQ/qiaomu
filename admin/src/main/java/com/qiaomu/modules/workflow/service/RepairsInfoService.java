@@ -59,4 +59,6 @@ public interface RepairsInfoService extends IService<RepairsInfo> {
     List<RepairsInfo> staticRepairsByAssign(String communityId);
 
     void revocationRepairs(Long id);
+
+    void updateWorkerOpinion(Long id, String workerOpinion, String type);
 }

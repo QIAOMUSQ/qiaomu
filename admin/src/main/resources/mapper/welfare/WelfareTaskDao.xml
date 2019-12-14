@@ -103,10 +103,12 @@
 	<update id="updatePonit" parameterType="com.qiaomu.modules.welfare.entity.PointEntity" >
 		update welfare_points_user set points = #{points}, updatedAt = #{updatedAt} WHERE userId=#{userId}
 	</update>
+	<update id="updateTaskUser"></update>
+	<update id="updateTaskRecevieUser"></update>
 
 
-	<delete id="deleteTaskByServiceId" parameterType="String">
+	<!--<delete id="deleteTaskByServiceId" parameterType="String">
 		delete from welfare_task WHERE serviceId = #{serviceId}
-	</delete>
+	</delete>-->
 
 </mapper>

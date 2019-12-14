@@ -3,7 +3,10 @@ package com.qiaomu.modules.workflow.entity;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.qiaomu.common.validator.group.AddGroup;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -23,9 +26,9 @@ public class RepairsInfo implements Serializable {
     private Long userId;
 
     private Long communityId;   //社区id
-
+    @Length(max = 225, message="意见不能超过225个字符")
     private String userOpinion; //用户评价
-
+    @Length(max = 225, message="意见不能超过225个字符")
     private String detail;  //事务描述细节
 
     private Date createTime;    //发起时间
@@ -49,6 +52,9 @@ public class RepairsInfo implements Serializable {
     private Date apportionTime;//分配时间
 
     private String lingerTime;//逗留时间
+
+    @Length(max = 225, message="意见不能超过225个字符")
+    private String repairsWorkerOpinion;
 
     @TableField(exist = false)
     private String repairsPhone;  //  处理人号码
@@ -286,5 +292,13 @@ public class RepairsInfo implements Serializable {
 
     public void setUserHeadImg(String userHeadImg) {
         this.userHeadImg = userHeadImg;
+    }
+
+    public String getRepairsWorkerOpinion() {
+        return repairsWorkerOpinion;
+    }
+
+    public void setRepairsWorkerOpinion(String repairsWorkerOpinion) {
+        this.repairsWorkerOpinion = repairsWorkerOpinion;
     }
 }

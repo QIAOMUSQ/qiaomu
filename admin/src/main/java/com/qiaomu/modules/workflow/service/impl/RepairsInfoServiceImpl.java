@@ -159,7 +159,12 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
             if (StringUtils.isNotBlank(info.getStarType())){
                 info.setStarType(RepairsStar.star(info.getStarType()).getStartInfo());
             }
-            info.setLingerTime(DateUtils.longTimeToDay(new Date().getTime()-info.getCreateTime().getTime()));
+            if (info.getLingerTime() != null){
+                info.setLingerTime(DateUtils.longTimeToDay(Long.valueOf(info.getLingerTime())));
+            }else {
+                info.setLingerTime(DateUtils.longTimeToDay(new Date().getTime()-info.getCreateTime().getTime()));
+            }
+
             info.setUserRealName(AESUtil.decrypt(info.getUserRealName()));
             info.setRepairsType(RepairsTypeEnum.repairs(info.getRepairsType()).getRepairsInfo());
             if (StringUtils.isNotBlank((String) params.get("companyId"))){
@@ -315,6 +320,18 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
                                 JSON.toJSONString(new TransmissionContentVO("社区维修",info.getCommunityId(),info.getId()))
                         ));
             }
+        }
+    }
+
+    @Override
+    public void updateWorkerOpinion(Long id, String workerOpinion, String type) {
+        RepairsInfo info = baseMapper.findRepairsById(id);
+        if (info != null){
+            info.setRepairsWorkerOpinion(workerOpinion);
+            info.setStatus(type);
+            info.setRepairsTime(new Date());
+            info.setLingerTime(String.valueOf(new Date().getTime()- info.getCreateTime().getTime()));
+            baseMapper.updateById(info);
         }
     }
 }
