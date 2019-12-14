@@ -356,6 +356,10 @@ public class WelfareBussiness {
 
     public List<TaskEntity> queryAllSubmitReviewTask(String receiveUserId){
         List<TaskEntity> tasks = publicWelfareTaskService.queryAllSubmitReviewTask(receiveUserId);
+        for(TaskEntity taskEntity:tasks){
+            String headUrl = sysUserService.queryUserImageUrl(publicWelfareTaskService.queryPublishUserTaskLast(taskEntity.getServiceId()).getPublishUserId());
+            taskEntity.setHeadUrl(headUrl);
+        }
         return tasks;
 
     }
@@ -363,6 +367,14 @@ public class WelfareBussiness {
     public Map<String,Object> queryAllRuningTask(String userId){
         List<TaskEntity>  publishTasks = publicWelfareTaskService.queryAllRuningTask1(userId);
         List<TaskEntity>  receiveTasks = publicWelfareTaskService.queryAllRuningTask2(userId);
+        for(TaskEntity taskEntity:publishTasks){
+            String headUrl = sysUserService.queryUserImageUrl(userId);
+            taskEntity.setHeadUrl(headUrl);
+        }
+        for(TaskEntity taskEntity:receiveTasks){
+            String headUrl = sysUserService.queryUserImageUrl(publicWelfareTaskService.queryPublishUserTaskLast(taskEntity.getServiceId()).getPublishUserId());
+            taskEntity.setHeadUrl(headUrl);
+        }
         Map<String,Object> tasks = new HashMap<>();
         tasks.put("publishTasks",publishTasks);
         tasks.put("receiveTasks",receiveTasks);
@@ -371,21 +383,37 @@ public class WelfareBussiness {
 
     public List<TaskEntity> queryAllCompleteTask(String userId){
         List<TaskEntity>  tasks = publicWelfareTaskService.queryAllCompleteTask(userId);
+        for(TaskEntity taskEntity:tasks){
+            String headUrl = sysUserService.queryUserImageUrl(publicWelfareTaskService.queryPublishUserTaskLast(taskEntity.getServiceId()).getPublishUserId());
+            taskEntity.setHeadUrl(headUrl);
+        }
         return tasks;
     }
 
     public List<TaskEntity> queryAllunReviewTask(String publishUserId){
         List<TaskEntity>  tasks = publicWelfareTaskService.queryAllunReviewTask(publishUserId);
+        for(TaskEntity taskEntity:tasks){
+            String headUrl = sysUserService.queryUserImageUrl(publishUserId);
+            taskEntity.setHeadUrl(headUrl);
+        }
         return tasks;
     }
 
     public List<TaskEntity> queryAllCreatedTask(String communityId,String publishUserId){
         List<TaskEntity>  tasks = publicWelfareTaskService.queryPublishUserServices(communityId,publishUserId);
+        for(TaskEntity taskEntity:tasks){
+            String headUrl = sysUserService.queryUserImageUrl(publishUserId);
+            taskEntity.setHeadUrl(headUrl);
+        }
         return tasks;
     }
 
     public List<TaskEntity> queryAllGetTask(String receiveUserId){
         List<TaskEntity>  tasks = publicWelfareTaskService.queryRecevieUserServices(receiveUserId);
+        for(TaskEntity taskEntity:tasks){
+            String headUrl = sysUserService.queryUserImageUrl(publicWelfareTaskService.queryPublishUserTaskLast(taskEntity.getServiceId()).getPublishUserId());
+            taskEntity.setHeadUrl(headUrl);
+        }
         return tasks;
     }
 
@@ -395,6 +423,8 @@ public class WelfareBussiness {
             if(pointRankForm.getRealName()!=null) {
                 pointRankForm.setRealName(AESUtil.decrypt(pointRankForm.getRealName()));
             }
+            String headUrl = sysUserService.queryUserImageUrl(pointRankForm.getUserId());
+            pointRankForm.setHeadUrl(headUrl);
         }
         return result;
 
@@ -412,7 +442,12 @@ public class WelfareBussiness {
         if(userExtend==null||userExtend.getCommunityId()==null){
             throw new CommentException("请认证该小区！");
         }
-        return publicWelfareTaskService.queryAllTask(communityId);
+        List<TaskEntity>  tasks = publicWelfareTaskService.queryAllTask(communityId);
+        for(TaskEntity taskEntity:tasks){
+            String headUrl = sysUserService.queryUserImageUrl(publicWelfareTaskService.queryPublishUserTaskLast(taskEntity.getServiceId()).getPublishUserId());
+            taskEntity.setHeadUrl(headUrl);
+        }
+        return tasks;
     }
 
 

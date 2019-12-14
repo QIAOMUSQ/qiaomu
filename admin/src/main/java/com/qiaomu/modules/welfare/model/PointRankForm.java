@@ -31,4 +31,22 @@ public class PointRankForm {
     private String point;
     private String loginName;
     private String realName;
+    private String userId;
+    private String headUrl;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getHeadUrl() {
+        return headUrl;
+    }
+
+    public void setHeadUrl(String headUrl) {
+        this.headUrl = headUrl;
+    }
 }

@@ -5,6 +5,7 @@
 		<result property="point" column="points"/>
 		<result property="loginName" column="username"/>
 		<result property="realName" column="real_name"/>
+		<result property="userId" column="userId"/>
 
 	</resultMap>
 	<!-- 根据key，更新value -->
@@ -76,7 +77,7 @@
 	</select>
 
 	<select id="selectTopPointUser" parameterType="String" resultMap="pointForm">
-		select  a.points ,b.real_name from welfare_points_user as a JOIN yw_user_extend as b
+		select  a.points ,a.userId,b.real_name from welfare_points_user as a JOIN yw_user_extend as b
 		where a.userId=b.user_id and b.community_id=#{community_id}
 		ORDER by ABS(a.points) DESC limit 20
 </select>
