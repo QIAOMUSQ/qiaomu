@@ -54,13 +54,7 @@
         FROM
             yw_community
         WHERE
-            STR_TO_DATE(
-              delete_time,
-              '%Y-%m-%d %H:%i:%s') &lt;
-              str_to_date(
-                #{deleteTime},
-                '%Y-%m-%d %H:%i:%s'
-            )
+            delete_time &lt; #{deleteTime}
     </select>
 
     <select id="getCommunityByAdvertise" resultType="com.qiaomu.modules.sys.entity.YwCommunity">

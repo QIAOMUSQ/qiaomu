@@ -36,7 +36,6 @@ public class AuthLoginServiceImpl implements AuthLoginService {
         setRedisUserInfo(RedisKeys.getUserInfoByUserNameKey(sysUserEntity.getUsername()),sysUserEntity);
         setRedisUserInfo(RedisKeys.getUserInfoBySessionIdKey(sessionId),sysUserEntity);
         kafkaTemplateService.loginTopic(sysUserEntity);
-
     }
 
     @Override

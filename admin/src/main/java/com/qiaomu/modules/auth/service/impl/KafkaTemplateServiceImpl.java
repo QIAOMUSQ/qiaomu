@@ -21,7 +21,14 @@ public class KafkaTemplateServiceImpl implements KafkaTemplateService {
 
     @Override
     public void loginTopic(SysUserEntity sysUserEntity) {
+        /*Thread thread = new Thread(){
+            public void run(){
+
+            }
+        };
+        thread.start();*/
         kafkaTemplate.send("userLoginTopic", JSON.toJSONString(sysUserEntity));
+
     }
 
     @Override

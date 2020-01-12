@@ -8,15 +8,15 @@ import com.qiaomu.common.utils.DateUtils;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
 import com.qiaomu.modules.auth.service.KafkaTemplateService;
-import com.qiaomu.modules.sys.entity.SysFileEntity;
-import com.qiaomu.modules.sys.service.SysFileService;
-import com.qiaomu.modules.workflow.VO.PushMessageVO;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
+import com.qiaomu.modules.sys.entity.SysFileEntity;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.entity.YwCommunity;
+import com.qiaomu.modules.sys.service.SysFileService;
 import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.sys.service.UserExtendService;
+import com.qiaomu.modules.workflow.VO.PushMessageVO;
 import com.qiaomu.modules.workflow.VO.TransmissionContentVO;
 import com.qiaomu.modules.workflow.dao.RepairsInfoDao;
 import com.qiaomu.modules.workflow.dao.UserRepairsDao;
@@ -295,6 +295,7 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void revocationRepairs(Long id) {
         RepairsInfo info = baseMapper.selectById(id);
         if (info.getStatus().equals(RepairsStatus.finish.getStatus())){
@@ -304,7 +305,7 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
                 e.printStackTrace();
             }
         }else {
-            info.setStatus(RepairsStatus.invalid.getStatus());
+            /*info.setStatus(RepairsStatus.invalid.getStatus());
             info.setLingerTime(String.valueOf(new Date().getTime()- info.getCreateTime().getTime()));
             baseMapper.updateById(info);
             //查询以前是否存在维修信息
@@ -319,19 +320,108 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
                                 "物业客户已经撤销您的维修任务，请及时查看",
                                 JSON.toJSONString(new TransmissionContentVO("社区维修",info.getCommunityId(),info.getId()))
                         ));
+            }*/
+            baseMapper.deleteById(id);
+            //需要删除图片
+            //sysFileService.deleteFileByHttpUrl(info.getPicture());
+            List<UserRepairs> userRepairsList = userRepairsDao.selectByRepairsId(info.getRepairsId());
+            for (UserRepairs repairs : userRepairsList) {
+                userRepairsDao.deleteById(repairs.getId());
             }
+
         }
     }
 
     @Override
     public void updateWorkerOpinion(Long id, String workerOpinion, String type) {
         RepairsInfo info = baseMapper.findRepairsById(id);
-        if (info != null){
+        if (info != null) {
             info.setRepairsWorkerOpinion(workerOpinion);
             info.setStatus(type);
             info.setRepairsTime(new Date());
-            info.setLingerTime(String.valueOf(new Date().getTime()- info.getCreateTime().getTime()));
+            info.setLingerTime(String.valueOf(new Date().getTime() - info.getCreateTime().getTime()));
             baseMapper.updateById(info);
         }
+    }
+
+    @Override
+    public String modifyRepair(RepairsInfo repairs) {
+        RepairsInfo info = baseMapper.findRepairsById(repairs.getId());
+        if (info == null) {
+            return "请选择需要修改信";
+        }
+        info.setServiceDate(repairs.getServiceDate());
+        info.setLocation(repairs.getLocation());
+        info.setDetail(repairs.getDetail());
+        if (repairs.getPicture() != null) {
+            info.setPicture(repairs.getPicture());
+        }
+        baseMapper.updateById(info);
+        return "修改成功";
+    }
+
+    /**
+     * userId
+     * repairsType
+     * status
+     * repairsId
+     *
+     * @param params
+     * @return
+     */
+    @Override
+    public Map<String, List<RepairsInfo>> queryAllRepairsByUserPhone(RepairsInfo params) {
+        if ("3".equals(params.getStatus())) {
+            params.setQueryType("3");
+            params.setStatus(null);
+        }
+        List<RepairsInfo> repairsInfoList = new ArrayList<>();
+        if (params.getRepairsId() != null) {
+            //根据维修人员id查询数据
+            repairsInfoList = this.baseMapper.selectPagesByRepairs(params);
+        } else {
+            repairsInfoList = this.baseMapper.selectPages(params);
+        }
+        Map<String, List<RepairsInfo>> resultMap = new HashMap<>();
+        for (RepairsInfo info : repairsInfoList) {
+            info.setStatus(RepairsStatus.status(info.getStatus()).getStatusInfo());
+            if (StringUtils.isNotBlank(info.getStarType())) {
+                info.setStarType(RepairsStar.star(info.getStarType()).getStartInfo());
+            }
+            if (info.getLingerTime() != null) {
+                info.setLingerTime(DateUtils.longTimeToDay(Long.valueOf(info.getLingerTime())));
+            } else {
+                info.setLingerTime(DateUtils.longTimeToDay(new Date().getTime() - info.getCreateTime().getTime()));
+            }
+
+            info.setUserRealName(AESUtil.decrypt(info.getUserRealName()));
+            info.setRepairsType(RepairsTypeEnum.repairs(info.getRepairsType()).getRepairsInfo());
+            if (info.getImgId() != null) {
+                SysFileEntity file = sysFileService.selectById(info.getImgId());
+                if (file != null) {
+                    info.setUserHeadImg(file.getPath());
+                }
+            }
+            if (params.getRepairsId() != null) {
+                List<UserRepairs> userRepairsList = userRepairsDao.selectByRepairsId(info.getId());
+                String repairsName = "", repairsPhone = "";
+                for (UserRepairs repairs : userRepairsList) {
+                    repairsName += AESUtil.decrypt(repairs.getRepairsName()) + " ";
+                    repairsPhone += repairs.getRepairsPhone() + " ";
+                }
+                info.setRepairsPhone(repairsPhone);
+                info.setRepairsName(repairsName);
+            }
+            if (resultMap.get(info.getRepairsType()) != null) {
+                resultMap.get(info.getRepairsType()).add(info);
+            } else {
+                List<RepairsInfo> mapList = new ArrayList<>();
+                mapList.add(info);
+                resultMap.put(info.getRepairsType(), mapList);
+            }
+
+        }
+
+        return resultMap;
     }
 }

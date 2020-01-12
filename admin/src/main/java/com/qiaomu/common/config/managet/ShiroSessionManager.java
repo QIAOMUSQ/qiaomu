@@ -52,10 +52,10 @@ public class ShiroSessionManager extends DefaultWebSessionManager {
                 }
             }
         }
-        String url = ((ShiroHttpServletRequest) request).getRequestURI().toString();
-        System.out.println( WebUtils.toHttp(request).getRemoteAddr()+":"
+       String url = ((ShiroHttpServletRequest) request).getRequestURI().toString();
+        /*System.out.println( WebUtils.toHttp(request).getRemoteAddr()+":"
                 +WebUtils.toHttp(request).getRemoteHost()+"=====url:" +url+
-                " ========= 参数：" +JSON.toJSONString(WebUtils.toHttp(request).getParameterMap()));
+                " ========= 参数：" +JSON.toJSONString(WebUtils.toHttp(request).getParameterMap()));*/
         if (StringUtils.isNotBlank(WebUtils.toHttp(request).getParameter("contentHtml"))){
             //公告html代码
             WebUtils.toHttp(request).setAttribute("content",WebUtils.toHttp(request).getParameter("contentHtml"));
@@ -64,7 +64,7 @@ public class ShiroSessionManager extends DefaultWebSessionManager {
             if(StringUtils.isEmpty(id) && url.contains("login") ){
                 //如果没有携带id参数则按照父类的方式在cookie进行获取
                 Serializable sessionid = super.getSessionId(request, response);
-                System.out.println("======时间:"+DateTime.now().toString("YYYY-MM-dd HH:mm:ss") +"___id："+sessionid);
+               // System.out.println("======时间:"+DateTime.now().toString("YYYY-MM-dd HH:mm:ss") +"___id："+sessionid);
                 httpResponse.setHeader(AUTHORIZATION, sessionid.toString());
                 return sessionid;
             }else{

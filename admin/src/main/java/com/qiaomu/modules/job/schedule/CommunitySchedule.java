@@ -14,6 +14,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,7 +46,10 @@ public class CommunitySchedule {
     @Scheduled(cron = "2 0 0 1/1 * ?")
     public void deleteCommunity(){
         YwCommunity community = new YwCommunity();
-        community.setDeleteTime(DateTime.now().plusDays(-3).toString("yyyy-MM-dd HH:mm:ss"));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DAY_OF_MONTH,-3);
+        community.setDeleteTime(calendar.getTime());
         List<YwCommunity> communities = communityService.getDeleteCommunity(community);
         try{
             for (YwCommunity community1: communities){

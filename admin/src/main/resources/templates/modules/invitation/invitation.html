@@ -5,6 +5,7 @@
     <title>Title</title>
     <#include "/header.html">
     <link rel="stylesheet" href="${request.contextPath}/statics/plugins/layui/css/layui.css">
+    <link rel="stylesheet" href="${request.contextPath}/statics/plugins/diyUpload/webuploader.css">
     <style>
         .layui-btn {
             display: inline-block;
@@ -34,6 +35,7 @@
             z-index: 99999;
             background: #abe4b3;
         }
+
     </style>
 </head>
 <body>
@@ -49,6 +51,7 @@
             <#if shiro.hasPermission("invitation:add")>
                 <a class="btn btn-primary" onclick="add()" ><i class="fa fa-plus"></i>&nbsp;新增</a>
             </#if>
+             <a class="btn btn-primary" onclick="edit()" ><i class="fa fa-edit"></i>&nbsp;修改</a>
             <#if shiro.hasPermission("invitation:delete")>
                 <a class="btn btn-primary" onclick="deleteById()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
             </#if>
@@ -64,6 +67,7 @@
             </div>
             <div class="layui-card-body" style="padding: 15px;">
                 <form class="layui-form" id="form" action="" lay-filter="component-form-group">
+                    <input id="dataId" name="id" style="display: none">
                     <div class="layui-form-item">
                         <div class="layui-col-md6">
                             <label class="layui-form-label">标题：</label>
@@ -78,9 +82,8 @@
                     </div>
                     <div class="layui-form-item">
                         <div id="contentText"  class="layui-col-md12"></div>
-                        <!--<input name="content" id="content">-->
                     </div>
-                    <div class="layui-form-item">
+                    <div class="layui-form-item" id="layui-form-item">
                         <div class="layui-input-block">
                             <div id="upImg_names" style="top:10px;width: 120px;">选择图片</div>
                             <div id="uploadFiles" style="position: absolute;top: 61px;">
@@ -189,13 +192,22 @@
         $("#add").css("display","none");
         editor2.txt.html('<p></p>');
         $("#picContents").html("");
+        $("#layui-form-item").html("");
         $("#title").val("");
         reload();
     }
+
     function add() {
         $("#main").css("display","none");
         $("#add").css("display","block");
         $("#submitData").css("display","block");
+        $("#upImg_names").css("display","block");
+        $("#layui-form-item").html('<div class="layui-input-block">\n' +
+            '                            <div id="upImg_names" style="top:10px;width: 120px;">选择图片</div>\n' +
+            '                            <div id="uploadFiles" style="position: absolute;top: 61px;">\n' +
+            '                                <div id="picContents"></div>\n' +
+            '                            </div>\n' +
+            '                        </div>');
         upload('#upImg_names','#picContents','imgJson',setPics);
         // 单选
         selectPlus = layui.selectPlus;
@@ -210,10 +222,82 @@
             label: ["name"]
         });
     }
-
-    function getById(id) {
+    function edit() {
+        let id = getSelectedRow();
+        if(id == undefined){
+            return ;
+        }
         $("#main").css("display","none");
         $("#add").css("display","block");
+        $("#submitData").css("display","block");
+        $("#upImg_names").css("display","block");
+        $("#layui-form-item").html('<div class="layui-input-block">\n' +
+            '                            <div id="upImg_names" style="top:10px;width: 120px;">选择图片</div>\n' +
+            '                            <div id="uploadFiles" style="position: absolute;top: 61px;">\n' +
+            '                                <div id="picContents"></div>\n' +
+            '                            </div>\n' +
+            '                        </div>');
+        // 单选
+        selectPlus = layui.selectPlus;
+        upload('#upImg_names','#picContents','imgJson',setPics);
+
+        $.ajax({
+            type:"GET",
+            url:baseURL + "mobile/invitation/getById",
+            datType:"JSON",
+            data: {"id":id},
+            success:function (result) {
+                editor2.txt.html(result.data.content);
+                $("#title").val(result.data.title);
+                $("#dataId").val(result.data.id);
+                // 单选
+                communityId = selectPlus.render({
+                    el: '#communityId',
+                    url: baseURL + "communityMessage/getAllCommunity",
+                    parseData: function (res) {
+                        return res.data;
+                    },
+                    type: "radio",
+                    valueName: "name",
+                    label: ["name"],
+                    values: result.data.communityName
+                });
+                $.each(JSON.parse(result.data.imgJson),function (index,item) {
+                    let filedIsplayStr = "<div id='picContainerDiv"+index+"' class=' ui-form-uploadfilediv' style='float: left;'>"+
+                                            "<div id='picdiv"+index+"' class='picdiv'>"+
+                                            "<img src=" + item.path.substring(0,item.path.indexOf("outapp/image"))+"welfare/sysFile/showPicForMany?name="+item.path.substring(item.path.lastIndexOf("/")+1,item.length) + " width='160px' height='120px' />" +
+                                            "<p class='diyControl'>"+
+                                                    "<span class='diyCancel' onclick='clickTest($(this))'><i></i></span>"+
+                                                "</p>"+
+                                                "<div class='pics-overlay'>"+
+                                                    "<a class='picDivClose close'><i class='iconfont icon-close'></i></a><br>"+
+                                                "</div>"+
+                                                "<div class='picDivSortNo'>"+
+                                                    "<input type='hidden' name='imgJson"+"_"+index+"' value='" + item.path + "'>" +
+                                                    "<input type='hidden' class='fileName' name='fileName' value='"+item.path.substring(item.path.lastIndexOf("/")+1,item.path.length)+"'>"+
+                                                "</div>"+
+                                            "</div>";
+
+                    $("#picContents").append(filedIsplayStr);
+                })
+            }
+        });
+    }
+
+    function clickTest(doc) {
+        let ob = doc.parents("div.ui-form-uploadfilediv");
+        ob.remove();
+    }
+    function getById(id) {
+        $("#main").css("display","none");
+        $("#upImg_names").css("display","none");
+        $("#add").css("display","block");
+        $("#layui-form-item").html('<div class="layui-input-block">\n' +
+            '                            <div id="upImg_names" style="top:10px;width: 120px;">选择图片</div>\n' +
+            '                            <div id="uploadFiles" style="position: absolute;top: 61px;">\n' +
+            '                                <div id="picContents"></div>\n' +
+            '                            </div>\n' +
+            '                        </div>');
         selectPlus = layui.selectPlus;
         $.ajax({
             type:"GET",
@@ -236,7 +320,8 @@
                     label: ["name"],
                     values: result.data.communityName
                 });
-//
+                //$("#communityId").css("disabled","disabled")
+                $('select').attr('disabled', 'disabled');
                 $.each(JSON.parse(result.data.imgJson),function (index,item) {
                     $("#picContents").append('<img style="width: 120px;height: 80px;" src="'+item.path+'"/>');
                 })
@@ -267,16 +352,16 @@
     }
 
    function submitData() {
-       var obj = communityId.getChecked();
-       var html = editor2.txt.html();
-       var nameJson = $("#form").serialize().split("&");
-       var imgJson = new Array();
+       let obj = communityId.getChecked();
+       let html = editor2.txt.html();
+       let nameJson = $("#form").serialize().split("&");
+       let imgJson = new Array();
        $.each(nameJson,function (index,item) {
            if(item.indexOf("imgJson")>=0){
                imgJson.push({name:item.split("=")[0], path:decodeURIComponent(item.split("=")[1],true)});
            }
        });
-       var test2Val = $("#test2").val();
+       let test2Val = $("#test2").val();
 
        $.ajax({
            type:"POST",
@@ -284,6 +369,7 @@
            data: {"communityId":obj.data[0].id,
                "imgJson":JSON.stringify(imgJson),
                 "title":$("#title").val(),
+                "id":$("#dataId").val(),
                 "contentHtml":html},
            success:function (result) {
                if(result.respCode =="1000"){

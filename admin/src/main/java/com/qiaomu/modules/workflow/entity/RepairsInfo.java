@@ -86,6 +86,9 @@ public class RepairsInfo implements Serializable {
     @TableField(exist = false)
     private String userHeadImg;
 
+    @TableField(exist = false)
+    private String nickName;
+
     public Long getId() {
         return id;
     }
@@ -300,5 +303,13 @@ public class RepairsInfo implements Serializable {
 
     public void setRepairsWorkerOpinion(String repairsWorkerOpinion) {
         this.repairsWorkerOpinion = repairsWorkerOpinion;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 }

@@ -29,4 +29,7 @@ public interface RepairsInfoDao extends BaseMapper<RepairsInfo> {
     List<HashMap<String,String>> staticRepairsByrepairsType(String communityId);
 
     List<RepairsInfo> staticRepairsByAssign(String communityId);
+
+    List<RepairsInfo> selectPagesByRepairs(RepairsInfo repairs);
+    List<RepairsInfo> selectPages(RepairsInfo repairs);
 }

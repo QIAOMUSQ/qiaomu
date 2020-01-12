@@ -16,11 +16,14 @@
             r.id,
             r.user_id,
             r.create_time,
+            r.repairs_time,
+            r.location,
             r.detail,
             r.repairs_id,
             r.repairs_type,
             r.`status`,
-            u.hand_img_id AS imgId
+            u.hand_img_id AS imgId,
+            u.nick_name as nickName
         FROM
             yw_repairs_info r
         LEFT JOIN sys_user u ON r.user_id = u.user_id
@@ -51,13 +54,16 @@
             r.user_id,
             r.community_id,
             r.create_time,
+            r.repairs_time,
+            r.location,
             r.detail,
             r.repairs_id,
             r.repairs_type,
             r.`status`,
             u.hand_img_id AS imgId,
             u.real_name as userRealName,
-            u.username as userPhone
+            u.username as userPhone,
+            u.nick_name as nickName
         FROM
             yw_repairs_info r
             LEFT JOIN sys_user u ON r.user_id = u.user_id
@@ -111,7 +117,9 @@
             r.`status`,
             u.hand_img_id AS imgId,
             u.real_name as userRealName,
-            u.username as userPhone
+            u.username as userPhone,
+            r.repairs_worker_opinion,
+            u.nick_name as nickName
         FROM
             yw_repairs_info r
         LEFT JOIN sys_user u ON r.user_id = u.user_id

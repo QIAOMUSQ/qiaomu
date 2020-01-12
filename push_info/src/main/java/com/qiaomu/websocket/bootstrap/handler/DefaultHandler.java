@@ -162,6 +162,7 @@ public class DefaultHandler extends Handler {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        //
         log.info(LogConstant.CHANNELACTIVE+ctx.channel().remoteAddress().toString()+LogConstant.CHANNEL_SUCCESS);
     }
 

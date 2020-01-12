@@ -178,6 +178,7 @@ public class HandlerServiceImpl extends HandlerService {
         if (inChatVerifyService.verifyToken(token)){
             return;
         }else{
+            //数据写到缓存区并且刷新
             channel.writeAndFlush(new TextWebSocketFrame(gson.toJson(inChatBackMapService.loginError())));
             close(channel);
         }

@@ -102,36 +102,42 @@ function upload(pickId, uploadFilesId, entityPre, callback, pixel, fileNumLimit)
 //图片tab中的上传图片
 function setPics(response, uploadFilesId, entityPre, tragger, pickId) {
 	if(response){
-        var obj = response;
+		let obj = response;
 		if (obj.id && tragger) {
-             var prevPicDiv = $("#picContents>div:last");
-             var curPicDivId;
-			debugger;
+			let prevPicDiv = $("#picContents>div:last");
+			let curPicDivId;
              if (prevPicDiv && prevPicDiv.length > 0) {
-				 var prevPicDivId = prevPicDiv.attr("id").substring(12);
+				 let prevPicDivId = prevPicDiv.attr("id").substring(12);
 				 curPicDivId = parseInt(prevPicDivId) + 1;
              } else {
            	 	curPicDivId = 1;
              }
-			debugger;
-			  var filedIsplayStr = "<div id='picContainerDiv"+curPicDivId+"' class=' ui-form-uploadfilediv' style='float: left;'>"+
+			let filedIsplayStr = "<div id='picContainerDiv"+curPicDivId+"' class=' ui-form-uploadfilediv' style='float: left;'>"+
 										"<div id='picdiv"+curPicDivId+"' class='picdiv'>"+
-				  							"<img src=" + obj.path + " width='160px' height='120px' />" +
+				  							//"<img src=" + obj.path + " width='160px' height='120px' />" +
+				  							"<img src=" + obj.path.substring(0,obj.path.indexOf("outapp/image"))+"welfare/sysFile/showPicForMany?id="+obj.id + " width='160px' height='120px' />" +
+				  							"<p class='diyControl'>"+
+												"<span class='diyCancel'><i></i></span>"+
+											"</p>"+
 				  							"<div class='pics-overlay'>"+
 				  	  							"<a class='picDivClose close'><i class='iconfont icon-close'></i></a><br>"+
 				  							"</div>"+
 					                         "<div class='picDivSortNo'>"+
 				  							"<input type='hidden' name='"+entityPre+"_"+curPicDivId+"' value='" + obj.path + "'>" +
 											"<input type='hidden' name='fileSize' value='"+obj.fileSize+"'>"+
+											"<input type='hidden' class='fileName' name='fileName' value='"+obj.path.substring(obj.path.lastIndexOf("/")+1,obj.path.length)+"'>"+
+											"<input type='hidden' class='fileId' value='"+obj.id+"'>"+
 			  							"</div>"+
 									 "</div>";
 
-				var filedisplay	= $(filedIsplayStr);
-				$(".close", filedisplay).click(function(){
-						var ob = $(this).parents("div.ui-form-uploadfilediv");
-						ob.remove();
-				});
-				$(uploadFilesId).append(filedisplay);
+			let filedisplay	= $(filedIsplayStr);
+			$(".diyCancel", filedisplay).click(function(){
+				let ob = $(this).parents("div.ui-form-uploadfilediv");
+				let id = $($(ob).find('.fileId')).val();
+				deleteFile(id);
+				ob.remove();
+			});
+			$(uploadFilesId).append(filedisplay);
 	 }else{
 			deleteFile(obj.id);
 	 	alert("图片上传失败！");

@@ -1,5 +1,6 @@
 package com.qiaomu.modules.sys.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.qiaomu.common.utils.CommonUtils;
 import com.qiaomu.modules.sys.dao.SysFileDao;
@@ -90,6 +91,12 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileDao, SysFileEntity> i
     }
 
     @Override
+    public void deleteFileByJsonString(String jsonString) {
+        JSONObject object = JSONObject.parseObject(jsonString);
+
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean deleteById(Serializable id) {
         SysFileEntity fileEntity = baseMapper.selectById(id);
@@ -102,4 +109,6 @@ public class SysFileServiceImpl extends ServiceImpl<SysFileDao, SysFileEntity> i
         }
         return bo;
     }
+
+
 }

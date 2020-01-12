@@ -22,4 +22,6 @@ public interface SysFileService extends IService<SysFileEntity> {
      * @return
      */
     boolean deleteFileByHttpUrl(String url);
+
+    void deleteFileByJsonString(String jsonString);
 }

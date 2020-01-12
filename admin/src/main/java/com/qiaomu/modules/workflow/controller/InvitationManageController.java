@@ -1,6 +1,7 @@
 package com.qiaomu.modules.workflow.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.qiaomu.common.annotation.SysLog;
 import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
@@ -53,6 +54,7 @@ public class InvitationManageController extends AbstractController {
     }
 
     @ResponseBody
+    @SysLog(value = "保存公告")
     @RequestMapping(value = "save",method = RequestMethod.POST)
     public Object save(InvitationEntity invitation, ServletRequest request){
         try {

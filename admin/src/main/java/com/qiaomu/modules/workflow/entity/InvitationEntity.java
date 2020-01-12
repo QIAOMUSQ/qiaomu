@@ -2,6 +2,7 @@ package com.qiaomu.modules.workflow.entity;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
@@ -20,6 +21,7 @@ public class InvitationEntity implements Serializable {
     private Long id;
     private Long communityId;
     private Date createTime;
+    private Date updateTime;
     @Length(max=30, message="用户名长度必须0-30之间")
     private String title;
     private String content;
@@ -111,5 +113,13 @@ public class InvitationEntity implements Serializable {
 
     public void setContentHtml(String contentHtml) {
         this.contentHtml = contentHtml;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

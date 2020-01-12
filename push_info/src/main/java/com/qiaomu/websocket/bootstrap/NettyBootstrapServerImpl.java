@@ -36,26 +36,26 @@ public class NettyBootstrapServerImpl extends AbstractBootstrapServerImpl {
     @Autowired
     private InitNetty serverBean;
 
-    private EventLoopGroup bossGroup;
+    private EventLoopGroup bossGroup;//主线程组---接受客户端连接，不做任何处理
 
-    private EventLoopGroup workGroup;
+    private EventLoopGroup workGroup;//从线程组---从线程组，接受从主线程组中传递的任务，并处理
 
 
-    ServerBootstrap bootstrap;// 启动辅助类
+    ServerBootstrap bootstrap;// 启动辅助类，为 netty 建立服务端的辅助类, 以 NIO为例
 
     /**
      * 服务开启
      */
     public void start() {
         initEventPool();
-        bootstrap.group(bossGroup, workGroup)
-                .channel(useEpoll()?EpollServerSocketChannel.class:NioServerSocketChannel.class)
+        bootstrap.group(bossGroup, workGroup)//设置主从线程组
+                .channel(useEpoll()?EpollServerSocketChannel.class:NioServerSocketChannel.class)//设置NIO双向通道
                 .option(ChannelOption.SO_REUSEADDR, serverBean.isReuseaddr())
                 .option(ChannelOption.SO_BACKLOG, serverBean.getBacklog())
                 .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
                 .option(ChannelOption.SO_RCVBUF, serverBean.getRevbuf())
                 .childHandler(new ChannelInitializer<SocketChannel>() {
-                    protected void initChannel(SocketChannel ch) throws Exception {
+                    protected void initChannel(SocketChannel ch) throws Exception {//子处理器，用于处理workGroup提交过来的信息
                         initHandler(ch.pipeline(),serverBean);
                     }
                 })

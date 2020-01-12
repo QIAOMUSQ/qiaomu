@@ -13,10 +13,7 @@ import com.qiaomu.modules.workflow.service.RepairsInfoService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -85,7 +82,13 @@ public class RepairsInfoController {
         }else {
             return R.ok().put("page",repairsInfo);
         }
+    }
 
+    @ResponseBody
+    @RequestMapping(value = "queryAllRepairsByUserPhone",method = RequestMethod.POST)
+    public Object queryAllRepairsByUserPhone(RepairsInfo repairsInfo){
+        Map<String,List<RepairsInfo>> repairsInfoMap = repairsInfoService.queryAllRepairsByUserPhone(repairsInfo);
+        return BuildResponse.success(repairsInfoMap);
     }
 
 
@@ -192,4 +195,23 @@ public class RepairsInfoController {
             return BuildResponse.fail(e.getMessage());
         }
     }
+
+    /**
+     * 修改维修信息
+     * @param repairs
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "modifyRepair",method = RequestMethod.POST)
+    public Object modifyRepair(RepairsInfo repairs,HttpServletRequest request){
+        Map<String,String> imgMap = fileService.imageUrls(request);
+        if (imgMap.size()>0){
+            repairs.setPicture(JSON.toJSONString(imgMap));
+        }
+        String info = repairsInfoService.modifyRepair(repairs);
+        return BuildResponse.success(info);
+    }
+
+
 }

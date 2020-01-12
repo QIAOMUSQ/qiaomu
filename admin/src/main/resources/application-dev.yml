@@ -58,7 +58,7 @@ spring:
 #### 上传文件保存的路径
 file:
   save: E:/files/picture/
-  img-path: http://locahost:8080/admin/outapp/image/
+  img-path: http://localhost:8080/admin/outapp/image/
 
 logging:
   level: debug

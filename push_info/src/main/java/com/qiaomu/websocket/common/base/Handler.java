@@ -41,6 +41,12 @@ public abstract class Handler extends SimpleChannelInboundHandler<Object> {
         handler.handlerApi = this.handlerApi;
     }*/
 
+    /**
+     * 缓存中读取数据
+     * @param ctx 上下文对象
+     * @param msg
+     * @throws Exception
+     */
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
         if (msg instanceof TextWebSocketFrame){
@@ -63,6 +69,7 @@ public abstract class Handler extends SimpleChannelInboundHandler<Object> {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        //channel不活跃
         log.info(LogConstant.CHANNELINACTIVE+ctx.channel().localAddress().toString()+LogConstant.CLOSE_SUCCESS);
         try {
             handlerApi.close(ctx.channel());

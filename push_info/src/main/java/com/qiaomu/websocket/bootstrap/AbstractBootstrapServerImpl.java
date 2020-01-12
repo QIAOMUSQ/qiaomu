@@ -45,7 +45,9 @@ public abstract class AbstractBootstrapServerImpl implements BootstrapServer {
      * @param serverBean  服务配置参数
      */
     protected  void initHandler(ChannelPipeline channelPipeline, InitNetty serverBean){
+
         if (serverBean.isSsl()){
+            //是否启动加密
             if (!ObjectUtils.allNotNull(serverBean.getJksCertificatePassword(),serverBean.getJksFile(),serverBean.getJksStorePassword())){
                 throw new NullPointerException(NotInChatConstant.SSL_NOT_FIND);
             }
@@ -60,6 +62,7 @@ public abstract class AbstractBootstrapServerImpl implements BootstrapServer {
                 e.printStackTrace();
             }
         }
+        //通过管道添加handler,可以理解为拦截器
         intProtocolHandler(channelPipeline,serverBean);
         channelPipeline.addLast(new IdleStateHandler(serverBean.getHeart(),0,0));
         channelPipeline.addLast("DefaultHandler",defaultHandler);

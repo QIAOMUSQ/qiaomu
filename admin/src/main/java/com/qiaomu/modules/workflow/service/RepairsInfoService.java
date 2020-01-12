@@ -61,4 +61,8 @@ public interface RepairsInfoService extends IService<RepairsInfo> {
     void revocationRepairs(Long id);
 
     void updateWorkerOpinion(Long id, String workerOpinion, String type);
+
+    String modifyRepair(RepairsInfo repairs);
+
+    Map<String, List<RepairsInfo>> queryAllRepairsByUserPhone(RepairsInfo params);
 }
