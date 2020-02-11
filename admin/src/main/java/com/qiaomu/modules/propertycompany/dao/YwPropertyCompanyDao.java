@@ -9,5 +9,6 @@ import com.qiaomu.modules.propertycompany.entity.YwPropertyCompany;
  * @Date 2019-04-21 16:17
  */
 public interface YwPropertyCompanyDao extends BaseMapper<YwPropertyCompany> {
-    YwPropertyCompany findCompanyByUserName(String userName);
+
+    YwPropertyCompany findCompanyByUserId(Long userId);
 }

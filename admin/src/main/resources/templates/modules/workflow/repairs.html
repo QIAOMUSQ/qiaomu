@@ -156,7 +156,7 @@
     $(function () {
         postAjax(baseURL + 'communityUser/getUserExtend',"",getCompany);
     });
-    var getCompany = function (result) {
+    let getCompany = function (result) {
         $("#companyId").val(result.data.companyId);
         page();
         var data = [

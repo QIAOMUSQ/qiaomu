@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qiaomu.modules.propertycompany.dao.YwPropertyCompanyDao">
-    <select id="findCompanyByUserName"
-            resultType="com.qiaomu.modules.propertycompany.entity.YwPropertyCompany" parameterType="string">
-        SELECT c.* FROM yw_property_company c LEFT JOIN sys_user u on u.company_id = c.id  where u.username =#{userName}
+    <select id="findCompanyByUserId"
+            resultType="com.qiaomu.modules.propertycompany.entity.YwPropertyCompany" parameterType="long">
+        SELECT * FROM yw_property_company   where administrator_id = #{userId}
     </select>
 </mapper>

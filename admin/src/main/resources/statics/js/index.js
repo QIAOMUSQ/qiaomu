@@ -28,7 +28,6 @@ $(window).on('resize', function() {
 	$content.find('iframe').each(function() {
 		$(this).height($content.height());
 	});
-	getCompany();
 }).resize();
 
 //注册菜单组件
@@ -53,7 +52,9 @@ var vm = new Vue({
 		getUser: function(){
 			$.getJSON("sys/user/info?_"+$.now(), function(r){
 				vm.user = r.user;
+				vm.getCompany();
 			});
+
 		},
 		updatePassword: function(){
 			layer.open({
@@ -94,7 +95,25 @@ var vm = new Vue({
                 shadeClose: false,
                 content: ['http://cdn.renren.io/donate.jpg', 'no']
             });
-        }
+        },
+		getCompany: function(){
+			let userName = vm.user;
+			if(userName.userId == 1 ){
+				$("#logo-lg").text("100分社区管理");
+			}else {
+				$.ajax({
+					type:"POST",
+					url:"propertyCompanyManage/findCompanyByUserId",
+					data:{userId:userName.userId},
+					success:function (data) {
+						if(data.result){
+							$("#logo-lg").text(data.result.name+"管理系统");
+						}
+
+					}
+				});
+			}
+		}
 	},
 	created: function(){
 		this.getMenuList();
@@ -131,24 +150,6 @@ function routerList(router, menuList){
 			});
 		}
 	}
+	//getCompany();
 }
 
-function getCompany() {
-	var userName = $("#userName").text();
-	if(userName =='admin'){
-		$("#logo-lg").text("100分社区管理");
-	}else {
-		$.ajax({
-			type:"POST",
-			url:"propertyCompanyManage/findCompanyByUserName",
-			data:{userName:userName},
-			contentType: "application/json",
-			success:function (data) {
-				if(data.result){
-					$("#logo-lg").text(data.result.name+"管理系统");
-				}
-
-			}
-		});
-	}
-}

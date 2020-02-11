@@ -68,10 +68,10 @@ public class YwPropertyCompanyServiceImpl extends ServiceImpl<YwPropertyCompanyD
     }
 
     @Override
-    public YwPropertyCompany findCompanyByUserName(String userName) {
-
-        return baseMapper.findCompanyByUserName(userName);
+    public YwPropertyCompany findCompanyByUserId(Long userId) {
+        return baseMapper.findCompanyByUserId(userId);
     }
+
 
     /**
      * 将管理员信息保存到人员信息表中

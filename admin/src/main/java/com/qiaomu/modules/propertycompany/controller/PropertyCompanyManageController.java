@@ -72,8 +72,9 @@ public class PropertyCompanyManageController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "findCompanyByUserName", method = {RequestMethod.POST})
-    public R findCompanyByUserName(String userName){
-        return R.ok().put("result",JSON.toJSON(propertyCompanyService.findCompanyByUserName(userName)));
+    @RequestMapping(value = "findCompanyByUserId", method = {RequestMethod.POST})
+    public R findCompanyByUserName(Long userId){
+        YwPropertyCompany company =  propertyCompanyService.findCompanyByUserId(userId);
+        return R.ok().put("result",JSON.toJSON(company));
     }
 }

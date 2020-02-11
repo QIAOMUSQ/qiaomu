@@ -18,5 +18,6 @@ public interface YwPropertyCompanyService extends IService<YwPropertyCompany> {
 
     void update(YwPropertyCompany paramYwPropertyCompany);
 
-    YwPropertyCompany findCompanyByUserName(String userName);
+
+    YwPropertyCompany findCompanyByUserId(Long userId);
 }
