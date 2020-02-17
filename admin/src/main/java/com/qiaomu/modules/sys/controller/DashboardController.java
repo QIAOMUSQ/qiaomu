@@ -8,14 +8,16 @@ import com.qiaomu.modules.welfare.model.PointRankForm;
 import com.qiaomu.modules.welfare.service.PublicWelfareTaskService;
 import com.qiaomu.modules.workflow.entity.RepairsInfo;
 import com.qiaomu.modules.workflow.service.RepairsInfoService;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by wenglei on 2019/11/25.
@@ -76,6 +78,35 @@ public class DashboardController  extends AbstractController{
     public String staticRepairsByAssign(String communityId){
         List<RepairsInfo> result = repairsInfoService.staticRepairsByAssign(communityId);
         return JSON.toJSONString(BuildResponse.success(result));
+    }
+
+    @RequestMapping(value = "getCompanyRepairStatistic",method = RequestMethod.POST)
+    public String getCompanyRepairStatistic(Long companyId){
+        List<RepairsInfo> result = new ArrayList<>();
+        Map<String, List<RepairsInfo>> infoMap = new HashMap<>();
+        try {
+            RepairsInfo info = new RepairsInfo();
+            String date = DateTime.now().toString("yyyy-MM-dd 00:00:00");
+            SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            info.setEndTime(new Date());
+            info.setCompanyId(companyId);
+            info.setStartTime(sdf.parse(date));
+            result = repairsInfoService.getCompanyRepairStatistic(info);
+
+            result.forEach(data->{
+                if (infoMap.containsKey(data.getCommunityName())){
+                    infoMap.get(data.getCommunityName()).add(data);
+                }else {
+                    List<RepairsInfo> repairs= new ArrayList<>();
+                    repairs.add(data);
+                    infoMap.put(data.getCommunityName(),repairs);
+                }
+            });
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return JSON.toJSONString(BuildResponse.success(infoMap));
     }
 
 }

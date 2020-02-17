@@ -7,22 +7,86 @@
         <link rel="stylesheet" href="${request.contextPath}/statics/plugins/layui/css/layui.css">
         <style>
             ::-webkit-scrollbar{width:0px;height:0px;}
+            .layadmin-backlog .layadmin-backlog-body {
+                display: block;
+                padding: 10px 15px;
+                background-color: #f8f8f8;
+                color: #999;
+                border-radius: 2px;
+                transition: all .3s;
+                -webkit-transition: all .3s;
+                height: 125px;
+            }
+            .layadmin-backlog-body h3 {
+                padding-bottom: 10px;
+                font-size: 21px;
+                color: #009688;
+                font-weight: 300;
+            }
+            .layadmin-backlog-body p cite {
+                font-style: normal;
+                font-size: 16px;
+                color: #000;
+            }
+            .layui-col-xs4{
+                padding: 20px;
+            }
         </style>
 </head>
 <body>
-    <div class="layui-card">
+    <div class="layui-card layadmin-backlog" id="companyText">
+        <div class="layui-card-header">
+            <h2 style="text-align: center; margin: 10px;font-size: 41px;" id="companyNames"> </h2>
+        </div>
+        <div class="layui-card-body">
+            <ul class="layui-row layui-col-space10 layui-this" id="communityContent">
+                <!--<li class="layui-col-xs4">
+                    <a lay-href="app/content/comment.html" class="layadmin-backlog-body">
+                        <h3>进入乔木物业</h3>
+                        <p><cite>66</cite></p>
+                    </a>
+                </li>
+                <li class="layui-col-xs4">
+                    <a lay-href="app/forum/list.html" class="layadmin-backlog-body">
+                        <h3>待审帖子</h3>
+                        <p><cite>12</cite></p>
+                    </a>
+                </li>
+                <li class="layui-col-xs4">
+                    <a lay-href="template/goodslist.html" class="layadmin-backlog-body">
+                        <h3>待审商品</h3>
+                        <p><cite>99</cite></p>
+                    </a>
+                </li>
+                <li class="layui-col-xs4">
+                    <a href="javascript:;" onclick="layer.tips('不跳转', this, {tips: 3});" class="layadmin-backlog-body">
+                        <h3>待发货</h3>
+                        <p><cite>20</cite></p>
+                    </a>
+                </li>-->
+            </ul>
+        </div>
+    </div>
+    <div class="layui-card" id="communityText" style="display: none;">
         <div class="layui-card-header">
             <div class="layui-a-tips">
-                选择社区:<input id="community"/>
+                <h2 id="communityName" style="text-align: center; margin: 10px;font-size: 41px;"> </h2>
             </div>
+        </div>
+       <!-- <div class="layui-card-header">
+
+
+        </div>-->
+        <div class="layui-card-body">
             <div class="layui-col-sm4">
                 <blockquote class="layui-elem-quote" id="loginTimes">登录次数:-</blockquote>
             </div>
             <div class="layui-col-sm4">
                 <blockquote class="layui-elem-quote" id="loginTimesToday">当天登录次数:-</blockquote>
             </div>
-        </div>
-        <div class="layui-card-body">
+            <div class="layui-col-sm4">
+                <button class="layui-btn layui-btn-danger" style="float: right; margin: 5px;" onclick="calBack();">返回</button>
+            </div>
             <div class="layui-row layui-col-space10">
                 <div class="layui-col-xs12 layui-col-sm4">
                     <div class="layuiadmin-card-text">
@@ -50,6 +114,8 @@
 <script src="${request.contextPath}/statics/plugins/echarts/echarts.min.js"></script>
 <script>
     var communityLove,communityRepairs,repairsType;
+    let companyId;
+    let communityName;
     var seriesLabel = {
         normal: {
             show: true,
@@ -58,12 +124,22 @@
         }
     }
     $(function(){
+         companyId = $(window.parent.document.getElementById('companyId')).val();
+         let companyNames = $(window.parent.document.getElementById('companyName')).val();
+         $("#companyNames").text(companyNames);
+        ajaxFun("sys/dashBoard/getCompanyRepairStatistic",{"companyId":companyId},getCompanyStatistics);
 
         communityLove = echarts.init(document.getElementById('communityLove'));
         communityRepairs = echarts.init(document.getElementById('communityRepairs'));
         repairsType = echarts.init(document.getElementById('repairsType'));
+        loveSta();
+        communityRepairsSta();
+        repairsTypeSta();
 
-        $.ajax({
+    });
+
+    function initCommunityData() {
+       /* $.ajax({
             type: "GET",
             url: baseURL + "communityMessage/getAllCommunity",
             datType: "JSON",
@@ -79,12 +155,9 @@
                     }
                 });
             }
-        });
-        loveSta();
-        communityRepairsSta();
-        repairsTypeSta();
-    });
+        });*/
 
+    }
     function loveSta() {
         var option = {
             xAxis: {
@@ -373,20 +446,51 @@
         $("#loginTimesToday").text("当天登录次数:"+result.data.logintime);
     };
 
-    function getStatistics(id) {
-        ajaxFun("sys/dashBoard/statisticLoveGoldByCommunityId",id,loveFun);
-        ajaxFun("sys/dashBoard/staticRepairsByStatus",id,communityRepairsFun);
-        ajaxFun("sys/dashBoard/loginTimesByCommunityId",id,getLoginTimes);
-        ajaxFun("sys/dashBoard/loginTimesTodayByCommunityId",id,getLoginTimesToday);
-        ajaxFun("sys/dashBoard/staticRepairsByrepairsType",id,repairsTypeFun);
+    let getCompanyStatistics=function (result) {
+        console.info(result);
+        let communityText='';
+
+        $.each(result.data,function (index,item) {
+            let content='';
+            let communityId;
+            //communityName = index;
+            $.each(item,function (k,m) {
+                communityId = m.communityId;
+                content += m.repairsName +':'+m.number+'</br>'
+            })
+            communityText +=' <li class="layui-col-xs4" onclick="getStatistics('+communityId+',\''+index+'\')">' +
+                '                    <div  class="layadmin-backlog-body">' +
+                '                        <h3>社区：'+index+'</h3>' +
+                '                        <p><cite>'+content+'</cite></p>' +
+                '                    </div>' +
+                '                </li>';
+        });
+        $("#communityContent").html(communityText);
+
+    }
+    function getStatistics(id,name) {
+        $("#communityText").css("display","block");
+        $("#companyText").css("display","none");
+        $("#communityName").text(name);
+
+        ajaxFun("sys/dashBoard/statisticLoveGoldByCommunityId", {"communityId": id},loveFun);
+        ajaxFun("sys/dashBoard/staticRepairsByStatus",{"communityId": id},communityRepairsFun);
+        ajaxFun("sys/dashBoard/loginTimesByCommunityId",{"communityId": id},getLoginTimes);
+        ajaxFun("sys/dashBoard/loginTimesTodayByCommunityId",{"communityId": id},getLoginTimesToday);
+        ajaxFun("sys/dashBoard/staticRepairsByrepairsType",{"communityId": id},repairsTypeFun);
     }
 
-    function ajaxFun(url,id,resFun) {
+    function calBack() {
+        $("#communityText").css("display","none");
+        $("#companyText").css("display","block");
+    }
+
+    function ajaxFun(url,data,resFun) {
         $.ajax({
             type: "POST",
             url: baseURL + url,
             datType: "JSON",
-            data: {communityId: id},
+            data: data,
             success: function (result) {
                 resFun(result);
             }

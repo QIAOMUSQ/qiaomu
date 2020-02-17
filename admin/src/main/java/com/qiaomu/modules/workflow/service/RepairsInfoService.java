@@ -65,4 +65,11 @@ public interface RepairsInfoService extends IService<RepairsInfo> {
     String modifyRepair(RepairsInfo repairs);
 
     Map<String, List<RepairsInfo>> queryAllRepairsByUserPhone(RepairsInfo params);
+
+    /**
+     * 根据公司id查询统计报修信息
+     * @param repairsInfo
+     * @return
+     */
+    List<RepairsInfo> getCompanyRepairStatistic(RepairsInfo repairsInfo);
 }

@@ -424,4 +424,13 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
 
         return resultMap;
     }
+
+    @Override
+    public List<RepairsInfo> getCompanyRepairStatistic(RepairsInfo repairsInfo) {
+        List<RepairsInfo> infos = this.baseMapper.getCompanyRepairStatistic(repairsInfo);
+        infos.forEach(info->{
+            info.setRepairsName(RepairsTypeEnum.repairs(info.getRepairsType()).getRepairsInfo());
+        });
+        return infos;
+    }
 }

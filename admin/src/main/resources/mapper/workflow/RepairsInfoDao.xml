@@ -177,5 +177,21 @@
     <select id="staticRepairsByAssign"  resultType="com.qiaomu.modules.workflow.entity.RepairsInfo"  parameterType="String">
         SELECT * from yw_repairs_info where  community_id = #{community_id} AND status=1 ORDER by apportion_time ASC
     </select>
+    <select id="getCompanyRepairStatistic" resultType="com.qiaomu.modules.workflow.entity.RepairsInfo" parameterType="com.qiaomu.modules.workflow.entity.RepairsInfo">
+        SELECT
+            t.communityName,t.community_id,t.repairs_type,COUNT(community_id) as number
+        FROM
+            (
+                SELECT
+                    r.repairs_type,r.community_id,c.`name` as communityName,r.create_time
+                FROM
+                    yw_repairs_info r
+                LEFT JOIN yw_community c ON c.id = r.community_id
+                WHERE
+                    c.company_id = #{companyId}
+                    and r.create_time &gt;= #{startTime}
+                    and r.create_time &lt;= #{endTime}
+            ) t GROUP BY community_id,repairs_type ORDER BY community_id
+    </select>
 
 </mapper>

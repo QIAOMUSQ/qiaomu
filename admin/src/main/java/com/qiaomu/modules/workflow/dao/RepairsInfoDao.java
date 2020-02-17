@@ -32,4 +32,6 @@ public interface RepairsInfoDao extends BaseMapper<RepairsInfo> {
 
     List<RepairsInfo> selectPagesByRepairs(RepairsInfo repairs);
     List<RepairsInfo> selectPages(RepairsInfo repairs);
+
+    List<RepairsInfo> getCompanyRepairStatistic(RepairsInfo repairsInfo);
 }

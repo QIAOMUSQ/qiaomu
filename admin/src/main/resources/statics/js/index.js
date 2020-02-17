@@ -107,7 +107,15 @@ var vm = new Vue({
 					data:{userId:userName.userId},
 					success:function (data) {
 						if(data.result){
-							$("#logo-lg").text(data.result.name+"管理系统");
+							if(data.result.name.length>6){
+								$("#logo-lg").text((data.result.name+"管理系统").substring(0,10));
+							}else {
+								$("#logo-lg").text(data.result.name+"管理系统");
+							}
+							$("#companyId").val(data.result.id);
+							$("#companyName").val(data.result.name);
+							$("#welcome-system").text("欢迎进入"+data.result.name+"  管理员："+vm.user.username);
+
 						}
 
 					}

@@ -88,7 +88,15 @@ public class RepairsInfo implements Serializable {
 
     @TableField(exist = false)
     private String nickName;
+    @TableField(exist = false)
+    private Date startTime;
+    @TableField(exist = false)
+    private Date endTime;
 
+    @TableField(exist = false)
+    private Long companyId;
+    @TableField(exist = false)
+    private int number;
     public Long getId() {
         return id;
     }
@@ -311,5 +319,37 @@ public class RepairsInfo implements Serializable {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 }
