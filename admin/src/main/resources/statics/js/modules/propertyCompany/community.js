@@ -12,6 +12,7 @@ $(function () {
             { label: 'id', name: 'id', index: "id", width: 45, key: true,hidden:true },
             { label: '社区名称', name: 'name',  width: 45 },
             { label: '城市', name: 'cityName', width: 75 },
+            { label: '户数', name: 'households', width: 75 },
             { label: '地址', name: 'address', width: 90 },
             { label: '描述', name: 'describe', width: 90 },
             { label: '时间', name: 'createTime', width: 100 }
@@ -135,7 +136,7 @@ var vm = new Vue({
                 vm.community.legalPerson=result.data.legalPerson;
                 vm.community.telPhone = result.data.telPhone;
                 vm.community.address =result.data.address;
-               /// vm.community.cityCode = result.data.cityCode;
+                vm.community.households = result.data.households;
                 vm.provinceCityId = result.data.cityId;
                 vm.community.describe = result.data.describe;
                 vm.selectProvince();

@@ -64,9 +64,21 @@ public class DashboardController  extends AbstractController{
 
     }
     @RequestMapping(value = "staticRepairsByStatus",method = RequestMethod.POST)
-    public String staticRepairsByStatus(String communityId){
-        List<HashMap<String,String>> result = repairsInfoService.staticRepairsByStatus(communityId);
-        return JSON.toJSONString(BuildResponse.success(result));
+    public String staticRepairsByStatus(Long communityId,String startTime,String endTime ){
+        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+        RepairsInfo info = new RepairsInfo();
+        try {
+            info.setStartTime(sdf.parse(startTime));
+            info.setEndTime(sdf.parse(endTime));
+            info.setCommunityId(communityId);
+            List<HashMap<String,String>> result = repairsInfoService.staticRepairsByStatus(info);
+            return JSON.toJSONString(BuildResponse.success(result));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return JSON.toJSONString(BuildResponse.fail());
+        }
+
+
     }
 
     @RequestMapping(value = "staticRepairsByrepairsType",method = RequestMethod.POST)
@@ -107,6 +119,32 @@ public class DashboardController  extends AbstractController{
             e.printStackTrace();
         }
         return JSON.toJSONString(BuildResponse.success(infoMap));
+    }
+
+    @RequestMapping(value = "getRepairInfoByTime",method = RequestMethod.POST)
+    public Object getRepairInfoByTime(String startTime,String endTime,Long communityId){
+        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+        RepairsInfo info = new RepairsInfo();
+        try {
+            Map<String,List<RepairsInfo>> map = new HashMap<>();
+            info.setStartTime(sdf.parse(startTime));
+            info.setEndTime(sdf.parse(endTime));
+            info.setCommunityId(communityId);
+            List<RepairsInfo> infoList = repairsInfoService.getRepairInfoByCondition(info);
+            infoList.forEach(d->{
+                if (map.containsKey(d.getRepairsType())){
+                    map.get(d.getRepairsType()).add(d);
+                }else {
+                    List<RepairsInfo> l = new ArrayList<>();
+                    l.add(d);
+                    map.put(d.getRepairsType(),l);
+                }
+            });
+            return BuildResponse.success(map);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return BuildResponse.fail();
+        }
     }
 
 }

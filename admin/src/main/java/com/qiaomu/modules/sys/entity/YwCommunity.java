@@ -28,6 +28,7 @@ public class YwCommunity implements Serializable {
     private Date createTime;
     private String enable;
     private Date deleteTime;
+    private int households;//户数
 
     @TableField(exist = false)
     private String companyName;
@@ -151,5 +152,13 @@ public class YwCommunity implements Serializable {
 
     public void setDeleteTime(Date deleteTime) {
         this.deleteTime = deleteTime;
+    }
+
+    public int getHouseholds() {
+        return households;
+    }
+
+    public void setHouseholds(int households) {
+        this.households = households;
     }
 }

@@ -178,9 +178,9 @@ public class DateUtils {
     //转换函数，可以封装成公用方法
     public static String longTimeToDay(Long ms){
         Integer ss = 1000;
-        Integer mi = ss * 60;
-        Integer hh = mi * 60;
-        Integer dd = hh * 24;
+        Integer mi = 60000;
+        Integer hh = 3600000;
+        Integer dd = 86400000;
 
         Long day = ms / dd;
         Long hour = (ms - day * dd) / hh;

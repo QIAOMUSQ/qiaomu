@@ -52,7 +52,7 @@ public interface RepairsInfoService extends IService<RepairsInfo> {
      */
     void invalidRepairs(Long id);
 
-    List<HashMap<String,String>> staticRepairsByStatus(String communityId);
+    List<HashMap<String,String>> staticRepairsByStatus(RepairsInfo info);
 
     List<HashMap<String,String>> staticRepairsByrepairsType(String communityId);
 
@@ -72,4 +72,6 @@ public interface RepairsInfoService extends IService<RepairsInfo> {
      * @return
      */
     List<RepairsInfo> getCompanyRepairStatistic(RepairsInfo repairsInfo);
+
+    List<RepairsInfo> getRepairInfoByCondition(RepairsInfo info);
 }

@@ -78,7 +78,8 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
 
         //List cityDate = this.provinceCityDateService.getProvinceCityDate(params);
        // if (cityDate.size() == 1) community.setCityId(((ProvinceCityDateEntity) cityDate.get(0)).getId());
-
+        ProvinceCityDateEntity provinceCity = provinceCityDateService.selectOne(new EntityWrapper<ProvinceCityDateEntity>().eq("CITY_CODE",community.getCityCode()));
+        community.setCityId(provinceCity.getId());
         community.setCreateTime(new Date());
         if (community.getId() != null)
             updateById(community);

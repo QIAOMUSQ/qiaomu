@@ -81,7 +81,7 @@ public class RepairsInfo implements Serializable {
     private List<Long> ids;
 
     @TableField(exist = false)
-    private String queryType;
+    private String queryType;//查询类型 3：查询所有的
 
     @TableField(exist = false)
     private String userHeadImg;
@@ -97,6 +97,12 @@ public class RepairsInfo implements Serializable {
     private Long companyId;
     @TableField(exist = false)
     private int number;
+
+    @TableField(exist = false)
+    private boolean overtime;
+    @TableField(exist = false)
+    private int households;
+
     public Long getId() {
         return id;
     }
@@ -351,5 +357,21 @@ public class RepairsInfo implements Serializable {
 
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    public boolean isOvertime() {
+        return overtime;
+    }
+
+    public void setOvertime(boolean overtime) {
+        this.overtime = overtime;
+    }
+
+    public int getHouseholds() {
+        return households;
+    }
+
+    public void setHouseholds(int households) {
+        this.households = households;
     }
 }

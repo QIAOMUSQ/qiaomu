@@ -278,8 +278,8 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
     }
 
     @Override
-    public List<HashMap<String,String>> staticRepairsByStatus(String communityId){
-        List<HashMap<String,String>> statusData = baseMapper.staticRepairsByStatus(communityId);
+    public List<HashMap<String,String>> staticRepairsByStatus(RepairsInfo info){
+        List<HashMap<String,String>> statusData = baseMapper.selectStaticRepairsByStatus(info);
         return statusData;
     }
 
@@ -429,8 +429,35 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
     public List<RepairsInfo> getCompanyRepairStatistic(RepairsInfo repairsInfo) {
         List<RepairsInfo> infos = this.baseMapper.getCompanyRepairStatistic(repairsInfo);
         infos.forEach(info->{
-            info.setRepairsName(RepairsTypeEnum.repairs(info.getRepairsType()).getRepairsInfo());
+            if (info.getRepairsType() != null) {
+                info.setRepairsName(RepairsTypeEnum.repairs(info.getRepairsType()).getRepairsInfo());
+            }
         });
         return infos;
+    }
+
+    @Override
+    public List<RepairsInfo> getRepairInfoByCondition(RepairsInfo info) {
+
+        List<RepairsInfo> list = this.baseMapper.getRepairInfoByCondition(info);
+        int dayMm =86400000;
+        list.forEach(data->{
+            if (data.getLingerTime() != null){
+                if (Long.valueOf(data.getLingerTime())/dayMm>2){
+                    data.setOvertime(true);
+                }
+                data.setLingerTime(DateUtils.longTimeToDay(Long.valueOf(data.getLingerTime())));
+            }else {
+                if (new Date().getTime()-data.getCreateTime().getTime()>2){
+                    data.setOvertime(true);
+                }
+                data.setLingerTime(DateUtils.longTimeToDay(new Date().getTime()-data.getCreateTime().getTime()));
+            }
+            if (data.getRepairsType() != null) {
+                data.setRepairsName(RepairsTypeEnum.repairs(data.getRepairsType()).getRepairsInfo());
+            }
+
+        });
+        return list;
     }
 }

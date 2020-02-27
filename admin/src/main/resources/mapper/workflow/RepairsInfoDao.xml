@@ -166,9 +166,6 @@
         ORDER BY i.create_time DESC
     </select>
 
-    <select id="staticRepairsByStatus" resultMap="statusNumber"  parameterType="String">
-        SELECT count(*) as number,status from yw_repairs_info where community_id = #{community_id} GROUP by status ASC
-    </select>
 
     <select id="staticRepairsByrepairsType" resultMap="repairsTypeNumber"  parameterType="String">
         SELECT count(*) as number,repairs_type from yw_repairs_info where community_id = #{community_id} GROUP by repairs_type ASC
@@ -179,19 +176,54 @@
     </select>
     <select id="getCompanyRepairStatistic" resultType="com.qiaomu.modules.workflow.entity.RepairsInfo" parameterType="com.qiaomu.modules.workflow.entity.RepairsInfo">
         SELECT
-            t.communityName,t.community_id,t.repairs_type,COUNT(community_id) as number
+            c.`name` as communityName,
+            c.id as communityId,
+            t.repairs_type,
+            number,
+            nullif(c.households,0) households
         FROM
-            (
-                SELECT
-                    r.repairs_type,r.community_id,c.`name` as communityName,r.create_time
-                FROM
-                    yw_repairs_info r
-                LEFT JOIN yw_community c ON c.id = r.community_id
-                WHERE
-                    c.company_id = #{companyId}
-                    and r.create_time &gt;= #{startTime}
-                    and r.create_time &lt;= #{endTime}
-            ) t GROUP BY community_id,repairs_type ORDER BY community_id
+        (
+            SELECT
+                repairs_type,
+                community_id,
+                COUNT(community_id) AS number,
+                create_time
+            FROM
+              yw_repairs_info
+            WHERE
+                create_time &gt;= #{startTime}
+                    and create_time &lt;= #{endTime}
+            GROUP BY
+                community_id,
+                repairs_type
+            ORDER BY
+                community_id
+            ) t
+            RIGHT JOIN yw_community c ON c.id = t.community_id
+        WHERE
+            c.company_id =#{companyId}
+    </select>
+    <select id="getRepairInfoByCondition" resultType="com.qiaomu.modules.workflow.entity.RepairsInfo" parameterType="com.qiaomu.modules.workflow.entity.RepairsInfo">
+       SELECT
+            *
+        FROM(
+            SELECT 	community_id,
+            DATE_FORMAT(create_time,'%Y-%m-%d') create_time,
+            repairs_time,
+            repairs_type,
+            `status` from yw_repairs_info WHERE  community_id = #{communityId}) t
+        where  create_time &gt;= #{startTime}
+            and create_time &lt;= #{endTime}
+    </select>
+    <select id="selectStaticRepairsByStatus" resultMap="statusNumber">
+         SELECT
+            count(*) AS number,
+            STATUS
+        FROM
+            (SELECT DATE_FORMAT(create_time,'%Y-%m-%d') create_time,status from yw_repairs_info WHERE  community_id = #{communityId})t
+        where create_time &gt;= #{startTime}
+            and create_time &lt;= #{endTime,}
+        GROUP by status ASC
     </select>
 
 </mapper>
