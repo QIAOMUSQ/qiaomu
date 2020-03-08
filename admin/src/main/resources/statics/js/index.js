@@ -46,7 +46,9 @@ var vm = new Vue({
 	methods: {
 		getMenuList: function (event) {
 			$.getJSON("sys/menu/nav?_"+$.now(), function(r){
+				//debugger;
 				vm.menuList = r.menuList;
+				//getMainList(vm.menuList);
 			});
 		},
 		getUser: function(){
@@ -109,13 +111,15 @@ var vm = new Vue({
 						if(data.result){
 							if(data.result.name.length>6){
 								$("#logo-lg").text((data.result.name+"管理系统").substring(0,10));
+
 							}else {
 								$("#logo-lg").text(data.result.name+"管理系统");
 							}
+							$(".navbar").css("background-color","#3cbc3f");
+							$(".logo").css("background-color","#3cbc3f");
 							$("#companyId").val(data.result.id);
 							$("#companyName").val(data.result.name);
 							$("#welcome-system").text("欢迎进入"+data.result.name+"  管理员："+vm.user.username);
-
 						}
 
 					}
@@ -144,9 +148,9 @@ function routerList(router, menuList){
 		if(menu.type == 0){
 			routerList(router, menu.list);
 		}else if(menu.type == 1){
+
 			router.add('#'+menu.url, function() {
 				var url = window.location.hash;
-				
 				//替换iframe的url
 			    vm.main = url.replace('#', '');
 			    
@@ -156,8 +160,22 @@ function routerList(router, menuList){
 			    
 			    vm.navTitle = $("a[href='"+url+"']").text();
 			});
+			if (vm.main == 'main.html'){
+				vm.main = menu.url;
+				vm.navTitle = menu.name;
+			}
 		}
 	}
-	//getCompany();
 }
+/*function getMainList(menuList) {
+	$.each(vm.menuList,function (index,item) {
+		if(menu.type == 0){
+			getMainList(item);
+		}else {
+			if (item.orderNum==0 || ){
+
+			}
+		}
+	});
+}*/
 

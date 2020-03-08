@@ -100,4 +100,8 @@ public class SysLoginController {
         return "redirect:login.html";
     }
 
+    @RequestMapping(value = "sys/forget", method = RequestMethod.GET)
+    public String forget() {
+        return "forget.html";
+    }
 }

@@ -59,6 +59,7 @@
             r.detail,
             r.repairs_id,
             r.repairs_type,
+            r.service_date,
             r.`status`,
             u.hand_img_id AS imgId,
             u.real_name as userRealName,
@@ -89,6 +90,12 @@
                 <foreach item="communityId" collection="communityIds" open="(" separator="," close=")">
                     #{communityId}
                 </foreach>
+            </if>
+            <if test="startTime !=null">
+                and r.create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime !=null">
+                and r.create_time &lt;= #{endTime}
             </if>
             <if test="repairsId !=null">
                 and r.repairs_id =#{repairsId}
@@ -134,6 +141,8 @@
             i.detail,
             r.user_id as repairsId,
             i.repairs_type,
+            i.service_date,
+            i.repairs_time,
             i.`status`,
             s.hand_img_id AS imgId,
             s.real_name AS userRealName,

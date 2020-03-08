@@ -91,7 +91,7 @@
                                 <li class="layui-col-xs6" >
                                     <div class="layadmin-backlog-body">
                                         <h3>电力报修</h3>
-                                        <div id="repairData-0">
+                                        <div id="repairData-0" onclick="queryRepairInfo(0)">
                                             <div>超时：0</div>
                                             <div>正常：0</div>
                                         </div>
@@ -100,7 +100,7 @@
                                 <li class="layui-col-xs6" >
                                     <div class="layadmin-backlog-body">
                                         <h3>供水报修</h3>
-                                        <div id="repairData-1">
+                                        <div id="repairData-1" onclick="queryRepairInfo(1)">
                                             <div>超时：0</div>
                                             <div>正常：0</div>
                                         </div>
@@ -109,7 +109,7 @@
                                 <li class="layui-col-xs6" >
                                     <div lay-href="#" class="layadmin-backlog-body">
                                         <h3>煤气报修</h3>
-                                        <div id="repairData-2">
+                                        <div id="repairData-2" onclick="queryRepairInfo(2)">
                                             <div>超时：0</div>
                                             <div>正常：0</div>
                                         </div>
@@ -118,7 +118,7 @@
                                 <li class="layui-col-xs6" >
                                     <div href="javascript:;"  class="layadmin-backlog-body">
                                         <h3>房屋维修</h3>
-                                        <div id="repairData-3">
+                                        <div id="repairData-3" onclick="queryRepairInfo(3)">
                                             <div>超时：0</div>
                                             <div>正常：0</div>
                                         </div>
@@ -134,36 +134,22 @@
                         <div id="communityRepairs" style="width: 600px;height: 280px"></div>
                     </div>
                 </div>
-
-               <!-- <div class="layui-col-xs12 layui-col-sm4">
-                    <div class="layuiadmin-card-text">
-                        <div class="layui-text-top"><i class="layui-icon layui-icon-water"></i>小区爱心积分</div>
-                    </div>
-                    <div id="communityLove" style="width: 400px;height: 200px;"></div>
-                </div>
-                <div class="layui-col-xs12 layui-col-sm4">
-                    <div class="layuiadmin-card-text">
-                        <div class="layui-text-top"><i class="layui-icon layui-icon-upload-circle"></i>报修状态统计</div>
-                        <div id="communityRepairs" style="width: 400px;height: 200px;"></div>
-                    </div>
-                </div>
-                <div class="layui-col-xs12 layui-col-sm4">
-                    <div class="layuiadmin-card-text">
-                        <div class="layui-text-top"><i class="layui-icon layui-icon-form"></i>报修类型统计</div>
-                        <div id="repairsType" style="width: 400px;height: 200px;"></div>
-                    </div>
-                </div>-->
-
             </div>
         </div>
     </div>
+    <div id="table" style="display: none">
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
 </body>
 <script src="${request.contextPath}/statics/plugins/echarts/echarts.min.js"></script>
+<!--<script src="${request.contextPath}/statics/plugins/layui/layui.js"></script>-->
 <script>
-    var communityLove,communityRepairs,repairsType;
+    var communityRepairs,repairsType;
     let companyId;
     let communityName;
     let layDate;
+    let first=true;
     var seriesLabel = {
         normal: {
             show: true,
@@ -177,13 +163,19 @@
          $("#companyNames").text(companyNames);
         ajaxFun("sys/dashBoard/getCompanyRepairStatistic",{"companyId":companyId},getCompanyStatistics);
         communityRepairs = echarts.init(document.getElementById('communityRepairs'));
-      /*  communityLove = echarts.init(document.getElementById('communityLove'));
-
-        repairsType = echarts.init(document.getElementById('repairsType'));*/
-        // loveSta();
         communityRepairsSta();
-        // repairsTypeSta();
         layDate = layui.laydate;
+        //获取系统前一个月的时间
+        let nowdate = new Date();
+        nowdate.setMonth(nowdate.getMonth()-1);
+        let y = nowdate.getFullYear();
+        let m = nowdate.getMonth()+1;
+        let d = nowdate.getDate();
+        if (m<10){
+            m = "0"+m;
+        }
+        let formatwdate = y+'-'+m+'-'+d;
+
 
         //常规用法
         layDate.render({
@@ -192,7 +184,7 @@
                 console.log(value); //得到日期生成的值，如：2017-08-18
                 queryCommunityData();
             },
-            value:new Date()
+            value:formatwdate, //设置开始时间为当前时间
         });
         layDate.render({
             elem: '#endTime',
@@ -202,29 +194,9 @@
                 queryCommunityData();
             }
         });
-
     });
 
-    function initCommunityData() {
-       /* $.ajax({
-            type: "GET",
-            url: baseURL + "communityMessage/getAllCommunity",
-            datType: "JSON",
-            success: function (result) {
-                console.info(result.data);
-                $("#community").kendoDropDownList({
-                    optionLabel: "--请选择社区--",
-                    dataTextField: "name",
-                    dataValueField: "id",
-                    dataSource: result.data,
-                    change: function (e) {
-                        getStatistics(this.value());
-                    }
-                });
-            }
-        });*/
 
-    }
     function communityRepairsSta() {
         var option = {
 
@@ -267,257 +239,69 @@
         };
         communityRepairs.setOption(option);
     }
- /*   function loveSta() {
-        var option = {
-            xAxis: {
-                data: [],
-                axisLabel: {
-                    inside: true,
-                    textStyle: {
-                        color: '#000'
-                    }
-                },
-                z: 10
-            },
-            yAxis: {
-                axisLabel: {
-                    textStyle: {
-                        color: '#999'
-                    }
-                }
-            },
-            dataZoom: [
-                {
-                    type: 'inside'
-                }
-            ],
-            series:
-
-                {
-                    type: 'bar',
-                    itemStyle: {
-                        normal: {
-                            color: new echarts.graphic.LinearGradient(
-                                    0, 0, 0, 1,
-                                    [
-                                        {offset: 0, color: '#83bff6'},
-                                        {offset: 0.5, color: '#188df0'},
-                                        {offset: 1, color: '#188df0'}
-                                    ]
-                            )
-                        },
-                        emphasis: {
-                            color: new echarts.graphic.LinearGradient(
-                                    0, 0, 0, 1,
-                                    [
-                                        {offset: 0, color: '#2378f7'},
-                                        {offset: 0.7, color: '#2378f7'},
-                                        {offset: 1, color: '#83bff6'}
-                                    ]
-                            )
-                        }
-                    },
-                    data: []
-                }
-
-        };
-        communityLove.setOption(option);
-    }
-
-    function repairsTypeSta() {
-        var option = {
-            legend: {
-                data: ['水电报修', '供水报修', '报修报修','房屋报修']
-            },
-            xAxis: {
-                type: 'value',
-                name: '条数',
-                axisLabel: {
-                    formatter: '{value}'
-                }
-            },
-            yAxis: {
-                type: 'category',
-                inverse: true,
-                data: ['类型'],
-
-            },
-            series: [
-                {
-                    name: '水电报修',
-                    type: 'bar',
-                    data: [0],
-                    label: seriesLabel
-                },
-                {
-                    name: '供水报修',
-                    type: 'bar',
-                    label: seriesLabel,
-                    data: [0]
-                },
-                {
-                    name: '报修报修',
-                    type: 'bar',
-                    label: seriesLabel,
-                    data: [0]
-                },
-                {
-                    name: '房屋报修',
-                    type: 'bar',
-                    label: seriesLabel,
-                    data: [0]
-                }
-            ]
-        };
-        repairsType.setOption(option);
-    }*/
-
-   /* var repairsTypeFun=function (result) {
-        var yData=new Array();
-        if(result.data.length>0){
-            $.each(result.data,function (index,item) {
-                if(item.repairs_type ==='0'){
-                    yData.push( {
-                        name: '水电报修',
-                        type: 'bar',
-                        data: [item.number],
-                        label: seriesLabel
-                    });
-                }
-                if(item.repairs_type ==='1'){
-                    yData.push({
-                        name: '供水报修',
-                        type: 'bar',
-                        label: seriesLabel,
-                        data: [item.number]
-                    });
-                }
-                if(item.repairs_type ==='2'){
-                    yData.push({
-                        name: '报修报修',
-                        type: 'bar',
-                        label: seriesLabel,
-                        data: [item.number]
-                    });
-
-                }
-                if(item.repairs_type ==='3'){
-                    yData.push({
-                        name: '房屋报修',
-                        type: 'bar',
-                        label: seriesLabel,
-                        data: [item.number]
-                    });
-                }
-            });
-        }else {
-            yData = [
-                {
-                    name: '水电报修',
-                    type: 'bar',
-                    data: [0],
-                    label: seriesLabel
-                },
-                {
-                    name: '供水报修',
-                    type: 'bar',
-                    label: seriesLabel,
-                    data: [0]
-                },
-                {
-                    name: '报修报修',
-                    type: 'bar',
-                    label: seriesLabel,
-                    data: [0]
-                },
-                {
-                    name: '房屋报修',
-                    type: 'bar',
-                    label: seriesLabel,
-                    data: [0]
-                }
-            ];
-        }
-        repairsType.setOption({series:yData});
-    };*/
- /*   var loveFun = function (result) {
-        var xData=[];
-        var yData=[];
-        $.each(result.data,function (index,item) {
-            if(index<10){
-                xData.push(item.realName);
-                yData.push(item.point);
-            }
-        });
-        communityLove.setOption({xAxis:{data:xData},series:{data:yData}});
-    };*/
- /*   */
 
     var communityRepairsFun=function (result) {
         var yData=new Array();
-        if(result.data.length>0){
-            $.each(result.data,function (index,item) {
-                if(item.status =='0'){
-                    yData.push( {
+        if (result.respCode!= "1001") {
+            if (result.data.length > 0) {
+                $.each(result.data, function (index, item) {
+                    if (item.status == '0') {
+                        yData.push({
+                            name: '已提交',
+                            type: 'bar',
+                            data: [item.number],
+                            label: seriesLabel
+                        });
+                    }
+                    if (item.status == '1') {
+                        yData.push({
+                            name: '待处理',
+                            type: 'bar',
+                            label: seriesLabel,
+                            data: [item.number]
+                        });
+                    }
+                    if (item.status == '2') {
+                        yData.push({
+                            name: '已完成',
+                            type: 'bar',
+                            label: seriesLabel,
+                            data: [item.number]
+                        });
+
+                    }
+
+                });
+            } else {
+                yData = [
+                    {
                         name: '已提交',
                         type: 'bar',
-                        data: [item.number],
+                        data: [0],
                         label: seriesLabel
-                    });
-                }
-                if(item.status =='1'){
-                    yData.push({
+                    },
+                    {
                         name: '待处理',
                         type: 'bar',
                         label: seriesLabel,
-                        data: [item.number]
-                    });
-                }
-                if(item.status =='2'){
-                    yData.push({
+                        data: [0]
+                    },
+                    {
                         name: '已完成',
                         type: 'bar',
                         label: seriesLabel,
-                        data: [item.number]
-                    });
-
-                }
-
-            });
+                        data: [0]
+                    }
+                ]
+            }
+            communityRepairs.setOption({series: yData});
         }
-        else {
-            yData = [
-                {
-                    name: '已提交',
-                    type: 'bar',
-                    data: [0],
-                    label: seriesLabel
-                },
-                {
-                    name: '待处理',
-                    type: 'bar',
-                    label: seriesLabel,
-                    data: [0]
-                },
-                {
-                    name: '已完成',
-                    type: 'bar',
-                    label: seriesLabel,
-                    data: [0]
-                }
-            ]
-        }
-        communityRepairs.setOption({series:yData});
     };
     var getLoginTimes= function (result) {
         $("#loginTimes").text("登录次数:"+result.data.logintime);
     };
-   /* var getLoginTimesToday= function (result) {
-        $("#loginTimesToday").text("当天登录次数:"+result.data.logintime);
-    };*/
 
     let getCompanyStatistics=function (result) {
-        console.info(result);
         let communityText='';
 
         $.each(result.data,function (index,item) {
@@ -549,17 +333,9 @@
         $("#communityId").val(id);
         $("#communityHouse").text("小区户数:"+households);
 
-       /* ajaxFun("sys/dashBoard/statisticLoveGoldByCommunityId", {"communityId": id},loveFun);
-
-          ajaxFun("sys/dashBoard/staticRepairsByrepairsType",{"communityId": id},repairsTypeFun);
-        */
         ajaxFun("sys/dashBoard/loginTimesByCommunityId",{"communityId": id},getLoginTimes);
         ajaxFun("sys/dashBoard/loginTimesByCommunityId",{"communityId": id},getLoginTimes);
-        // ajaxFun("sys/dashBoard/loginTimesTodayByCommunityId",{"communityId": id},getLoginTimesToday);
         queryCommunityData();
-    }
-    function getLoginPeople(communityId) {
-
     }
 
     function queryCommunityData() {
@@ -591,7 +367,9 @@
     }
 
     let getRepairInfoByTime = function(result) {
-        console.info(result.data);
+        for (let i=0;i<4;i++){
+            $("#repairData-"+i).html(' <div>超时：0</div>' + '<div>正常：0</div>');
+        }
         $.each(result.data,function (index,item) {
             let normal = 0;
             let overTime =0;
@@ -602,8 +380,82 @@
                     normal++;
                 }
             });
-            $("#repairData-"+index).html(' <div>超时：'+overTime+'</div>' +
-                '                          <div>正常：'+normal+'</div>');
+            $("#repairData-"+index).html(' <div>超时：'+overTime+'</div>' + '<div>正常：'+normal+'</div>');
+        });
+    }
+
+    function queryRepairInfo(repairsType) {
+        let startTime = $("#startTime").val();
+        let endTime = $("#endTime").val();
+        let communityId =  $("#communityId").val();
+        let queryCondition = {'startTime': startTime+" 00:00:00",endTime:endTime+" 23:59:59",communityId:communityId,repairsType:repairsType};
+
+        layer.open({
+            type: 1,
+            title :'报修信息',
+            area: ['900px', '400px'],
+            offset: 'auto',
+            fixed: false, //不固定
+            shadeClose:true,
+            maxmin: true,
+            content: $("#table")
+        });
+        if (first){
+            first=false;
+            queryPage(queryCondition);
+        }else {
+            getPage(queryCondition);
+        }
+
+
+    }
+    function getPage(queryCondition) {
+
+        var page = $("#jqGrid").jqGrid('getGridParam','page');
+        $("#jqGrid").jqGrid('setGridParam',{
+            postData:queryCondition,
+            page:page
+        }).trigger("reloadGrid");
+    }
+    function  queryPage(queryCondition) {
+        $("#jqGrid").jqGrid({
+            url: baseURL + 'mobile/repairs/findRepairs',
+            datatype: "json",
+            mtype:"POST",
+            postData:queryCondition,
+            colModel: [
+                { label: 'id', name: 'id', index: "id",  key: true,hidden:true },
+                { label: '业主', name: 'userRealName',align:'center'},
+                { label: '业主手机', name: 'userPhone',align:'center'},
+                { label: '描述', name: 'detail',align:'center' },
+                { label: '状态', name: 'status',align:'center' },
+                { label: '提交时间', name: 'createTime',align:'center'},
+                { label: '维修类型', name: 'repairsType',align:'center'}
+            ],
+            viewrecords: true,
+            height: 385,
+            rowNum: 10,
+            rowList : [10,30,50],
+            rownumbers: true,
+            rownumWidth: 25,
+            autowidth:true,
+            multiselect: true,
+            pager: "#jqGridPager",
+            jsonReader : {
+                root: "data.list",
+                page: "data.currPage",
+                total: "data.totalPage",
+                records: "page.totalCount"
+            },
+            prmNames : {
+                page:"data",
+                rows:"limit",
+                order: "order"
+            },
+            gridComplete:function(){
+                //隐藏grid底部滚动条
+                $("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+            }
         });
     }
 </script>

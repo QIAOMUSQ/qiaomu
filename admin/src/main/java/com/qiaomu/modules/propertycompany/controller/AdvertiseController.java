@@ -35,7 +35,7 @@ public class AdvertiseController {
 
     @ResponseBody
     @RequestMapping(value = "pageList",method = RequestMethod.POST)
-    public R pageList(@RequestParam Map<String, Object> params, ServletRequest request){
+    public R pageList( @RequestParam Map<String, Object> params, ServletRequest request){
         Advertise advertise = new Advertise();
         if (params.get("merchantName") != null){
             advertise.setName((String) params.get("merchantName"));

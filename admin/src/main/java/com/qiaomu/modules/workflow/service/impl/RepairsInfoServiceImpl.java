@@ -32,6 +32,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -143,7 +145,19 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
             }
 
         }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            if(StringUtils.isNotBlank((String) params.get("startTime"))){
+                repairs.setStartTime(sdf.parse((String) params.get("startTime")));
+            }
+            if(StringUtils.isNotBlank((String) params.get("endTime"))){
+                repairs.setEndTime(sdf.parse((String) params.get("endTime")));
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         Page<RepairsInfo> page = new Query(params).getPage();
+       // page.setCondition(params);
         if (params.get("repairsId")!=null){
             //根据维修人员id查询数据
             repairs.setRepairsId(Long.valueOf((String)params.get("repairsId")));

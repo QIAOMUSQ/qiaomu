@@ -124,7 +124,7 @@ public class AppUserController extends AbstractController {
             return R.ok("error", "手机号码已存在");
         }
         List roleList = new ArrayList();
-        if(securityCode.equals("666666")){
+       /* if(securityCode.equals("666666")){
             roleList.add(5l);
             user.setRoleIdList(roleList);
             user.setDeptId(9l);
@@ -138,7 +138,18 @@ public class AppUserController extends AbstractController {
             return R.ok();
         }else {
             return R.ok("error", "验证码错误");
+        }*/
+        roleList.add(5l);
+        user.setRoleIdList(roleList);
+        user.setDeptId(9l);
+        user.setStatus(Integer.valueOf(1));
+        user.setNickName(RandomName.randomName(true,4));
+        user.setHandImgId(167l);
+        if (!"null".equals(clientId)){
+            user.setClientId(clientId);
         }
+        this.sysUserService.save(user);
+        return R.ok();
 
     }
 
