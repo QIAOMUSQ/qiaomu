@@ -22,7 +22,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+import java.util.HashMap;
 import java.util.Map;
+
+import static com.qiaomu.common.utils.Constant.OUT_DIR;
+import static com.qiaomu.common.utils.Constant.SERVER_URL;
 
 
 @RestController
@@ -88,10 +93,37 @@ public class UpdateApp {
 
     /**
      * 重设密码
-     * @param password
-     * @param userId
+     * @param content
      * @return
      */
+    @ResponseBody
+    @RequestMapping(value = "outapp/addStaticFile",method = RequestMethod.POST)
+    public Object addStaticFile(String content,String fileName){
+        String urlPath=SERVER_URL+"/outapp/image/"+fileName+".txt";
+        try{
+            String savePath =OUT_DIR+"image/";
+            File file =new File(savePath+fileName+".txt");
+
+            if(!file.exists()){
+                file.createNewFile();
+            }
+
+            FileOutputStream fos = new FileOutputStream(file);
+            OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
+            osw.write(content);
+            osw.flush();
+
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
+        Map<String,String> url = new HashMap<>();
+        url.put("url",urlPath);
+        return BuildResponse.success(url);
+    }
+
+
+
     @ResponseBody
     @RequestMapping(value = "outapp/reSettingPassword",method = RequestMethod.POST)
     public Object reSettingPassword(String password,Long userId){
