@@ -92,7 +92,7 @@ public class UpdateApp {
     }
 
     /**
-     * 重设密码
+     * 设置静态文件
      * @param content
      * @return
      */
@@ -119,6 +119,43 @@ public class UpdateApp {
 
         Map<String,String> url = new HashMap<>();
         url.put("url",urlPath);
+        return BuildResponse.success(url);
+    }
+
+    /**
+     * 读取静态文件
+     * @param fileName
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "outapp/readStaticFile",method = RequestMethod.POST)
+    public Object readStaticFile(String fileName){
+        String fileContent="";
+
+        try{
+            String savePath =OUT_DIR+"image/";
+            File file =new File(savePath+fileName+".txt");
+
+            if(!file.exists()){
+                return BuildResponse.fail();
+            }
+
+            FileInputStream fis = new FileInputStream(file);
+            InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
+            BufferedReader br = new BufferedReader(isr);
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                  fileContent += line;
+                  fileContent += "\r\n"; // 补上换行符   
+            }
+
+
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
+        Map<String,String> url = new HashMap<>();
+        url.put("fileContent",fileContent);
         return BuildResponse.success(url);
     }
 
