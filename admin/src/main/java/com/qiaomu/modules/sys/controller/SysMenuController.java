@@ -56,6 +56,16 @@ public class SysMenuController extends AbstractController {
     }
 
     /**
+     * 导航菜单
+     */
+    @RequestMapping("/getCommunityMenu")
+    public R getCommunityMenu() {
+        List<SysMenuEntity> menuList = sysMenuService.getCommunityMenuList(getUserId());
+
+        return R.ok().put("menuList", menuList);
+    }
+
+    /**
      * 所有菜单列表
      */
     @RequestMapping("/list")

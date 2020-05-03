@@ -11,6 +11,7 @@ import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.sys.service.UserExtendService;
 import com.qiaomu.modules.sys.shiro.ShiroUtils;
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
@@ -19,14 +20,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 import static org.apache.http.HttpHeaders.AUTHORIZATION;
 
@@ -87,25 +89,42 @@ public class AppUserController extends AbstractController {
                authLoginService.saveUserInfoToRedis(userEntity,session);
                return R.ok("success",JSON.toJSON(userEntity));
            }else {
-               return R.ok("error","客户端出现问题");
+               return R.error("error","客户端出现问题");
            }
         } catch (UnknownAccountException e) {
             log.error(DateTime.now().toString("yyyy-MM-dd HH:mm:ss") +"phone:"+phone+"--"+e.getMessage());
-            return R.ok("error",e.getMessage());
+            return R.error("401",e.getMessage());
         } catch (IncorrectCredentialsException e) {
             log.error(DateTime.now().toString("yyyy-MM-dd HH:mm:ss") +"phone:"+phone+"--"+e.getMessage());
-            return R.ok("error","账号或密码不正确");
+            return R.error("401","账号或密码不正确");
         } catch (LockedAccountException e) {
             log.error(DateTime.now().toString("yyyy-MM-dd HH:mm:ss") +"phone:"+phone+"--"+e.getMessage());
-            return R.ok("error","账号已被锁定");
+            return R.error("401","账号已被锁定");
         }catch(DisabledAccountException e){
             logger.info(DateTime.now().toString("yyyy-MM-dd HH:mm:ss") +"phone:"+phone+"--"+e.getMessage());
-            return R.ok("error",e.getMessage());
+            return R.error("401",e.getMessage());
         }catch (Exception e) {
             log.error(DateTime.now().toString("yyyy-MM-dd HH:mm:ss") +"phone:"+phone+"--"+e.getMessage());
-            return R.ok("error","登陆失败");
+            return R.error("401","登陆失败");
         }
 
+    }
+
+    @RequestMapping(value = "registerBySecurityCode", method = RequestMethod.POST)
+    public R registerBySecurityCode(String phone,String securityCode){
+        SysUserEntity userEntity = sysUserService.isExist(phone);
+        if (userEntity!=null) {
+            return R.ok("error", "手机号码已存在");
+        }
+        if(securityCode.equals("666666")){
+            SysUserEntity user = new SysUserEntity();
+            user.setUsername(phone);
+            user.setCreateTime(new Date());
+            sysUserService.insert(user);
+        }else {
+           return R.ok("error", "验证码错误，默认666666");
+        }
+        return R.ok();
     }
 
     /**
@@ -115,41 +134,29 @@ public class AppUserController extends AbstractController {
      * @return
      */
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public R registerUser(String phone, String password,String securityCode,String clientId) {
-        SysUserEntity user = new SysUserEntity();
-        user.setUsername(phone);
-        user.setPassword(password);
+    public String registerUser(String phone, String password,String password2,String clientId) {
         SysUserEntity userEntity = sysUserService.isExist(phone);
-        if (userEntity!=null) {
-            return R.ok("error", "手机号码已存在");
+        if (userEntity==null) {
+            return JSON.toJSONString(BuildResponse.fail("手机号码不存在"));
+        }
+        if (!password2.equals(password)){
+            return JSON.toJSONString(BuildResponse.fail("两次密码不一致"));
         }
         List roleList = new ArrayList();
-       /* if(securityCode.equals("666666")){
-            roleList.add(5l);
-            user.setRoleIdList(roleList);
-            user.setDeptId(9l);
-            user.setStatus(Integer.valueOf(1));
-            user.setNickName(RandomName.randomName(true,4));
-            user.setHandImgId(167l);
-            if (!"null".equals(clientId)){
-                user.setClientId(clientId);
-            }
-            this.sysUserService.save(user);
-            return R.ok();
-        }else {
-            return R.ok("error", "验证码错误");
-        }*/
         roleList.add(5l);
-        user.setRoleIdList(roleList);
-        user.setDeptId(9l);
-        user.setStatus(Integer.valueOf(1));
-        user.setNickName(RandomName.randomName(true,4));
-        user.setHandImgId(167l);
+        userEntity.setRoleIdList(roleList);
+        userEntity.setDeptId(9l);
+        userEntity.setStatus(Integer.valueOf(1));
+        userEntity.setNickName(RandomName.randomName(true,4));
+        userEntity.setHandImgId(167l);
         if (!"null".equals(clientId)){
-            user.setClientId(clientId);
+            userEntity.setClientId(clientId);
         }
-        this.sysUserService.save(user);
-        return R.ok();
+        String salt = RandomStringUtils.randomAlphanumeric(20);
+        userEntity.setSalt(salt);
+        userEntity.setPassword(password);
+        this.sysUserService.update(userEntity);
+        return JSON.toJSONString(BuildResponse.success(userEntity));
 
     }
 
@@ -214,6 +221,5 @@ public class AppUserController extends AbstractController {
         sysUserService.setUserLoginCommunity(userId,communityId);
         return BuildResponse.success();
     }
-
 
 }

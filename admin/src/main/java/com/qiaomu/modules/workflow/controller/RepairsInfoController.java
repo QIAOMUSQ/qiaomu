@@ -5,6 +5,7 @@ import com.qiaomu.common.Enum.CommunityRoleType;
 import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
+import com.qiaomu.modules.sys.controller.AbstractController;
 import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.service.SysFileService;
 import com.qiaomu.modules.sys.service.UserExtendService;
@@ -26,7 +27,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("mobile/repairs")
-public class RepairsInfoController {
+public class RepairsInfoController extends AbstractController {
 
     @Autowired
     private RepairsInfoService repairsInfoService;
@@ -76,6 +77,10 @@ public class RepairsInfoController {
     @ResponseBody
     @RequestMapping(value = "findRepairs",method = RequestMethod.POST)
     public Object findRepairs(@RequestParam Map<String, Object> params){
+       /* String CommunityId = getCommunityId();
+        if (StringUtils.isNotBlank(CommunityId)){
+            params.put("communityId",CommunityId);
+        }*/
         PageUtils repairsInfo = repairsInfoService.findRepairsPage(params);
         if(StringUtils.isBlank((String) params.get("companyId"))){
             return BuildResponse.success(JSON.toJSON(repairsInfo));

@@ -79,6 +79,7 @@ public class R extends HashMap<String, Object> {
 		return r;
 	}
 
+
 	public static R ok() {
 		return new R();
 	}

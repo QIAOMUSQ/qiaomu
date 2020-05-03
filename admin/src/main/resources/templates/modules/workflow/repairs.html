@@ -178,7 +178,7 @@
             url: baseURL + 'mobile/repairs/findRepairs',
             datatype: "json",
             mtype:"POST",
-            postData:{'companyId': $("#companyId").val()},
+            postData:{'companyId': $("#companyId").val(),'communityId': window.parent.$("#communityId").val()},
             colModel: [
                 { label: 'id', name: 'id', index: "id", width: 45, key: true,hidden:true },
                 { label: '社区名称', name: 'communityName', align:'center', width: 85 },
@@ -228,6 +228,7 @@
         $("#jqGrid").jqGrid('setGridParam',{
             postData:{'companyId': $("#companyId").val(),
                         "repairsType":$("#repairs").val(),
+                        'communityId': window.parent.$("#communityId").val(),
                         communityName:$("#communityName").val()},
             page:page
         }).trigger("reloadGrid");

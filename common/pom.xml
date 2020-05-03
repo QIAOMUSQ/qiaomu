@@ -12,6 +12,9 @@
 	<build>
 		<finalName>${project.artifactId}</finalName>
 	</build>
+	<properties>
+
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>joda-time</groupId>

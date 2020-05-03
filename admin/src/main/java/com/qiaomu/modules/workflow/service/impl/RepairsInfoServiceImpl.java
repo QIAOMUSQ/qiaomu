@@ -113,14 +113,13 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
     @Override
     public PageUtils findRepairsPage(Map<String, Object> params) {
         RepairsInfo repairs = new RepairsInfo();
+        if (StringUtils.isNotBlank((String) params.get("communityId"))){
+            repairs.setCommunityId(Long.valueOf((String) params.get("communityId")));
+        }
         if (StringUtils.isBlank((String) params.get("companyId"))){
             if (StringUtils.isNotBlank((String) params.get("userId"))){
                 repairs.setUserId(Long.valueOf((String) params.get("userId")));
             }
-            if (StringUtils.isNotBlank((String) params.get("communityId"))){
-                repairs.setCommunityId(Long.valueOf((String) params.get("communityId")));
-            }
-
         }else {
             YwCommunity community = new YwCommunity();
             String companyId = (String) params.get("companyId");

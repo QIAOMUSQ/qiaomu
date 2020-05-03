@@ -87,7 +87,7 @@ public class CustomAccessControlFilter extends AccessControlFilter {
         if (url.contains("/mobile/")) {
             //当没有登录时候
             map.put("error","请登录");
-            ResponseEntity result = new ResponseEntity<>(map, HttpStatus.OK);
+            ResponseEntity result = new ResponseEntity<>(map, HttpStatus.UNAUTHORIZED);
 
             httpResponse.getWriter().append(JSON.toJSONString(result));
             httpResponse.getWriter().flush();

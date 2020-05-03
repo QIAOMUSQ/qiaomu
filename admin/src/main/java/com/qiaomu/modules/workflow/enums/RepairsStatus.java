@@ -10,7 +10,9 @@ public enum RepairsStatus {
     assign("1","已分派"),
     finish("2","维修结束"),
     invalid("4","维修撤销"),
-    finishAndClose("5","解决并关闭");
+    finishAndClose("5","解决并关闭"),
+    overTime("6","延迟解决"),
+    noSolve("7","无法解决，转外部服务");
     private String status;
 
     private String statusInfo;

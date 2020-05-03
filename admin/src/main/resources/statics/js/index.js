@@ -167,15 +167,5 @@ function routerList(router, menuList){
 		}
 	}
 }
-/*function getMainList(menuList) {
-	$.each(vm.menuList,function (index,item) {
-		if(menu.type == 0){
-			getMainList(item);
-		}else {
-			if (item.orderNum==0 || ){
 
-			}
-		}
-	});
-}*/
 

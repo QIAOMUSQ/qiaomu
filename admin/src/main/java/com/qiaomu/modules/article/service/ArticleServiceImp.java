@@ -86,6 +86,9 @@ public class ArticleServiceImp implements ArticleService{
             articleModels = articleDao.queryArticleByCommentNum(articleSelectModel);
         }else if("5".equals(articleSelectModel.getQueryType())){
             articleModels = articleDao.queryHotArticle(articleSelectModel);
+        }else if ("6".equals(articleSelectModel.getQueryType())){
+            articleSelectModel.setAuthorId(articleSelectModel.getUserId());
+            articleModels = articleDao.query(articleSelectModel);
         }
         ArticlePraiseEntity articlePraiseEntity = new ArticlePraiseEntity();
         articlePraiseEntity.setUserId(articleSelectModel.getUserId());

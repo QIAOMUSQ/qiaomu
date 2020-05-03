@@ -3,6 +3,7 @@ $(function () {
         url: baseURL + 'communityUser/people/list',
         datatype: "json",
         mtype:"POST",
+        postData:{'communityId': window.parent.$("#communityId").val()},
         colModel: [
             { label: '', name: 'id', width: 45,hidden:true  },
             { label: '用户手机', name: 'userPhone', width: 75 },
@@ -233,6 +234,7 @@ var vm = new Vue({
             var page = $("#jqGrid").jqGrid('getGridParam','page');
             $("#jqGrid").jqGrid('setGridParam',{
                 postData:{"userPhone": vm.q.userPhone,
+                    'communityId': window.parent.$("#communityId").val(),
                             "communityName":vm.q.communityName},
                 page:page
             }).trigger("reloadGrid");

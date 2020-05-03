@@ -80,6 +80,10 @@ public abstract class AbstractController {
         return data;
     }
 
+    protected String getCommunityId(){
+        String id= (String) SecurityUtils.getSubject().getSession().getAttribute("communityId");
+        return id;
+    }
 
 
     /**

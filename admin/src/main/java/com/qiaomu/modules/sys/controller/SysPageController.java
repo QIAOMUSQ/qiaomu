@@ -16,9 +16,13 @@
 
 package com.qiaomu.modules.sys.controller;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 系统页面视图
@@ -58,6 +62,14 @@ public class SysPageController {
     @RequestMapping("404.html")
     public String notFound() {
         return "404";
+    }
+
+    @RequestMapping(value = {"/", "companyIndex.html"})
+    public String companyIndex(String communityId, ModelMap view) {
+        Session  session = SecurityUtils.getSubject().getSession();
+        session.setAttribute("communityId",communityId);
+        view.addAttribute("communityId", communityId);
+        return "companyIndex";
     }
 
 }
