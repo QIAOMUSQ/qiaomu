@@ -32,7 +32,7 @@
             url: baseURL + 'communityUser/people/list',
             datatype: "json",
             mtype:"POST",
-            postData:{companyRoleType:2},
+            postData:{companyRoleType:2,'communityId': window.parent.$("#communityId").val()},
             colModel: [
                 { label: '', name: 'id',hidden:true  },
                 { label: '用户手机', name: 'userPhone'},
@@ -80,6 +80,7 @@
         $("#jqGrid").jqGrid('setGridParam',{
             postData:{"userPhone": $("#userPhone").val(),
                 "communityName":$("#communityName").val(),
+                'communityId': window.parent.$("#communityId").val(),
                 companyRoleType:2},
             page:page
         }).trigger("reloadGrid");

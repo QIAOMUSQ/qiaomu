@@ -61,4 +61,6 @@ public interface SysMenuService extends IService<SysMenuEntity> {
      * 删除
      */
     void delete(Long menuId);
+
+    List<SysMenuEntity> getCommunityMenuList(Long userId);
 }

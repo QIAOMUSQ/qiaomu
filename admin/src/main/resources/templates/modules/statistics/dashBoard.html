@@ -39,10 +39,10 @@
 </head>
 <body>
     <div class="layui-card layadmin-backlog" id="companyText">
-        <div class="layui-card-header">
-            <h2 style="text-align: center; margin: 10px;font-size: 41px;" id="companyNames"> </h2>
+        <div class="layui-card-header" style="border-bottom:5px solid #F6F6E5;">
+            <h2 style="text-align: center; margin: 10px;font-size: 33px;" id="companyNames"> </h2>
         </div>
-        <div class="layui-card-body">
+        <div class="layui-card-body" style="background: #63df9e61;top:27px;">
             <ul class="layui-row layui-col-space10 layui-this" id="communityContent">
             </ul>
         </div>
@@ -50,8 +50,10 @@
     <div class="layui-card" id="communityText" style="display: none;">
         <div class="layui-card-header">
             <div class="layui-a-tips">
-                <h2 id="communityName" style="text-align: center; margin: 10px;font-size: 41px;"> </h2>
-                <div class="layui-col-sm1" style="float: right;margin-top: -65px;">
+                <h2 id="communityName" style="text-align: center; margin: 20px;font-size: 41px;"> </h2>
+
+                <div class="layui-col-sm3" style="float: right;margin-top: -65px;">
+                    <a id="communityhtml" href="" class="fa fa-sign-in layui-btn" aria-hidden="true" target="_blank">进入社区</a>
                     <button class="layui-btn layui-btn-danger" onclick="calBack();">返回</button>
                 </div>
             </div>
@@ -83,55 +85,11 @@
             </div>
 
             <div class="layui-row layui-col-space10">
-                <div class="layui-col-md5">
-                    <div class="layui-card">
-                        <div class="layui-card-header">维修板块</div>
-                        <div class="layui-card-body">
-                            <ul class="layui-row layui-col-space10 layui-this layadmin-backlog" id="repairData"  style="background: #fff;">
-                                <li class="layui-col-xs6" >
-                                    <div class="layadmin-backlog-body">
-                                        <h3>电力报修</h3>
-                                        <div id="repairData-0" onclick="queryRepairInfo(0)">
-                                            <div>超时：0</div>
-                                            <div>正常：0</div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="layui-col-xs6" >
-                                    <div class="layadmin-backlog-body">
-                                        <h3>供水报修</h3>
-                                        <div id="repairData-1" onclick="queryRepairInfo(1)">
-                                            <div>超时：0</div>
-                                            <div>正常：0</div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="layui-col-xs6" >
-                                    <div lay-href="#" class="layadmin-backlog-body">
-                                        <h3>煤气报修</h3>
-                                        <div id="repairData-2" onclick="queryRepairInfo(2)">
-                                            <div>超时：0</div>
-                                            <div>正常：0</div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="layui-col-xs6" >
-                                    <div href="javascript:;"  class="layadmin-backlog-body">
-                                        <h3>房屋维修</h3>
-                                        <div id="repairData-3" onclick="queryRepairInfo(3)">
-                                            <div>超时：0</div>
-                                            <div>正常：0</div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-col-md5">
+
+                <div class="layui-col-md12">
                     <div class="layuiadmin-card-text">
                         <div class="layui-text-top"><i class="layui-icon layui-icon-upload-circle"></i>报修状态统计</div>
-                        <div id="communityRepairs" style="width: 600px;height: 280px"></div>
+                        <div id="communityRepairs" style="width: 1200%;height: 280px"></div>
                     </div>
                 </div>
             </div>
@@ -332,7 +290,8 @@
         $("#communityName").text(name);
         $("#communityId").val(id);
         $("#communityHouse").text("小区户数:"+households);
-
+        let communityhtml = "${request.contextPath}/companyIndex.html?communityId="+$('#communityId').val();
+        $("#communityhtml").attr("href",communityhtml);
         ajaxFun("sys/dashBoard/loginTimesByCommunityId",{"communityId": id},getLoginTimes);
         ajaxFun("sys/dashBoard/loginTimesByCommunityId",{"communityId": id},getLoginTimes);
         queryCommunityData();
@@ -346,7 +305,7 @@
             return;
         }
         ajaxFun("sys/dashBoard/staticRepairsByStatus",{"communityId": $("#communityId").val(),startTime:startTime,endTime:endTime},communityRepairsFun);
-        ajaxFun("sys/dashBoard/getRepairInfoByTime",{"communityId": $("#communityId").val(),startTime:startTime,endTime:endTime},getRepairInfoByTime);
+      //  ajaxFun("sys/dashBoard/getRepairInfoByTime",{"communityId": $("#communityId").val(),startTime:startTime,endTime:endTime},getRepairInfoByTime);
     }
 
     function calBack() {
@@ -366,49 +325,9 @@
         });
     }
 
-    let getRepairInfoByTime = function(result) {
-        for (let i=0;i<4;i++){
-            $("#repairData-"+i).html(' <div>超时：0</div>' + '<div>正常：0</div>');
-        }
-        $.each(result.data,function (index,item) {
-            let normal = 0;
-            let overTime =0;
-            $.each(item,function (j,k) {
-                if (k.overtime=true){
-                    overTime ++;
-                }else {
-                    normal++;
-                }
-            });
-            $("#repairData-"+index).html(' <div>超时：'+overTime+'</div>' + '<div>正常：'+normal+'</div>');
-        });
-    }
-
-    function queryRepairInfo(repairsType) {
-        let startTime = $("#startTime").val();
-        let endTime = $("#endTime").val();
-        let communityId =  $("#communityId").val();
-        let queryCondition = {'startTime': startTime+" 00:00:00",endTime:endTime+" 23:59:59",communityId:communityId,repairsType:repairsType};
-
-        layer.open({
-            type: 1,
-            title :'报修信息',
-            area: ['900px', '400px'],
-            offset: 'auto',
-            fixed: false, //不固定
-            shadeClose:true,
-            maxmin: true,
-            content: $("#table")
-        });
-        if (first){
-            first=false;
-            queryPage(queryCondition);
-        }else {
-            getPage(queryCondition);
-        }
 
 
-    }
+
     function getPage(queryCondition) {
 
         var page = $("#jqGrid").jqGrid('getGridParam','page');

@@ -74,7 +74,22 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenuEntity> i
 
         //用户菜单列表
         List<Long> menuIdList = sysUserService.queryAllMenuId(userId);
+
         return getAllMenuList(menuIdList);
+    }
+
+
+    @Override
+    public List<SysMenuEntity> getCommunityMenuList(Long userId) {
+        //用户菜单列表
+        List<Long> menuIdList = sysUserService.queryAllMenuId(userId);
+        List<Long> li = new ArrayList<>();
+        for (Long m : menuIdList) {
+            if (m != 108 && m != 72) {
+                li.add(m);
+            }
+        }
+        return getAllMenuList(li);
     }
 
     @Override

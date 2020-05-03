@@ -124,12 +124,11 @@
             'justify'  // 对齐方式
         ]
         editor2.create();
-
-
         $("#jqGrid").jqGrid({
             url: baseURL + 'mobile/invitation/pageList',
             datatype: "json",
             mtype:"POST",
+            postData:{'communityId': window.parent.$("#communityId").val()},
             colModel: [
                 { label: 'id', name: 'id', index: "id", width: 45, key: true,hidden:true },
                 { label: '标题', name: 'title',  width: 45 },
@@ -181,7 +180,7 @@
     function reload() {
         var page = $("#jqGrid").jqGrid('getGridParam','page');
         $("#jqGrid").jqGrid('setGridParam',{
-            postData:{'title': $("#titleName").val()},
+            postData:{'title': $("#titleName").val(),'communityId': window.parent.$("#communityId").val()},
             page:page
         }).trigger("reloadGrid");
     }

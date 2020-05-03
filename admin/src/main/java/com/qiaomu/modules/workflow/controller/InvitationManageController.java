@@ -8,6 +8,7 @@ import com.qiaomu.common.utils.R;
 import com.qiaomu.modules.workflow.entity.InvitationEntity;
 import com.qiaomu.modules.workflow.service.InvitationService;
 import com.qiaomu.modules.sys.controller.AbstractController;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,10 @@ public class InvitationManageController extends AbstractController {
     @ResponseBody
     @RequestMapping(value = "pageList",method = RequestMethod.POST)
     public R getInfoPageByType(@RequestParam Map<String, Object> params){
-
+       /* String CommunityId = getCommunityId();
+        if (StringUtils.isNotBlank(CommunityId)){
+            params.put("communityId",CommunityId);
+        }*/
         params.put("companyId",getCompanyId());
         PageUtils page = invitationService.queryPage(params);
         return R.ok().put("page", page);

@@ -33,6 +33,11 @@ public class UserExtendController extends AbstractController {
     @RequiresPermissions("process:people:list")
     public R list(@RequestParam Map<String, Object> params) {
         SysUserEntity user = getUser();
+
+      /*  String CommunityId = getCommunityId();
+        if (StringUtils.isNotBlank(CommunityId)){
+            params.put("communityId",CommunityId);
+        }*/
         if(user.getCompanyId() != null ){
             params.put("companyId", user.getCompanyId());
         }
