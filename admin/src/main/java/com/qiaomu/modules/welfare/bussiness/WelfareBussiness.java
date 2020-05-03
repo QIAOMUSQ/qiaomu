@@ -433,7 +433,7 @@ public class WelfareBussiness {
     public List<TaskEntity> queryAllTask(String communityId,String userId){
         SysUserEntity sysUserEntity = sysUserService.queryById(Long.valueOf(userId));
         if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
-            throw new WelfareException("请先实名认证后再查看！");
+            throw new WelfareException("请先实名认证！");
         }
         UserExtend userExtendQ = new UserExtend();
         userExtendQ.setUserId(Long.valueOf(sysUserEntity.getUserId()));
