@@ -80,7 +80,7 @@
                 and r.repairs_type =#{repairsType}
             </if>
             <if test="queryType !=null">
-                and r.status &lt; 2
+                and r.status &gt;= 2
             </if>
             <if test="status !=null">
                 and r.status = #{status}
@@ -138,6 +138,7 @@
             i.user_id,
             i.community_id,
             i.create_time,
+            i.location,
             i.detail,
             r.user_id as repairsId,
             i.repairs_type,
@@ -157,7 +158,7 @@
                 and i.repairs_type =#{repairsType}
             </if>
             <if test="queryType !=null">
-                and r.status &lt; 2
+                and i.status &lt; 2
             </if>
             <if test="status !=null and status != '' ">
                 and i.status =#{status}

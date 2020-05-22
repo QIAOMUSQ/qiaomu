@@ -28,13 +28,27 @@
                 font-size: 16px;
                 color: #000;
             }
-            .layui-col-xs4{
+
+            .layui-col-xs4 {
                 padding: 20px;
             }
-            .layui-form-label{
+
+            .layui-form-label {
                 width: 90px;
             }
 
+            #LAY-component-grid-mobile-pc .layui-card-body {
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                text-align: center;
+                height: 200px;
+            }
+
+            html {
+                background-color: #f2f2f2;
+                color: #666;
+            }
         </style>
 </head>
 <body>
@@ -53,7 +67,6 @@
                 <h2 id="communityName" style="text-align: center; margin: 20px;font-size: 41px;"> </h2>
 
                 <div class="layui-col-sm3" style="float: right;margin-top: -65px;">
-                    <a id="communityhtml" href="" class="fa fa-sign-in layui-btn" aria-hidden="true" target="_blank">进入社区</a>
                     <button class="layui-btn layui-btn-danger" onclick="calBack();">返回</button>
                 </div>
             </div>
@@ -66,195 +79,128 @@
                 <blockquote class="layui-elem-quote" id="loginTimes">登录次数:-</blockquote>
             </div>
             <div class="layui-col-sm2">
-                <blockquote class="layui-elem-quote" >物业缴费占比:-</blockquote>
-                <input style="display: none" id="communityId"/>
+                <blockquote class="layui-elem-quote" id="ljbx">累计报修:</blockquote>
             </div>
-            <div class="layui-col-sm6">
-                <div class="layui-inline">
-                    <label class="layui-form-label">开始时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input" id="startTime" placeholder="yyyy-MM-dd" lay-key="1">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">结束时间</label>
-                    <div class="layui-input-inline">
-                        <input type="text" class="layui-input" id="endTime" placeholder="yyyy-MM-dd" lay-key="2">
-                    </div>
-                </div>
+            <div class="layui-col-sm2">
+                <div id="hpl" style="width: 200px;height: 150px;"></div>
+
             </div>
-
-            <div class="layui-row layui-col-space10">
-
-                <div class="layui-col-md12">
-                    <div class="layuiadmin-card-text">
-                        <div class="layui-text-top"><i class="layui-icon layui-icon-upload-circle"></i>报修状态统计</div>
-                        <div id="communityRepairs" style="width: 1200%;height: 280px"></div>
-                    </div>
-                </div>
+            <div class="layui-col-sm2">
+                <div id="bxbl" style="width: 300px;height: 150px;"></div>
             </div>
         </div>
+        <div class=" layui-fluid" id="LAY-component-grid-mobile-pc">
+            <div class="layui-row layui-col-space10">
+                <div class="layui-col-xs6 layui-col-md6">
+                    <!-- 填充内容 -->
+                    <div class="layui-card">
+                        <div class="layui-card-header">报修待办事项</div>
+                        <div class="layui-card-body">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-xs6 layui-col-md6">
+                    <div class="layui-card">
+                        <div class="layui-card-header">热门家事讨论</div>
+                        <div class="layui-card-body">
+                            <table class="layui-table">
+                                <thead>
+                                    <tr>
+                                        <th>标题</th>
+                                        <th>内容</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="hotArticle" style="height: 200px;overflow:auto;">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-xs6 layui-col-md8">
+                    <div class="layui-card">
+                        <div class="layui-card-header">报修列表</div>
+                        <div class="layui-card-body" id="table">
+                            <table id="jqGrid"></table>
+                            <div id="jqGridPager"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-xs6 layui-col-md4">
+                    <div class="layui-card">
+                        <div class="layui-card-header">维修人员通讯录</div>
+                        <div class="layui-card-body">
+                            <table class="layui-table" lay-even="" lay-skin="nob">
+                                <colgroup>
+                                    <col width="100">
+                                    <col width="200">
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th>姓名</th>
+                                    <th>电话</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>贤心</td>
+                                        <td>汉族</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>张爱玲</td>
+                                        <td>汉族</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>Helen Keller</td>
+                                        <td>拉丁美裔</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>岳飞</td>
+                                        <td>汉族</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>孟子</td>
+                                        <td>华夏族（汉族）</td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
     </div>
-    <div id="table" style="display: none">
-        <table id="jqGrid"></table>
-        <div id="jqGridPager"></div>
-    </div>
+
 </body>
 <script src="${request.contextPath}/statics/plugins/echarts/echarts.min.js"></script>
 <!--<script src="${request.contextPath}/statics/plugins/layui/layui.js"></script>-->
 <script>
-    var communityRepairs,repairsType;
+    var communityRepairs, repairsType;
     let companyId;
     let communityName;
     let layDate;
-    let first=true;
-    var seriesLabel = {
-        normal: {
-            show: true,
-            textBorderColor: '#333',
-            textBorderWidth: 2
-        }
-    };
-    $(function(){
-         companyId = $(window.parent.document.getElementById('companyId')).val();
-         let companyNames = $(window.parent.document.getElementById('companyName')).val();
-         $("#companyNames").text(companyNames);
-        ajaxFun("sys/dashBoard/getCompanyRepairStatistic",{"companyId":companyId},getCompanyStatistics);
-        communityRepairs = echarts.init(document.getElementById('communityRepairs'));
-        communityRepairsSta();
+    let first = true;
+    let hpl = echarts.init(document.getElementById('hpl'));
+    let bxbl = echarts.init(document.getElementById('bxbl'));
+
+    $(function () {
+        companyId = $(window.parent.document.getElementById('companyId')).val();
+        let companyNames = $(window.parent.document.getElementById('companyName')).val();
+        $("#companyNames").text(companyNames);
+        ajaxFun("sys/dashBoard/getCompanyRepairStatistic", {"companyId": companyId}, getCompanyStatistics);
         layDate = layui.laydate;
-        //获取系统前一个月的时间
-        let nowdate = new Date();
-        nowdate.setMonth(nowdate.getMonth()-1);
-        let y = nowdate.getFullYear();
-        let m = nowdate.getMonth()+1;
-        let d = nowdate.getDate();
-        if (m<10){
-            m = "0"+m;
-        }
-        let formatwdate = y+'-'+m+'-'+d;
 
-
-        //常规用法
-        layDate.render({
-            elem: '#startTime',
-            done: function(value, date, endDate){
-                console.log(value); //得到日期生成的值，如：2017-08-18
-                queryCommunityData();
-            },
-            value:formatwdate, //设置开始时间为当前时间
-        });
-        layDate.render({
-            elem: '#endTime',
-            value:new Date(),
-            done: function(value, date, endDate){
-                console.log(value); //得到日期生成的值，如：2017-08-18
-                queryCommunityData();
-            }
-        });
     });
 
 
-    function communityRepairsSta() {
-        var option = {
-
-            legend: {
-                data: ['已提交', '待处理', '已完成']
-            },
-            xAxis: {
-                type: 'value',
-                name: '条数',
-                axisLabel: {
-                    formatter: '{value}'
-                }
-            },
-            yAxis: {
-                type: 'category',
-                inverse: true,
-                data: ['状态'],
-
-            },
-            series: [
-                {
-                    name: '已提交',
-                    type: 'bar',
-                    data: [0],
-                    label: seriesLabel
-                },
-                {
-                    name: '待处理',
-                    type: 'bar',
-                    label: seriesLabel,
-                    data: [0]
-                },
-                {
-                    name: '已完成',
-                    type: 'bar',
-                    label: seriesLabel,
-                    data: [0]
-                }
-            ]
-        };
-        communityRepairs.setOption(option);
-    }
-
-    var communityRepairsFun=function (result) {
-        var yData=new Array();
-        if (result.respCode!= "1001") {
-            if (result.data.length > 0) {
-                $.each(result.data, function (index, item) {
-                    if (item.status == '0') {
-                        yData.push({
-                            name: '已提交',
-                            type: 'bar',
-                            data: [item.number],
-                            label: seriesLabel
-                        });
-                    }
-                    if (item.status == '1') {
-                        yData.push({
-                            name: '待处理',
-                            type: 'bar',
-                            label: seriesLabel,
-                            data: [item.number]
-                        });
-                    }
-                    if (item.status == '2') {
-                        yData.push({
-                            name: '已完成',
-                            type: 'bar',
-                            label: seriesLabel,
-                            data: [item.number]
-                        });
-
-                    }
-
-                });
-            } else {
-                yData = [
-                    {
-                        name: '已提交',
-                        type: 'bar',
-                        data: [0],
-                        label: seriesLabel
-                    },
-                    {
-                        name: '待处理',
-                        type: 'bar',
-                        label: seriesLabel,
-                        data: [0]
-                    },
-                    {
-                        name: '已完成',
-                        type: 'bar',
-                        label: seriesLabel,
-                        data: [0]
-                    }
-                ]
-            }
-            communityRepairs.setOption({series: yData});
-        }
-    };
     var getLoginTimes= function (result) {
         $("#loginTimes").text("登录次数:"+result.data.logintime);
     };
@@ -293,27 +239,113 @@
         let communityhtml = "${request.contextPath}/companyIndex.html?communityId="+$('#communityId').val();
         $("#communityhtml").attr("href",communityhtml);
         ajaxFun("sys/dashBoard/loginTimesByCommunityId",{"communityId": id},getLoginTimes);
-        ajaxFun("sys/dashBoard/loginTimesByCommunityId",{"communityId": id},getLoginTimes);
         queryCommunityData();
+        bxblEcharts();
+        queryPage({"communityId": id});
+
+        ajaxFun("/mobile/article/queryHotArticle",{"communityId": id,"queryType":"5","type":"community"},queryHotArticle);
     }
 
     function queryCommunityData() {
-        let startTime = $("#startTime").val();
-        let endTime = $("#endTime").val();
-        if(endTime<startTime){
-            layer.msg("查询时间错误");
-            return;
-        }
-        ajaxFun("sys/dashBoard/staticRepairsByStatus",{"communityId": $("#communityId").val(),startTime:startTime,endTime:endTime},communityRepairsFun);
-      //  ajaxFun("sys/dashBoard/getRepairInfoByTime",{"communityId": $("#communityId").val(),startTime:startTime,endTime:endTime},getRepairInfoByTime);
+        let option = {
+            legend: {
+                orient: 'vertical',
+                left: 10,
+                data: ['差评', '中评', '好评']
+            },
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: ['30%', '60%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '30',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        {name: "差评", value: 16850}, {name: "中评", value: 69013}, {name: "好评", value: 80003}
+                    ]
+                }
+            ]
+        };
+        hpl.setOption(option)
     }
+
+    function bxblEcharts() {
+        let option = {
+            legend: {
+                orient: 'vertical',
+                left: 10,
+                data: ['电力报修', '供水报修', '煤气报修', '房屋报修']
+            },
+            series: [
+                {
+
+                    type: 'pie',
+                    radius: '55%',
+                    avoidLabelOverlap: false,
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '30',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        {name: "电力报修", value: 16850},
+                        {name: "供水报修", value: 69013},
+                        {name: "煤气报修", value: 80003},
+                        {name: "房屋报修", value: 70003}
+                    ]
+                }
+            ]
+        };
+        bxbl.setOption(option)
+    }
+
+   let queryHotArticle = function (result) {
+        let  hotArticle = "";
+        $.each(result.data,function (index,item) {
+           if (index<5){
+               let title = item.title;
+               let content = item.content;
+               if (title.length>10){
+                   title = title.substring(0,10)+"...";
+               }
+               if (content.length>15){
+                   content = content.substring(0,20)+"...";
+               }
+               hotArticle += " <tr> <td>"+title+"</td><td>"+content+"</td> </tr>"
+           }
+        });
+        console.info(result.data);
+        $("#hotArticle").html(hotArticle);
+   }
 
     function calBack() {
-        $("#communityText").css("display","none");
-        $("#companyText").css("display","block");
+        $("#communityText").css("display", "none");
+        $("#companyText").css("display", "block");
     }
 
-    function ajaxFun(url,data,resFun) {
+    function ajaxFun(url, data, resFun) {
         $.ajax({
             type: "POST",
             url: baseURL + url,
@@ -352,7 +384,7 @@
                 { label: '维修类型', name: 'repairsType',align:'center'}
             ],
             viewrecords: true,
-            height: 385,
+            height: 159,
             rowNum: 10,
             rowList : [10,30,50],
             rownumbers: true,

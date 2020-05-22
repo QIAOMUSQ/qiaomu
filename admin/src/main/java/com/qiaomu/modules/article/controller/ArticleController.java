@@ -181,12 +181,13 @@ public class ArticleController extends AbstractController{
      * @return
      */
     @RequestMapping(value = "queryHotArticle",method = RequestMethod.POST)
-    public String queryHotArticle(String communityId,String category,String userId){
+    public String queryHotArticle(String communityId,String category,String userId,String type){
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setCommunityId(communityId);
         articleSelectModel.setCategory(category);
         articleSelectModel.setUserId(userId);//用户id并非文章作者
         articleSelectModel.setQueryType("5");
+        articleSelectModel.setType(type);
         List<ArticleModel> articles = articleService.query(articleSelectModel);
         return JSON.toJSONString(BuildResponse.success(articles));
 
@@ -253,6 +254,7 @@ public class ArticleController extends AbstractController{
         articleSelectModel.setAuthorId(authorId);
         articleSelectModel.setCommunityId(communityId);
         articleSelectModel.setCategory(category);
+
         List<ArticleModel> articles = articleService.query(articleSelectModel);
         return JSON.toJSONString(BuildResponse.success(articles));
 

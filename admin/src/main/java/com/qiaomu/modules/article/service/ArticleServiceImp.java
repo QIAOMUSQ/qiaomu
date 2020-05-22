@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,7 @@ import java.util.Map;
  */
 @Service
 public class ArticleServiceImp implements ArticleService{
-    @Autowired
+    @Resource
     private ArticleDao articleDao;
 
     @Autowired
@@ -63,17 +64,20 @@ public class ArticleServiceImp implements ArticleService{
 
     @Override
     public List<ArticleModel> query(ArticleSelectModel articleSelectModel) {
-        SysUserEntity sysUserEntity = sysUserService.queryById(Long.valueOf(articleSelectModel.getUserId()));
+        //社区查询热点详情
+        if (!"community".equals(articleSelectModel.getType())){
+            SysUserEntity sysUserEntity = sysUserService.queryById(Long.valueOf(articleSelectModel.getUserId()));
 
-        if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
-            throw new CommentException("请先实名认证！");
-        }
-        UserExtend userExtendQ = new UserExtend();
-        userExtendQ.setUserId(Long.valueOf(articleSelectModel.getUserId()));
-        userExtendQ.setCommunityId(Long.valueOf(articleSelectModel.getCommunityId()));
-        UserExtend userExtend = userExtendService.queryUserExtend(userExtendQ);
-        if(userExtend==null||userExtend.getCommunityId()==null){
-            throw new CommentException("请认证该小区！");
+            if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
+                throw new CommentException("请先实名认证！");
+            }
+            UserExtend userExtendQ = new UserExtend();
+            userExtendQ.setUserId(Long.valueOf(articleSelectModel.getUserId()));
+            userExtendQ.setCommunityId(Long.valueOf(articleSelectModel.getCommunityId()));
+            UserExtend userExtend = userExtendService.queryUserExtend(userExtendQ);
+            if(userExtend==null||userExtend.getCommunityId()==null){
+                throw new CommentException("请认证该小区！");
+            }
         }
         List<ArticleModel> articleModels =null;
         if(articleSelectModel.getQueryType()==null

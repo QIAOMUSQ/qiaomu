@@ -85,14 +85,14 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
             UserRepairs userRepairs = new UserRepairs(workers.getUserId(),entity.getId());
             userRepairsDao.insert(userRepairs);
             //消息推动到工作人员app
-            kafkaTemplateService.pushRepairsInfo(
+           /* kafkaTemplateService.pushRepairsInfo(
                     new PushMessageVO(
                             workers.getUserPhone(),
                             "社区新的维修信息",
                             entity.getCommunityId(),
                             entity.getDetail(),
                             JSON.toJSONString(new TransmissionContentVO("社区维修",entity.getCommunityId(),entity.getId()))
-                     ));
+                     ));*/
         }
 
 
