@@ -69,8 +69,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     @Autowired
     private UserExtendService userExtendService;
 
-    @Autowired
-    private SysUserDao sysUserDao;
 
 
     @Override
@@ -144,7 +142,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 
     @Override
     public SysUserEntity queryById(Long userId) {
-        return baseMapper.queryById(userId);
+        SysUserEntity user = baseMapper.queryById(userId);
+        if (StringUtils.isNotBlank(user.getRealName()))user.setRealName(AESUtil.decrypt(user.getRealName()));
+
+        return user;
     }
 
     @Override
@@ -188,7 +189,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 
     @Override
     public String queryUserImageUrl(String userId) {
-        return sysUserDao.queryUserImageUrl(userId);
+        return baseMapper.queryUserImageUrl(userId);
     }
 
     @Override

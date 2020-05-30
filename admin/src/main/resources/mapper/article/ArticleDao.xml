@@ -132,4 +132,18 @@
 	<select id="queryArticlePoint" parameterType="java.lang.String" resultType="com.qiaomu.modules.article.entity.ArticlePoint">
 		select userId,sum(point) as point from article_point WHERE userId = #{userId} and communityId = #{communityId} GROUP by userId
 	</select>
+	<select id="gettest" resultType="com.qiaomu.modules.article.entity.ArticlePoint">
+		SELECT
+			u.real_name as realName,
+			COUNT(1) as point,
+			 p.authorId as userId
+		FROM
+			pluto_article p
+		LEFT JOIN sys_user u ON u.user_id = p.authorId
+		WHERE
+			createdAt LIKE '2020-05%'
+		AND communityId = 14
+		GROUP BY
+			p.authorId
+	</select>
 </mapper>

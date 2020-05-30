@@ -27,6 +27,7 @@ public interface RepairsInfoDao extends BaseMapper<RepairsInfo> {
     List<RepairsInfo> selectPagesByRepairs(Page<RepairsInfo> page, RepairsInfo repairs);
 
     List<HashMap<String,String>> selectStaticRepairsByStatus(RepairsInfo info);
+    List<HashMap<String,String>> StaticRepairsByStatus(String communityId);
 
     List<HashMap<String,String>> staticRepairsByrepairsType(String communityId);
 
@@ -38,6 +39,8 @@ public interface RepairsInfoDao extends BaseMapper<RepairsInfo> {
     List<RepairsInfo> getCompanyRepairStatistic(RepairsInfo repairsInfo);
 
     List<RepairsInfo> getRepairInfoByCondition(RepairsInfo info);
+
+    List<RepairsInfo> queryNotRepairs(String communityId);
 
 //    List<HashMap<String, String>> staticRepairsByStatus(String communityId);
 }

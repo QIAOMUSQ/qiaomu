@@ -74,4 +74,8 @@ public interface RepairsInfoService extends IService<RepairsInfo> {
     List<RepairsInfo> getCompanyRepairStatistic(RepairsInfo repairsInfo);
 
     List<RepairsInfo> getRepairInfoByCondition(RepairsInfo info);
+
+    List<RepairsInfo> queryNotRepairs(String communityId);
+
+    List<HashMap<String, String>> StaticRepairsByStatus(String communityId);
 }

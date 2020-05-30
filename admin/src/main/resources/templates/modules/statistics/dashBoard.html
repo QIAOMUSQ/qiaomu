@@ -61,7 +61,7 @@
             </ul>
         </div>
     </div>
-    <div class="layui-card" id="communityText" style="display: none;">
+    <div class="layui-card" id="communityText" style="display: none;height: 1024px;">
         <div class="layui-card-header">
             <div class="layui-a-tips">
                 <h2 id="communityName" style="text-align: center; margin: 20px;font-size: 41px;"> </h2>
@@ -89,91 +89,63 @@
                 <div id="bxbl" style="width: 300px;height: 150px;"></div>
             </div>
         </div>
-        <div class=" layui-fluid" id="LAY-component-grid-mobile-pc">
-            <div class="layui-row layui-col-space10">
-                <div class="layui-col-xs6 layui-col-md6">
+        <div class=" layui-fluid" id="LAY-component-grid-mobile-pc" >
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs6 layui-col-md7">
                     <!-- 填充内容 -->
                     <div class="layui-card">
                         <div class="layui-card-header">报修待办事项</div>
                         <div class="layui-card-body">
-
+                            <div class="layui-carousel" id="test1">
+                                <div carousel-item id="carousel-item">
+                                    <div>条目1</div>
+                                    <div>条目2</div>
+                                    <div>条目3</div>
+                                    <div>条目4</div>
+                                    <div>条目5</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="layui-col-xs6 layui-col-md6">
+                <div class="layui-col-xs6 layui-col-md5">
+                    <div class="layui-card">
+                        <div class="layui-card-header">维修人员通讯录</div>
+                        <div class="layui-card-body" style="height: 217px;">
+                            <table id="workersGrid"></table>
+                            <div id="workersGridPager"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs8 layui-col-md6">
                     <div class="layui-card">
                         <div class="layui-card-header">热门家事讨论</div>
-                        <div class="layui-card-body">
-                            <table class="layui-table">
+                        <div class="layui-card-body" style="height: 337px;">
+                            <table class="layui-table layuiadmin-page-table "  lay-size="sm">
                                 <thead>
-                                    <tr>
-                                        <th>标题</th>
-                                        <th>内容</th>
-                                    </tr>
+                                <tr>
+                                    <th>标题</th>
+                                    <th>内容</th>
+                                </tr>
                                 </thead>
-                                <tbody id="hotArticle" style="height: 200px;overflow:auto;">
+                                <tbody id="hotArticle" style="height: 300px;overflow-y:auto;">
 
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-                <div class="layui-col-xs6 layui-col-md8">
+                <div class="layui-col-xs8 layui-col-md6">
                     <div class="layui-card">
                         <div class="layui-card-header">报修列表</div>
-                        <div class="layui-card-body" id="table">
+                        <div class="layui-card-body" style="height: 337px;">
                             <table id="jqGrid"></table>
                             <div id="jqGridPager"></div>
                         </div>
                     </div>
                 </div>
-                <div class="layui-col-xs6 layui-col-md4">
-                    <div class="layui-card">
-                        <div class="layui-card-header">维修人员通讯录</div>
-                        <div class="layui-card-body">
-                            <table class="layui-table" lay-even="" lay-skin="nob">
-                                <colgroup>
-                                    <col width="100">
-                                    <col width="200">
-                                </colgroup>
-                                <thead>
-                                <tr>
-                                    <th>姓名</th>
-                                    <th>电话</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>贤心</td>
-                                        <td>汉族</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>张爱玲</td>
-                                        <td>汉族</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>Helen Keller</td>
-                                        <td>拉丁美裔</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>岳飞</td>
-                                        <td>汉族</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>孟子</td>
-                                        <td>华夏族（汉族）</td>
-
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
 
@@ -239,14 +211,157 @@
         let communityhtml = "${request.contextPath}/companyIndex.html?communityId="+$('#communityId').val();
         $("#communityhtml").attr("href",communityhtml);
         ajaxFun("sys/dashBoard/loginTimesByCommunityId",{"communityId": id},getLoginTimes);
-        queryCommunityData();
+        queryRepairsStatistic();
         bxblEcharts();
         queryPage({"communityId": id});
+        queryworkersPage({"communityId": id,"companyRoleType":"2"});
 
         ajaxFun("/mobile/article/queryHotArticle",{"communityId": id,"queryType":"5","type":"community"},queryHotArticle);
+        ajaxFun("/mobile/repairs/queryNotRepairs",{"communityId": id,},queryNotRepairs);
+        ajaxFun("/mobile/repairs/queryRepairsStatistic",{"communityId": id,},queryRepairs);
+        ajaxFun("/mobile/repairs/StaticRepairsByStatus",{"communityId": id,},RepairsByStatus);
     }
 
-    function queryCommunityData() {
+    let queryNotRepairs =function (result) {
+        console.info(result);
+        let text = "";
+        for (let i=0;i<result.data.length;i++){
+            let item = result.data[i];
+            let item2 ;
+            if (i+1<result.data.length){
+                item2=result.data[i+1];
+            }
+            let detile ="";
+            if (item.detail !=null && item.detail.length>25){
+                detile = item.detail.substring(0,35)+"...";
+            }else {
+                detile =item.detail;
+            }
+            text += '<div>'+
+                '<div class="layadmin-contact-box layui-col-sm6"  align="center" style="height: 100%"> ' +
+                '          <div class="layui-col-md4 layui-col-sm6" style="margin-top: 33px;">' +
+                        '<div class="layadmin-text-center">' +
+                    '                <img src="'+item.userHeadImg+'" style="height: 183px;width: 139px;">' +
+                    '                <div class="layadmin-maillist-img layadmin-font-blod">'+item.userRealName+'</div>' +
+                    '              </div>' +
+                        ' </div>' +
+                '        <div class="layui-col-md8 layadmin-padding-left20 layui-col-sm6" style="top: 33px;">' +
+                '          <a href="javascript:;">' +
+                '            <h3 class="layadmin-title">' +
+                '              <strong>'+item.userPhone+'</strong>' +
+
+                '            </h3>' +
+                '            <p class="layadmin-textimg">' +
+                '              <i class="layui-icon layui-icon-location"></i>' +
+                                    item.location+
+                '            </p>' +
+                '          </a>' +
+                                '<strong>超时时间:'+item.lingerTime+'</strong><br>'+
+                '          <div class="layadmin-address">' +
+                '            <div style="width: 80%;float: right;">' +
+                        detile +
+                '            </div>' +
+                '          </div>' +
+                '        </div>' +
+                '      </div>';
+                if (item2){
+                    let detile2 ="";
+                    if (item2.detail !=null && item2.detail.length>25){
+                        detile2 = item2.detail.substring(0,35)+"...";
+                    }else {
+                        detile2 =item2.detail;
+                    }
+                    text +='<div class="layadmin-contact-box layui-col-sm6" style="height: 100%"> ' +
+                        '          <div class="layui-col-md4 layui-col-sm6" style="margin-top: 33px;">' +
+                        '<div class="layadmin-text-center">' +
+                    '                <img src="'+item2.userHeadImg+'" style="height: 183px;width: 139px;">' +
+                    '                <div class="layadmin-maillist-img layadmin-font-blod">'+item2.userRealName+'</div>' +
+                    '              </div>' +
+                        '          </div>' +
+                        '        ' +
+                        '        <div class="layui-col-md8 layadmin-padding-left20 layui-col-sm6"style="top: 33px;">' +
+                        '          <a href="javascript:;">' +
+                        '            <h3 class="layadmin-title">' +
+                        '              <strong>'+item2.userPhone+'</strong>' +
+
+                        '            </h3>' +
+                        '            <p class="layadmin-textimg">' +
+                        '              <i class="layui-icon layui-icon-location"></i>' +
+                        item2.location+
+                        '            </p>' +
+                        '          </a>' +
+                        '          <div class="layadmin-address">' +
+                                    '<strong>超时时间:'+item.lingerTime+'</strong><br>'+
+                        '            <div style="width: 80%;float: right;">' +
+                            detile2 +
+                        '            </div>' +
+                        '          </div>' +
+                        '        </div>' +
+                        '      </div>';
+                    i++;
+                }
+            text += '</div>';
+        }
+
+        $("#carousel-item").html(text);
+        layui.use('carousel', function(){
+            var carousel = layui.carousel;
+            //建造实例
+            carousel.render({
+                elem: '#test1'
+                ,width: '100%' //设置容器宽度
+                ,arrow: 'always' //始终显示箭头
+                ,interval: 500000
+            });
+        });
+    }
+
+    let queryRepairs = function (result) {
+        console.info(result);
+        let array = new Array();
+        let name =new Array();
+        $.each(result.data,function (index,item) {
+            if (item.repairs_type == 0){
+                name.push("电力报修");
+                array.push( {name: "电力报修", value: item.number});
+            }else if (item.repairs_type == 1){
+                name.push("供水报修");
+                array.push( {name: "供水报修", value: item.number});
+            }else if (item.repairs_type == 2){
+                name.push("煤气报修");
+                array.push( {name: "煤气报修", value: item.number});
+            }else if (item.repairs_type == 3){
+                name.push("房屋维修");
+                array.push( {name: "房屋维修", value: item.number});
+            }
+        })
+        bxblEcharts(array,name);
+
+    }
+
+    let RepairsByStatus = function (result) {
+        let data1 = 0;
+        let data2=0;
+        let data3=0;
+        $.each(result.data,function(index,item){
+            if (item.status == "1" || item.status == "2"){
+                data1 +=item.number
+            }
+            if (item.status == "3" || item.status == "4"){
+                data2 +=item.number
+            }
+            if (item.status == "5"){
+                data3 +=item.number
+            }
+        });
+        let array = new Array();
+        array.push({name: "差评", value: data1});
+        array.push({name: "中评", value: data2});
+        array.push({name: "好评", value: data3});
+        console.info(result);
+        queryRepairsStatistic(array);
+    }
+    function queryRepairsStatistic(array) {
         let option = {
             legend: {
                 orient: 'vertical',
@@ -273,21 +388,20 @@
                     labelLine: {
                         show: false
                     },
-                    data: [
-                        {name: "差评", value: 16850}, {name: "中评", value: 69013}, {name: "好评", value: 80003}
-                    ]
+                    data: array
                 }
             ]
         };
         hpl.setOption(option)
     }
 
-    function bxblEcharts() {
+
+    function bxblEcharts(array,name) {
         let option = {
             legend: {
                 orient: 'vertical',
                 left: 10,
-                data: ['电力报修', '供水报修', '煤气报修', '房屋报修']
+                data: name
             },
             series: [
                 {
@@ -309,12 +423,7 @@
                     labelLine: {
                         show: false
                     },
-                    data: [
-                        {name: "电力报修", value: 16850},
-                        {name: "供水报修", value: 69013},
-                        {name: "煤气报修", value: 80003},
-                        {name: "房屋报修", value: 70003}
-                    ]
+                    data:array
                 }
             ]
         };
@@ -324,7 +433,6 @@
    let queryHotArticle = function (result) {
         let  hotArticle = "";
         $.each(result.data,function (index,item) {
-           if (index<5){
                let title = item.title;
                let content = item.content;
                if (title.length>10){
@@ -334,11 +442,9 @@
                    content = content.substring(0,20)+"...";
                }
                hotArticle += " <tr> <td>"+title+"</td><td>"+content+"</td> </tr>"
-           }
         });
-        console.info(result.data);
         $("#hotArticle").html(hotArticle);
-   }
+   };
 
     function calBack() {
         $("#communityText").css("display", "none");
@@ -358,19 +464,49 @@
     }
 
 
-
-
-    function getPage(queryCondition) {
-
-        var page = $("#jqGrid").jqGrid('getGridParam','page');
-        $("#jqGrid").jqGrid('setGridParam',{
+    function queryworkersPage(queryCondition) {
+        $("#workersGrid").jqGrid({
+            url: baseURL + 'communityUser/people/list',
+            datatype: "json",
+            mtype:"POST",
             postData:queryCondition,
-            page:page
-        }).trigger("reloadGrid");
+            colModel: [
+                { label: '姓名', name: 'realName',align:'center'},
+                { label: '工作内容', name: 'repairsType',align:'center'},
+                { label: '手机', name: 'userPhone',align:'center'}
+
+
+            ],
+            viewrecords: false,
+            height: 139,
+            rowNum: 10,
+            rowList : [10,30,50],
+            rownumbers: false,
+            rownumWidth: 25,
+            autowidth:true,
+            multiselect: false,
+            pager: "#workersGridPager",
+            jsonReader : {
+                root: "page.list",
+                page: "page.currPage",
+                total: "page.totalPage",
+                records: "page.totalCount"
+            },
+            prmNames : {
+                page:"page",
+                rows:"limit",
+                order: "order"
+            },
+            gridComplete:function(){
+                //隐藏grid底部滚动条
+                $("#workersGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+            }
+        });
     }
+
     function  queryPage(queryCondition) {
         $("#jqGrid").jqGrid({
-            url: baseURL + 'mobile/repairs/findRepairs',
+            url: baseURL + 'mobile/repairs/findRepairsByCommunity',
             datatype: "json",
             mtype:"POST",
             postData:queryCondition,
@@ -384,7 +520,7 @@
                 { label: '维修类型', name: 'repairsType',align:'center'}
             ],
             viewrecords: true,
-            height: 159,
+            height: 259,
             rowNum: 10,
             rowList : [10,30,50],
             rownumbers: true,
@@ -393,13 +529,13 @@
             multiselect: true,
             pager: "#jqGridPager",
             jsonReader : {
-                root: "data.list",
-                page: "data.currPage",
-                total: "data.totalPage",
+                root: "page.list",
+                page: "page.currPage",
+                total: "page.totalPage",
                 records: "page.totalCount"
             },
             prmNames : {
-                page:"data",
+                page:"page",
                 rows:"limit",
                 order: "order"
             },

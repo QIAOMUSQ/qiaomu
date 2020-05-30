@@ -37,4 +37,5 @@ public interface ArticleDao extends BaseMapper<InvitationEntity> {
     ArticlePoint queryArticlePoint(String userId,String communityId);
     void insertArticlePoint(ArticlePoint articlePoint);
 
+    List<ArticlePoint> gettest();
 }

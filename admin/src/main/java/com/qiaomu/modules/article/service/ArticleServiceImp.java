@@ -232,4 +232,13 @@ public class ArticleServiceImp implements ArticleService{
          articleDao.updateArticleViewNum(articleEntity);
     }
 
+    @Override
+    public List<ArticlePoint> gettest() {
+        List<ArticlePoint> list= articleDao.gettest();
+        for (ArticlePoint point: list){
+            SysUserEntity userExtend =   sysUserService.queryById(Long.valueOf(point.getUserId()));
+            point.setRealName(userExtend.getRealName());
+        }
+        return list;
+    }
 }

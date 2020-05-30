@@ -473,4 +473,28 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
         });
         return list;
     }
+
+    @Override
+    public List<RepairsInfo> queryNotRepairs(String communityId) {
+        List<RepairsInfo> list = this.baseMapper.queryNotRepairs(communityId);
+        for (RepairsInfo info: list){
+            info.setStatus(RepairsStatus.status(info.getStatus()).getStatusInfo());
+            info.setLingerTime(DateUtils.TimeToDay(new Date().getTime()-info.getCreateTime().getTime()));
+            info.setUserRealName(AESUtil.decrypt(info.getUserRealName()));
+            info.setRepairsType(RepairsTypeEnum.repairs(info.getRepairsType()).getRepairsInfo());
+            if(info.getImgId() !=null ){
+                SysFileEntity file = sysFileService.selectById(info.getImgId());
+                if (file !=  null){
+                    info.setUserHeadImg(file.getPath());
+                }
+
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public List<HashMap<String, String>> StaticRepairsByStatus(String communityId) {
+        return baseMapper.StaticRepairsByStatus(communityId);
+    }
 }

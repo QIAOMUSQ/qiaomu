@@ -235,5 +235,38 @@
             and create_time &lt;= #{endTime,}
         GROUP by status ASC
     </select>
+    <select id="queryNotRepairs" resultType="com.qiaomu.modules.workflow.entity.RepairsInfo">
+        SELECT
+        r.id,
+        r.user_id,
+        r.community_id,
+        r.create_time,
+        r.repairs_time,
+        r.location,
+        r.detail,
+        r.repairs_id,
+         r.picture,
+        r.repairs_type,
+        r.service_date,
+        r.`status`,r.linger_time,
+        u.hand_img_id AS imgId,
+        u.real_name as userRealName,
+        u.username as userPhone,
+        u.nick_name as nickName
+        FROM
+        yw_repairs_info r
+        LEFT JOIN sys_user u ON r.user_id = u.user_id
+        where community_id =#{communityId} and r.`status`  &lt;= 1
+    </select>
 
+
+    <select id="StaticRepairsByStatus" resultMap="statusNumber">
+         SELECT
+            count(*) AS number,
+            star_type as status
+        FROM
+           yw_repairs_info
+        where  community_id = #{communityId} and star_type !=''
+        GROUP by star_type ASC
+    </select>
 </mapper>

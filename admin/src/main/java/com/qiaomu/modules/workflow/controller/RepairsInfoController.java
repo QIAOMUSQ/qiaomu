@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -216,6 +217,38 @@ public class RepairsInfoController extends AbstractController {
         }
         String info = repairsInfoService.modifyRepair(repairs);
         return BuildResponse.success(info);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "queryNotRepairs",method = RequestMethod.POST)
+    public Object queryNotRepairs(String communityId){
+        List<RepairsInfo> info = repairsInfoService.queryNotRepairs(communityId);
+        return BuildResponse.success(JSON.toJSON(info));
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "findRepairsByCommunity",method = RequestMethod.POST)
+    public Object findRepairsByCommunity(@RequestParam Map<String, Object> params){
+
+        PageUtils repairsInfo = repairsInfoService.findRepairsPage(params);
+        return R.ok().put("page",repairsInfo);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "queryRepairsStatistic",method = RequestMethod.POST)
+    public Object queryRepairsStatistic(String communityId){
+
+        List<HashMap<String,String>> data = repairsInfoService.staticRepairsByrepairsType(communityId);
+        return R.ok(JSON.toJSON(data));
+    }
+    @ResponseBody
+    @RequestMapping(value = "StaticRepairsByStatus",method = RequestMethod.POST)
+    public Object StaticRepairsByStatus(String communityId){
+
+        List<HashMap<String,String>> data = repairsInfoService.StaticRepairsByStatus(communityId);
+        return R.ok(JSON.toJSON(data));
     }
 
 

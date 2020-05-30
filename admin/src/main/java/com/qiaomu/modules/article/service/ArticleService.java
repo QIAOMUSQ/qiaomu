@@ -29,4 +29,6 @@ public interface ArticleService {
     void updateArticleViewNum(ArticleEntity articleEntity);
     List<ArticleModel> queryOnly(ArticleSelectModel articleSelectModel);
     void updateArticleCategory(ArticleEntity  articleEntity );
+
+    List<ArticlePoint> gettest();
 }

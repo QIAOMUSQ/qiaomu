@@ -206,4 +206,26 @@ public class DateUtils {
         }
         return sb.toString();
     }
+
+    //转换函数，可以封装成公用方法
+    public static String TimeToDay(Long ms){
+
+        Integer hh = 3600000;
+        Integer dd = 86400000;
+
+        Long day = ms / dd;
+        Long hour = (ms - day * dd) / hh;
+
+
+
+        StringBuffer sb = new StringBuffer();
+        if(day > 0) {
+            sb.append(day+"天");
+        }
+        if(hour > 0) {
+            sb.append(hour+"小时");
+        }
+
+        return sb.toString();
+    }
 }
