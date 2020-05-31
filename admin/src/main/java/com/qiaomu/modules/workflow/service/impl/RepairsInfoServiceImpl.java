@@ -497,4 +497,41 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
     public List<HashMap<String, String>> StaticRepairsByStatus(String communityId) {
         return baseMapper.StaticRepairsByStatus(communityId);
     }
+
+    @Override
+    public PageUtils queryCommunityCertainRepairs(Map<String, Object> params) {
+        Page<RepairsInfo> page = new Query(params).getPage();
+        RepairsInfo repairs = new RepairsInfo();
+        String communityId = (String) params.get("communityId");
+        String userId = (String) params.get("userId");
+        repairs.setCommunityId(Long.valueOf(communityId));
+        repairs.setUserId(Long.valueOf(userId));
+
+        page.setRecords(this.baseMapper.queryCommunityCertainRepairs(page, repairs));
+        for (RepairsInfo info: page.getRecords()){
+            info.setStatus(RepairsStatus.status(info.getStatus()).getStatusInfo());
+            if (StringUtils.isNotBlank(info.getStarType())){
+                info.setStarType(RepairsStar.star(info.getStarType()).getStartInfo());
+            }
+            if (info.getLingerTime() != null){
+                info.setLingerTime(DateUtils.longTimeToDay(Long.valueOf(info.getLingerTime())));
+            }else {
+                info.setLingerTime(DateUtils.longTimeToDay(new Date().getTime()-info.getCreateTime().getTime()));
+            }
+
+            info.setUserRealName(AESUtil.decrypt(info.getUserRealName()));
+            info.setRepairsType(RepairsTypeEnum.repairs(info.getRepairsType()).getRepairsInfo());
+            if (StringUtils.isNotBlank((String) params.get("companyId"))){
+                info.setCommunityName(communityService.selectById(info.getCommunityId()).getName());
+            }
+            if(info.getImgId() !=null ){
+                SysFileEntity file = sysFileService.selectById(info.getImgId());
+                if (file !=  null){
+                    info.setUserHeadImg(file.getPath());
+                }
+
+            }
+        }
+        return new PageUtils(page);
+    }
 }

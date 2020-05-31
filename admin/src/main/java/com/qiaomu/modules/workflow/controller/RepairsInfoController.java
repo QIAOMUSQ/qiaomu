@@ -250,6 +250,17 @@ public class RepairsInfoController extends AbstractController {
         List<HashMap<String,String>> data = repairsInfoService.StaticRepairsByStatus(communityId);
         return R.ok(JSON.toJSON(data));
     }
+    /**
+     * 分页查询信息
+     * @param params
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "queryCommunityCertainRepairs",method = RequestMethod.POST)
+    public Object queryCommunityCertainRepairs(@RequestParam Map<String, Object> params){
 
+        PageUtils repairsInfo = repairsInfoService.queryCommunityCertainRepairs(params);
+        return BuildResponse.success(JSON.toJSON(repairsInfo));
+    }
 
 }

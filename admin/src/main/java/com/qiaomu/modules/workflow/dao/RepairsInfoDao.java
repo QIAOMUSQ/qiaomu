@@ -42,5 +42,7 @@ public interface RepairsInfoDao extends BaseMapper<RepairsInfo> {
 
     List<RepairsInfo> queryNotRepairs(String communityId);
 
+    List<RepairsInfo> queryCommunityCertainRepairs(Page<RepairsInfo> page, RepairsInfo repairs);
+
 //    List<HashMap<String, String>> staticRepairsByStatus(String communityId);
 }

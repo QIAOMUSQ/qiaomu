@@ -78,4 +78,6 @@ public interface RepairsInfoService extends IService<RepairsInfo> {
     List<RepairsInfo> queryNotRepairs(String communityId);
 
     List<HashMap<String, String>> StaticRepairsByStatus(String communityId);
+
+    PageUtils queryCommunityCertainRepairs(Map<String, Object> params);
 }

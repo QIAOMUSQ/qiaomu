@@ -365,8 +365,8 @@ public class ArticleController extends AbstractController{
         return JSON.toJSONString(BuildResponse.success(articlePoint));
     }
 
-   /* @RequestMapping(value = "welfare/gettest",method = RequestMethod.GET)
+    @RequestMapping(value = "welfare/gettest",method = RequestMethod.GET)
     public Object gettest(){
         return JSON.toJSONString(articleService.gettest());
-    }*/
+    }
 }
