@@ -75,7 +75,7 @@ public class ArticleServiceImp implements ArticleService{
             userExtendQ.setUserId(Long.valueOf(articleSelectModel.getUserId()));
             userExtendQ.setCommunityId(Long.valueOf(articleSelectModel.getCommunityId()));
             UserExtend userExtend = userExtendService.queryUserExtend(userExtendQ);
-            if(userExtend==null||userExtend.getCommunityId()==null){
+            if(userExtend==null||"0".equals(userExtend.getCheck())){
                 throw new CommentException("请认证该小区！");
             }
         }

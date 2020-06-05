@@ -237,7 +237,7 @@ public class WelfareTaskController extends AbstractController{
         userExtendQ.setUserId(Long.valueOf(sysUserEntity.getUserId()));
         userExtendQ.setCommunityId(Long.valueOf(communityId));
         UserExtend userExtend = userExtendService.queryUserExtend(userExtendQ);
-        if(userExtend==null||userExtend.getCommunityId()==null){
+        if(userExtend==null||"0".equals(userExtend.getCheck())){
             throw new CommentException("请认证该小区！");
         }
         List<PointRankForm> result = welfareBussiness.rankByGold(communityId);

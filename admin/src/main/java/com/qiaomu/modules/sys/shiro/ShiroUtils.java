@@ -94,9 +94,5 @@ public class ShiroUtils {
         getSession().removeAttribute(key);
         return kaptcha.toString();
     }
-    public static void main(String[] args){
-        System.out.println(getMd5("9d0fb05e7a1cefdf69886e560af82055559a12d307111013084f80d505ac2d0c","ZLo9fKYFBkAXb9eAYXHp"));
-
-    }
 
 }

@@ -46,7 +46,7 @@ public class CarportContoller extends AbstractController{
         userExtendQ.setUserId(Long.valueOf(sysUserEntity.getUserId()));
         userExtendQ.setCommunityId(carport.getCommunityId());
         UserExtend userExtend = userExtendService.queryUserExtend(userExtendQ);
-        if(userExtend==null||userExtend.getCommunityId()==null){
+        if(userExtend==null||"0".equals(userExtend.getCheck())){
             throw new CommentException("请认证该小区！");
         }
          List<CarportEntity> data =  carportService.selectAll(carport);
