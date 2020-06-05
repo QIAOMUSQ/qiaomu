@@ -123,20 +123,23 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
         userExtend.setUserId(user.getUserId());
         userExtend.setCommunityId(communityId);
         List<UserExtend> userList = userExtendDao.selectCommunityList(userExtend);
-        if(userList.size() ==0){
-            userExtend.setAddress(AESUtil.encrypt(address));
-            userExtend.setRealName(AESUtil.encrypt(realName));
-            if(community.getCompanyId() != null && community.getCompanyId()!=-1l){
-                userExtend.setCompanyId(community.getCompanyId());
-            }
-            userExtend.setStatus(true);
-            userExtend.setCheck("0");
-            userExtend.setCompanyRoleType("4");
-            userExtend.setCreateTime(new Date());
+
+        userExtend.setAddress(AESUtil.encrypt(address));
+        userExtend.setRealName(AESUtil.encrypt(realName));
+        if (community.getCompanyId() != null && community.getCompanyId() != -1l) {
+            userExtend.setCompanyId(community.getCompanyId());
+        }
+        userExtend.setStatus(true);
+        userExtend.setCheck("0");
+        userExtend.setCompanyRoleType("4");
+        userExtend.setCreateTime(new Date());
+        if (userList.size() == 0) {
             userExtendDao.insert(userExtend);
             return "保存成功";
         }else {
-            return "重复提交信息";
+            userExtend.setId(userList.get(0).getId());
+            userExtendDao.updateById(userExtend);
+            return "修改成功";
         }
 
 
@@ -156,7 +159,12 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
             if(userEntity !=null && userEntity.getUsername() != null){
                 user2.setUserPhone(userEntity.getUsername());
             }
-            user2.setRealName(AESUtil.decrypt(user2.getRealName()));
+
+            if(user2.getRealName()==null){
+                user2.setRealName(AESUtil.decrypt(userDao.queryById(userId).getRealName()));
+            }else {
+                user2.setRealName(AESUtil.decrypt(user2.getRealName()));
+            }
             user2.setAddress(AESUtil.decrypt(user2.getAddress()));
             //物业信息
             user2.setCommunityName(this.baseMapper.selectById(user2.getCommunityId()).getName());
