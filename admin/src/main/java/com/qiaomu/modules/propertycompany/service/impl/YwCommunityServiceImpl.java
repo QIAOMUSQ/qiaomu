@@ -137,9 +137,19 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
             userExtendDao.insert(userExtend);
             return "保存成功";
         }else {
+            UserExtend userExtend1 = userList.get(0);
+            try {
+                if (phone.equals(user.getUsername())
+                        && realName.equals(AESUtil.decrypt(userExtend1.getRealName()))
+                        && address.equals(AESUtil.decrypt(userExtend1.getAddress()))) {
+                    return "信息未变更，请修改后重新提交";
+                }
+            }catch (Exception e){
+                return "信息条目不能存在空值";
+            }
             userExtend.setId(userList.get(0).getId());
             userExtendDao.updateById(userExtend);
-            return "修改成功";
+            return "修改成功，系统重新审核！";
         }
 
 
