@@ -432,6 +432,10 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
                 mapList.add(info);
                 resultMap.put(info.getRepairsType(), mapList);
             }
+            YwCommunity community = communityService.selectById(info.getCommunityId());
+            if (community!=null){
+                info.setCommunityName(community.getName());
+            }
 
         }
 
