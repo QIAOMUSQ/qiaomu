@@ -52,6 +52,7 @@
         SELECT * ,count(*) as number from (SELECT a.* ,b.createdAt as tt,c.nick_name as nickName,c.real_name as realName from (pluto_article as a
         inner join  pluto_article_comment  as b on a.articleId=b.articleId) left join sys_user as c  on a.authorId=c.user_id ) as t
         <where>
+			1=1
             <if test="category != null and category !=''">
                 AND category = #{category}
             </if>
@@ -63,10 +64,11 @@
     </select>
 
 	<select id="queryArticleByCommentTime" parameterType="com.qiaomu.modules.article.model.ArticleSelectModel" resultType="com.qiaomu.modules.article.model.ArticleModel">
-		SELECT * from (SELECT a.* ,b.createdAt as tt,c.nick_name as nickName,c.real_name as realName from (pluto_article as a inner join  pluto_article_comment
+		SELECT * from (SELECT a.* ,b.createdAt as tt,c.nick_name as nickName,c.real_name as realName from (pluto_article as a LEFT join  pluto_article_comment
 		as b on a.articleId=b.articleId) left join sys_user as c  on a.authorId=c.user_id order by b.createdAt desc limit 1000)
 		as t
 		<where>
+			1=1
 			<if test="category != null and category !=''">
 				AND category = #{category}
 			</if>
