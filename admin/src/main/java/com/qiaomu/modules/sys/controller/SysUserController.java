@@ -116,6 +116,14 @@ public class SysUserController extends AbstractController {
     @RequiresPermissions("sys:user:save")
     public R save(@RequestBody SysUserEntity user) {
         String info = ValidatorUtils.validateEntity(user, AddGroup.class);
+        SysUserEntity userEntity= getUser();
+        //超级管理员
+        if (userEntity.getSysUser().equals("0")){
+            user.setSysUser("1");
+        }else if (userEntity.getSysUser().equals("0")){
+            //物业管理员
+            user.setSysUser("2");
+        }
         if (info.equals("")) {
             String value = DicRoleCode.role_dept_map.get(String.valueOf(user.getRoleIdList().get(0)));
             user.setPropertyCompanyRoleType(value);

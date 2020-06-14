@@ -8,12 +8,10 @@ import com.qiaomu.common.utils.AESUtil;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
 import com.qiaomu.modules.sys.dao.SysUserDao;
+import com.qiaomu.modules.sys.dao.SysUserRoleDao;
 import com.qiaomu.modules.sys.dao.YwCommunityDao;
 import com.qiaomu.modules.sys.dao.UserExtendDao;
-import com.qiaomu.modules.sys.entity.ProvinceCityDateEntity;
-import com.qiaomu.modules.sys.entity.SysUserEntity;
-import com.qiaomu.modules.sys.entity.YwCommunity;
-import com.qiaomu.modules.sys.entity.UserExtend;
+import com.qiaomu.modules.sys.entity.*;
 import com.qiaomu.modules.sys.service.ProvinceCityDateService;
 import com.qiaomu.modules.sys.service.SysFileService;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
@@ -45,6 +43,8 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
     @Resource
     private UserExtendDao userExtendDao;
 
+    @Resource
+    private SysUserRoleDao userRoleDao;
 
     public PageUtils queryPage(Map<String, Object> params) {
         String name = (String) params.get("name");
@@ -62,6 +62,13 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
         if (StringUtils.isNotBlank(name))condition.setName(name);
         Page<YwCommunity> page = new Query(params).getPage();// 当前页，总条
         page.setRecords(this.baseMapper.selectPageByCondition(page,condition));
+        for (YwCommunity community:page.getRecords()){
+            UserExtend userExtend = userExtendDao.selectById(community.getAdminId());
+            if (userExtend!=null){
+                community.setAdmin(AESUtil.decrypt(userExtend.getRealName()));
+            }
+
+        }
         return new PageUtils(page);
     }
 
@@ -196,5 +203,33 @@ public class YwCommunityServiceImpl extends ServiceImpl<YwCommunityDao, YwCommun
     @Override
     public List<YwCommunity> getDeleteCommunity(YwCommunity community) {
         return baseMapper.getDeleteCommunity(community);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void setCommunityAdministrator(String userId, String communityId) {
+        YwCommunity community = baseMapper.selectById(communityId);
+        if (community.getAdminId()!=null){
+            //删除原来的管理员角色
+            UserExtend  userExtend = userExtendDao.selectById(Long.valueOf(userId));
+            EntityWrapper<SysUserRoleEntity> wrapper = new EntityWrapper();
+            wrapper.eq("user_id",userExtend.getUserId());
+            List<SysUserRoleEntity> userRoleList = userRoleDao.selectList(wrapper);
+            userRoleList.forEach(c->{
+                c.setRoleId(5l);
+                userRoleDao.updateById(c);
+            });
+        }
+        community.setAdminId(Long.valueOf(userId));
+        baseMapper.updateById(community);
+        //修改用户和角色
+        UserExtend  userExtend = userExtendDao.selectById(Long.valueOf(userId));
+        EntityWrapper<SysUserRoleEntity> wrapper = new EntityWrapper();
+        wrapper.eq("user_id",userExtend.getUserId());
+        List<SysUserRoleEntity> userRoleList =  userRoleDao.selectList(wrapper);
+        userRoleList.forEach(c->{
+            c.setRoleId(3l);
+            userRoleDao.updateById(c);
+        });
     }
 }

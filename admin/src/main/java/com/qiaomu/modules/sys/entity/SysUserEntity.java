@@ -23,6 +23,8 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.qiaomu.common.validator.group.AddGroup;
 import com.qiaomu.common.validator.group.UpdateGroup;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
@@ -40,6 +42,7 @@ import java.util.List;
  * @date 2016年9月18日 上午9:28:55
  */
 @TableName("sys_user")
+@Data
 public class SysUserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -133,6 +136,9 @@ public class SysUserEntity implements Serializable {
 
     @TableField(exist = false)
     private String communityRoleType;
+
+    @ApiModelProperty(value = "用户等级，0：超级管理员  1：物业管理员  2:社区管理员用户  3：app用户:")
+    private String sysUser;
 
     /**
      * 设置：

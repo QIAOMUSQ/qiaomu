@@ -8,15 +8,20 @@
     <select id="selectPageAll" resultType="com.qiaomu.modules.workflow.entity.InvitationEntity">
         SELECT i.*,c.name as communityName FROM yw_invitation i LEFT JOIN yw_community c ON i.community_id = c.id
         <where>
-            1=1
-            <if test="companyId != null">
-                and c.company_id = #{companyId}
+            <if test="entity.companyId != null">
+                and c.company_id = #{entity.companyId}
             </if>
-            <if test="communityId != null">
-                and i.community_id = #{communityId}
+            <if test="entity.communityId != null">
+                and i.community_id = #{entity.communityId}
             </if>
-            <if test="title != null and title != ''">
+            <if test="entity.title != null and entity.title != ''">
                 and i.title like concat('%',#{title},'%')
+            </if>
+            <if test="entity.communityIds !=null ">
+                and i.community_id in
+                <foreach item="communityIds" collection="entity.communityIds" index="communityId" open="(" separator="," close=")" >
+                    #{communityIds}
+                </foreach>
             </if>
         </where>
 

@@ -128,7 +128,8 @@
             url: baseURL + 'mobile/invitation/pageList',
             datatype: "json",
             mtype:"POST",
-            postData:{'communityId': window.parent.$("#communityId").val()},
+            postData:{'communityId': window.parent.$("#communityId").val(),
+                        'communityIds':window.parent.$("#communityIds").val()},
             colModel: [
                 { label: 'id', name: 'id', index: "id", width: 45, key: true,hidden:true },
                 { label: '标题', name: 'title',  width: 45 },

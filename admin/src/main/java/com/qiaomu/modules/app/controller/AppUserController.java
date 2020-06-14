@@ -155,6 +155,7 @@ public class AppUserController extends AbstractController {
         String salt = RandomStringUtils.randomAlphanumeric(20);
         userEntity.setSalt(salt);
         userEntity.setPassword(password);
+        userEntity.setSysUser("3");
         this.sysUserService.update(userEntity);
         return JSON.toJSONString(BuildResponse.success(userEntity));
 

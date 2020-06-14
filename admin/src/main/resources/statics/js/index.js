@@ -99,6 +99,7 @@ var vm = new Vue({
             });
         },
 		getCompany: function(){
+			debugger;
 			let userName = vm.user;
 			if(userName.userId == 1 ){
 				$("#logo-lg").text("100分社区管理");
@@ -109,17 +110,29 @@ var vm = new Vue({
 					data:{userId:userName.userId},
 					success:function (data) {
 						if(data.result){
-							if(data.result.name.length>6){
-								$("#logo-lg").text((data.result.name+"管理系统").substring(0,10));
-
+							debugger
+							if (data.result.length>0){
+								$(".navbar").css("background-color","#3cbc3f");
+								$(".logo").css("background-color","#3cbc3f");
+								let commIds = new Array();
+								$.each(data.result,function (index,item) {
+									commIds.push(item.id);
+								})
+								$("#communityIds").val(commIds);
+								$("#logo-lg").text("社区管理系统");
 							}else {
-								$("#logo-lg").text(data.result.name+"管理系统");
+								if(data.result.name.length>6){
+									$("#logo-lg").text((data.result.name+"管理系统").substring(0,10));
+
+								}else {
+									$("#logo-lg").text(data.result.name+"管理系统");
+								}
+								$("#companyId").val(data.result.id);
+								$("#companyName").val(data.result.name);
+								$("#welcome-system").text("欢迎进入"+data.result.name+"  管理员："+vm.user.username);
+								$(".navbar").css("background-color","#3cbc3f");
+								$(".logo").css("background-color","#3cbc3f");
 							}
-							$(".navbar").css("background-color","#3cbc3f");
-							$(".logo").css("background-color","#3cbc3f");
-							$("#companyId").val(data.result.id);
-							$("#companyName").val(data.result.name);
-							$("#welcome-system").text("欢迎进入"+data.result.name+"  管理员："+vm.user.username);
 						}
 
 					}

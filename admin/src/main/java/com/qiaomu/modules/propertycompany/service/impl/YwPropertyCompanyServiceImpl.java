@@ -8,8 +8,10 @@ import com.qiaomu.common.utils.Query;
 import com.qiaomu.modules.propertycompany.dao.YwPropertyCompanyDao;
 import com.qiaomu.modules.propertycompany.entity.YwPropertyCompany;
 import com.qiaomu.modules.propertycompany.service.YwPropertyCompanyService;
+import com.qiaomu.modules.sys.dao.YwCommunityDao;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.entity.UserExtend;
+import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.service.SysFileService;
 import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.sys.service.UserExtendService;
@@ -18,9 +20,11 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,8 +42,8 @@ public class YwPropertyCompanyServiceImpl extends ServiceImpl<YwPropertyCompanyD
     @Autowired
     private SysUserService userService;
 
-    @Autowired
-    private SysFileService sysFileService;
+    @Resource
+    private YwCommunityDao ywCommunityDao;
 
     public PageUtils queryPage(Map<String, Object> params) {
         Page<YwPropertyCompany> page = selectPage(new Query(params)
@@ -69,7 +73,8 @@ public class YwPropertyCompanyServiceImpl extends ServiceImpl<YwPropertyCompanyD
 
     @Override
     public YwPropertyCompany findCompanyByUserId(Long userId) {
-        return baseMapper.findCompanyByUserId(userId);
+        YwPropertyCompany company = baseMapper.findCompanyByUserId(userId);
+        return company;
     }
 
 

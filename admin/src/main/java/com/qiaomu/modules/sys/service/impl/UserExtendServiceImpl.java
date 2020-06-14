@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -34,7 +35,7 @@ public class UserExtendServiceImpl extends ServiceImpl<UserExtendDao, UserExtend
     @Autowired
     private YwCommunityService communityService;
 
-    @Autowired
+    @Resource
     private SysUserDao userDao;
 
     @Autowired

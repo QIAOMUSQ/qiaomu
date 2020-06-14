@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,10 @@ public class InvitationServiceImpl extends ServiceImpl<InvitationDao,InvitationE
         }
         if(StringUtils.isNotBlank((String) params.get("title"))){
             entity.setTitle((String) params.get("title"));
+        }
+        if (StringUtils.isNotBlank((String)params.get("communityIds"))){
+            String[] ids = ((String) params.get("communityIds")).split(",");
+            entity.setCommunityIds(Arrays.asList(ids));
         }
         Page<InvitationEntity> page = new Query(params).getPage();// 当前页，总条
         page.setRecords(this.baseMapper.selectPageAll(page,entity));

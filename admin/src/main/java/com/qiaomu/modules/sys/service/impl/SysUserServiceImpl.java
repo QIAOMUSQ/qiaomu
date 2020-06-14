@@ -38,6 +38,7 @@ import com.qiaomu.modules.sys.service.UserExtendService;
 import com.qiaomu.modules.sys.shiro.ShiroUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
@@ -80,13 +81,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
     @DataFilter(subDept = true, user = false)
     public PageUtils queryPage(Map<String, Object> params) {
         String username = (String) params.get("username");
-
-        Page<SysUserEntity> page = this.selectPage(
-                new Query<SysUserEntity>(params).getPage(),
-                new EntityWrapper<SysUserEntity>()
-                        .like(StringUtils.isNotBlank(username), "username", StringUtils.trimToEmpty(username))
-                        .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER))
-        );
+        SysUserEntity userEntity = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
+        String userType= userEntity.getSysUser();
+        if (userType != null){
+            userType = Integer.valueOf(userType)+1+"";
+        }
+        EntityWrapper<SysUserEntity> wrapper = new  EntityWrapper<SysUserEntity>();
+        wrapper.like(StringUtils.isNotBlank(username), "username", StringUtils.trimToEmpty(username))
+                .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER))
+                .eq("sys_user",userType);
+        Page<SysUserEntity> page = this.selectPage(new Query<SysUserEntity>(params).getPage(), wrapper);
 
         for (SysUserEntity sysUserEntity : page.getRecords()) {
             SysDeptEntity sysDeptEntity = sysDeptService.selectById(sysUserEntity.getDeptId());

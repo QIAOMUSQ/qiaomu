@@ -79,4 +79,11 @@ public class CommunityController extends AbstractController {
         return R.ok().put("data", JSON.toJSON(communityService.findAllByCondition(community)));
     }
 
+    @ResponseBody
+    @RequestMapping(value = "setCommunityAdministrator",method = RequestMethod.POST)
+    public R setCommunityAdministrator(String userId,String  communityId){
+        communityService.setCommunityAdministrator(userId,communityId);
+        return R.ok();
+    }
+
 }

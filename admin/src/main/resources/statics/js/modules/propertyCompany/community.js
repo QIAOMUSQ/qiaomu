@@ -12,6 +12,7 @@ $(function () {
             { label: 'id', name: 'id', index: "id", width: 45, key: true,hidden:true },
             { label: '社区名称', name: 'name',  width: 45 },
             { label: '城市', name: 'cityName', width: 75 },
+            { label: '管理人员', name: 'admin', width: 75 },
             { label: '户数', name: 'households', width: 75 },
             { label: '地址', name: 'address', width: 90 },
             { label: '描述', name: 'describe', width: 90 },
@@ -53,6 +54,8 @@ var vm = new Vue({
             name: null
         },
         showList: true,
+        userTableList:true,
+        userformList:false,
         title:null,
         community:{
             name:null,
@@ -67,6 +70,7 @@ var vm = new Vue({
     },
     methods: {
         query: function () {
+            vm.userTableList=true;
             vm.reload();
         },
         add: function(){
@@ -182,6 +186,95 @@ var vm = new Vue({
         },
         selectCity:function (event) {
             vm.community.cityCode = event.target.value;
+        },
+        setCommunityUser:function () {
+            let communityId = getSelectedRow();
+            if(communityId == null){
+                return ;
+            }
+            layer.open({
+                type: 1,
+                skin: 'layui-layer-molv',
+                title: "设置管理员",
+                area: ['780px', '450px'],
+                fixed:false,
+                content:jQuery("#userTable"),
+                closeBtn:1,
+                btn: ['确定','取消'],
+                btn1: function (index) {
+                    var grid = $("#userjqGrid");
+                    var id = grid.getGridParam("selarrrow");
+                    $.ajax({
+                        type: "POST",
+                        url: baseURL + "communityMessage/setCommunityAdministrator",
+                        data: {communityId:communityId,userId:id[0]},
+                        success: function(r){
+                            if(r.status == "success"){
+                                alert('操作成功', function(){
+                                    layer.close(index);
+                                    vm.reload();
+
+                                });
+                            }else{
+                                alert(r.respMsg);
+                            }
+                        }
+                    });
+                }
+            });
+            layer.ready(function () {
+                vm.loadWorker(communityId);
+            });
+
+        },
+        loadWorker:function (communityId) {
+            debugger;
+            $("#userjqGrid").jqGrid({
+                url: baseURL + 'communityUser/people/list',
+                datatype: "json",
+                mtype:"POST",
+                postData:{
+                    "communityId": communityId,
+                    "companyRoleType":2},
+                colModel: [
+                    { label: '', name: 'id',hidden:true  },
+                    { label: '用户手机', name: 'userPhone'},
+                    { label: '真实姓名', name: 'realName' },
+                    { label: '所属社区', name: 'communityName'},
+                    {label: '创建时间', name: 'createTime'},
+                    {label: '维修工作类型', name: 'repairsType'},
+                    {
+                        label: '操作', name: '', formatter: function (cellvalue, options, rowObject) {
+                            return ' <a class="btn btn-default" onclick="queryInfo(' + rowObject.id + ')">分配维修类型</a>';
+                        }
+                    }
+
+                ],
+                viewrecords: true,
+                height: 385,
+                rowNum: 10,
+                rowList : [10,30,50],
+                rownumbers: true,
+                rownumWidth: 25,
+                autowidth:true,
+                multiselect: true,
+                pager: "#userjqGridPager",
+                jsonReader : {
+                    root: "page.list",
+                    page: "page.currPage",
+                    total: "page.totalPage",
+                    records: "page.totalCount"
+                },
+                prmNames : {
+                    page:"page",
+                    rows:"limit",
+                    order: "order"
+                },
+                gridComplete:function(){
+                    //隐藏grid底部滚动条
+                    $("#userjqGridPager").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+                }
+            });
         }
     }
 });

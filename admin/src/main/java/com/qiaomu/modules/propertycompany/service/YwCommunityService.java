@@ -64,6 +64,8 @@ public interface YwCommunityService extends IService<YwCommunity> {
     void setCommunityDisEnable(Long[] ids);
 
     List<YwCommunity> getDeleteCommunity(YwCommunity community);
+
+    void setCommunityAdministrator(String userId, String communityId);
 }
 
 

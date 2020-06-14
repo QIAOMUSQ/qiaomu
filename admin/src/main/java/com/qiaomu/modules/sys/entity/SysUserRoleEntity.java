@@ -19,6 +19,7 @@ package com.qiaomu.modules.sys.entity;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import lombok.Data;
 
 import java.io.Serializable;
 
@@ -30,10 +31,12 @@ import java.io.Serializable;
  * @date 2016年9月18日 上午9:28:39
  */
 @TableName("sys_user_role")
+@Data
 public class SysUserRoleEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
-
+    @TableId
+    private Long id;
     /**
      * 用户ID
      */
@@ -48,35 +51,5 @@ public class SysUserRoleEntity implements Serializable {
      *
      * @param userId 用户ID
      */
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    /**
-     * 获取：用户ID
-     *
-     * @return Long
-     */
-    public Long getUserId() {
-        return userId;
-    }
-
-    /**
-     * 设置：角色ID
-     *
-     * @param roleId 角色ID
-     */
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
-
-    /**
-     * 获取：角色ID
-     *
-     * @return Long
-     */
-    public Long getRoleId() {
-        return roleId;
-    }
 
 }
