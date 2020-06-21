@@ -13,6 +13,7 @@ import com.qiaomu.modules.sys.service.UserExtendService;
 import com.qiaomu.modules.sys.shiro.ShiroUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import org.joda.time.DateTime;
@@ -223,4 +224,35 @@ public class AppUserController extends AbstractController {
         return BuildResponse.success();
     }
 
+    /**
+     * 查询用户社区
+     * @param communityId
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "queryCommunityUserInfo",method = RequestMethod.POST)
+    public Map<String,Object> queryCommunityUserInfo(String communityId){
+        SysUserEntity info = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
+        UserExtend condition = new UserExtend();
+        condition.setUserId(info.getUserId());
+        condition.setCommunityId(Long.valueOf(communityId));
+        UserExtend userExtend = userExtendService.queryUserExtend(condition);
+        userExtend.setAddress(AESUtil.decrypt(userExtend.getAddress()));
+        return  BuildResponse.success(JSON.toJSON(userExtend));
+    }
+
+    /**
+     * 注销用户
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "deleteUser",method = RequestMethod.POST)
+    public Map<String,Object> deleteUser(){
+        SysUserEntity info = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
+        List<Long> longList = new ArrayList<>();
+        longList.add(info.getUserId());
+        sysUserService.deleteByIds(longList);
+        userExtendService.deleteByUserIds(longList);
+        return  BuildResponse.success();
+    }
 }

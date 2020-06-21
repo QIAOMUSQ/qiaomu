@@ -1,14 +1,19 @@
 package com.qiaomu.modules.workflow.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.qiaomu.common.utils.BuildResponse;
+import com.qiaomu.common.utils.PageUtils;
+import com.qiaomu.common.utils.Query;
 import com.qiaomu.modules.article.exception.CommentException;
 import com.qiaomu.modules.workflow.entity.CarportEntity;
+import com.qiaomu.modules.workflow.entity.InvitationEntity;
 import com.qiaomu.modules.workflow.service.CarportService;
 import com.qiaomu.modules.sys.controller.AbstractController;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.service.UserExtendService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +31,7 @@ import java.util.List;
 @RestController
 @RequestMapping("mobile/carport")
 public class CarportContoller extends AbstractController{
+
     @Autowired
     private CarportService carportService;
     @Autowired
@@ -46,7 +52,10 @@ public class CarportContoller extends AbstractController{
         userExtendQ.setUserId(Long.valueOf(sysUserEntity.getUserId()));
         userExtendQ.setCommunityId(carport.getCommunityId());
         UserExtend userExtend = userExtendService.queryUserExtend(userExtendQ);
-        if(userExtend==null||"0".equals(userExtend.getCheck())){
+
+        if(userExtend==null
+                || !"1".equals(userExtend.getCheck())
+                || Integer.valueOf(userExtend.getCompanyRoleType()) >=4){
             throw new CommentException("请认证该小区！");
         }
          List<CarportEntity> data =  carportService.selectAll(carport);

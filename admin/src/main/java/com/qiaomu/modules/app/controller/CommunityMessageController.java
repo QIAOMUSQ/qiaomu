@@ -197,6 +197,7 @@ public class CommunityMessageController  extends AbstractController {
     }
 
 
+
     /**
      * 获取用户所在社区权限
      * @param userId

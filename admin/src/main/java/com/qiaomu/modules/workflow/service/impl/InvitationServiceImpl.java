@@ -3,12 +3,16 @@ package com.qiaomu.modules.workflow.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.qiaomu.common.exception.RRException;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.Query;
 import com.qiaomu.modules.auth.service.KafkaTemplateService;
+import com.qiaomu.modules.sys.dao.UserExtendDao;
+import com.qiaomu.modules.sys.entity.SysUserEntity;
+import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.service.SysFileService;
 import com.qiaomu.modules.workflow.VO.ImgFile;
 import com.qiaomu.modules.workflow.VO.TransmissionContentVO;
@@ -19,6 +23,7 @@ import com.qiaomu.modules.workflow.service.InvitationService;
 import com.qiaomu.modules.workflow.service.PushRedisMessageService;
 import com.qiniu.util.Json;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,11 +42,14 @@ import java.util.Map;
 @Service
 public class InvitationServiceImpl extends ServiceImpl<InvitationDao,InvitationEntity> implements InvitationService{
 
-    @Resource
+  /*  @Resource
     private PushRedisMessageService pushRedisMessageService;
 
     @Resource
-    private KafkaTemplateService kafkaTemplateService;
+    private KafkaTemplateService kafkaTemplateService;*/
+    @Resource
+    private UserExtendDao userExtendDao;
+
     @Resource
     private SysFileService sysFileService;
 
@@ -60,6 +68,7 @@ public class InvitationServiceImpl extends ServiceImpl<InvitationDao,InvitationE
             entity.setCommunityIds(Arrays.asList(ids));
         }
         Page<InvitationEntity> page = new Query(params).getPage();// 当前页，总条
+
         page.setRecords(this.baseMapper.selectPageAll(page,entity));
         return new PageUtils(page);
     }
