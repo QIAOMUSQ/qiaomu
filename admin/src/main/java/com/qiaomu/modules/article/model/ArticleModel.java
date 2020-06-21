@@ -21,6 +21,7 @@ public class ArticleModel {
     private String createdAt;
     private String updatedAt;
     private String isPraise;
+    private Integer commentNum;
     public String getCommunityId() {
         return communityId;
     }
@@ -156,5 +157,13 @@ public class ArticleModel {
 
     public void setIsPraise(String isPraise) {
         this.isPraise = isPraise;
+    }
+
+    public Integer getCommentNum() {
+        return commentNum;
+    }
+
+    public void setCommentNum(Integer commentNum) {
+        this.commentNum = commentNum;
     }
 }

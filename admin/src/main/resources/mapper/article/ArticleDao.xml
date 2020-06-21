@@ -22,12 +22,16 @@
 			<if test="communityId != null and communityId !=''">
 				AND (isPrivate = "0" OR communityId = #{communityId})
 			</if>
+			<if test='queryType != null and queryType =="7"'>
+				AND (content LIKE concat('%','${content}','%') or title LIKE concat('%','${content}','%'))
+			</if>
 			<if test='queryType != null and queryType =="1"'>
 				order by createdAt desc
 			</if>
 			<if test='queryType != null and queryType =="3"'>
 				order by viewNum desc
 			</if>
+
 
 		</where>
 	</select>
@@ -60,7 +64,7 @@
                 AND (isPrivate = "0" OR communityId = #{communityId})
             </if>
         </where>
-        GROUP BY articleId order by number desc,viewNum desc limit 10
+        GROUP BY articleId order by number desc,viewNum desc
     </select>
 
 	<select id="queryArticleByCommentTime" parameterType="com.qiaomu.modules.article.model.ArticleSelectModel" resultType="com.qiaomu.modules.article.model.ArticleModel">

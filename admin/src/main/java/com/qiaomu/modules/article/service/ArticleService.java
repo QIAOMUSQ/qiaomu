@@ -1,5 +1,6 @@
 package com.qiaomu.modules.article.service;
 
+import com.github.pagehelper.PageInfo;
 import com.qiaomu.modules.article.entity.ArticleEntity;
 import com.qiaomu.modules.article.entity.ArticlePoint;
 import com.qiaomu.modules.article.entity.CommentEntity;
@@ -15,7 +16,7 @@ import java.util.Map;
  */
 public interface ArticleService {
     void add(ArticleEntity articleEntity);
-    List<ArticleModel> query(ArticleSelectModel articleSelectModel);
+    PageInfo query(ArticleSelectModel articleSelectModel);
     Map<String,Object> addPraiseNum(String userId, String articleId);
     void addComment(CommentEntity commentEntity)throws Exception;
     List<CommentEntity> queryComment(CommentEntity commentEntity);

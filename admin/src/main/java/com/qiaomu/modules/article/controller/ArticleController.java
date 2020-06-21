@@ -2,8 +2,10 @@ package com.qiaomu.modules.article.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.CommonUtils;
+import com.qiaomu.common.utils.PageResult;
 import com.qiaomu.modules.article.entity.ArticleEntity;
 import com.qiaomu.modules.article.entity.ArticlePoint;
 import com.qiaomu.modules.article.entity.CommentEntity;
@@ -17,6 +19,7 @@ import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.sys.service.impl.SysUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanMap;
+import org.springframework.cglib.util.StringSwitcher;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
@@ -55,6 +58,7 @@ public class ArticleController extends AbstractController{
     public String add(HttpServletRequest request){
         ArticleEntity articleEntity = buildAticle(request);
         articleEntity.setViewNum(0);
+        articleEntity.setPraiseNum(0);
         articleService.add(articleEntity);
         ArticlePoint articlePoint = new ArticlePoint();
         articlePoint.setUserId(articleEntity.getAuthorId());
@@ -152,7 +156,7 @@ public class ArticleController extends AbstractController{
     public String queryAll(String communityId){
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setCommunityId(communityId);
-        List<ArticleModel> articles = articleService.query(articleSelectModel);
+        PageInfo articles = articleService.query(articleSelectModel);
         return JSON.toJSONString(BuildResponse.success(articles));
 
     }
@@ -163,14 +167,18 @@ public class ArticleController extends AbstractController{
      * @return
      */
     @RequestMapping(value = "queryAllByCommunityIdAndCategary",method = RequestMethod.POST)
-    public String queryAllByCommunityIdAndCategary(String communityId,String category,String userId,String queryType){
+    public String queryAllByCommunityIdAndCategary(String communityId, String category, String userId, String queryType, String queryString,int pageSize, int pageNum){
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setCommunityId(communityId);
         articleSelectModel.setCategory(category);
         articleSelectModel.setUserId(userId);//用户id并非文章作者
         articleSelectModel.setQueryType(queryType);
-        List<ArticleModel> articles = articleService.query(articleSelectModel);
-        return JSON.toJSONString(BuildResponse.success(articles));
+        articleSelectModel.setPageNum(pageNum);
+        articleSelectModel.setPageSize(pageSize);
+        articleSelectModel.setContent(queryString);
+        PageInfo articles = articleService.query(articleSelectModel);
+
+        return JSON.toJSONString(BuildResponse.success( PageResult.getPageResult(articles)));
 
     }
 
@@ -188,8 +196,10 @@ public class ArticleController extends AbstractController{
         articleSelectModel.setUserId(userId);//用户id并非文章作者
         articleSelectModel.setQueryType("5");
         articleSelectModel.setType(type);
-        List<ArticleModel> articles = articleService.query(articleSelectModel);
-        return JSON.toJSONString(BuildResponse.success(articles));
+        articleSelectModel.setPageSize(10);
+        articleSelectModel.setPageNum(1);
+        PageInfo articles = articleService.query(articleSelectModel);
+        return JSON.toJSONString(BuildResponse.success(PageResult.getPageResult(articles).getContent()));
 
     }
 
@@ -202,7 +212,7 @@ public class ArticleController extends AbstractController{
     public String queryByCategory(@RequestParam String category){
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setCategory(category);
-        List<ArticleModel> articles = articleService.query(articleSelectModel);
+        PageInfo articles = articleService.query(articleSelectModel);
         return JSON.toJSONString(BuildResponse.success(articles));
 
     }
@@ -215,8 +225,8 @@ public class ArticleController extends AbstractController{
     public String queryByArticleId(@RequestParam String articleId){
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setArticleId(articleId);
-        List<ArticleModel> articles = articleService.query(articleSelectModel);
-        return JSON.toJSONString(BuildResponse.success(articles));
+        PageInfo articles = articleService.query(articleSelectModel);
+        return JSON.toJSONString(BuildResponse.success(PageResult.getPageResult(articles).getContent()));
 
     }
 
@@ -255,8 +265,8 @@ public class ArticleController extends AbstractController{
         articleSelectModel.setCommunityId(communityId);
         articleSelectModel.setCategory(category);
 
-        List<ArticleModel> articles = articleService.query(articleSelectModel);
-        return JSON.toJSONString(BuildResponse.success(articles));
+        PageInfo articles = articleService.query(articleSelectModel);
+        return JSON.toJSONString(BuildResponse.success(PageResult.getPageResult(articles).getContent()));
 
     }
     /**

@@ -11,6 +11,15 @@ public class ArticleSelectModel {
     private String isPrivate;
     private String userId;
     private String queryType;
+    private String content;
+    /**
+     * 当前页码
+     */
+    private int pageNum;
+    /**
+     * 每页数量
+     */
+    private int pageSize;
 
     private String type;
 
@@ -88,5 +97,29 @@ public class ArticleSelectModel {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

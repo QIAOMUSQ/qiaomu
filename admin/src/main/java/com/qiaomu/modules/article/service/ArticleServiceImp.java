@@ -1,6 +1,8 @@
 package com.qiaomu.modules.article.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.qiaomu.common.utils.AESUtil;
 import com.qiaomu.common.utils.DateUtils;
 import com.qiaomu.modules.article.dao.ArticleDao;
@@ -15,6 +17,9 @@ import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.sys.service.UserExtendService;
+import org.apdplat.word.WordSegmenter;
+import org.apdplat.word.segmentation.SegmentationAlgorithm;
+import org.apdplat.word.segmentation.Word;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -63,7 +68,7 @@ public class ArticleServiceImp implements ArticleService{
     }
 
     @Override
-    public List<ArticleModel> query(ArticleSelectModel articleSelectModel) {
+    public PageInfo query(ArticleSelectModel articleSelectModel) {
         //社区查询热点详情
         if (!"community".equals(articleSelectModel.getType())){
             SysUserEntity sysUserEntity = sysUserService.queryById(Long.valueOf(articleSelectModel.getUserId()));
@@ -80,9 +85,14 @@ public class ArticleServiceImp implements ArticleService{
             }
         }
         List<ArticleModel> articleModels =null;
+        int pageNum = articleSelectModel.getPageNum();
+        int pageSize = articleSelectModel.getPageSize();
+        PageHelper.startPage(pageNum, pageSize);
+
         if(articleSelectModel.getQueryType()==null
                 ||"1".equals(articleSelectModel.getQueryType())
-                ||"3".equals(articleSelectModel.getQueryType())){
+                ||"3".equals(articleSelectModel.getQueryType())
+                ||"7".equals(articleSelectModel.getQueryType())){
             articleModels = articleDao.query(articleSelectModel);
         }else if("2".equals(articleSelectModel.getQueryType())){
             articleModels = articleDao.queryArticleByCommentTime(articleSelectModel);
@@ -106,8 +116,10 @@ public class ArticleServiceImp implements ArticleService{
             }else{
                 articleModel.setIsPraise("0");
             }
+            articleModel.setCommentNum(this.queryCommentSize(articleModel.getArticleId()));
         }
-        return articleModels;
+        PageInfo pageInfo = new PageInfo<ArticleModel>(articleModels);
+        return pageInfo;
     }
 
     @Override
@@ -240,5 +252,36 @@ public class ArticleServiceImp implements ArticleService{
             point.setRealName(userExtend.getRealName());
         }
         return list;
+    }
+
+    private int queryCommentSize(String articleId) {
+        List<CommentEntity> commentEntities = articleDao.queryCommentByArticleId(articleId);
+        if(commentEntities==null){
+            return 0;
+        }
+        return commentEntities.size();
+    }
+
+
+
+    public static Map<String, String> segMore(String text) {
+        Map<String, String> map = new HashMap<>();
+        for(SegmentationAlgorithm segmentationAlgorithm : SegmentationAlgorithm.values()){
+            map.put(segmentationAlgorithm.getDes(), seg(text, segmentationAlgorithm));
+        }
+        return map;
+    }
+    private static String seg(String text, SegmentationAlgorithm segmentationAlgorithm) {
+        StringBuilder result = new StringBuilder();
+        WordSegmenter.seg(text);
+        for(Word word : WordSegmenter.segWithStopWords(text, segmentationAlgorithm)){
+            result.append(word.getText()).append(" ");
+        }
+        return result.toString();
+    }
+    public static void main(String[] args){
+//        seg("我在家干活",SegmentationAlgorithm.MinimalWordCount);
+        List<Word> e =WordSegmenter.seg("我在家干活");
+        System.out.println(e);
     }
 }
