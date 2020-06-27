@@ -2,7 +2,9 @@ package com.qiaomu.common.config.managet;
 
 import com.alibaba.fastjson.JSON;
 import com.qiaomu.modules.auth.service.AuthLoginService;
+import com.qiaomu.modules.sys.entity.SysUserEntity;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.SessionContext;
 import org.apache.shiro.session.mgt.SessionKey;
@@ -59,6 +61,7 @@ public class ShiroSessionManager extends DefaultWebSessionManager {
             WebUtils.toHttp(request).setAttribute("content",WebUtils.toHttp(request).getParameter("contentHtml"));
         }
         try{
+
             if(StringUtils.isEmpty(id) && url.contains("login") ){
                 //如果没有携带id参数则按照父类的方式在cookie进行获取
                 Serializable sessionid = super.getSessionId(request, response);

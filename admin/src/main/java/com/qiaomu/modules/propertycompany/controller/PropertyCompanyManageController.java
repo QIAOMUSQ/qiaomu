@@ -7,9 +7,12 @@ import com.qiaomu.common.utils.R;
 import com.qiaomu.modules.propertycompany.entity.YwPropertyCompany;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
 import com.qiaomu.modules.propertycompany.service.YwPropertyCompanyService;
+import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.service.UserExtendService;
+import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -82,11 +85,12 @@ public class PropertyCompanyManageController {
 
     @ResponseBody
     @RequestMapping(value = "findCompanyByUserId", method = {RequestMethod.POST})
-    public R findCompanyByUserName(Long userId){
-        YwPropertyCompany company =  propertyCompanyService.findCompanyByUserId(userId);
-        if (company==null){
+    public R findCompanyByUserName(String type){
+        SysUserEntity userEntity = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
+        YwPropertyCompany company =  propertyCompanyService.findCompanyByUserId(userEntity.getUserId());
+        /*if (company==null){
             EntityWrapper<UserExtend> userWrapper = new EntityWrapper<>();
-            userWrapper.eq("user_id",userId);
+            userWrapper.eq("user_id",userEntity.getUserId());
             List<UserExtend> extendList =  userExtendService.selectList(userWrapper);
             EntityWrapper<YwCommunity> wrapper = new EntityWrapper<>();
             List<Long> ids = new ArrayList<>();
@@ -95,8 +99,12 @@ public class PropertyCompanyManageController {
             }
             wrapper.in("admin_id",ids);
             List<YwCommunity> communityList =  communityService.selectList(wrapper);
-            return R.ok().put("result",JSON.toJSON(communityList));
+            return R.ok(JSON.toJSON(communityList));
+        }*/
+        if (!"login".equals(type) && userEntity.getLoginCommunityId() != null){
+            YwCommunity community =  communityService.selectById(userEntity.getLoginCommunityId());
+            return R.ok().put("community",JSON.toJSON(community));
         }
-        return R.ok().put("result",JSON.toJSON(company));
+        return R.ok().put("company",JSON.toJSON(company));
     }
 }

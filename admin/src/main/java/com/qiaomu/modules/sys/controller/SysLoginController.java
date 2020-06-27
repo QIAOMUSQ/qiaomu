@@ -20,7 +20,9 @@ package com.qiaomu.modules.sys.controller;
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
 import com.qiaomu.common.utils.R;
+import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.shiro.ShiroUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +75,6 @@ public class SysLoginController {
         if (!captcha.equalsIgnoreCase(kaptcha)) {
             return R.error("error","验证码不正确");
         }
-
         try {
             Subject subject = ShiroUtils.getSubject();
             UsernamePasswordToken token = new UsernamePasswordToken(username, password);
@@ -87,8 +88,10 @@ public class SysLoginController {
         } catch (AuthenticationException e) {
             return R.error("error","账户验证失败");
         }
-
-        return R.ok();
+        SysUserEntity userEntity = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
+         ((SysUserEntity)SecurityUtils.getSubject().getPrincipal()).setLoginCommunityId(null);
+        userEntity.setLoginCommunityId(null);
+        return R.ok(userEntity);
     }
 
     /**

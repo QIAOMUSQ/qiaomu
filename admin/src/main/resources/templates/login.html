@@ -170,8 +170,15 @@ var vm = new Vue({
 			    data: data,
 			    dataType: "json",
 			    success: function(result){
-					if(result.status == "success"){//登录成功
-						parent.location.href ='index.html';
+					if(result.status == 200){//登录成功
+					    if (result.data.username == 'admin'){
+                            parent.location.href ='index.html';
+                        }else if (result.data.loginCommunityId != null){
+                            parent.location.href ='index.html';
+                        }else {
+                            parent.location.href ='index1.html';
+                        }
+
 					}else{
 						vm.error = true;
 						vm.errorMsg = result.data;

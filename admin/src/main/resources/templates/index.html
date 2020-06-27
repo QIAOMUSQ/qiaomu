@@ -49,7 +49,7 @@
       <span class="logo-lg"><b id="logo-lg"></b>
           <input id="companyId" style="display: none"/>
           <input id="companyName" style="display: none"/>
-          <input id="communityIds" style="display: none"/>
+          <input id="communityId" style="display: none"/>
       </span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
@@ -63,10 +63,9 @@
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-         <!-- <li><a href="javascript:;" @click="donate"><i class="fa fa-jpy"></i> &nbsp;捐赠作者</a></li>-->
-         <!-- <li><a href="http://www.renren.io" target="_blank"><i class="fa fa-home"></i> &nbsp;人人开源</a></li>-->
 		  <li><a href="javascript:;" @click="updatePassword"><i class="fa fa-lock"></i> &nbsp;修改密码</a></li>
           <li><a href="logout"><i class="fa fa-sign-out"></i> &nbsp;退出系统</a></li>
+          <li><a href="index.html"><i class="fa fa-sign-out"></i> &nbsp;返回引导页</a></li>
 		</ul>
       </div>
     </nav>
@@ -99,21 +98,11 @@
         <li class="active">{{navTitle}}</li>
       </ol>
     </section>
-
-    <!-- Main content -->
-    <section class="content" style="background:#fff;">
+      <section class="content" style="background:#fff;">
       <iframe scrolling="yes" frameborder="0" class="layadmin-iframe"  :src="main"></iframe>
     </section>
-    <!-- /.content -->
   </div>
-  <!-- /.content-wrapper -->
 
-  <!--<footer class="main-footer">-->
-    <!---->
-  <!--</footer>-->
-
-  <!-- Add the sidebar's background. This div must be placed
-       immediately after the control sidebar -->
   <div class="control-sidebar-bg"></div>
   
   <!-- 修改密码 -->

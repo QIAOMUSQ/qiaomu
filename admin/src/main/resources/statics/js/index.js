@@ -99,42 +99,34 @@ var vm = new Vue({
             });
         },
 		getCompany: function(){
-			debugger;
-			let userName = vm.user;
-			if(userName.userId == 1 ){
+			let user = vm.user;
+			if(user.userId == 1 ){
 				$("#logo-lg").text("100分社区管理");
 			}else {
 				$.ajax({
 					type:"POST",
 					url:"propertyCompanyManage/findCompanyByUserId",
-					data:{userId:userName.userId},
-					success:function (data) {
-						if(data.result){
-							debugger
-							if (data.result.length>0){
+					success:function (result) {
+						if(result.status=="success"){
+							if (result.community){
 								$(".navbar").css("background-color","#3cbc3f");
 								$(".logo").css("background-color","#3cbc3f");
-								let commIds = new Array();
-								$.each(data.result,function (index,item) {
-									commIds.push(item.id);
-								})
-								$("#communityIds").val(commIds);
+								$("#communityId").val(result.community.id);
 								$("#logo-lg").text("社区管理系统");
-							}else {
-								if(data.result.name.length>6){
-									$("#logo-lg").text((data.result.name+"管理系统").substring(0,10));
+							}else if (result.company) {
+								if(result.company.name.length>6){
+									$("#logo-lg").text((result.company.name+"管理系统").substring(0,10));
 
 								}else {
-									$("#logo-lg").text(data.result.name+"管理系统");
+									$("#logo-lg").text(result.company.name+"管理系统");
 								}
-								$("#companyId").val(data.result.id);
-								$("#companyName").val(data.result.name);
-								$("#welcome-system").text("欢迎进入"+data.result.name+"  管理员："+vm.user.username);
+								$("#companyId").val(result.company.id);
+								$("#companyName").val(result.company.name);
+								$("#welcome-system").text("欢迎进入"+result.company.name+"  管理员："+vm.user.username);
 								$(".navbar").css("background-color","#3cbc3f");
 								$(".logo").css("background-color","#3cbc3f");
 							}
 						}
-
 					}
 				});
 			}

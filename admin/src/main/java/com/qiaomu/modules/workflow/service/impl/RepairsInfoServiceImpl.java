@@ -156,13 +156,10 @@ public class RepairsInfoServiceImpl extends ServiceImpl<RepairsInfoDao,RepairsIn
             e.printStackTrace();
         }
         Page<RepairsInfo> page = new Query(params).getPage();
-       // page.setCondition(params);
+        page.setSearchCount(true);
         if (params.get("repairsId")!=null){
             //根据维修人员id查询数据
             repairs.setRepairsId(Long.valueOf((String)params.get("repairsId")));
-           /* //查询关系表
-            UserRepairs userRepairs = new UserRepairs(Long.valueOf((String)params.get("repairsId")));
-            List<UserRepairs> UserRepairsList = userRepairsDao.selectAll(userRepairs);*/
             page.setRecords(this.baseMapper.selectPagesByRepairs(page, repairs));
         }else {
             page.setRecords(this.baseMapper.selectPages(page, repairs));

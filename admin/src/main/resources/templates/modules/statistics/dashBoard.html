@@ -52,7 +52,7 @@
         </style>
 </head>
 <body>
-    <div class="layui-card layadmin-backlog" id="companyText">
+   <!-- <div class="layui-card layadmin-backlog" id="companyText">
         <div class="layui-card-header" style="border-bottom:5px solid #F6F6E5;">
             <h2 style="text-align: center; margin: 10px;font-size: 33px;" id="companyNames"> </h2>
         </div>
@@ -60,17 +60,17 @@
             <ul class="layui-row layui-col-space10 layui-this" id="communityContent">
             </ul>
         </div>
-    </div>
-    <div class="layui-card" id="communityText" style="display: none;height: 1024px;">
-        <div class="layui-card-header">
+    </div>-->
+    <div class="layui-card" id="communityText" style="height: 1024px;">
+       <!-- <div class="layui-card-header">
             <div class="layui-a-tips">
                 <h2 id="communityName" style="text-align: center; margin: 20px;font-size: 41px;"> </h2>
 
-                <div class="layui-col-sm3" style="float: right;margin-top: -65px;">
+               &lt;!&ndash; <div class="layui-col-sm3" style="float: right;margin-top: -65px;">
                     <button class="layui-btn layui-btn-danger" onclick="calBack();">返回</button>
-                </div>
+                </div>&ndash;&gt;
             </div>
-        </div>
+        </div>-->
         <div class="layui-card-body">
             <div class="layui-col-sm2">
                 <blockquote class="layui-elem-quote" id="communityHouse">小区户数:-</blockquote>
@@ -157,59 +157,24 @@
 <script>
     var communityRepairs, repairsType;
     let companyId;
-    let communityName;
+   // let communityName;
     let layDate;
     let first = true;
     let hpl = echarts.init(document.getElementById('hpl'));
     let bxbl = echarts.init(document.getElementById('bxbl'));
+    let communityId ;
 
     $(function () {
-        companyId = $(window.parent.document.getElementById('companyId')).val();
-        let companyNames = $(window.parent.document.getElementById('companyName')).val();
-        $("#companyNames").text(companyNames);
-        ajaxFun("sys/dashBoard/getCompanyRepairStatistic", {"companyId": companyId}, getCompanyStatistics);
+        communityId = $(window.parent.document.getElementById('communityId')).val();
         layDate = layui.laydate;
-
+        getStatistics(communityId);
     });
 
 
     var getLoginTimes= function (result) {
         $("#loginTimes").text("登录次数:"+result.data.logintime);
     };
-
-    let getCompanyStatistics=function (result) {
-        let communityText='';
-
-        $.each(result.data,function (index,item) {
-            let content='';
-            let communityId;
-            let households;
-            $.each(item,function (k,m) {
-                communityId = m.communityId;
-                households = m.households;
-                if (m.repairsName){
-                    content += m.repairsName +':'+m.number+'</br>'
-                }
-            })
-            communityText +=' <li class="layui-col-xs4" onclick="getStatistics('+communityId+',\''+index+'\''+','+households+')">' +
-                '                    <div  class="layadmin-backlog-body">' +
-                '                        <h3>社区：'+index+'</h3>' +
-                                         '<div style="float: right;margin-top: -35px;">今日数据</div>'+
-                '                        <p><cite>'+content+'</cite></p>' +
-                '                    </div>' +
-                '                </li>';
-        });
-        $("#communityContent").html(communityText);
-
-    }
-    function getStatistics(id,name,households) {
-        $("#communityText").css("display","block");
-        $("#companyText").css("display","none");
-        $("#communityName").text(name);
-        $("#communityId").val(id);
-        $("#communityHouse").text("小区户数:"+households);
-        let communityhtml = "${request.contextPath}/companyIndex.html?communityId="+$('#communityId').val();
-        $("#communityhtml").attr("href",communityhtml);
+    function getStatistics(id) {
         ajaxFun("sys/dashBoard/loginTimesByCommunityId",{"communityId": id},getLoginTimes);
         queryRepairsStatistic();
         bxblEcharts();
@@ -446,11 +411,11 @@
         $("#hotArticle").html(hotArticle);
    };
 
-    function calBack() {
+   /* function calBack() {
         $("#communityText").css("display", "none");
         $("#companyText").css("display", "block");
     }
-
+*/
     function ajaxFun(url, data, resFun) {
         $.ajax({
             type: "POST",

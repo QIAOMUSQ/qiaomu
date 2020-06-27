@@ -26,16 +26,21 @@
 			<artifactId>druid-spring-boot-starter</artifactId>
 			<version>${druid.version}</version>
 		</dependency>
-		<dependency>
+	<!--	<dependency>
 			<groupId>com.baomidou</groupId>
 			<artifactId>mybatis-plus</artifactId>
 			<version>${mybatisplus.version}</version>
-		</dependency>
+		</dependency>-->
 		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus-boot-starter</artifactId>
+			<version>${mybatisplus.version}</version>
+		</dependency>
+		<!--<dependency>
 			<groupId>com.baomidou</groupId>
 			<artifactId>mybatisplus-spring-boot-starter</artifactId>
 			<version>${mybatisplus.spring.boot.version}</version>
-		</dependency>
+		</dependency>-->
 	</dependencies>
 
 </project>

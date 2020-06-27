@@ -29,6 +29,7 @@ import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.sys.shiro.ShiroUtils;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -182,6 +183,10 @@ public class SysUserController extends AbstractController {
         return R.ok().put("user", sysUserService.getLoginUser(deptId));
     }
 
-
+    @ResponseBody
+    @RequestMapping(value = "selectCommunity", method = RequestMethod.POST)
+    public void selectCommunity(Long communityId) {
+        ((SysUserEntity) SecurityUtils.getSubject().getPrincipal()).setLoginCommunityId(communityId);
+    }
 }
 

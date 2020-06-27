@@ -18,9 +18,7 @@
 <body>
 <div id="rrapp">
     <div class="grid-btn">
-        <div class="form-group col-sm-2">
-            <input type="text" class="form-control" id= "communityName" placeholder="社区">
-        </div>
+
         <div class="form-group col-sm-2">
             <input type="text" class="form-control" id="repairs"  placeholder="维修类型">
         </div>
@@ -157,7 +155,6 @@
         postAjax(baseURL + 'communityUser/getUserExtend',"",getCompany);
     });
     let getCompany = function (result) {
-        $("#companyId").val(result.data.companyId);
         page();
         var data = [
             {name:"电力报修",value:0},
@@ -175,13 +172,13 @@
 
     function page() {
         $("#jqGrid").jqGrid({
-            url: baseURL + 'mobile/repairs/findRepairs',
+            url: baseURL + 'mobile/repairs/findRepairsByCommunity',
             datatype: "json",
             mtype:"POST",
-            postData:{'companyId': $("#companyId").val(),'communityId': window.parent.$("#communityId").val()},
+            postData:{'communityId': window.parent.$("#communityId").val()},
             colModel: [
                 { label: 'id', name: 'id', index: "id", width: 45, key: true,hidden:true },
-                { label: '社区名称', name: 'communityName', align:'center', width: 85 },
+                // { label: '社区名称', name: 'communityName', align:'center', width: 85 },
                 { label: '业主', name: 'userRealName',align:'center', width: 55 },
                 { label: '业主手机', name: 'userPhone',align:'center', width: 90 },
                 { label: '描述', name: 'detail',align:'center', width: 150 },
@@ -218,7 +215,7 @@
             },
             gridComplete:function(){
                 //隐藏grid底部滚动条
-                $("#jqGrid").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
+                $("#jqGridPager").closest(".ui-jqgrid-bdiv").css({ "overflow-x" : "hidden" });
             }
         });
     }
@@ -226,10 +223,7 @@
     function query() {
         var page = $("#jqGrid").jqGrid('getGridParam','page');
         $("#jqGrid").jqGrid('setGridParam',{
-            postData:{'companyId': $("#companyId").val(),
-                        "repairsType":$("#repairs").val(),
-                        'communityId': window.parent.$("#communityId").val(),
-                        communityName:$("#communityName").val()},
+            postData:{"repairsType":$("#repairs").val(), 'communityId': window.parent.$("#communityId").val()},
             page:page
         }).trigger("reloadGrid");
     }
