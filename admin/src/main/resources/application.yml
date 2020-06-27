@@ -66,6 +66,6 @@ mybatis-plus:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 pagehelper:
     helperDialect: mysql
-    reasonable: true
+    reasonable: false
     supportMethodsArguments: true
     params: count=countSql
