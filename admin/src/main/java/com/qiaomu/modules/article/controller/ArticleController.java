@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.CommonUtils;
+import com.qiaomu.common.utils.Constant;
 import com.qiaomu.common.utils.PageResult;
 import com.qiaomu.modules.article.entity.ArticleEntity;
 import com.qiaomu.modules.article.entity.ArticlePoint;
@@ -20,6 +21,8 @@ import com.qiaomu.modules.sys.service.impl.SysUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanMap;
 import org.springframework.cglib.util.StringSwitcher;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
@@ -48,7 +51,10 @@ public class ArticleController extends AbstractController{
     @Autowired
     private SysUserServiceImpl sysUserServiceImpl;
 
+    @Autowired
+    private RedisTemplate<String, String> stringRedisTemplate;
 
+    public static final String category = "article:category:";
     /**
      * 发布新闻
      * @param
@@ -65,6 +71,10 @@ public class ArticleController extends AbstractController{
         articlePoint.setPoint(3);
         articlePoint.setCommunityId(articleEntity.getCommunityId());
         articleService.insertArticlePoint(articlePoint);
+        if (articleEntity.getCategory().equals("2")&& articleEntity.getCommunityId().equals("14")){
+            ValueOperations<String, String> opsForValue = stringRedisTemplate.opsForValue();
+            opsForValue.increment(category+articleEntity.getAuthorId(), 1);
+        }
         return JSON.toJSONString(BuildResponse.success());
 
     }
