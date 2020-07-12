@@ -5,6 +5,10 @@ import com.qiaomu.common.annotation.SysLog;
 import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.PageUtils;
 import com.qiaomu.common.utils.R;
+import com.qiaomu.modules.article.exception.CommentException;
+import com.qiaomu.modules.sys.entity.SysUserEntity;
+import com.qiaomu.modules.sys.entity.UserExtend;
+import com.qiaomu.modules.sys.service.UserExtendService;
 import com.qiaomu.modules.workflow.entity.InvitationEntity;
 import com.qiaomu.modules.workflow.service.InvitationService;
 import com.qiaomu.modules.sys.controller.AbstractController;
@@ -30,6 +34,8 @@ public class InvitationManageController extends AbstractController {
     @Autowired
     private InvitationService invitationService;
 
+    @Autowired
+    private UserExtendService userExtendService;
     /**
      * 根据类型获取信息
      * @param params
@@ -42,7 +48,27 @@ public class InvitationManageController extends AbstractController {
         if (StringUtils.isNotBlank(CommunityId)){
             params.put("communityId",CommunityId);
         }*/
-        params.put("companyId",getCompanyId());
+
+        Long companyId = getCompanyId();
+        if (companyId!=null && companyId>0){
+            params.put("companyId",getCompanyId());
+        }else {
+            SysUserEntity sysUserEntity = getUser();
+            if(sysUserEntity==null||sysUserEntity.getRealName()==null||sysUserEntity.getRealName().isEmpty()){
+                throw new CommentException("请先实名认证！");
+            }
+
+            UserExtend userExtendQ = new UserExtend();
+            userExtendQ.setUserId(Long.valueOf(sysUserEntity.getUserId()));
+            userExtendQ.setCommunityId(Long.valueOf((String) params.get("communityId")));
+            UserExtend userExtend = userExtendService.queryUserExtend(userExtendQ);
+
+            if(userExtend==null
+                    || !"1".equals(userExtend.getCheck())
+                    || Integer.valueOf(userExtend.getCompanyRoleType()) >=4){
+                throw new CommentException("请认证该小区！");
+            }
+        }
         PageUtils page = invitationService.queryPage(params);
         return R.ok().put("page", page);
 

@@ -148,7 +148,7 @@
 			pluto_article p
 		LEFT JOIN sys_user u ON u.user_id = p.authorId
 		WHERE
-			createdAt LIKE '2020-05%'
+			createdAt LIKE '2020-06%'
 		AND communityId = 14
 		GROUP BY
 			p.authorId

@@ -65,12 +65,21 @@
 			-moz-box-sizing: border-box;
 			box-sizing: border-box;
 		}
+		.fa-sign-out, .navbar-nav,.logout{
+			color: #ffffff;
+		}
+		.navbar-nav{
+			position: absolute;
+			right: 10px;
+			top: 20px;
+		}
 	</style>
 </head>
 <body>
 <div class="layui-card layadmin-backlog" id="companyText">
-	<ul class="nav navbar-nav" style="position: absolute;  right: 10px;color: #fff;">
-		<li><a href="logout"><i class="fa fa-sign-out"></i> &nbsp;退出系统</a></li>
+	<ul class="nav navbar-nav">
+		<li><a href="logout" class="logout"><i class="fa fa-sign-out"></i> &nbsp;退出系统</a></li>
+		<li><a href="modules/platform/index.html" class="logout" target="_blank"><i class="fa fa-github-square"></i> &nbsp;社区管理</a></li>
 	</ul>
 	<h2 style="text-align: center;font-size: 33px;    color: #fff;padding-top: 87px;" id="companyNames"> </h2>
 	<div class="layui-card-body" style="background: #63df9e61;top:27px;">
