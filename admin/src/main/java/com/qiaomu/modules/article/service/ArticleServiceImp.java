@@ -48,10 +48,10 @@ public class ArticleServiceImp implements ArticleService{
     public void add(ArticleEntity articleEntity) {
         ArticleSelectModel articleSelectModel = new ArticleSelectModel();
         articleSelectModel.setTitle(articleEntity.getTitle());
-        List<ArticleModel> articles =  articleDao.query(articleSelectModel);
-        if(articles!=null&&articles.size()>0){
-            throw new DuplicateKeyException("文章标题重名");
-        }
+//        List<ArticleModel> articles =  articleDao.query(articleSelectModel);
+//        if(articles!=null&&articles.size()>0){
+//            throw new DuplicateKeyException("文章标题重名");
+//        }
         Date date = new Date();
         articleEntity.setCreatedAt(DateUtils.formats(date));
         articleEntity.setUpdatedAt(DateUtils.formats(date));
