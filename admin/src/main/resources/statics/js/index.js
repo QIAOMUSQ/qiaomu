@@ -46,9 +46,14 @@ var vm = new Vue({
 	methods: {
 		getMenuList: function (event) {
 			$.getJSON("sys/menu/nav?_"+$.now(), function(r){
-				//debugger;
-				vm.menuList = r.menuList;
-				//getMainList(vm.menuList);
+				let array = new Array();
+				$.each(r.menuList,function (index,item) {
+					if (item.menuId != 111){
+						debugger;
+						array.push(item);
+					}
+				});
+				vm.menuList = array;
 			});
 		},
 		getUser: function(){
@@ -101,6 +106,7 @@ var vm = new Vue({
 		getCompany: function(){
 			let user = vm.user;
 			if(user.userId == 1 ){
+				$("#reBack").css("display","none");
 				$("#logo-lg").text("100分社区管理");
 			}else {
 				$.ajax({

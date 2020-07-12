@@ -78,9 +78,21 @@ public class SysMenuController extends AbstractController {
                 sysMenuEntity.setParentName(parentMenuEntity.getName());
             }
         }
-
         return menuList;
     }
+
+    @RequestMapping("/queryListParentId")
+    public List<SysMenuEntity> queryListParentId(Long parentId) {
+        List<SysMenuEntity> menuList = sysMenuService.queryListParentId(parentId);
+        for (SysMenuEntity sysMenuEntity : menuList) {
+            SysMenuEntity parentMenuEntity = sysMenuService.selectById(sysMenuEntity.getParentId());
+            if (parentMenuEntity != null) {
+                sysMenuEntity.setParentName(parentMenuEntity.getName());
+            }
+        }
+        return menuList;
+    }
+
 
     /**
      * 选择菜单(添加、修改菜单)

@@ -2,10 +2,10 @@ package com.qiaomu.modules.article.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.github.pagehelper.PageInfo;
 import com.qiaomu.common.utils.BuildResponse;
 import com.qiaomu.common.utils.CommonUtils;
-import com.qiaomu.common.utils.Constant;
 import com.qiaomu.common.utils.PageResult;
 import com.qiaomu.modules.article.entity.ArticleEntity;
 import com.qiaomu.modules.article.entity.ArticlePoint;
@@ -17,10 +17,7 @@ import com.qiaomu.modules.article.service.ArticleService;
 import com.qiaomu.modules.sys.controller.AbstractController;
 import com.qiaomu.modules.sys.entity.SysUserEntity;
 import com.qiaomu.modules.sys.service.SysUserService;
-import com.qiaomu.modules.sys.service.impl.SysUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.beans.BeanMap;
-import org.springframework.cglib.util.StringSwitcher;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.web.bind.annotation.*;
@@ -48,8 +45,7 @@ public class ArticleController extends AbstractController{
     private ArticleService articleService;
     @Autowired
     private SysUserService sysUserService;
-    @Autowired
-    private SysUserServiceImpl sysUserServiceImpl;
+
 
     @Autowired
     private RedisTemplate<String, String> stringRedisTemplate;
@@ -71,9 +67,9 @@ public class ArticleController extends AbstractController{
         articlePoint.setPoint(3);
         articlePoint.setCommunityId(articleEntity.getCommunityId());
         articleService.insertArticlePoint(articlePoint);
-        if (articleEntity.getCategory().equals("2")&& articleEntity.getCommunityId().equals("14")){
+        if (articleEntity.getCategory().equals("2")){
             ValueOperations<String, String> opsForValue = stringRedisTemplate.opsForValue();
-            opsForValue.increment(category+articleEntity.getAuthorId(), 1);
+            opsForValue.increment(category+"communityId_"+articleEntity.getCommunityId()+":"+articleEntity.getAuthorId(), 1);
         }
         return JSON.toJSONString(BuildResponse.success());
 
@@ -113,7 +109,7 @@ public class ArticleController extends AbstractController{
         for(CommentEntity commentEntity1:commentEntities){
             String headUrl = sysUserService.queryUserImageUrl(commentEntity1.getUserId());
             JSONObject json = (JSONObject)JSON.toJSON(commentEntity1);
-            SysUserEntity sysUserEntity = sysUserServiceImpl.queryById(Long.valueOf(commentEntity1.getUserId()));
+            SysUserEntity sysUserEntity = sysUserService.queryById(Long.valueOf(commentEntity1.getUserId()));
             json.put("headUrl",headUrl);
             String nickName = sysUserEntity.getNickName();
             if(nickName==null||nickName.isEmpty()){
