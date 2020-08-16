@@ -20,7 +20,7 @@
         <module>admin</module>
         <module>push_info</module>
         <module>push_information</module>
-       <!-- <module>api</module>-->
+        <!-- <module>api</module>-->
         <!--  <module>generator</module>-->
     </modules>
 
@@ -207,6 +207,16 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-re</artifactId>
             <version>5.2.13</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-collections</groupId>
+                    <artifactId>commons-collections</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
