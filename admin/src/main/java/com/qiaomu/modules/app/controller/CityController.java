@@ -6,8 +6,11 @@ import com.qiaomu.common.utils.R;
 import com.qiaomu.modules.sys.entity.SysDeptEntity;
 import com.qiaomu.modules.sys.service.CityService;
 import com.qiaomu.modules.sys.service.SysDeptService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,6 +27,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(value = "mobile/community")
+
 public class CityController {
 
     @Autowired
@@ -38,7 +42,8 @@ public class CityController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    @PostMapping(value = "/list")
+
     public R getCommunityList(String name) {
         List<SysDeptEntity> deptList = new ArrayList<>();
         try {

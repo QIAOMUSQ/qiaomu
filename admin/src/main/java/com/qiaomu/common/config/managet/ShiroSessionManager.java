@@ -54,7 +54,7 @@ public class ShiroSessionManager extends DefaultWebSessionManager {
                 }
             }
         }
-       String url = ((ShiroHttpServletRequest) request).getRequestURI().toString();
+        String url = ((ShiroHttpServletRequest) request).getRequestURI().toString();
         System.out.println("url = " + url + ", Parameter = " + JSON.toJSONString(WebUtils.toHttp(request).getParameterMap()));
         if (StringUtils.isNotBlank(WebUtils.toHttp(request).getParameter("contentHtml"))){
             //公告html代码

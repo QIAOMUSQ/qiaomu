@@ -203,12 +203,12 @@
             <artifactId>swagger-models</artifactId>
             <version>1.5.22</version>
         </dependency>
-        <dependency>
+      <!--  <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-re</artifactId>
             <version>5.2.13</version>
-        </dependency>
-        <dependency>
+        </dependency>-->
+        <!--<dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <exclusions>
@@ -217,7 +217,7 @@
                     <artifactId>commons-collections</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
     <!-- 阿里云maven仓库 -->

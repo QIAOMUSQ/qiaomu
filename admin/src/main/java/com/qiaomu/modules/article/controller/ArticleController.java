@@ -345,8 +345,6 @@ public class ArticleController extends AbstractController{
             }
 
         }
-
-
         ArticleEntity articleEntity = new ArticleEntity();
         articleEntity.setTitle(title);
         articleEntity.setCategory(category);

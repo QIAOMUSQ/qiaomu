@@ -11,6 +11,10 @@ import com.qiaomu.modules.sys.entity.UserExtend;
 import com.qiaomu.modules.sys.service.SysUserService;
 import com.qiaomu.modules.sys.service.UserExtendService;
 import com.qiaomu.modules.sys.shiro.ShiroUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -41,6 +45,7 @@ import static org.apache.http.HttpHeaders.AUTHORIZATION;
  */
 @RestController
 @RequestMapping("mobile/user")
+@Api(tags="APP登录")
 public class AppUserController extends AbstractController {
 
     private static final Logger log = LoggerFactory.getLogger(AppUserController.class);
@@ -58,12 +63,17 @@ public class AppUserController extends AbstractController {
      * 用户登陆
      * @param phone
      * @param password
-     * @param isAgree
      * @return
      */
     @ResponseBody
-    @RequestMapping(value ="login")
-    public R login(String phone, String password,String clientId, ServletRequest request, boolean isAgree,HttpServletResponse response) {
+    @GetMapping(value ="login")
+    @ApiOperation("用户登陆")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "phone", value = "手机号码"),
+            @ApiImplicitParam(name = "password", value = "密码"),
+            @ApiImplicitParam(name = "clientId", value = "手机唯一编码")
+    })
+    public R login(String phone, String password,String clientId, ServletRequest request,HttpServletResponse response) {
         try {
            if(!"".equals(phone) && phone != null){
                Subject subject = ShiroUtils.getSubject();

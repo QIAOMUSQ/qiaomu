@@ -15,6 +15,8 @@ import com.qiaomu.modules.sys.entity.YwCommunity;
 import com.qiaomu.modules.sys.service.CityService;
 import com.qiaomu.modules.sys.service.ProvinceCityDateService;
 import com.qiaomu.modules.propertycompany.service.YwCommunityService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -40,6 +42,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("mobile/communityMessage")
+@Api(tags="获取社区信息")
 public class CommunityMessageController  extends AbstractController {
 
     Logger logger = LoggerFactory.getLogger(CommunityMessageController.class);
@@ -64,7 +67,8 @@ public class CommunityMessageController  extends AbstractController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "list", method = RequestMethod.POST)
+    @PostMapping(value = "list")
+    @ApiOperation("获取社区信息")
     public R getCommunityList(@RequestParam Map<String, Object> params, ServletRequest request) {
         SysUserEntity user = getUser();
         if(user.getCompanyId()!= null ){

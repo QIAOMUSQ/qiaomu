@@ -33,6 +33,7 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 
 import javax.servlet.Filter;
 import java.util.LinkedHashMap;
@@ -102,7 +103,6 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         //自定义拦截器
         Map<String, Filter> filtersMap = new LinkedHashMap<String, Filter>();
-        filtersMap.put("mobileAuthc", new CustomAccessControlFilter());
         shiroFilterFactoryBean.setLoginUrl("/login.html");
         shiroFilterFactoryBean.setUnauthorizedUrl("/");
         shiroFilterFactoryBean.setFilters(filtersMap);
@@ -113,6 +113,24 @@ public class ShiroConfig {
         filterMap.put("/swagger-ui.html", "anon");
         filterMap.put("/webjars/**", "anon");
         filterMap.put("/swagger-resources/**", "anon");
+        filterMap.put("/doc.html", "anon");
+        filterMap.put("/**/*.js", "anon");
+        filterMap.put("/**/*.css", "anon");
+        filterMap.put("/**/*.html", "anon");
+        filterMap.put("/**/*.svg", "anon");
+        filterMap.put("/**/*.pdf", "anon");
+        filterMap.put("/**/*.jpg", "anon");
+        filterMap.put("/**/*.png", "anon");
+        filterMap.put("/**/*.ico", "anon");
+        filterMap.put("/**/*.ttf", "anon");
+        filterMap.put("/**/*.woff", "anon");
+
+        // update-begin--Author:sunjianlei Date:20190813 for：排除字体格式的后缀
+        filterMap.put("/**/*.ttf", "anon");
+        filterMap.put("/**/*.woff", "anon");
+        filterMap.put("/**/*.woff2", "anon");
+        // update-begin--Author:sunjianlei Date:20190813 for：排除字体格式的后缀
+        
         filterMap.put("/upgrade/**", "anon");
         filterMap.put("/mobile/**", "mobileAuthc");
         filterMap.put("/welfare/**", "anon");
@@ -126,7 +144,7 @@ public class ShiroConfig {
         filterMap.put("/favicon.ico", "anon");
         filterMap.put("/captcha.jpg", "anon");
         filterMap.put("/**", "authc");
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
+        filtersMap.put("mobileAuthc", new CustomAccessControlFilter());
 
         return shiroFilterFactoryBean;
     }
@@ -136,12 +154,12 @@ public class ShiroConfig {
         return new LifecycleBeanPostProcessor();
     }
 
-    @Bean
+   /* @Bean
     public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
         DefaultAdvisorAutoProxyCreator proxyCreator = new DefaultAdvisorAutoProxyCreator();
         proxyCreator.setProxyTargetClass(true);
         return proxyCreator;
-    }
+    }*/
 
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
@@ -150,5 +168,24 @@ public class ShiroConfig {
         return advisor;
     }
 
+
+
+    /**
+     * 下面的代码是添加注解支持
+     * @return
+     */
+    @Bean
+    @DependsOn("lifecycleBeanPostProcessor")
+    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
+        DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+        defaultAdvisorAutoProxyCreator.setProxyTargetClass(true);
+        /**
+         * 解决重复代理问题 github#994
+         * 添加前缀判断 不匹配 任何Advisor
+         */
+        defaultAdvisorAutoProxyCreator.setUsePrefix(true);
+        defaultAdvisorAutoProxyCreator.setAdvisorBeanNamePrefix("_no_advisor");
+        return defaultAdvisorAutoProxyCreator;
+    }
 
 }
