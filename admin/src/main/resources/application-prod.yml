@@ -66,3 +66,4 @@ logging:
   level.com.qiaomu: info
   path: logs/
   file: admin.log
+error-file: /www/app/admin/error/

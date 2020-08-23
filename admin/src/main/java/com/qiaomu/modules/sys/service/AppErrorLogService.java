@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.IService;
 import com.qiaomu.modules.sys.entity.AppErrorLog;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -15,4 +16,7 @@ public interface AppErrorLogService extends IService<AppErrorLog> {
     void save(AppErrorLog appErrorLog);
 
     List<AppErrorLog> selectLogList(EntityWrapper<AppErrorLog> wrapper);
+
+    List<File> getFileList();
+
 }

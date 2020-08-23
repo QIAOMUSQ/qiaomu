@@ -67,3 +67,4 @@ logging:
   file: admin
 
 web-socket-url: 127.0.0.1:8081
+error-file: E:/files/error/
