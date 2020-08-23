@@ -16,16 +16,22 @@
 
 package com.qiaomu.common.config;
 
+import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 /**
  * Swagger配置
@@ -33,30 +39,39 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @author Mark sunlightcs@gmail.com
  * @since 3.0.0 2018-01-16
  */
+@Slf4j
 @Configuration
 @EnableSwagger2
+@EnableSwaggerBootstrapUI
 public class SwaggerConfig{
+
+    @Bean
+    SecurityScheme securityScheme() {
+        return new ApiKey(AUTHORIZATION, AUTHORIZATION, "header");
+    }
 
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-            .apiInfo(apiInfo())
-            .select()
-            //加了ApiOperation注解的类，生成接口文档
-            .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
-            //包下的类，生成接口文档
-            .apis(RequestHandlerSelectors.basePackage("com.qiaomu.modules.job.controller"))
-            .paths(PathSelectors.any())
-            .build();
+                .groupName("后台管理")
+                .apiInfo(apiInfo())
+                .select()
+                //加了ApiOperation注解的类，生成接口文档
+                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
+                //包下的类，生成接口文档
+                .apis(RequestHandlerSelectors.basePackage("com.qiaomu"))
+                .paths(PathSelectors.any())
+                .build();
     }
+
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-            .title("后台管理")
-            .description("admin文档")
-            .termsOfServiceUrl("")
-            .version("3.2.0")
-            .build();
+                .title("后台管理")
+                .description("admin文档")
+                .termsOfServiceUrl("")
+                .version("3.2.0")
+                .build();
     }
 
 }
