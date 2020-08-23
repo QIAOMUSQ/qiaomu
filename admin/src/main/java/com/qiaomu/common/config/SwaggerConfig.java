@@ -19,7 +19,6 @@ package com.qiaomu.common.config;
 import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -32,7 +31,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import static org.apache.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 /**
  * Swagger配置
@@ -44,7 +43,6 @@ import static org.apache.http.HttpHeaders.AUTHORIZATION;
 @Configuration
 @EnableSwagger2
 @EnableSwaggerBootstrapUI
-//@ConditionalOnProperty(name = "swagger.enable", havingValue = "true")
 public class SwaggerConfig{
 
     @Bean
