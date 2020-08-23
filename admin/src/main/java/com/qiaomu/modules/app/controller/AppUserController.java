@@ -66,7 +66,7 @@ public class AppUserController extends AbstractController {
      * @return
      */
     @ResponseBody
-    @GetMapping(value ="login")
+    @PostMapping(value ="login")
     @ApiOperation("用户登陆")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "phone", value = "手机号码"),
